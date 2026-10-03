@@ -1,12 +1,11 @@
 import QRCode from "qrcode";
 
 /**
- * Address of the audience glossary: the LAN join address with /glossary
- * instead of /join when the runtime knows it, else this page's own origin
- * (a public deployment, or no network).
+ * Address of the audience glossary: `ctx.glossaryUrl` (the LAN address under
+ * `pnpm dev`) when known, else this page's own origin (a deployment).
  */
-export function glossaryUrl(joinUrl: string | null, origin: string | null): string | null {
-  if (joinUrl) return joinUrl.replace(/\/join(?=$|[?#])/, "/glossary");
+export function resolveGlossaryUrl(glossaryUrl: string | null, origin: string | null): string | null {
+  if (glossaryUrl) return glossaryUrl;
   return origin ? `${origin}/glossary` : null;
 }
 

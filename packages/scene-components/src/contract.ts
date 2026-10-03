@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import type { Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
-import type { InteractionState, SessionCommand } from "@ai-exhibit/session-protocol";
+import type { SessionCommand } from "@ai-exhibit/session-protocol";
 
 /**
  * How a scene component is rendered:
@@ -39,12 +39,10 @@ export interface SceneContext<S = unknown> {
   getSource: (id: string) => SourceRecord | undefined;
   /** True when the user prefers reduced motion or the presenter paused animations. */
   reducedMotion: boolean;
-  /** Audience interaction state from the session (polls, word submissions). */
-  interaction: InteractionState | null;
-  /** Sends a session command (openPoll, showPollResults...). No-op unless controller. */
+  /** Sends a session command (navigation, blackout...). No-op unless controller. */
   sendCommand: (command: SessionCommand) => void;
-  /** URL audience phones open to join, e.g. "http://192.168.1.20:4317/join"; null when unknown. */
-  joinUrl: string | null;
+  /** Audience glossary address phones can reach, e.g. "http://192.168.1.20:5173/glossary"; null: use this page's origin. */
+  glossaryUrl: string | null;
   /** The presenter's model source for language demos; undefined means "simulation". */
   modelSource?: ModelSource;
 }

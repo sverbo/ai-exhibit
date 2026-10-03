@@ -4,15 +4,15 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { SceneContext } from "../../contract.ts";
 import { Agenda } from "./Agenda.tsx";
-import { glossaryUrl, qrPath } from "./glossaryUrl.ts";
+import { resolveGlossaryUrl, qrPath } from "./glossaryUrl.ts";
 
-describe("glossaryUrl", () => {
-  it("turns the LAN join address into the glossary address", () => {
-    expect(glossaryUrl("http://192.168.1.20:4317/join", "http://127.0.0.1:4317")).toBe("http://192.168.1.20:4317/glossary");
+describe("resolveGlossaryUrl", () => {
+  it("uses the LAN glossary address when known", () => {
+    expect(resolveGlossaryUrl("http://192.168.1.20:4317/glossary", "http://127.0.0.1:4317")).toBe("http://192.168.1.20:4317/glossary");
   });
   it("falls back to this page's origin, or nothing", () => {
-    expect(glossaryUrl(null, "https://ai-exhibit.vercel.app")).toBe("https://ai-exhibit.vercel.app/glossary");
-    expect(glossaryUrl(null, null)).toBeNull();
+    expect(resolveGlossaryUrl(null, "https://ai-exhibit.vercel.app")).toBe("https://ai-exhibit.vercel.app/glossary");
+    expect(resolveGlossaryUrl(null, null)).toBeNull();
   });
   it("draws a square QR code", () => {
     const { size, d } = qrPath("https://ai-exhibit.vercel.app/glossary");
@@ -37,9 +37,8 @@ describe("Agenda", () => {
           setState: () => {},
           getSource: () => undefined,
           reducedMotion: true,
-          interaction: null,
           sendCommand: () => {},
-          joinUrl: "http://192.168.1.20:4317/join",
+          glossaryUrl: "http://192.168.1.20:4317/glossary",
         } satisfies SceneContext,
       }),
     );

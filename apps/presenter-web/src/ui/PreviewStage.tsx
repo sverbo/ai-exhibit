@@ -41,10 +41,9 @@ function PreviewInner({ scene, locale, getSource, ghost }: { scene: SceneDefinit
     revealStep: 0,
     fallback: false,
     sceneState: undefined,
-    interaction: null,
     dispatch: null,
     getSource,
-    joinUrl: null,
+    glossaryUrl: null,
     reducedMotion: true,
   });
   return (

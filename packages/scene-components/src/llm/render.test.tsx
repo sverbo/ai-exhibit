@@ -21,9 +21,8 @@ function ctx(role: SceneRole, revealStep: number, locale: Locale, state?: unknow
     setState: () => {},
     getSource: (id) => byId.get(id),
     reducedMotion: false,
-    interaction: null,
     sendCommand: () => {},
-    joinUrl: null,
+    glossaryUrl: null,
   };
 }
 

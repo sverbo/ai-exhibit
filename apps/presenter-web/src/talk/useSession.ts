@@ -57,8 +57,6 @@ export function useSession(role: ClientRole, opts: UseSessionOptions): SessionVi
       role,
       sessionId,
       initialState: () => initialRef.current(),
-      // No relay: go straight to the BroadcastChannel.
-      WebSocketImpl: null,
     });
     clientRef.current = client;
     const read = () => {

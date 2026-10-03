@@ -90,7 +90,7 @@ apps/local-runtime/          Node dev server on :4317: /api proxy to Hugging Fac
 api/                         Vercel functions, thin wrappers around packages/cloud-api
 packages/cloud-api/          Hugging Face endpoints (/api/llm/*, /api/embed, /api/tokenize), shared by the runtime and api/
 packages/presentation-core/  Content model types, editions, navigation, validation
-packages/session-protocol/   Session state, commands, reducer, WebSocket and BroadcastChannel clients
+packages/session-protocol/   Session state, commands, reducer, BroadcastChannel client and stage owner
 packages/ml-runtime/         Browser helpers: /api client, recording formats, chat templates, embedding geometry
 packages/scene-components/   Scene contract and registry, renderer, layouts, theme, components by area
 presentations/canonical/     The talk: chapters, scenes/0X-*.ts, editions

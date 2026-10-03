@@ -26,7 +26,7 @@ export type EvidenceLevel =
 /** A: deterministic/offline, B: local compute (in-browser training, no model download), C: live/networked. */
 export type RuntimeClass = "A" | "B" | "C";
 
-export type InteractionKind = "none" | "presenter" | "audience" | "network";
+export type InteractionKind = "none" | "presenter" | "network";
 
 export interface ChapterDefinition {
   id: ChapterId;

@@ -3,7 +3,7 @@ import { stepCount, type L10n, type Locale } from "@ai-exhibit/presentation-core
 import type { SceneComponentProps } from "../../contract.ts";
 import { visibleItemCount } from "../../layouts/reveal.ts";
 import layout from "../../layouts/layouts.module.css";
-import { glossaryUrl, qrPath } from "./glossaryUrl.ts";
+import { resolveGlossaryUrl, qrPath } from "./glossaryUrl.ts";
 import styles from "./Agenda.module.css";
 
 export interface AgendaProps {
@@ -23,7 +23,7 @@ export function Agenda({ props, ctx }: SceneComponentProps<AgendaProps>) {
   const visible = visibleItemCount(items.length, stepCount(ctx.scene), ctx.revealStep);
   const still = ctx.reducedMotion || ctx.role === "preview" ? layout.still : "";
   const origin = typeof window === "undefined" ? null : window.location.origin;
-  const url = glossaryUrl(ctx.joinUrl, origin);
+  const url = resolveGlossaryUrl(ctx.glossaryUrl, origin);
   const qr = useMemo(() => (url ? qrPath(url) : null), [url]);
 
   return (

@@ -34,7 +34,7 @@ export function labScene(name: string, props: Record<string, unknown>, steps: nu
 }
 
 export type LabAction =
-  | { kind: "command"; command: SessionCommand; role?: "solo" | "audience" }
+  | { kind: "command"; command: SessionCommand }
   | { kind: "reset"; sceneId: string };
 
 export interface LabLogEntry {
@@ -57,7 +57,7 @@ export function initialLab(sceneId: string): LabStore {
 /** In-memory session shared by the lab's controller, display and preview. */
 export function labReducer(store: LabStore, action: LabAction): LabStore {
   if (action.kind === "reset") return initialLab(action.sceneId);
-  const next = applyCommand(store.state, action.command, action.role ?? "solo");
+  const next = applyCommand(store.state, action.command, "solo");
   return {
     state: next,
     log: [{ at: Date.now(), command: action.command }, ...store.log].slice(0, 40),

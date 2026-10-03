@@ -13,7 +13,7 @@ import { demoPresentation } from "../../talk/demo.ts";
 import { presentations } from "../../talk/presentation.ts";
 import { useDefaultModelSource } from "../../talk/modelSourceDefault.ts";
 import { sceneSlice, usePrefersReducedMotion, useSceneContext } from "../../talk/sceneContext.ts";
-import { useRuntime, joinUrlFor } from "../../talk/runtime.ts";
+import { useRuntime, glossaryUrlFor } from "../../talk/runtime.ts";
 import chrome from "../../ui/chrome.module.css";
 import { ThemeToggle } from "../../ui/ThemeToggle.tsx";
 import { initialLab, LAB_SCENE_ID, labReducer, labScene } from "./labStore.ts";
@@ -73,7 +73,7 @@ export default function LabView() {
   const [store, send] = useReducer(labReducer, LAB_SCENE_ID, initialLab);
   const prefersReduced = usePrefersReducedMotion();
   const { network } = useRuntime(15000);
-  const joinUrl = joinUrlFor(network) ?? `${window.location.origin}/join`;
+  const glossaryUrl = glossaryUrlFor(network) ?? `${window.location.origin}/glossary`;
 
   // Initial step, fallback and example props from the URL.
   useEffect(() => {
@@ -237,14 +237,14 @@ export default function LabView() {
 
             <div className={styles.stages}>
               <Pane title={t("labController")} className={styles.controller}>
-                <LabStage scene={scene} role="controller" state={state} locale={locale} dispatch={dispatch} joinUrl={joinUrl} reducedMotion={reducedMotion} />
+                <LabStage scene={scene} role="controller" state={state} locale={locale} dispatch={dispatch} glossaryUrl={glossaryUrl} reducedMotion={reducedMotion} />
               </Pane>
               <div className={styles.side}>
                 <Pane title={t("labDisplay")}>
-                  <LabStage scene={scene} role="display" state={state} locale={locale} dispatch={null} joinUrl={joinUrl} reducedMotion={reducedMotion} />
+                  <LabStage scene={scene} role="display" state={state} locale={locale} dispatch={null} glossaryUrl={glossaryUrl} reducedMotion={reducedMotion} />
                 </Pane>
                 <Pane title={t("labPreview")}>
-                  <LabStage scene={scene} role="preview" state={state} locale={locale} dispatch={null} joinUrl={joinUrl} reducedMotion revealStep={0} />
+                  <LabStage scene={scene} role="preview" state={state} locale={locale} dispatch={null} glossaryUrl={glossaryUrl} reducedMotion revealStep={0} />
                 </Pane>
               </div>
             </div>
@@ -275,14 +275,13 @@ export default function LabView() {
               <section className={styles.panel}>
                 <h3 className={chrome.label}>{t("labState")}</h3>
                 <pre className={styles.code}>{JSON.stringify(
-                  { sceneState: state.sceneStates[LAB_SCENE_ID] ?? null, fallback: fallbackOn, revealStep: state.revealStep, interaction: state.interaction },
+                  { sceneState: state.sceneStates[LAB_SCENE_ID] ?? null, fallback: fallbackOn, revealStep: state.revealStep },
                   null,
                   2,
                 )}</pre>
               </section>
               <section className={styles.panel}>
                 <h3 className={chrome.label}>{t("labCommands")}</h3>
-                <VoteSimulator state={state} props={props} send={send} />
                 <ol className={styles.log}>
                   {store.log.map((e, i) => (
                     <li key={store.log.length - i}>
@@ -300,14 +299,14 @@ export default function LabView() {
 }
 
 function LabStage({
-  scene, role, state, locale, dispatch, joinUrl, reducedMotion, revealStep,
+  scene, role, state, locale, dispatch, glossaryUrl, reducedMotion, revealStep,
 }: {
   scene: SceneDefinition;
   role: SceneRole;
   state: SessionState;
   locale: Locale;
   dispatch: ((c: SessionCommand) => void) | null;
-  joinUrl: string;
+  glossaryUrl: string;
   reducedMotion: boolean;
   revealStep?: number;
 }) {
@@ -320,7 +319,7 @@ function LabStage({
     ...sceneSlice(state, scene.id),
     dispatch,
     getSource,
-    joinUrl,
+    glossaryUrl,
     reducedMotion,
     modelSource: LAB_MODEL_SOURCE ?? defaultSource,
   });
@@ -328,40 +327,6 @@ function LabStage({
     <Stage>
       <SceneRenderer scene={scene} ctx={ctx} />
     </Stage>
-  );
-}
-
-function VoteSimulator({ state, props, send }: { state: SessionState; props: Record<string, unknown>; send: (a: Parameters<typeof labReducer>[1]) => void }) {
-  const { t } = useUi();
-  const [word, setWord] = useState("");
-  const ia = state.interaction;
-  if (ia.phase !== "open" || !ia.pollId) return null;
-  const pollId = ia.pollId;
-  const options = Array.isArray(props.options)
-    ? (props.options as { id?: unknown }[]).map((o) => o.id).filter((id): id is string => typeof id === "string")
-    : [];
-  const vote = (extra: { optionId?: string; word?: string }) =>
-    send({ kind: "command", role: "audience", command: { type: "vote", pollId, voterId: Math.random().toString(36).slice(2), ...extra } });
-  return (
-    <div className={styles.votes}>
-      <span className={chrome.label}>{t("labVotes")}</span>
-      <div className={styles.examples}>
-        {options.map((id) => (
-          <button key={id} type="button" className={chrome.btn} onClick={() => vote({ optionId: id })}>
-            +1 {id}
-          </button>
-        ))}
-        {options.length ? (
-          <button type="button" className={chrome.btn}
-            onClick={() => { for (let i = 0; i < 10; i++) vote({ optionId: options[Math.floor(Math.random() * options.length)]! }); }}>
-            +10
-          </button>
-        ) : null}
-      </div>
-      <form className={styles.row} onSubmit={(e) => { e.preventDefault(); if (word.trim()) vote({ word }); setWord(""); }}>
-        <input className={styles.text} value={word} onChange={(e) => setWord(e.target.value)} placeholder="word" />
-      </form>
-    </div>
   );
 }
 

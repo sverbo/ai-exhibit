@@ -16,7 +16,7 @@ const input = (over: Partial<SceneContextInput>): SceneContextInput => ({
   ...sceneSlice(state, "s1"),
   dispatch: null,
   getSource: () => undefined,
-  joinUrl: null,
+  glossaryUrl: null,
   reducedMotion: false,
   ...over,
 });
@@ -28,10 +28,9 @@ describe("buildSceneContext", () => {
     expect(ctx.mode).toBe("fallback");
     expect(ctx.state).toEqual({ n: 1 });
     expect(ctx.revealStep).toBe(2);
-    expect(ctx.interaction?.phase).toBe("closed");
     ctx.setState({ n: 2 });
-    ctx.sendCommand({ type: "closePoll" });
-    expect(sent).toEqual([{ type: "setSceneState", sceneId: "s1", state: { n: 2 } }, { type: "closePoll" }]);
+    ctx.sendCommand({ type: "setBlackout", on: true });
+    expect(sent).toEqual([{ type: "setSceneState", sceneId: "s1", state: { n: 2 } }, { type: "setBlackout", on: true }]);
   });
 
   it("makes display and preview read-only", () => {
@@ -39,7 +38,7 @@ describe("buildSceneContext", () => {
     for (const role of ["display", "preview"] as const) {
       const ctx = buildSceneContext(input({ role, dispatch: (c) => sent.push(c) }));
       ctx.setState({ n: 3 });
-      ctx.sendCommand({ type: "closePoll" });
+      ctx.sendCommand({ type: "setBlackout", on: true });
     }
     expect(sent).toEqual([]);
   });
@@ -48,6 +47,5 @@ describe("buildSceneContext", () => {
     const ctx = buildSceneContext(input({ ...sceneSlice(null, "s1") }));
     expect(ctx.mode).toBe("live");
     expect(ctx.state).toBeUndefined();
-    expect(ctx.interaction).toBeNull();
   });
 });

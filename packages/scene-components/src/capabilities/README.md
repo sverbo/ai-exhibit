@@ -165,6 +165,6 @@ The talk's plan (scene `00-agenda`) with a large QR code to the audience glossar
 on the side. Props: `{ heading: L10n; items: L10n[] }`. Items reveal like a
 generic `list` (`visibleItemCount`): one per step with `scene.steps` equal to the
 item count, all at once with `scene.steps: 0`. The QR code points at
-`ctx.joinUrl` with `/join` replaced by `/glossary` (the LAN address), or at
+`ctx.glossaryUrl` (the LAN address under `pnpm dev`), or at
 `window.location.origin + "/glossary"` when there is none (public deployment). It
 is generated locally with `qrcode`, dark modules on a light card in both themes.

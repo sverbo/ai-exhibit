@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
 import type { ModelSource, SceneContext, SceneRole } from "@ai-exhibit/scene-components";
-import type { InteractionState, SessionCommand, SessionState } from "@ai-exhibit/session-protocol";
+import type { SessionCommand, SessionState } from "@ai-exhibit/session-protocol";
 
 const noop = () => {};
 
@@ -12,11 +12,10 @@ export interface SceneContextInput {
   revealStep: number;
   fallback: boolean;
   sceneState: unknown;
-  interaction: InteractionState | null;
   /** Present only for controllers allowed to change the session. */
   dispatch: ((command: SessionCommand) => void) | null;
   getSource: (id: string) => SourceRecord | undefined;
-  joinUrl: string | null;
+  glossaryUrl: string | null;
   reducedMotion: boolean;
   /** Presenter's model source for language demos (shell setting). */
   modelSource?: ModelSource;
@@ -27,7 +26,6 @@ export function sceneSlice(state: SessionState | null, sceneId: string) {
   return {
     fallback: Boolean(state?.fallback[sceneId]),
     sceneState: state?.sceneStates[sceneId],
-    interaction: state?.interaction ?? null,
   };
 }
 
@@ -45,9 +43,8 @@ export function buildSceneContext(input: SceneContextInput): SceneContext {
     setState: controls ? (next) => dispatch({ type: "setSceneState", sceneId: scene.id, state: next }) : noop,
     getSource: input.getSource,
     reducedMotion: input.reducedMotion,
-    interaction: input.interaction,
     sendCommand: controls ? dispatch : noop,
-    joinUrl: input.joinUrl,
+    glossaryUrl: input.glossaryUrl,
     modelSource: input.modelSource ?? "simulation",
   };
 }
@@ -60,7 +57,7 @@ export function useSceneContext(input: SceneContextInput): SceneContext {
   const dispatchRef = useRef(input.dispatch);
   dispatchRef.current = input.dispatch;
   const canDispatch = input.dispatch !== null;
-  const { scene, role, locale, revealStep, fallback, sceneState, interaction, getSource, joinUrl, reducedMotion, modelSource } = input;
+  const { scene, role, locale, revealStep, fallback, sceneState, getSource, glossaryUrl, reducedMotion, modelSource } = input;
   return useMemo(
     () =>
       buildSceneContext({
@@ -70,14 +67,13 @@ export function useSceneContext(input: SceneContextInput): SceneContext {
         revealStep,
         fallback,
         sceneState,
-        interaction,
         dispatch: canDispatch ? (c) => dispatchRef.current?.(c) : null,
         getSource,
-        joinUrl,
+        glossaryUrl,
         reducedMotion,
         modelSource,
       }),
-    [scene, role, locale, revealStep, fallback, sceneState, interaction, canDispatch, getSource, joinUrl, reducedMotion, modelSource],
+    [scene, role, locale, revealStep, fallback, sceneState, canDispatch, getSource, glossaryUrl, reducedMotion, modelSource],
   );
 }
 

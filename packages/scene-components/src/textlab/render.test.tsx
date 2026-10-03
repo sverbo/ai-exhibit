@@ -20,9 +20,8 @@ function ctx(role: SceneRole, revealStep: number, locale: Locale, state?: unknow
     setState: () => {},
     getSource: () => undefined,
     reducedMotion: false,
-    interaction: null,
     sendCommand: () => {},
-    joinUrl: null,
+    glossaryUrl: null,
   };
 }
 

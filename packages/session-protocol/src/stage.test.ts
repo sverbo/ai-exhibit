@@ -4,7 +4,7 @@ import { stageOwner } from "./stage.ts";
 describe("stageOwner", () => {
   it("prefers a presenter view, then the window that joined first", () => {
     expect(stageOwner([])).toBeNull();
-    expect(stageOwner([{ clientId: "p", role: "projector" }, { clientId: "r", role: "remote" }])).toBeNull();
+    expect(stageOwner([{ clientId: "p", role: "projector" }, { clientId: "r", role: "projector" }])).toBeNull();
     // An old solo tab (e.g. /present) and a projector acting alone: the older one runs the stage.
     expect(stageOwner([{ clientId: "b", role: "solo", since: 1 }, { clientId: "a", role: "solo", since: 2 }])).toBe("b");
     // A presenter opened later still wins over both.

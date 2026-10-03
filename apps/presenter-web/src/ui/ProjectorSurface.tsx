@@ -12,11 +12,11 @@ import styles from "./ProjectorSurface.module.css";
 export function ProjectorSurface({
   talk,
   role,
-  joinUrl,
+  glossaryUrl,
 }: {
   talk: Talk;
   role: Exclude<SceneRole, "preview">;
-  joinUrl: string | null;
+  glossaryUrl: string | null;
 }) {
   const { t } = useUi();
   const { state, scenes } = talk;
@@ -27,7 +27,7 @@ export function ProjectorSurface({
   if (!scene) return <Slate text={scenes.length ? t("waitingSession") : t("emptyEdition")} />;
   return (
     <div className={styles.surface} data-projector={view.kind}>
-      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} joinUrl={joinUrl} />
+      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} glossaryUrl={glossaryUrl} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { type BroadcastChannelLike, type WebSocketLike, connectSession } from "./client.ts";
+import { type BroadcastChannelLike, connectSession } from "./client.ts";
 import { createInitialState } from "./reducer.ts";
 import { stageOwner } from "./stage.ts";
 import type { ClientRole, SessionClient } from "./types.ts";
@@ -27,21 +27,6 @@ class FakeChannel implements BroadcastChannelLike {
   }
 }
 
-/** A WebSocket that never connects. */
-class DeadSocket implements WebSocketLike {
-  static created = 0;
-  readyState = 0;
-  onopen = null;
-  onclose = null;
-  onerror = null;
-  onmessage = null;
-  constructor(_url: string) {
-    DeadSocket.created++;
-  }
-  send(): void {}
-  close(): void {}
-}
-
 const initial = () =>
   createInitialState({ presentationId: "canonical", editionId: "fr-full", locale: "fr", sceneId: "00-title" });
 
@@ -51,7 +36,6 @@ function open(role: ClientRole, clientId: string, extra: Partial<Parameters<type
     role,
     clientId,
     initialState: initial,
-    WebSocketImpl: null,
     BroadcastChannelImpl: FakeChannel,
     ...extra,
   });
@@ -93,12 +77,12 @@ describe("BroadcastChannel presence", () => {
     // Projector opened first: it runs the stage, the old /present tab mirrors it.
     expect(owners([projector, oldTab])).toEqual(["p", "p"]);
     const presenter = open("presenter", "z");
-    const remote = open("remote", "r");
+    const projectorOnly = open("projector", "r");
     await vi.advanceTimersByTimeAsync(600);
-    expect(owners([projector, oldTab, presenter, remote])).toEqual(["z", "z", "z", "z"]);
+    expect(owners([projector, oldTab, presenter, projectorOnly])).toEqual(["z", "z", "z", "z"]);
     presenter.close();
     await vi.advanceTimersByTimeAsync(20);
-    expect(owners([projector, oldTab, remote])).toEqual(["p", "p", "p"]);
+    expect(owners([projector, oldTab, projectorOnly])).toEqual(["p", "p", "p"]);
   });
 
   it("forgets at once a window whose lock is gone (closed or crashed without a bye)", async () => {
@@ -178,7 +162,7 @@ describe("BroadcastChannel client", () => {
   it("two controllers stay in sync", async () => {
     const a = open("presenter", "a");
     await vi.advanceTimersByTimeAsync(600);
-    const r = open("remote", "r");
+    const r = open("solo", "r");
     await vi.advanceTimersByTimeAsync(300);
     r.dispatch({ type: "goto", sceneId: "05-x", revealStep: 0 });
     await vi.advanceTimersByTimeAsync(0);
@@ -209,58 +193,5 @@ describe("BroadcastChannel client", () => {
     a.dispatch({ type: "setFrozen", on: true });
     await vi.advanceTimersByTimeAsync(600);
     expect(a.getState()?.frozen).toBe(true);
-  });
-
-  it("falls back from WebSocket after 1.5 s", async () => {
-    DeadSocket.created = 0;
-    const a = open("solo", "a", { WebSocketImpl: DeadSocket, wsUrl: "ws://127.0.0.1:1/session" });
-    expect(DeadSocket.created).toBe(1);
-    expect(a.getTransport()).toBeNull();
-    await vi.advanceTimersByTimeAsync(1499);
-    expect(a.getTransport()).toBeNull();
-    await vi.advanceTimersByTimeAsync(1);
-    expect(a.getTransport()).toBe("broadcast");
-    await vi.advanceTimersByTimeAsync(600);
-    expect(a.getState()).not.toBeNull();
-  });
-
-  it("keeps retrying the relay after falling back, then follows the relay", async () => {
-    // The runtime was restarting when the window opened: the first sockets die.
-    const sockets: ManualSocket[] = [];
-    class ManualSocket implements WebSocketLike {
-      readyState = 0;
-      onopen: ((ev: unknown) => void) | null = null;
-      onclose: ((ev: unknown) => void) | null = null;
-      onerror: ((ev: unknown) => void) | null = null;
-      onmessage: ((ev: { data: unknown }) => void) | null = null;
-      sent: unknown[] = [];
-      constructor(_url: string) {
-        sockets.push(this);
-      }
-      send(data: string): void {
-        this.sent.push(JSON.parse(data));
-      }
-      close(): void {}
-    }
-    const a = open("projector", "a", { WebSocketImpl: ManualSocket, wsUrl: "ws://127.0.0.1:1/session" });
-    await vi.advanceTimersByTimeAsync(1500);
-    expect(a.getTransport()).toBe("broadcast");
-    // A retry is scheduled even though the channel works.
-    await vi.advanceTimersByTimeAsync(700);
-    expect(sockets.length).toBe(2);
-    sockets[1]!.onclose?.({});
-    expect(a.getTransport()).toBe("broadcast");
-    await vi.advanceTimersByTimeAsync(1300);
-    expect(sockets.length).toBe(3);
-    // The runtime is back.
-    const live = sockets[2]!;
-    live.readyState = 1;
-    live.onopen?.({});
-    expect(live.sent[0]).toMatchObject({ kind: "hello", role: "projector" });
-    const relayState = { ...initial(), sceneId: "01-one-request", version: 42 };
-    live.onmessage?.({ data: JSON.stringify({ kind: "welcome", state: relayState, canControl: false, clients: [] }) });
-    expect(a.getTransport()).toBe("websocket");
-    expect(a.getState()?.sceneId).toBe("01-one-request");
-    expect(FakeChannel.buses.get("ai-exhibit:main")?.size ?? 0).toBe(0);
   });
 });

@@ -11,7 +11,7 @@ export function SceneStage({
   scene,
   role,
   revealStep,
-  joinUrl,
+  glossaryUrl,
   ghost = false,
   bars,
   className,
@@ -20,7 +20,7 @@ export function SceneStage({
   scene: SceneDefinition;
   role: SceneRole;
   revealStep?: number;
-  joinUrl: string | null;
+  glossaryUrl: string | null;
   ghost?: boolean;
   /** Letterbox color; "transparent" lets presenter chrome show through. */
   bars?: "black" | "transparent";
@@ -37,7 +37,7 @@ export function SceneStage({
     ...sceneSlice(talk.state, scene.id),
     dispatch: effective === "controller" && talk.controller ? talk.session.dispatch : null,
     getSource: talk.getSource,
-    joinUrl,
+    glossaryUrl,
     reducedMotion: talk.reducedMotion || effective === "preview",
     modelSource: modelSourceOf(talk.shell, defaultSource),
   });

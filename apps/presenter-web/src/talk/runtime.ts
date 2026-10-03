@@ -65,9 +65,10 @@ export function lanOrigin(network: NetworkInfo | null): string | null {
   return window.location.origin;
 }
 
-export function joinUrlFor(network: NetworkInfo | null): string | null {
+/** Address of the audience glossary that phones can reach (the LAN address under `pnpm dev`). */
+export function glossaryUrlFor(network: NetworkInfo | null): string | null {
   const origin = lanOrigin(network);
-  return origin ? `${origin}/join` : null;
+  return origin ? `${origin}/glossary` : null;
 }
 
 

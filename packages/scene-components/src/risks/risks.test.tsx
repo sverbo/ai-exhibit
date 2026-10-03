@@ -44,9 +44,8 @@ function ctx(role: SceneRole, revealStep: number, locale: Locale, steps?: number
     setState: () => {},
     getSource: (id) => byId.get(id),
     reducedMotion: false,
-    interaction: null,
     sendCommand: () => {},
-    joinUrl: null,
+    glossaryUrl: null,
   };
 }
 
@@ -256,7 +255,7 @@ describe("ResourceList (05-resources)", () => {
     const scene = chapter05.find((s) => s.id === "05-resources")!;
     expect(scene.visual).toMatchObject({ layout: "component", component: "ResourceList" });
     for (const locale of locales) {
-      const c = { ...ctx("display", 0, locale), joinUrl: "http://192.168.1.20:4317/join" };
+      const c = { ...ctx("display", 0, locale), glossaryUrl: "http://192.168.1.20:4317/glossary" };
       const html = render(ResourceList, {}, c);
       expect(resources.length).toBeGreaterThan(0);
       for (const r of resources) {

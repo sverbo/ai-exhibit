@@ -146,7 +146,6 @@ const UI = {
   labPreview: { fr: "Aperçu (preview)", en: "Preview" },
   labState: { fr: "État partagé", en: "Shared state" },
   labCommands: { fr: "Commandes envoyées", en: "Commands sent" },
-  labVotes: { fr: "Simuler des votes", en: "Simulate votes" },
   labPickOne: { fr: "Choisissez un composant à gauche.", en: "Pick a component on the left." },
   labFromScene: { fr: "Propriétés de la scène", en: "Props from scene" },
   labLocale: { fr: "Langue de la scène", en: "Scene language" },

@@ -4,7 +4,7 @@ import { useTalkKeyboard } from "../../control/useTalkKeyboard.ts";
 import { computePace, formatDelta, formatDuration, formatMinutes } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
 import { chapterOf } from "../../talk/presentation.ts";
-import { joinUrlFor, useRuntime } from "../../talk/runtime.ts";
+import { glossaryUrlFor, useRuntime } from "../../talk/runtime.ts";
 import { projectorView } from "../../talk/shell.ts";
 import { useElapsedMs, useTalk } from "../../talk/useTalk.ts";
 import chrome from "../../ui/chrome.module.css";
@@ -29,7 +29,7 @@ export default function PresenterView() {
   const talk = useTalk("presenter");
   // The runtime (under pnpm dev) knows the LAN address phones use for the glossary QR.
   const runtime = useRuntime(15000);
-  const joinUrl = joinUrlFor(runtime.network);
+  const glossaryUrl = glossaryUrlFor(runtime.network);
   const [sidebar, setSidebar] = useState(true);
   const [tab, setTab] = useState<Tab>("notes");
   const [palette, setPalette] = useState(false);
@@ -163,7 +163,7 @@ export default function PresenterView() {
         <div className={`${styles.stageFrame} ${styles[`frame_${air}`]}`}>
           {air !== "live" ? <span className={styles.privateTag}>{t("privateNav")}</span> : null}
           {scene ? (
-            <SceneStage talk={talk} scene={scene} role="controller" joinUrl={joinUrl} ghost bars="transparent" />
+            <SceneStage talk={talk} scene={scene} role="controller" glossaryUrl={glossaryUrl} ghost bars="transparent" />
           ) : (
             <div className={styles.empty}>
               <p>{scenes.length ? t("waitingSession") : t("noScenes")}</p>
@@ -201,7 +201,7 @@ export default function PresenterView() {
               </span>
             </figcaption>
             <div className={styles.thumbStage}>
-              {next ? <SceneStage talk={talk} scene={next} role="preview" revealStep={0} joinUrl={joinUrl} ghost bars="transparent" /> : <div className={styles.thumbEmpty} />}
+              {next ? <SceneStage talk={talk} scene={next} role="preview" revealStep={0} glossaryUrl={glossaryUrl} ghost bars="transparent" /> : <div className={styles.thumbEmpty} />}
             </div>
           </figure>
           <figure className={`${styles.thumb} ${styles.mirror} ${styles[`mirror_${air}`]}`}>
@@ -212,7 +212,7 @@ export default function PresenterView() {
               </span>
             </figcaption>
             <div className={styles.thumbStage}>
-              <ProjectorSurface talk={talk} role="display" joinUrl={joinUrl} />
+              <ProjectorSurface talk={talk} role="display" glossaryUrl={glossaryUrl} />
             </div>
           </figure>
         </div>

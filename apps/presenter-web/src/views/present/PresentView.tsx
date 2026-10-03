@@ -3,7 +3,7 @@ import { stepCount } from "@ai-exhibit/presentation-core";
 import { useTalkKeyboard } from "../../control/useTalkKeyboard.ts";
 import { formatDuration } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
-import { joinUrlFor, useRuntime } from "../../talk/runtime.ts";
+import { glossaryUrlFor, useRuntime } from "../../talk/runtime.ts";
 import { useElapsedMs, useTalk } from "../../talk/useTalk.ts";
 import chrome from "../../ui/chrome.module.css";
 import { GotoPalette } from "../../ui/GotoPalette.tsx";
@@ -87,7 +87,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
     <div className={`${styles.present} ${!hud && !pointerActive ? styles.idle : ""}`} lang={locale} data-stage={talk.ownsStage ? "owner" : talk.linked ? "linked" : "none"}>
       <OutOfDateNotice talk={talk} className={styles.outOfDate} />
       <div className={styles.stageArea}>
-        <ProjectorSurface talk={talk} role="controller" joinUrl={joinUrlFor(network)} />
+        <ProjectorSurface talk={talk} role="controller" glossaryUrl={glossaryUrlFor(network)} />
         {!hud && !palette ? (
           <KeyHint
             fullscreen={fullscreen}

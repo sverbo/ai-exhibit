@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { L10n, Locale } from "@ai-exhibit/presentation-core";
 import { resources, type ResourceEntry } from "@ai-exhibit/content/glossary";
 import type { SceneComponentProps } from "../contract.ts";
-import { glossaryUrl, qrPath } from "../capabilities/agenda/glossaryUrl.ts";
+import { resolveGlossaryUrl, qrPath } from "../capabilities/agenda/glossaryUrl.ts";
 import qrStyles from "../capabilities/agenda/Agenda.module.css";
 import styles from "./ResourceList.module.css";
 
@@ -36,7 +36,7 @@ const COPY = {
 export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListProps>) {
   const { locale } = ctx;
   const origin = typeof window === "undefined" ? null : window.location.origin;
-  const url = glossaryUrl(ctx.joinUrl, origin);
+  const url = resolveGlossaryUrl(ctx.glossaryUrl, origin);
   const qr = useMemo(() => (url ? qrPath(url) : null), [url]);
 
   return (

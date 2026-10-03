@@ -1,25 +1,20 @@
 /**
- * Shared presentation session. Every view (projector, presenter, phone remote,
- * audience phone) is a client of one SessionState. The presenter is
- * authoritative: only clients holding the presenter token may send control
- * commands. The relay applies commands with `applyCommand` and broadcasts the
- * resulting state; it never needs to know the scene order, because clients
- * resolve "next"/"previous" into explicit `goto` commands themselves.
+ * Shared presentation session. The windows of one browser profile (presenter
+ * view, projector, rehearsal) share one SessionState over a BroadcastChannel;
+ * there is no server. Controllers apply commands with `applyCommand` and post
+ * the resulting state; navigation arrives as explicit `goto` commands, so the
+ * reducer never needs the scene order.
  */
 
 import type { Locale } from "@ai-exhibit/presentation-core";
 
 export type ClientRole =
-  /** Projector/audience screen: display-only follower. */
+  /** Display-only follower. */
   | "projector"
-  /** Laptop presenter view: controller, runs heavy compute for interactive scenes. */
+  /** Laptop presenter view: controller, runs the stage when present. */
   | "presenter"
-  /** Single-window mode: projector that is also the controller (rehearsal, one screen). */
-  | "solo"
-  /** Phone remote: controller without compute. */
-  | "remote"
-  /** Audience phone: may only send interaction responses. */
-  | "audience";
+  /** Projector or rehearsal window that is also a controller (it runs the stage when alone). */
+  | "solo";
 
 export interface TimerState {
   /** Epoch ms when the timer was last started, null when paused. */
@@ -28,38 +23,13 @@ export interface TimerState {
   accumulatedMs: number;
 }
 
-export type PollPhase = "closed" | "open" | "results";
-
-export interface InteractionState {
-  /** Scene that opened the interaction; null when nothing is open. */
-  sceneId: string | null;
-  pollId: string | null;
-  phase: PollPhase;
-  /** optionId -> count. Never per-person data. */
-  tallies: Record<string, number>;
-  /** Free-text submissions (word clouds), already trimmed and length-capped. */
-  words: string[];
-  /** Results kept per pollId so the closing scene can compare before/after. */
-  history: Record<string, Record<string, number>>;
-  /**
-   * Hand counts typed by the presenter (offline-friendly polls), per pollId then
-   * optionId. Displayed in addition to phone votes. Absent until first used.
-   */
-  manual?: Record<string, Record<string, number>>;
-  /**
-   * Audience phones currently connected to the relay. Maintained by the relay
-   * only; absent when there is no relay (BroadcastChannel mode).
-   */
-  audienceConnected?: number;
-}
-
 export interface SessionState {
   presentationId: string;
   editionId: string;
   locale: Locale;
   sceneId: string;
   revealStep: number;
-  /** Small serializable per-scene state (inputs, computed top-k, poll phase...). */
+  /** Small serializable per-scene state (inputs, computed top-k...). */
   sceneStates: Record<string, unknown>;
   /** Scenes currently switched to their prepared fallback. */
   fallback: Record<string, boolean>;
@@ -68,7 +38,6 @@ export interface SessionState {
   blackout: boolean;
   /** Projector holds its current frame while the presenter navigates privately. */
   frozen: boolean;
-  interaction: InteractionState;
   /** Monotonic version, incremented by every applied command. */
   version: number;
 }
@@ -82,66 +51,29 @@ export type SessionCommand =
   | { type: "setBlackout"; on: boolean }
   | { type: "setFrozen"; on: boolean }
   | { type: "setEdition"; editionId: string; locale: Locale; sceneId: string }
-  | { type: "openPoll"; sceneId: string; pollId: string }
-  | { type: "showPollResults" }
-  | { type: "closePoll" }
-  /** Forgets a poll's votes, hand counts and history (rehearsal clean-up). */
-  | { type: "resetPoll"; pollId: string }
-  /** Replaces a poll's hand counts (optionId -> count). */
-  | { type: "setManualTally"; pollId: string; tallies: Record<string, number> }
   /**
-   * Starts the talk fresh: clears scene states, fallbacks, timer, blackout,
-   * freeze and every poll result. Keeps presentation, edition, locale and scene.
+   * Starts the talk fresh: clears scene states, fallbacks, timer, blackout and
+   * freeze. Keeps presentation, edition, locale and scene.
    */
-  | { type: "resetSession" }
-  /** The only command an audience client may send. */
-  | { type: "vote"; pollId: string; optionId?: string; word?: string; voterId: string };
-
-/** Wire messages between clients and the relay. */
-export type ClientMessage =
-  | {
-      kind: "hello";
-      sessionId: string;
-      role: ClientRole;
-      token?: string;
-      clientId: string;
-      /** Lets a controller bootstrap a relay that has no state yet. Ignored otherwise. */
-      initialState?: SessionState;
-    }
-  /** `id` (per-connection, increasing) is echoed back as `ack` so clients can drop it from their optimistic queue. */
-  | { kind: "command"; command: SessionCommand; id?: number }
-  | { kind: "ping"; t: number };
+  | { type: "resetSession" };
 
 export interface ClientSummary {
   clientId: string;
   role: ClientRole;
-  /** When the window joined (BroadcastChannel presence); relay lists are in joining order instead. */
+  /** When the window joined (epoch ms). */
   since?: number;
 }
 
-export type ServerMessage =
-  | { kind: "welcome"; state: SessionState; canControl: boolean; clients: ClientSummary[] }
-  /** `ack` is set only in the copy sent to the client whose command produced this state. */
-  | { kind: "state"; state: SessionState; ack?: number }
-  | { kind: "clients"; clients: ClientSummary[] }
-  /** A rejected or no-op command carries its `ack` so the sender can drop it. */
-  | { kind: "error"; message: string; ack?: number }
-  | { kind: "pong"; t: number };
-
 /**
- * Health of the active transport. "open": synced (relay connected, or
- * BroadcastChannel ready). "connecting": first attempt or reconnecting.
- * "offline": relay lost, retrying with backoff; local state keeps working.
+ * "open": synced (BroadcastChannel ready). "connecting": waiting for a
+ * snapshot. "offline": no BroadcastChannel in this browser.
  */
 export type ConnectionStatus = "connecting" | "open" | "offline";
 
-/** Which transport the client settled on; null while still choosing. */
-export type SessionTransport = "websocket" | "broadcast";
+/** How windows reach each other (only the BroadcastChannel now). */
+export type SessionTransport = "broadcast";
 
-/**
- * What views use. Implemented over WebSocket (local-runtime relay) and over
- * BroadcastChannel (same-browser windows, no server).
- */
+/** What views use: a session shared by the windows of one browser profile. */
 export interface SessionClient {
   readonly role: ClientRole;
   /** This window's id in client lists. */
@@ -152,9 +84,9 @@ export interface SessionClient {
   canControl(): boolean;
   /** Windows in the session, this one included, oldest first. */
   getClients(): ClientSummary[];
-  /** False until the client list is known (relay welcome, or the first presence round). */
+  /** False until the first presence round is over. */
   presenceReady(): boolean;
-  /** Commands are applied optimistically for controllers, then confirmed by the relay. */
+  /** Controllers apply commands at once and post the new state to the other windows. */
   dispatch(command: SessionCommand): void;
   subscribe(listener: () => void): () => void;
   close(): void;
