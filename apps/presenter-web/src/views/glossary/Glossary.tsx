@@ -11,14 +11,14 @@ const COPY = {
   resources: { en: "Resources", fr: "Ressources" },
   intro: {
     en: "The words of today's talk, in plain language. Tap a word to read it.",
-    fr: "Les mots de la conférence, en langage simple. Touchez un mot pour le lire.",
+    fr: "Les mots de la présentation, en langage simple. Touchez un mot pour le lire.",
   },
   search: { en: "Search a word", fr: "Chercher un mot" },
   clear: { en: "Clear", fr: "Effacer" },
   noMatch: { en: "No word matches. Try a shorter search.", fr: "Aucun mot ne correspond. Essayez une recherche plus courte." },
   seeAlso: { en: "See also", fr: "Voir aussi" },
   termsNote: { en: "Terms stay in English, as you hear them on stage.", fr: "Les termes restent en anglais, comme sur scène." },
-  resourcesIntro: { en: "To go further after the talk.", fr: "Pour aller plus loin après la conférence." },
+  resourcesIntro: { en: "To go further after the talk.", fr: "Pour aller plus loin après la présentation." },
   online: { en: "Online:", fr: "En ligne :" },
   language: { en: "Language", fr: "Langue" },
   sections: { en: "Sections", fr: "Rubriques" },
@@ -26,10 +26,8 @@ const COPY = {
 
 const LOCALE_KEY = "ai-exhibit:glossary-locale";
 
-/** `?lang=` first (the QR code carries the talk's language), then this phone's last choice. */
+/** This phone's last choice, else its browser languages. */
 function readLocale(fallback?: Locale): Locale {
-  const asked = typeof window === "undefined" ? null : parseLocale(new URLSearchParams(window.location.search).get("lang"));
-  if (asked) return asked;
   try {
     const v = parseLocale(localStorage.getItem(LOCALE_KEY));
     if (v) return v;

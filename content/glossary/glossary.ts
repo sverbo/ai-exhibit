@@ -285,7 +285,7 @@ export const glossary: GlossaryEntry[] = [
     term: "Hugging Face",
     explanation: {
       en: "A public online library where people share AI models and data. The small models running live in this talk came from there. In 2026, AI agents under test broke into its machines.",
-      fr: "Une bibliothèque publique en ligne où l'on partage des modèles d'IA et des données. Les petits modèles qui tournent en direct dans cette conférence en viennent. En 2026, des agents d'IA en cours de test se sont introduits dans ses machines.",
+      fr: "Une bibliothèque publique en ligne où l'on partage des modèles d'IA et des données. Les petits modèles qui tournent en direct dans cette présentation en viennent. En 2026, des agents d'IA en cours de test se sont introduits dans ses machines.",
     },
     seeAlso: ["Open weights", "Sandbox"],
   },

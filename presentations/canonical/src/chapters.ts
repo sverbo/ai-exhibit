@@ -55,7 +55,12 @@ export const agendaItems: L10n[] = parts.map((c) => c.title);
  * stays stable if parts are renumbered. Its texts are English, like every
  * scene; translations live in locales/<lang>.json under "<code>/...".
  */
-export function partOpener(chapterId: ChapterId, code: string): SceneDefinition {
+export function partOpener(
+  chapterId: ChapterId,
+  code: string,
+  /** Extra speaker-note bullets (English, markdown) and a closing line, when the opener also frames the part. */
+  extra: { notes?: string; transitionOut?: string } = {},
+): SceneDefinition {
   const index = parts.findIndex((c) => c.id === chapterId);
   const part = parts[index];
   if (!part) throw new Error(`No part for chapter "${chapterId}"`);
@@ -75,10 +80,10 @@ export function partOpener(chapterId: ChapterId, code: string): SceneDefinition 
     interaction: "presenter",
     speakerNotes: {
       en: `- Part ${n} of ${parts.length}: ${part.title.en}
-- ${part.summary.en}`,
+- ${part.summary.en}${extra.notes ? `\n${extra.notes}` : ""}`,
     },
     transitionIn: { en: `Part ${n}.` },
-    transitionOut: part.summary,
+    transitionOut: extra.transitionOut ? { en: extra.transitionOut } : part.summary,
     evidenceLevel: "none",
     sourceIds: [],
     runtimeClass: "A",

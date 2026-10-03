@@ -17,7 +17,6 @@ import {
   preferredTalkLocale,
   queryParam,
   rememberTalkLocale,
-  requestedLocale,
   resolveTalk,
   sourceLookup,
 } from "./presentation.ts";
@@ -119,7 +118,6 @@ function personalFirstSceneId(r: ResolvedEdition): string | undefined {
 export function useTalk(role: ClientRole): Talk {
   const [params] = useState(() => ({
     edition: queryParam("edition"),
-    lang: requestedLocale(),
     scene: queryParam("scene"),
     session: queryParam("s") ?? undefined,
   }));
@@ -129,7 +127,7 @@ export function useTalk(role: ClientRole): Talk {
     return createInitialState({
       presentationId: r.presentation.id,
       editionId: r.edition.id,
-      locale: params.lang ?? preferredTalkLocale(r.presentation) ?? defaultTalkLocale(r.presentation),
+      locale: preferredTalkLocale(r.presentation) ?? defaultTalkLocale(r.presentation),
       sceneId: (params.scene && r.scenes.some((s) => s.id === params.scene) ? params.scene : personalFirstSceneId(r)) ?? EMPTY_SCENE,
     });
   }, [params]);
@@ -175,7 +173,7 @@ export function useTalk(role: ClientRole): Talk {
   // One-time URL sync, then repair a session whose edition or scene no longer
   // exists. Only a window that is not out of date may repair: a stale window
   // that does not know the current scene must never pull everyone back.
-  const synced = useRef({ edition: false, lang: false, scene: false });
+  const synced = useRef({ edition: false, scene: false });
   useEffect(() => {
     if (!controller || !state || session.status !== "open") return;
     if (!synced.current.edition) {
@@ -186,18 +184,11 @@ export function useTalk(role: ClientRole): Talk {
           dispatch({
             type: "setEdition",
             editionId: target.edition.id,
-            locale: params.lang ?? state.locale,
+            locale: state.locale,
             sceneId: personalFirstSceneId(target) ?? EMPTY_SCENE,
           });
           return;
         }
-      }
-    }
-    if (!synced.current.lang) {
-      synced.current.lang = true;
-      if (params.lang && params.lang !== state.locale) {
-        dispatch({ type: "setLocale", locale: params.lang });
-        return;
       }
     }
     if (params.scene && !synced.current.scene) {
@@ -317,7 +308,7 @@ export function useTalk(role: ClientRole): Talk {
     scene,
     index,
     personal,
-    locale: state?.locale ?? params.lang ?? preferredTalkLocale(talk.presentation) ?? defaultTalkLocale(talk.presentation),
+    locale: state?.locale ?? preferredTalkLocale(talk.presentation) ?? defaultTalkLocale(talk.presentation),
     getSource,
     controller,
     ownsStage,

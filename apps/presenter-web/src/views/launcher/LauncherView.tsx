@@ -5,7 +5,6 @@ import {
   defaultTalkLocale,
   preferredTalkLocale,
   rememberTalkLocale,
-  requestedLocale,
   resolveTalk,
 } from "../../talk/presentation.ts";
 import { cloudHealthText, lanOrigin, useCloudHealth, useRuntime } from "../../talk/runtime.ts";
@@ -18,7 +17,7 @@ import { exhibits } from "./exhibits.ts";
 import styles from "./LauncherView.module.css";
 
 function initialLocale(): Locale {
-  return requestedLocale() ?? preferredTalkLocale() ?? defaultTalkLocale();
+  return preferredTalkLocale() ?? defaultTalkLocale();
 }
 /** The author's contact and repository, shown in "About this talk". */
 const SIGNAL = "sverbo.39";

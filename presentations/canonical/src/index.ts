@@ -22,6 +22,8 @@ export const canonical: PresentationDefinition = {
   locales: ["en", "fr"],
   artifacts,
   sources,
+  // Codes of removed scenes: never reuse them (personal configs may still name them).
+  retiredSceneCodes: ["open"],
 };
 
 // Texts are written in English; each language's catalog (locales/<lang>.json)

@@ -41,10 +41,3 @@ export function LocalePicker({
     </div>
   );
 }
-
-/** Keeps `?lang=` in the URL in sync with a picker. */
-export function setLangParam(locale: Locale): void {
-  const url = new URL(window.location.href);
-  url.searchParams.set("lang", locale);
-  window.history.replaceState(null, "", url);
-}

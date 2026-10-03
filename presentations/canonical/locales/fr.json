@@ -9,7 +9,7 @@
   },
   "chapter:00/summary": {
     "source": "The plan of the talk, and what it is not.",
-    "text": "Le plan de la conférence, et ce qu'elle n'est pas."
+    "text": "Le plan de la présentation, et ce qu'elle n'est pas."
   },
   "chapter:01/title": {
     "source": "What AI can do today",
@@ -53,7 +53,7 @@
   },
   "edition:full/title": {
     "source": "Full talk (about 90 min)",
-    "text": "Conférence complète (environ 90 min)"
+    "text": "Présentation complète (environ 90 min)"
   },
   "00-agenda/title": {
     "source": "Today",
@@ -61,7 +61,7 @@
   },
   "00-agenda/objective": {
     "source": "Welcome the room and show the five parts of the talk.",
-    "text": "Accueillir la salle et montrer les cinq parties de la conférence."
+    "text": "Accueillir la salle et montrer les cinq parties de la présentation."
   },
   "00-agenda/takeaway": {
     "source": "Five parts: what AI can do, its history and how it works, who builds it, the risks, what we can do.",
@@ -73,19 +73,19 @@
   },
   "00-agenda/speakerNotes": {
     "source": "- Welcome, who I am, why this talk\n- **Do:** five parts, one per click\n- First what it does, then how, then who builds it\n- Then the risks, and what we can do about them\n- Questions at the end",
-    "text": "- Bienvenue, qui je suis, pourquoi cette conférence\n- **Faire :** cinq parties, une par clic\n- D'abord ce qu'elle fait, puis comment, puis qui la construit\n- Ensuite les risques, et ce qu'on peut y faire\n- Les questions à la fin"
+    "text": "- Bienvenue, qui je suis, pourquoi cette présentation\n- **Faire :** cinq parties, une par clic\n- D'abord ce qu'elle fait, puis comment, puis qui la construit\n- Ensuite les risques, et ce qu'on peut y faire\n- Les questions à la fin"
   },
   "00-agenda/transitionIn": {
     "source": "The talk opens on its plan.",
-    "text": "La conférence s'ouvre sur son plan."
+    "text": "La présentation s'ouvre sur son plan."
   },
   "00-agenda/transitionOut": {
     "source": "And two things this talk is not.",
-    "text": "Et deux choses que cette conférence n'est pas."
+    "text": "Et deux choses que cette présentation n'est pas."
   },
   "00-not-this/title": {
     "source": "What this talk is not",
-    "text": "Ce que cette conférence n'est pas"
+    "text": "Ce que cette présentation n'est pas"
   },
   "00-not-this/objective": {
     "source": "Set expectations: no tool tutorial, no environmental assessment, and why today's focus is capabilities and risks.",
@@ -97,7 +97,7 @@
   },
   "00-not-this/visual.heading": {
     "source": "What this talk is not",
-    "text": "Ce que cette conférence n'est pas"
+    "text": "Ce que cette présentation n'est pas"
   },
   "00-not-this/visual.cards.0.title": {
     "source": "Not a tutorial on AI tools",
@@ -112,8 +112,8 @@
     "text": "Pas sur l'environnement"
   },
   "00-not-this/visual.cards.1.body": {
-    "source": "It matters, but it is another talk. One hour of video streaming uses about as much energy as 250 chatbot questions.",
-    "text": "C'est important, mais c'est une autre conférence. Une heure de vidéo en streaming consomme à peu près autant d'énergie que 250 questions à un chatbot (*agent conversationnel*)."
+    "source": "Of course it is a serious problem, and a talk of its own. But for many, the risks we discuss today are of another order of magnitude.",
+    "text": "C'est bien sûr un problème sérieux, et le sujet d'une autre présentation. Mais pour beaucoup, les risques dont on parle aujourd'hui sont d'un autre ordre de grandeur."
   },
   "00-not-this/visual.cards.2.title": {
     "source": "Today's focus",
@@ -124,8 +124,8 @@
     "text": "« Réduire le risque d'extinction lié à l'IA devrait être une priorité mondiale. » (chercheurs en IA et dirigeants de laboratoires d'IA, 2023)"
   },
   "00-not-this/speakerNotes": {
-    "source": "- Not a tutorial: tool setup goes out of date fast, and tools keep adding layers on top\n- What lasts: knowing what is possible; then ask your assistant how\n- Not about the environment: it matters, it is another talk\n- To calibrate: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)\n- Data centres: about 1.5% of world electricity in 2024 (IEA)\n- 2023: Hinton, Bengio and AI lab leaders signed: extinction risk from AI, a priority alongside pandemics and nuclear war\n- My own view, not a consensus: for many experts, AI risk is an order of magnitude more pressing than the environment",
-    "text": "- Pas un tutoriel : les réglages d'outils se périment vite, et les outils ajoutent sans cesse des couches\n- Ce qui dure : savoir ce qui est possible, puis demander à son assistant comment faire\n- Pas sur l'environnement : c'est important, c'est une autre conférence\n- Pour se situer : une requête environ 0,3 Wh, une heure de streaming environ 77 Wh, soit à peu près 250 requêtes (les requêtes longues ou de raisonnement coûtent bien plus)\n- Centres de données : environ 1,5 % de l'électricité mondiale en 2024 (AIE)\n- 2023 : Hinton, Bengio et des dirigeants de laboratoires d'IA signent : le risque d'extinction lié à l'IA, une priorité au même titre que les pandémies et la guerre nucléaire\n- Mon avis, pas un consensus : pour beaucoup d'experts, le risque de l'IA est d'un ordre de grandeur plus pressant que l'environnement"
+    "source": "- Not a tutorial: tool setup goes out of date fast, and tools keep adding layers on top\n- What lasts: knowing what is possible; then ask your assistant how\n- Not about the environment: a serious problem, and another talk; for many, today's risks are of another order of magnitude\n- To calibrate, if asked: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)\n- Data centres: about 1.5% of world electricity in 2024 (IEA)\n- 2023: Hinton, Bengio and AI lab leaders signed: extinction risk from AI, a priority alongside pandemics and nuclear war\n- My own view, not a consensus: for many experts, AI risk is an order of magnitude more pressing than the environment",
+    "text": "- Pas un tutoriel : les réglages d'outils se périment vite, et les outils ajoutent sans cesse des couches\n- Ce qui dure : savoir ce qui est possible, puis demander à son assistant comment faire\n- Pas sur l'environnement : un problème sérieux, et une autre présentation ; pour beaucoup, les risques d'aujourd'hui sont d'un autre ordre de grandeur\n- Pour se situer, si on vous le demande : une requête environ 0,3 Wh, une heure de streaming environ 77 Wh, soit à peu près 250 requêtes (les requêtes longues ou de raisonnement coûtent bien plus)\n- Centres de données : environ 1,5 % de l'électricité mondiale en 2024 (AIE)\n- 2023 : Hinton, Bengio et des dirigeants de laboratoires d'IA signent : le risque d'extinction lié à l'IA, une priorité au même titre que les pandémies et la guerre nucléaire\n- Mon avis, pas un consensus : pour beaucoup d'experts, le risque de l'IA est d'un ordre de grandeur plus pressant que l'environnement"
   },
   "00-not-this/transitionIn": {
     "source": "From the plan to what is not in it.",
@@ -137,41 +137,17 @@
   },
   "01-part/objective": {
     "source": "Open part 1 of 5 and show where it sits in the talk.",
-    "text": "Ouvrir la partie 1 sur 5 et montrer où elle se situe dans la conférence."
+    "text": "Ouvrir la partie 1 sur 5 et montrer où elle se situe dans la présentation."
   },
   "01-part/speakerNotes": {
-    "source": "- Part 1 of 5: What AI can do today\n- Today's assistants answer well and act on our behalf, within what we allow.",
-    "text": "- Partie 1 sur 5 : Ce que l'IA sait faire aujourd'hui\n- Les assistants d'aujourd'hui répondent bien et agissent pour nous, dans les limites de ce qu'on leur permet."
+    "source": "- Part 1 of 5: What AI can do today\n- Today's assistants answer well and act on our behalf, within what we allow.\n- Everyone has an opinion on AI, often formed a few years ago\n- **Ask:** who has used a chatbot this week?\n- Let's test your picture with a few trick questions",
+    "text": "- Partie 1 sur 5 : Ce que l'IA sait faire aujourd'hui\n- Les assistants d'aujourd'hui répondent bien et agissent pour nous, dans les limites de ce qu'on leur permet.\n- Tout le monde a un avis sur l'IA, souvent formé il y a quelques années\n- **Demander :** qui a utilisé un chatbot (*agent conversationnel*) cette semaine ?\n- Testons l'idée que vous vous en faites avec quelques questions pièges"
   },
   "01-part/transitionIn": {
     "source": "Part 1.",
     "text": "Partie 1."
   },
-  "01-opening/title": {
-    "source": "Opening",
-    "text": "Ouverture"
-  },
-  "01-opening/objective": {
-    "source": "Set the question of the first chapter: what AI can actually do today.",
-    "text": "Poser la question du premier chapitre : ce que l'IA sait vraiment faire aujourd'hui."
-  },
-  "01-opening/takeaway": {
-    "source": "Before explaining how it works, let's look at what it does.",
-    "text": "Avant d'expliquer comment ça marche, regardons ce que ça fait."
-  },
-  "01-opening/visual.heading": {
-    "source": "What can AI do today?",
-    "text": "Que sait faire l'IA aujourd'hui ?"
-  },
-  "01-opening/speakerNotes": {
-    "source": "- Everyone has an opinion on AI, often formed a few years ago\n- **Ask:** who has used a chatbot this week?\n- Let's test your picture with a few trick questions",
-    "text": "- Tout le monde a un avis sur l'IA, souvent formé il y a quelques années\n- **Demander :** qui a utilisé un chatbot (*agent conversationnel*) cette semaine ?\n- Testons l'idée que vous vous en faites avec quelques questions pièges"
-  },
-  "01-opening/transitionIn": {
-    "source": "From what this talk is not to the first question.",
-    "text": "De ce que la conférence n'est pas à la première question."
-  },
-  "01-opening/transitionOut": {
+  "01-part/transitionOut": {
     "source": "Let's start with a few trick questions.",
     "text": "Commençons par quelques questions pièges."
   },
@@ -369,7 +345,7 @@
   },
   "02-part/objective": {
     "source": "Open part 2 of 5 and show where it sits in the talk.",
-    "text": "Ouvrir la partie 2 sur 5 et montrer où elle se situe dans la conférence."
+    "text": "Ouvrir la partie 2 sur 5 et montrer où elle se situe dans la présentation."
   },
   "02-part/speakerNotes": {
     "source": "- Part 2 of 5: History and how it works\n- From written rules to learned ones, with one running example, then language models.",
@@ -909,7 +885,7 @@
   },
   "03-part/objective": {
     "source": "Open part 3 of 5 and show where it sits in the talk.",
-    "text": "Ouvrir la partie 3 sur 5 et montrer où elle se situe dans la conférence."
+    "text": "Ouvrir la partie 3 sur 5 et montrer où elle se situe dans la présentation."
   },
   "03-part/speakerNotes": {
     "source": "- Part 3 of 5: Who builds it\n- A handful of labs, a race between them, and a race for chips.",
@@ -969,7 +945,7 @@
   },
   "04-part/objective": {
     "source": "Open part 4 of 5 and show where it sits in the talk.",
-    "text": "Ouvrir la partie 4 sur 5 et montrer où elle se situe dans la conférence."
+    "text": "Ouvrir la partie 4 sur 5 et montrer où elle se situe dans la présentation."
   },
   "04-part/speakerNotes": {
     "source": "- Part 4 of 5: The risks\n- Powerful, opaque and built in a race: why risk is the next question.",
@@ -1045,7 +1021,7 @@
   },
   "04-to-risks/objective": {
     "source": "Turn the talk towards risk and name the three families that follow: misuse, systemic effects, loss of control.",
-    "text": "Tourner la conférence vers les risques et nommer les trois familles qui suivent : usages malveillants, effets systémiques, perte de contrôle."
+    "text": "Tourner la présentation vers les risques et nommer les trois familles qui suivent : usages malveillants, effets systémiques, perte de contrôle."
   },
   "04-to-risks/takeaway": {
     "source": "Risks come from people, from society as a whole, or from the systems themselves.",
@@ -1417,7 +1393,7 @@
   },
   "05-part/objective": {
     "source": "Open part 5 of 5 and show where it sits in the talk.",
-    "text": "Ouvrir la partie 5 sur 5 et montrer où elle se situe dans la conférence."
+    "text": "Ouvrir la partie 5 sur 5 et montrer où elle se situe dans la présentation."
   },
   "05-part/speakerNotes": {
     "source": "- Part 5 of 5: What we can do\n- A question for the room.",
@@ -1569,7 +1545,7 @@
   },
   "05-resources/takeaway": {
     "source": "The talk ends here; the learning does not have to.",
-    "text": "La conférence s'arrête ici ; l'apprentissage, pas forcément."
+    "text": "La présentation s'arrête ici ; l'apprentissage, pas forcément."
   },
   "05-resources/speakerNotes": {
     "source": "- Leave this up during questions\n- Pointers, not endorsements: a video channel, a free course, and a petition by PauseAI for those who want to act\n- The QR code opens the glossary on their phones, with the same links under Resources",
@@ -2185,7 +2161,7 @@
   },
   "copy:Every word of the talk, explained.": {
     "source": "Every word of the talk, explained.",
-    "text": "Tous les mots de la conférence, expliqués."
+    "text": "Tous les mots de la présentation, expliqués."
   },
   "copy:Part": {
     "source": "Part",

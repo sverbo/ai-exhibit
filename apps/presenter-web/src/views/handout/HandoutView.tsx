@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { tr, type SourceRecord } from "@ai-exhibit/presentation-core";
 import { EvidenceBadge } from "@ai-exhibit/scene-components";
 import { useUi } from "../../i18n.ts";
-import { DEFAULT_EDITION, defaultTalkLocale, queryParam, requestedLocale, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
-import { LocalePicker, setLangParam } from "../../ui/LocalePicker.tsx";
+import { DEFAULT_EDITION, defaultTalkLocale, queryParam, preferredTalkLocale, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { sceneSourceIds } from "../presenter/panels.tsx";
 import styles from "./HandoutView.module.css";
 
 const COPY = {
   intro: {
-    fr: "Ce qu'il faut retenir de la conférence, chapitre par chapitre, avec toutes les sources citées et leur niveau de preuve.",
+    fr: "Ce qu'il faut retenir de la présentation, chapitre par chapitre, avec toutes les sources citées et leur niveau de preuve.",
     en: "What to remember from the talk, chapter by chapter, with every source cited and its level of evidence.",
   },
   sources: { fr: "Sources", en: "Sources" },
@@ -21,11 +21,11 @@ const COPY = {
   language: { fr: "Langue", en: "Language" },
 } as const;
 
-/** Public post-talk page, in the language of `?lang=` (default: the talk's). */
+/** Public post-talk page, in the language last chosen in this browser (default: the talk's); its own picker switches it. */
 export default function HandoutView() {
   const { t } = useUi();
   const [editionId] = useState(() => queryParam("edition") ?? DEFAULT_EDITION);
-  const [locale, setLocale] = useState(() => requestedLocale() ?? defaultTalkLocale());
+  const [locale, setLocale] = useState(() => preferredTalkLocale() ?? defaultTalkLocale());
   const talk = useMemo(() => resolveTalk(editionId), [editionId]);
   const getSource = useMemo(() => sourceLookup(talk.presentation), [talk.presentation]);
   const { presentation, edition, scenes } = talk;
@@ -51,7 +51,6 @@ export default function HandoutView() {
           label={tr(COPY.language, locale)}
           onChange={(l) => {
             setLocale(l);
-            setLangParam(l);
           }}
         />
       </div>

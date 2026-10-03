@@ -82,7 +82,7 @@ const UI = {
   todo: { fr: "À faire", en: "TODO" },
   noTodo: { fr: "Rien à signaler.", en: "Nothing pending." },
   upNext: { fr: "Ensuite", en: "Up next" },
-  endOfTalk: { fr: "Fin de la conférence", en: "End of the talk" },
+  endOfTalk: { fr: "Fin de la présentation", en: "End of the talk" },
   timer: { fr: "Minuteur", en: "Timer" },
   start: { fr: "Démarrer", en: "Start" },
   pause: { fr: "Pause", en: "Pause" },
@@ -108,7 +108,7 @@ const UI = {
   noMatch: { fr: "Aucune scène ne correspond.", en: "No scene matches." },
   // Personal config
   config: { fr: "Config", en: "Config" },
-  configTitle: { fr: "Votre version de la conférence", en: "Your version of the talk" },
+  configTitle: { fr: "Votre version de la présentation", en: "Your version of the talk" },
   configHint: {
     fr: "Réordonnez, masquez et annotez les scènes. Enregistré dans ce navigateur, appliqué au projecteur aussi.",
     en: "Reorder, hide and annotate scenes. Saved in this browser, applied to the projector too.",
@@ -130,9 +130,9 @@ const UI = {
   },
   configExport: { fr: "Exporter", en: "Export" },
   configImport: { fr: "Importer", en: "Import" },
-  configReset: { fr: "Revenir à la conférence par défaut", en: "Reset to the default talk" },
+  configReset: { fr: "Revenir à la présentation par défaut", en: "Reset to the default talk" },
   configConfirmReset: {
-    fr: "Effacer votre ordre, vos scènes masquées et vos notes pour cette conférence ?",
+    fr: "Effacer votre ordre, vos scènes masquées et vos notes pour cette présentation ?",
     en: "Clear your order, hidden scenes and notes for this talk?",
   },
   configUnknown: { fr: "Codes inconnus, ignorés", en: "Unknown codes, ignored" },
@@ -145,7 +145,7 @@ const UI = {
     fr: "Configuration créée par une version plus récente : mettez l'application à jour.",
     en: "Configuration made by a newer version: update the app.",
   },
-  configErrorTalk: { fr: "Cette configuration est celle d'une autre conférence.", en: "This configuration belongs to another talk." },
+  configErrorTalk: { fr: "Cette configuration est celle d'une autre présentation.", en: "This configuration belongs to another talk." },
   configPersonal: { fr: "personnalisée", en: "personalised" },
   personalNoteCue: { fr: "Moi", en: "Mine" },
   close: { fr: "Fermer", en: "Close" },
@@ -164,7 +164,7 @@ const UI = {
     en: "This window is out of date: the scenes changed since it was opened. Reload it before going on.",
   },
   reload: { fr: "Recharger", en: "Reload" },
-  restartTalk: { fr: "Recommencer la conférence", en: "Restart the talk" },
+  restartTalk: { fr: "Recommencer la présentation", en: "Restart the talk" },
   confirmRestart: {
     fr: "Recommencer ? Le minuteur, les votes et l'état des scènes seront effacés.",
     en: "Restart? The timer, votes and scene states will be cleared.",

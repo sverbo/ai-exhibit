@@ -11,8 +11,8 @@ import { tr,
 import { Rich, EvidenceBadge } from "@ai-exhibit/scene-components";
 import { formatDuration, formatMinutes } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
-import { DEFAULT_EDITION, defaultTalkLocale, queryParam, requestedLocale, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
-import { LocalePicker, setLangParam } from "../../ui/LocalePicker.tsx";
+import { DEFAULT_EDITION, defaultTalkLocale, queryParam, preferredTalkLocale, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import chrome from "../../ui/chrome.module.css";
 import { EditionPicker, setEditionParam } from "../../ui/EditionPicker.tsx";
 import { PreviewStage } from "../../ui/PreviewStage.tsx";
@@ -27,7 +27,7 @@ export default function OverviewView() {
   const [editionId, setEditionId] = useState(() => queryParam("edition") ?? DEFAULT_EDITION);
   const talk = useMemo(() => resolveTalk(editionId), [editionId]);
   const getSource = useMemo(() => sourceLookup(talk.presentation), [talk.presentation]);
-  const [locale, setLocale] = useState<Locale>(() => requestedLocale() ?? defaultTalkLocale());
+  const [locale, setLocale] = useState<Locale>(() => preferredTalkLocale() ?? defaultTalkLocale());
   const scenes = talk.scenes;
   // Personal config of this browser: hidden scenes are greyed, totals follow it.
   const [personalConfig] = usePersonalConfig(talk.presentation);
@@ -70,7 +70,6 @@ export default function OverviewView() {
             value={locale}
             onChange={(l) => {
               setLocale(l);
-              setLangParam(l);
             }}
           />
           <EditionPicker
@@ -136,7 +135,7 @@ export default function OverviewView() {
                   hidden={sequence.hiddenIds.has(scene.id)}
                   locale={locale}
                   getSource={getSource}
-                  href={`/present?edition=${encodeURIComponent(talk.edition.id)}&lang=${locale}&scene=${encodeURIComponent(scene.id)}`}
+                  href={`/present?edition=${encodeURIComponent(talk.edition.id)}&scene=${encodeURIComponent(scene.id)}`}
                   hint={t("rehearseFromHere")}
                 />
               ))}

@@ -46,20 +46,6 @@ export function talkLocales(presentation: PresentationDefinition = canonical): L
   return presentation.locales;
 }
 
-/**
- * The language a launch asks for: `?lang=`, else a locale in a legacy
- * `?edition=fr-full`, else null (the session's or the talk's default applies).
- * Only locales the talk offers count.
- */
-export function requestedLocale(
-  search: string = typeof window === "undefined" ? "" : window.location.search,
-  presentation: PresentationDefinition = canonical,
-): Locale | null {
-  const q = new URLSearchParams(search);
-  const asked = parseLocale(q.get("lang")) ?? parseEditionParam(presentation, q.get("edition")).locale;
-  return asked && presentation.locales.includes(asked) ? asked : null;
-}
-
 /** Where the browser remembers the talk's language, for the next session it starts. */
 export const TALK_LOCALE_KEY = "ai-exhibit:talk-locale";
 

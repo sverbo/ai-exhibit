@@ -73,10 +73,10 @@ export const chapter01: SceneDefinition[] = [
         {
           title: { en: "Not about the environment" },
           body: {
-            en: "It matters, but it is another talk. One hour of video streaming uses about as much energy as 250 chatbot questions.",
+            en: "Of course it is a serious problem, and a talk of its own. But for many, the risks we discuss today are of another order of magnitude.",
           },
           evidence: "contested",
-          sourceIds: ["tk-epoch-2025-chatgpt-energy", "tk-iea-2020-streaming", "sc-iea-2025-energy-ai"],
+          sourceIds: ["tk-cais-statement-ai-risk", "sc-iea-2025-energy-ai"],
         },
         {
           title: { en: "Today's focus" },
@@ -92,8 +92,8 @@ export const chapter01: SceneDefinition[] = [
     speakerNotes: {
       en: `- Not a tutorial: tool setup goes out of date fast, and tools keep adding layers on top
 - What lasts: knowing what is possible; then ask your assistant how
-- Not about the environment: it matters, it is another talk
-- To calibrate: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)
+- Not about the environment: a serious problem, and another talk; for many, today's risks are of another order of magnitude
+- To calibrate, if asked: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)
 - Data centres: about 1.5% of world electricity in 2024 (IEA)
 - 2023: Hinton, Bengio and AI lab leaders signed: extinction risk from AI, a priority alongside pandemics and nuclear war
 - My own view, not a consensus: for many experts, AI risk is an order of magnitude more pressing than the environment`,
@@ -115,47 +115,19 @@ export const chapter01: SceneDefinition[] = [
     optional: true,
     localizationNotes: "The French quote translates the CAIS statement; the original is in English. Say clearly that the order-of-magnitude comparison is the presenter's opinion.",
   },
-  partOpener("01", "pcap"),
-  {
-    id: "01-opening",
-    code: "open",
-    chapter: "01",
-    number: "1.1",
-    title: { en: "Opening" },
-    objective: {
-      en: "Set the question of the first chapter: what AI can actually do today.",
-    },
-    takeaway: {
-      en: "Before explaining how it works, let's look at what it does.",
-    },
-    visual: {
-      layout: "title",
-      heading: { en: "What can AI do today?" },
-    },
-    interaction: "none",
-    speakerNotes: {
-      en: `- Everyone has an opinion on AI, often formed a few years ago
+  // The part opener also frames the chapter (it replaced a separate "Opening" title slide).
+  partOpener("01", "pcap", {
+    notes: `- Everyone has an opinion on AI, often formed a few years ago
 - **Ask:** who has used a chatbot this week?
 - Let's test your picture with a few trick questions`,
-    },
-    transitionIn: { en: "From what this talk is not to the first question." },
-    transitionOut: {
-      en: "Let's start with a few trick questions.",
-    },
-    evidenceLevel: "none",
-    sourceIds: [],
-    runtimeClass: "A",
-    artifacts: [],
-    fallback: { kind: "none", reason: "Static title." },
-    durationSec: 30,
-    optional: false,
-  },
+    transitionOut: "Let's start with a few trick questions.",
+  }),
   {
     id: "01-then-and-now",
     code: "then",
     steps: 5,
     chapter: "01",
-    number: "1.2",
+    number: "1.1",
     title: { en: "Then and now" },
     objective: {
       en: "Show that trick questions which fooled early language models are now answered correctly.",
@@ -195,7 +167,7 @@ export const chapter01: SceneDefinition[] = [
     code: "side",
     steps: 4,
     chapter: "01",
-    number: "1.3",
+    number: "1.2",
     title: { en: "Then and now, side by side" },
     objective: {
       en: "Compare a 2019 model, a 2020 model and a current frontier model on cost, electricity, reliability, skill and memory.",
@@ -248,7 +220,7 @@ export const chapter01: SceneDefinition[] = [
     code: "conn",
     steps: 7,
     chapter: "01",
-    number: "1.4",
+    number: "1.3",
     title: { en: "Connected to your life" },
     objective: {
       en: "Show that today's assistants can be connected to email, calendar, files, the browser, payments and code.",
@@ -289,7 +261,7 @@ export const chapter01: SceneDefinition[] = [
     code: "perm",
     steps: 5,
     chapter: "01",
-    number: "1.5",
+    number: "1.4",
     title: { en: "Permissions" },
     objective: {
       en: "Show that what an assistant can do depends on what we allow it to touch, up to spending money.",
@@ -325,7 +297,7 @@ export const chapter01: SceneDefinition[] = [
     code: "demo",
     steps: 1,
     chapter: "01",
-    number: "1.6",
+    number: "1.5",
     title: { en: "My own demo" },
     objective: {
       en: "Show a real task the presenter gave an AI assistant, recorded on screen.",
@@ -365,7 +337,7 @@ export const chapter01: SceneDefinition[] = [
     code: "tool",
     steps: 5,
     chapter: "01",
-    number: "1.7",
+    number: "1.6",
     title: { en: "Chat or agent: calling a tool" },
     objective: {
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
@@ -404,7 +376,7 @@ export const chapter01: SceneDefinition[] = [
     code: "steps",
     steps: 15,
     chapter: "01",
-    number: "1.8",
+    number: "1.7",
     title: { en: "One request, every step" },
     objective: {
       en: "Make every step of one complex request visible: tool calls, sub-agents in parallel, merged results, a human approval before paying.",
@@ -441,7 +413,7 @@ export const chapter01: SceneDefinition[] = [
     code: "loop",
     steps: 5,
     chapter: "01",
-    number: "1.9",
+    number: "1.8",
     title: { en: "The agent loop" },
     objective: {
       en: "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",

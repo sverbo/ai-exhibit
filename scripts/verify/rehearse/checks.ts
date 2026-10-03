@@ -17,7 +17,7 @@ import { clip, isLocalUrl, normalizeDetail, type Cursor, type Mode, type Problem
 export interface CheckOptions {
   baseUrl: string;
   edition: string;
-  /** Language of the talk for this run (`?lang=` on every talk view). */
+  /** Language of the talk for this run (set as the browser's remembered choice). */
   locale: Locale;
   scenes: SceneDefinition[];
   /** Max time for a scene to show something after a keypress (spec: 2 s). */
@@ -275,6 +275,8 @@ async function newPage(browser: Browser, rec: Recorder, opts: CheckOptions, view
   if (!shared) {
     // tsx compiles with keepNames: functions passed to page.evaluate may call __name.
     await context.addInitScript("globalThis.__name = (fn) => fn;");
+    // The talk starts in the language this browser last chose (no URL parameter for it).
+    await context.addInitScript(`try { localStorage.setItem("ai-exhibit:talk-locale", ${JSON.stringify(opts.locale)}); } catch {}`);
     await rec.guardContext(context, () => cursor());
   }
   const page = await context.newPage();
@@ -289,10 +291,9 @@ async function newPage(browser: Browser, rec: Recorder, opts: CheckOptions, view
   };
 }
 
-/** A view URL; talk views (those given an edition, and the projector) also get `lang`. */
+/** A view URL. The talk's language comes from the browser's remembered choice (see newPage). */
 function url(opts: CheckOptions, path: string, params: Record<string, string> = {}): string {
   const u = new URL(path, opts.baseUrl);
-  if ("edition" in params || path === "/projector") u.searchParams.set("lang", opts.locale);
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
   return u.href;
 }
