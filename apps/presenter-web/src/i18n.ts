@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { parseLocale, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 
 /** Presenter-side interface strings (chrome, not talk content). */
 const UI = {
@@ -194,24 +194,25 @@ const UI = {
   labLocale: { fr: "Langue de la scène", en: "Scene language" },
   labSteps: { fr: "Étapes", en: "Steps" },
   labResetState: { fr: "Effacer l'état", en: "Clear state" },
-} satisfies Record<string, Record<Locale, string>>;
+} satisfies Record<string, L10n>;
 
 export type UiKey = keyof typeof UI;
 
 /** One interface string in a given language, for pages pinned to a language. */
 export function uiString(key: UiKey, locale: Locale): string {
-  return UI[key][locale];
+  return tr(UI[key], locale);
 }
 
 const STORAGE_KEY = "ai-exhibit:ui-locale";
 const listeners = new Set<() => void>();
 
 function readLocale(): Locale {
-  const fromUrl = new URLSearchParams(window.location.search).get("ui");
-  if (fromUrl === "fr" || fromUrl === "en") return fromUrl;
+  const fromUrl = parseLocale(new URLSearchParams(window.location.search).get("ui"));
+  if (fromUrl) return fromUrl;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "fr" || stored === "en") return stored;
+    const known = parseLocale(stored);
+    if (known) return known;
   } catch {
     // storage unavailable
   }
@@ -240,5 +241,5 @@ export function useUi(): { t: (key: UiKey) => string; locale: Locale; setLocale:
     },
     () => current,
   );
-  return { t: (key) => UI[key][locale], locale, setLocale: setUiLocale };
+  return { t: (key) => tr(UI[key], locale), locale, setLocale: setUiLocale };
 }

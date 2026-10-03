@@ -1,3 +1,4 @@
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
 import { type CellId, type Choice, CHOICES, cellId, PAYOFFS, STEP_COUNT, stepFocus } from "./raceDilemma.ts";
@@ -13,58 +14,56 @@ export interface RaceDilemmaState {
 const COPY = {
   analogy: {
     en: "An analogy (the prisoner's dilemma), not a model of real companies or countries",
-    fr: "Une analogie (le dilemme du prisonnier), pas un modèle d'entreprises ou de pays réels",
   },
-  a: { en: "Developer A", fr: "Développeur A" },
-  b: { en: "Developer B", fr: "Développeur B" },
-  careful: { en: "Take time for safety", fr: "Prendre le temps de la sécurité" },
-  race: { en: "Race ahead", fr: "Accélérer" },
+  a: { en: "Developer A" },
+  b: { en: "Developer B" },
+  careful: { en: "Take time for safety" },
+  race: { en: "Race ahead" },
   ranks: {
     en: "Rankings illustrate the structure of the dilemma. They are not measurements.",
-    fr: "Les classements illustrent la structure du dilemme. Ce ne sont pas des mesures.",
   },
-  levers: { en: "What can change the game", fr: "Ce qui peut changer la donne" },
-  limits: { en: "Where the analogy breaks", fr: "Les limites de l'analogie" },
+  levers: { en: "What can change the game" },
+  limits: { en: "Where the analogy breaks" },
 } as const;
 
 const RANK_WORD = {
-  4: { en: "best", fr: "le mieux" },
-  3: { en: "good", fr: "bien" },
-  2: { en: "poor", fr: "médiocre" },
-  1: { en: "worst", fr: "le pire" },
+  4: { en: "best" },
+  3: { en: "good" },
+  2: { en: "poor" },
+  1: { en: "worst" },
 } as const;
 
-const OUTCOME: Record<CellId, { en: string; fr: string }> = {
-  "careful-careful": { en: "Both take precautions. Nobody falls behind.", fr: "Les deux prennent leurs précautions. Personne ne prend de retard." },
-  "careful-race": { en: "B pulls ahead. A falls behind.", fr: "B prend l'avantage. A prend du retard." },
-  "race-careful": { en: "A pulls ahead. B falls behind.", fr: "A prend l'avantage. B prend du retard." },
-  "race-race": { en: "Both rush. Risks rise for everyone.", fr: "Les deux se précipitent. Les risques montent pour tous." },
+const OUTCOME: Record<CellId, L10n> = {
+  "careful-careful": { en: "Both take precautions. Nobody falls behind." },
+  "careful-race": { en: "B pulls ahead. A falls behind." },
+  "race-careful": { en: "A pulls ahead. B falls behind." },
+  "race-race": { en: "Both rush. Risks rise for everyone." },
 };
 
 const CAPTIONS = [
-  { en: "Two developers each choose, without knowing the other's choice.", fr: "Deux développeurs choisissent chacun, sans connaître le choix de l'autre." },
-  { en: "Each outcome, as each side might rank it.", fr: "Chaque issue, telle que chaque camp pourrait la classer." },
-  { en: "If A takes its time, B does better by racing.", fr: "Si A prend son temps, B a intérêt à accélérer." },
-  { en: "If A races, B still does better by racing.", fr: "Si A accélère, B a encore intérêt à accélérer." },
-  { en: "Both race, and both end up worse off than if they had coordinated.", fr: "Les deux accélèrent, et finissent moins bien lotis que s'ils s'étaient coordonnés." },
-  { en: "The trap is in the structure, not in anyone's character.", fr: "Le piège tient à la structure, pas au caractère de quiconque." },
+  { en: "Two developers each choose, without knowing the other's choice." },
+  { en: "Each outcome, as each side might rank it." },
+  { en: "If A takes its time, B does better by racing." },
+  { en: "If A races, B still does better by racing." },
+  { en: "Both race, and both end up worse off than if they had coordinated." },
+  { en: "The trap is in the structure, not in anyone's character." },
 ] as const;
 
 const LEVERS = [
-  { en: "Agreements that can be checked", fr: "Des accords vérifiables" },
-  { en: "Shared rules that apply to everyone", fr: "Des règles communes qui s'appliquent à tous" },
-  { en: "Repeated interaction and trust", fr: "Des interactions répétées et de la confiance" },
-  { en: "Making safety cheaper, or rewarding it", fr: "Rendre la sécurité moins coûteuse, ou la récompenser" },
+  { en: "Agreements that can be checked" },
+  { en: "Shared rules that apply to everyone" },
+  { en: "Repeated interaction and trust" },
+  { en: "Making safety cheaper, or rewarding it" },
 ];
 
 const LIMITS = [
-  { en: "Many players, not two", fr: "Beaucoup d'acteurs, pas deux" },
-  { en: "Payoffs are uncertain and disputed", fr: "Les gains sont incertains et discutés" },
-  { en: "Not every actor sees it as a race", fr: "Tous les acteurs ne voient pas cela comme une course" },
+  { en: "Many players, not two" },
+  { en: "Payoffs are uncertain and disputed" },
+  { en: "Not every actor sees it as a race" },
 ];
 
 function Rank({ value, who, locale }: { value: number; who: string; locale: "fr" | "en" }) {
-  const word = RANK_WORD[value as 1 | 2 | 3 | 4][locale];
+  const word = tr(RANK_WORD[value as 1 | 2 | 3 | 4], locale);
   return (
     <span className={styles.rank} data-rank={value}>
       <span className={styles.who}>{who}</span>
@@ -85,7 +84,7 @@ export function RaceDilemma({ ctx }: SceneComponentProps<Record<string, never>, 
   const picked = ctx.state && ctx.state.atStep === ctx.revealStep ? ctx.state.cell : null;
   const emphasized = new Set<CellId>(picked ? [picked] : focus.cells);
   const interactive = role === "controller";
-  const label = (c: Choice) => (c === "careful" ? COPY.careful[locale] : COPY.race[locale]);
+  const label = (c: Choice) => (c === "careful" ? tr(COPY.careful, locale) : tr(COPY.race, locale));
 
   const choose = (id: CellId) => {
     if (interactive) ctx.setState({ cell: picked === id ? null : id, atStep: ctx.revealStep });
@@ -95,12 +94,12 @@ export function RaceDilemma({ ctx }: SceneComponentProps<Record<string, never>, 
     <div className={`${styles.root} ${ctx.reducedMotion || role === "preview" ? common.still : ""}`}>
       <header className={styles.header}>
         <EvidenceBadge level="thought-experiment" locale={locale} size="md" />
-        <span className={styles.analogy}>{COPY.analogy[locale]}</span>
+        <span className={styles.analogy}>{tr(COPY.analogy, locale)}</span>
       </header>
 
       <div className={styles.matrix}>
-        <span className={styles.playerB}>{COPY.b[locale]}</span>
-        <span className={styles.playerA}>{COPY.a[locale]}</span>
+        <span className={styles.playerB}>{tr(COPY.b, locale)}</span>
+        <span className={styles.playerA}>{tr(COPY.a, locale)}</span>
         {CHOICES.map((b, j) => (
           <span key={b} className={styles.choiceCol} style={{ gridColumn: 3 + j }}>{label(b)}</span>
         ))}
@@ -119,7 +118,7 @@ export function RaceDilemma({ ctx }: SceneComponentProps<Record<string, never>, 
                 <>
                   <Rank value={p.a} who="A" locale={locale} />
                   <Rank value={p.b} who="B" locale={locale} />
-                  <span className={styles.outcome}>{OUTCOME[id][locale]}</span>
+                  <span className={styles.outcome}>{tr(OUTCOME[id], locale)}</span>
                 </>
               ) : (
                 <span className={styles.unknown} aria-hidden="true">?</span>
@@ -139,19 +138,19 @@ export function RaceDilemma({ ctx }: SceneComponentProps<Record<string, never>, 
       </div>
 
       <aside className={styles.side}>
-        <p className={styles.caption} key={step}>{CAPTIONS[step]![locale]}</p>
-        {step >= 1 && step < STEP_COUNT ? <p className={styles.note}>{COPY.ranks[locale]}</p> : null}
+        <p className={styles.caption} key={step}>{tr(CAPTIONS[step]!, locale)}</p>
+        {step >= 1 && step < STEP_COUNT ? <p className={styles.note}>{tr(COPY.ranks, locale)}</p> : null}
         {step >= STEP_COUNT ? (
           <div className={styles.lists}>
             <section>
-              <h3>{COPY.levers[locale]}</h3>
-              <ul>{LEVERS.map((l) => <li key={l.en}>{l[locale]}</li>)}</ul>
+              <h3>{tr(COPY.levers, locale)}</h3>
+              <ul>{LEVERS.map((l) => <li key={l.en}>{tr(l, locale)}</li>)}</ul>
             </section>
             <section className={styles.limits}>
               <h3>
-                <EvidenceBadge level="contested" locale={locale} size="sm" /> {COPY.limits[locale]}
+                <EvidenceBadge level="contested" locale={locale} size="sm" /> {tr(COPY.limits, locale)}
               </h3>
-              <ul>{LIMITS.map((l) => <li key={l.en}>{l[locale]}</li>)}</ul>
+              <ul>{LIMITS.map((l) => <li key={l.en}>{tr(l, locale)}</li>)}</ul>
             </section>
           </div>
         ) : null}

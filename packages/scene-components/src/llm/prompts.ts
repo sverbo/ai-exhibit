@@ -11,7 +11,7 @@
  */
 import type { L10n } from "@ai-exhibit/presentation-core";
 
-export const NEXT_TOKEN_SEQUENCE: L10n = { en: "She looked out of the", fr: "Il était une" };
+export const NEXT_TOKEN_SEQUENCE: L10n = { en: "She looked out of the" };
 
 /** Words the scene appends, one per reveal step. */
 export const SEQUENCE_WORDS = 3;

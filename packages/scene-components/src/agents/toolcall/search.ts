@@ -1,3 +1,4 @@
+import { pick, tr } from "@ai-exhibit/presentation-core";
 import { l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 
 /**
@@ -10,17 +11,17 @@ import { l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 export const SEARCH_TOOL_USE_ID = "toolu_01T1x1fJ34qAmk2tNTrN7Up6";
 
 export const SEARCH_TEXT = {
-  question: l("Qui a gagné le match d'hier soir, Westhoek contre Damme ?", "Who won last night's match, Westhoek against Damme?"),
+  question: { en: "Who won last night's match, Westhoek against Damme?" },
   chatAnswer: l(
     "Je ne peux pas le savoir : mes connaissances s'arrêtent à la date de mon entraînement.",
     "I can't know that: my knowledge stops at the date of my training.",
   ),
-  chatNote: l("Seul, le modèle ne voit rien de ce qui s'est passé depuis.", "On its own, the model sees nothing that happened since."),
-  toolDescription: l("Cherche sur le web, renvoie les premiers résultats", "Search the web, return the top results"),
-  query: l("match Westhoek Damme hier soir score", "Westhoek Damme match last night score"),
+  chatNote: { en: "On its own, the model sees nothing that happened since." },
+  toolDescription: { en: "Search the web, return the top results" },
+  query: { en: "Westhoek Damme match last night score" },
   results: [
-    l("sport.example : Westhoek 2, Damme 1", "sport.example: Westhoek 2, Damme 1"),
-    l("news.example : Damme battu 2 à 1", "news.example: Damme beaten 2 to 1"),
+    { en: "sport.example: Westhoek 2, Damme 1" },
+    { en: "news.example: Damme beaten 2 to 1" },
   ],
   answer: l(
     "Westhoek a gagné 2 à 1 contre Damme hier soir (sources : sport.example, news.example).",
@@ -31,7 +32,7 @@ export const SEARCH_TEXT = {
 export function searchToolDefinition(locale: Locale) {
   return {
     name: "web_search",
-    description: SEARCH_TEXT.toolDescription[locale],
+    description: tr(SEARCH_TEXT.toolDescription, locale),
     input_schema: {
       type: "object",
       properties: { query: { type: "string" } },
@@ -45,7 +46,7 @@ export function searchToolUseBlock(locale: Locale) {
     type: "tool_use",
     id: SEARCH_TOOL_USE_ID,
     name: "web_search",
-    input: { query: SEARCH_TEXT.query[locale] },
+    input: { query: pick(SEARCH_TEXT.query, locale) },
   };
 }
 
@@ -53,7 +54,7 @@ export function searchToolResultBlock(locale: Locale) {
   return {
     type: "tool_result",
     tool_use_id: SEARCH_TOOL_USE_ID,
-    content: SEARCH_TEXT.results.map((r) => ({ type: "text", text: r[locale] })),
+    content: SEARCH_TEXT.results.map((r) => ({ type: "text", text: tr(r, locale) })),
   };
 }
 
@@ -73,16 +74,16 @@ export interface SearchStage {
 export const SEARCH_STAGES: SearchStage[] = [
   {
     step: 2,
-    chip: l("Outils", "Tools"),
+    chip: { en: "Tools" },
     from: "software",
     to: "model",
     where: '"tools": [ … ]',
-    caption: l("Le logiciel décrit l'outil au modèle : un nom, à quoi il sert, ce qu'il attend.", "The software describes the tool to the model: a name, what it does, what it expects."),
+    caption: { en: "The software describes the tool to the model: a name, what it does, what it expects." },
     highlights: ["name", "description", "input_schema.properties"],
   },
   {
     step: 3,
-    chip: l("Appel", "Call"),
+    chip: { en: "Call" },
     from: "model",
     to: "software",
     where: '"stop_reason": "tool_use"',
@@ -94,19 +95,19 @@ export const SEARCH_STAGES: SearchStage[] = [
   },
   {
     step: 4,
-    chip: l("Résultats", "Results"),
+    chip: { en: "Results" },
     from: "software",
     to: "model",
     where: '"content": [ … ]',
-    caption: l("Le logiciel renvoie les résultats au modèle, avec le même identifiant.", "The software sends the results back to the model, with the same id."),
+    caption: { en: "The software sends the results back to the model, with the same id." },
     highlights: ["tool_use_id", "content"],
   },
   {
     step: 5,
-    chip: l("Réponse", "Answer"),
+    chip: { en: "Answer" },
     from: "model",
     to: "you",
-    caption: l("Le modèle répond en citant ce qu'il a trouvé.", "The model answers, citing what it found."),
+    caption: { en: "The model answers, citing what it found." },
     highlights: [],
   },
 ];

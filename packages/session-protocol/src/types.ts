@@ -52,6 +52,11 @@ export type SessionCommand =
   | { type: "setFrozen"; on: boolean }
   | { type: "setEdition"; editionId: string; locale: Locale; sceneId: string }
   /**
+   * Switches the talk's language on every screen. Keeps the scene, step
+   * and timer; clears scene states, which may hold text in the old language.
+   */
+  | { type: "setLocale"; locale: Locale }
+  /**
    * Starts the talk fresh: clears scene states, fallbacks, timer, blackout and
    * freeze. Keeps presentation, edition, locale and scene.
    */

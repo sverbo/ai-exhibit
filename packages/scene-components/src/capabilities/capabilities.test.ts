@@ -1,3 +1,4 @@
+import { pick } from "@ai-exhibit/presentation-core";
 import { describe, expect, it } from "vitest";
 import { sources } from "../../../../content/sources/index.ts";
 import {
@@ -129,8 +130,8 @@ describe("connected assistant", () => {
   it("has both locales, no dashes, and a verified source for every connector", () => {
     for (const c of CONNECTORS) {
       for (const text of [c.label, c.example]) {
-        expect(text.fr.trim() && text.en.trim(), c.id).toBeTruthy();
-        expect(text.fr + text.en).not.toMatch(DASH);
+        expect(pick(text, "fr").trim() && text.en.trim(), c.id).toBeTruthy();
+        expect(pick(text, "fr") + text.en).not.toMatch(DASH);
       }
       expect(c.sourceIds.length, c.id).toBeGreaterThan(0);
       for (const id of c.sourceIds) {

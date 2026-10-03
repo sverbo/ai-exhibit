@@ -1,3 +1,5 @@
+import { tr } from "@ai-exhibit/presentation-core";
+import { Rich, RichTspans } from "../../primitives/Rich.tsx";
 import type { SceneComponentProps } from "../../contract.ts";
 import { cx, l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 import { shortSourceLabel } from "../../primitives/sourceLabel.ts";
@@ -25,16 +27,16 @@ import styles from "./ModelComparison.module.css";
 export type ModelComparisonProps = Record<string, never>;
 
 const TEXT = {
-  heading: l("Hier et aujourd'hui, en chiffres", "Then and now, in numbers"),
-  model: l("Modèle", "Model"),
+  heading: { en: "Then and now, in numbers" },
+  model: { en: "Model" },
   basis: l(
     "Calcul de la projection (écran du présentateur seulement)",
     "How the projection is computed (presenter screen only)",
   ),
-  projection: l("projection", "projection"),
-  missingMark: l("non publié ou non testé", "not published or not tested"),
+  projection: { en: "projection" },
+  missingMark: { en: "not published or not tested" },
   footnote: l(
-    "Estimations : Epoch AI et Patterson et al. Pages : 1 token ≈ 0,75 mot, 500 mots par page. Grok 3 : le modèle de pointe récent pour lequel le plus de chiffres sont publiés ou estimés.",
+    "Estimations : Epoch AI et Patterson et al. Pages : 1 token ≈ 0,75 mot, 500 mots par page. Grok 3 : le frontier model (*modèle de pointe*) récent pour lequel le plus de chiffres sont publiés ou estimés.",
     "Estimates: Epoch AI and Patterson et al. Pages: 1 token ≈ 0.75 words, 500 words a page. Grok 3: the recent frontier model with the most published or estimated figures.",
   ),
 };
@@ -43,7 +45,7 @@ export function ModelComparison({
   ctx,
 }: SceneComponentProps<ModelComparisonProps>) {
   const { locale, role, reducedMotion } = ctx;
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const step = Math.max(0, Math.min(LAST_STEP, Math.floor(ctx.revealStep)));
   const animate = role !== "preview" && !reducedMotion;
   const projected = step >= STEP_PROJECTION;
@@ -60,20 +62,20 @@ export function ModelComparison({
 
   return (
     <div className={cx(styles.root, animate && styles.animate, charts && styles.compact)}>
-      <h2 className={styles.h}>{t(TEXT.heading)}</h2>
+      <h2 className={styles.h}><Rich text={t(TEXT.heading)} /></h2>
 
       <table className={styles.table}>
         <thead>
           <tr>
             <th className={styles.modelHead} scope="col">
-              {t(TEXT.model)}
+              <Rich text={t(TEXT.model)} />
             </th>
             {COLUMNS.map((c) => (
               <th key={c} scope="col" className={styles.colHead}>
                 <span className={styles.colTitle}>
-                  {t(COLUMN_TITLES[c].title)}
+                  <Rich text={t(COLUMN_TITLES[c].title)} />
                 </span>
-                <span className={styles.colSub}>{t(COLUMN_TITLES[c].sub)}</span>
+                <span className={styles.colSub}><Rich text={t(COLUMN_TITLES[c].sub)} /></span>
               </th>
             ))}
           </tr>
@@ -103,9 +105,9 @@ export function ModelComparison({
                       cell.kind === "reference" && styles.reference,
                     )}
                   >
-                    <span className={styles.main}>{t(cell.main)}</span>
+                    <span className={styles.main}><Rich text={t(cell.main)} /></span>
                     {cell.small && (
-                      <span className={styles.small}>{t(cell.small)}</span>
+                      <span className={styles.small}><Rich text={t(cell.small)} /></span>
                     )}
                   </td>
                 );
@@ -114,16 +116,16 @@ export function ModelComparison({
           ))}
           <tr className={cx(styles.projRow, !projected && styles.hidden)}>
             <th scope="row" className={styles.modelCell}>
-              <span className={styles.projLabel}>{t(PROJECTION.label)}</span>
+              <span className={styles.projLabel}><Rich text={t(PROJECTION.label)} /></span>
               <EvidenceBadge level="projection" locale={locale} size="sm" />
             </th>
             {COLUMNS.map((c) => {
               const cell = PROJECTION.cells[c];
               return (
                 <td key={c} className={cx(styles.cell, styles.projCell)}>
-                  <span className={styles.projMain}>{t(cell.main)}</span>
+                  <span className={styles.projMain}><Rich text={t(cell.main)} /></span>
                   {cell.small && (
-                    <span className={styles.small}>{t(cell.small)}</span>
+                    <span className={styles.small}><Rich text={t(cell.small)} /></span>
                   )}
                 </td>
               );
@@ -142,12 +144,12 @@ export function ModelComparison({
 
       {role === "controller" && projected && !charts && (
         <aside className={cx(styles.basis, styles.foot)}>
-          <span className={styles.basisTitle}>{t(TEXT.basis)}</span>
+          <span className={styles.basisTitle}><Rich text={t(TEXT.basis)} /></span>
           <ul>
             {COLUMNS.map((c) => (
               <li key={c}>
-                <b>{t(COLUMN_TITLES[c].title)}</b>{" "}
-                {t(PROJECTION.cells[c].basis)}
+                <b><Rich text={t(COLUMN_TITLES[c].title)} /></b>{" "}
+                <Rich text={t(PROJECTION.cells[c].basis)} />
               </li>
             ))}
           </ul>
@@ -156,7 +158,7 @@ export function ModelComparison({
 
       {!(role === "controller" && projected && !charts) && (
         <footer className={styles.foot}>
-          <p>{t(TEXT.footnote)}</p>
+          <p><Rich text={t(TEXT.footnote)} /></p>
           <p className={styles.sources}>{sources}</p>
         </footer>
       )}
@@ -173,7 +175,7 @@ const cxOf = (x: number) => PAD.l + ((x - X_FROM) / (X_TO - X_FROM)) * (CW - PAD
 const cyOf = (y: number, max: number) => CH - PAD.b - (y / max) * (CH - PAD.t - PAD.b);
 
 function ChartView({ chart, locale }: { chart: Chart; locale: Locale }) {
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const measured = chart.points.filter((p) => p.y !== null && !p.projection && !p.reference);
   const proj = chart.points.find((p) => p.projection && p.y !== null);
   const pathOf = (pts: ChartPoint[]) =>
@@ -183,14 +185,14 @@ function ChartView({ chart, locale }: { chart: Chart; locale: Locale }) {
   const base = CH - PAD.b;
   return (
     <figure className={styles.chartFig}>
-      <figcaption className={styles.chartTitle}>{t(chart.title)}</figcaption>
+      <figcaption className={styles.chartTitle}><Rich text={t(chart.title)} /></figcaption>
       <svg viewBox={`0 0 ${CW} ${CH}`} className={styles.chart} aria-hidden="true">
         {/* axes and the two ticks: zero and one round value in words */}
         <line x1={PAD.l} x2={CW - PAD.r} y1={base} y2={base} className={styles.axis} />
         <line x1={PAD.l} x2={PAD.l} y1={PAD.t - 10} y2={base} className={styles.axis} />
         <line x1={PAD.l - 6} x2={CW - PAD.r} y1={topTickY} y2={topTickY} className={styles.grid} />
         <text x={PAD.l - 12} y={topTickY + 7} textAnchor="end" className={styles.yTick}>
-          {t(chart.topTick)}
+          <RichTspans text={t(chart.topTick)} />
         </text>
         <text x={PAD.l - 12} y={base + 7} textAnchor="end" className={styles.yTick}>
           0
@@ -205,7 +207,7 @@ function ChartView({ chart, locale }: { chart: Chart; locale: Locale }) {
           <g>
             <line x1={PAD.l} x2={CW - PAD.r} y1={cyOf(chart.expert.y, chart.max)} y2={cyOf(chart.expert.y, chart.max)} className={styles.expert} />
             <text x={PAD.l + 8} y={cyOf(chart.expert.y, chart.max) - 8} className={styles.expertLabel}>
-              {t(chart.expert.label)}
+              <RichTspans text={t(chart.expert.label)} />
             </text>
           </g>
         )}
@@ -225,7 +227,7 @@ function ChartView({ chart, locale }: { chart: Chart; locale: Locale }) {
               textAnchor="end"
               className={styles.projLabelSvg}
             >
-              {t(chart.ceilingBand)}
+              <RichTspans text={t(chart.ceilingBand)} />
             </text>
           </g>
         )}
@@ -253,20 +255,20 @@ function ChartView({ chart, locale }: { chart: Chart; locale: Locale }) {
             <g key={p.model || "projection"}>
               <circle cx={x} cy={y} r={p.projection ? 9 : 8} className={dot} />
               <text x={lx} y={y - 16 - (p.lift ?? 0)} textAnchor={anchor} className={val}>
-                {t(p.label)}
+                <RichTspans text={t(p.label)} />
               </text>
             </g>
           );
         })}
       </svg>
       <p className={styles.chartNote}>
-        {chart.points.some((p) => p.y === null) && <span>× {t(TEXT.missingMark)}   </span>}
+        {chart.points.some((p) => p.y === null) && <span>× <Rich text={t(TEXT.missingMark)} />   </span>}
         <span className={styles.projKey}>
           <svg viewBox="0 0 44 16" width="44" height="16" aria-hidden="true">
             <line x1="2" x2="30" y1="8" y2="8" className={styles.cProjLine} />
             <circle cx="36" cy="8" r="5" className={styles.cProjDot} />
           </svg>
-          {t(TEXT.projection)}
+          <Rich text={t(TEXT.projection)} />
         </span>
       </p>
     </figure>

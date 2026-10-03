@@ -75,6 +75,12 @@
   line-height: 1.05;
   letter-spacing: -0.01em;
 }
+/* A term's translation (French edition) reads as a quieter aside, so the name stays on one line. */
+.name em {
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
 .definition {
   margin: 12px 0 0;
   max-width: 34em;

@@ -215,10 +215,8 @@ export const demoPresentation: PresentationDefinition = {
     { id: "02", title: { fr: "Schémas", en: "Diagrams" }, summary: { fr: "Flux et comparaisons.", en: "Flows and comparisons." } },
   ],
   scenes,
-  editions: [
-    { id: "demo", locale: "fr", title: { fr: "Démo (français)", en: "Demo (French)" }, targetMinutes: [12, 16], cut: "full" },
-    { id: "demo-en", locale: "en", title: { fr: "Démo (anglais)", en: "Demo (English)" }, targetMinutes: [12, 16], cut: "full" },
-  ],
+  editions: [{ id: "demo", title: { fr: "Démo", en: "Demo" }, targetMinutes: [12, 16], cut: "full" }],
+  locales: ["en", "fr"],
   artifacts: [],
   sources: [
     {

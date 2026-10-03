@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useReducer, useState } from "react";
-import type { Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
+import { LOCALES, parseLocale, REFERENCE_LOCALE, tr, type Locale, type SceneDefinition, type SourceRecord } from "@ai-exhibit/presentation-core";
 import {
   registeredSceneComponents,
   SceneRenderer,
@@ -30,7 +30,7 @@ function readSelection(): { selection: Selection | null; props: string; step: nu
     props: q.get("props") ?? "",
     step: Number(q.get("step") ?? 0) || 0,
     fallback: q.get("fallback") === "1",
-    locale: q.get("locale") === "fr" ? "fr" : "en",
+    locale: parseLocale(q.get("locale")) ?? REFERENCE_LOCALE,
   };
 }
 
@@ -113,7 +113,7 @@ export default function LabView() {
     }
     if (store.state.revealStep) url.searchParams.set("step", String(store.state.revealStep));
     if (store.state.fallback[LAB_SCENE_ID]) url.searchParams.set("fallback", "1");
-    if (locale === "fr") url.searchParams.set("locale", "fr");
+    if (locale !== REFERENCE_LOCALE) url.searchParams.set("locale", locale);
     window.history.replaceState(null, "", url);
   }, [selection, props, store.state.revealStep, store.state.fallback, locale]);
 
@@ -193,7 +193,7 @@ export default function LabView() {
         ) : (
           <>
             <div className={styles.toolbar}>
-              <h2 className={styles.name}>{name ?? scene.title[locale]}</h2>
+              <h2 className={styles.name}>{name ?? tr(scene.title, locale)}</h2>
               <div className={styles.group}>
                 <span className={chrome.label}>{t("step")}</span>
                 <button type="button" className={chrome.btn} disabled={state.revealStep <= 0}
@@ -228,8 +228,11 @@ export default function LabView() {
                   {t("labResetState")}
                 </button>
                 <select className={chrome.select} aria-label={t("labLocale")} value={locale} onChange={(e) => setLocale(e.target.value as Locale)}>
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
+                  {LOCALES.map((l) => (
+                    <option key={l} value={l}>
+                      {l.toUpperCase()}
+                    </option>
+                  ))}
                 </select>
                 <ThemeToggle hint={false} />
               </div>

@@ -95,7 +95,7 @@ export const weekendTrip: AgentRunScenario = {
         },
       ],
       caption: t(
-        "Il consulte les agendas. C'est un « outil » : un programme qu'il a le droit d'utiliser. Il envoie une question, il reçoit une réponse.",
+        "Il consulte l'agenda de chacun. C'est un « outil » : un programme qu'il a le droit d'utiliser. Il envoie une question, il reçoit une réponse.",
         "It checks everyone's calendar. That is a \"tool\": a program it is allowed to use. It sends a question and gets an answer back.",
       ),
     },
@@ -335,7 +335,7 @@ export const weekendTrip: AgentRunScenario = {
         "Done. Bruges, 14-15 November: the driest outlook of the three free weekends. Two rooms near the station, €238 in total, free cancellation until 7 November. Invitation sent. Note: a forecast a month ahead is only a trend.",
       ),
       caption: t(
-        "Il vous fait un compte rendu. Une phrase de votre part est devenue toute une chaîne d'actions, et on vous a demandé une seule fois, au moment qui compte.",
+        "Il vous fait un compte rendu. Une phrase de votre part est devenue toute une chaîne d'actions, et on ne vous a sollicité qu'une seule fois, au moment qui comptait.",
         "It reports back. One sentence from you became a whole chain of actions, and you were asked once, at the moment that mattered.",
       ),
     },

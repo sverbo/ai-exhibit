@@ -1,3 +1,4 @@
+import { tr } from "@ai-exhibit/presentation-core";
 import type { CSSProperties } from "react";
 import { getStoryImage } from "@ai-exhibit/content/assets/media/story/credits.ts";
 import type { SceneComponentProps } from "../contract.ts";
@@ -92,8 +93,8 @@ export function hopArc(move: PersonMove): string | null {
 }
 
 const COPY = {
-  label: { en: "The AI industry, layer by layer", fr: "L'industrie de l'IA, couche par couche" },
-  sources: { en: "Sources for what is lit", fr: "Sources de ce qui est allumé" },
+  label: { en: "The AI industry, layer by layer" },
+  sources: { en: "Sources for what is lit" },
 } as const;
 
 /**
@@ -117,7 +118,7 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
   const imageIds = [...PEOPLE.map((p) => p.image), ...LAYERS.flatMap((l) => l.actors.map((a) => a.image))];
 
   return (
-    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={COPY.label[locale]}>
+    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={tr(COPY.label, locale)}>
       {LAYERS.map((layer) => {
         const box = LAYER_BOX[layer.id];
         return (
@@ -126,9 +127,9 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
             className={styles.layer}
             data-layer={layer.id}
             style={{ top: box.top, height: box.height, left: LEFT, width: RIGHT - LEFT }}
-            aria-label={layer.name[locale]}
+            aria-label={tr(layer.name, locale)}
           >
-            <h3 className={styles.layerName}>{layer.name[locale]}</h3>
+            <h3 className={styles.layerName}>{tr(layer.name, locale)}</h3>
           </section>
         );
       })}
@@ -152,7 +153,7 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
               className={`${styles.logo} ${on ? styles.on : styles.off}`}
               style={style}
               role="img"
-              aria-label={actor.label[locale]}
+              aria-label={tr(actor.label, locale)}
               data-lit={on}
             />,
             <Flags
@@ -245,10 +246,10 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
       <footer className={styles.footer}>
         {role === "controller" && litSources.length ? (
           <details className={styles.sources} onKeyDown={stopShellKeys}>
-            <summary>{COPY.sources[locale]}</summary>
+            <summary>{tr(COPY.sources, locale)}</summary>
             <ul className={styles.moves}>
               {MOVES.filter((m) => m.step <= step).map((m) => (
-                <li key={`${m.person}-${m.step}`}>{m.what[locale]}</li>
+                <li key={`${m.person}-${m.step}`}>{tr(m.what, locale)}</li>
               ))}
             </ul>
             <SourceList sourceIds={litSources} role={role} locale={locale} getSource={ctx.getSource} />

@@ -21,7 +21,9 @@ export type ProblemKind =
   | "stuck"
   | "follow"
   | "layout"
-  | "view";
+  | "view"
+  /** Raw term markup "(*...*)" on screen, or a view not in the requested language. */
+  | "locale";
 
 export interface Problem extends Cursor {
   edition: string;

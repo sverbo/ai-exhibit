@@ -1,3 +1,4 @@
+import { pick, tr } from "@ai-exhibit/presentation-core";
 import { l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 
 /**
@@ -19,9 +20,10 @@ export function tomorrowIso(now: Date = new Date()): string {
 }
 
 export const WEATHER_TEXT = {
-  question: l("Faut-il un parapluie à Bruges demain ?", "Do I need an umbrella in Bruges tomorrow?"),
-  toolDescription: l("Météo d'une ville pour un jour donné", "Weather for a city on a given day"),
-  serviceReply: l("Pluie dès 14 h, risque 80 %, 14 °C", "Rain from 2 pm, 80% chance, 14 °C"),
+  question: { en: "Do I need an umbrella in Bruges tomorrow?" },
+  location: { en: "Bruges, Belgium" },
+  toolDescription: { en: "Weather for a city on a given day" },
+  serviceReply: { en: "Rain from 2 pm, 80% chance, 14 °C" },
   answer: l(
     "Oui, prenez un parapluie : il devrait pleuvoir à Bruges demain après-midi (risque de 80 %), avec 14 °C.",
     "Yes, take an umbrella: rain is likely in Bruges tomorrow afternoon (80% chance), around 14 °C.",
@@ -32,7 +34,7 @@ export const WEATHER_TEXT = {
 export function toolDefinition(locale: Locale) {
   return {
     name: "get_weather",
-    description: WEATHER_TEXT.toolDescription[locale],
+    description: tr(WEATHER_TEXT.toolDescription, locale),
     input_schema: {
       type: "object",
       properties: {
@@ -45,12 +47,12 @@ export function toolDefinition(locale: Locale) {
 }
 
 /** Step 2: the model's reply is this content block (with `stop_reason: "tool_use"`), not prose. */
-export function toolUseBlock(date: string) {
+export function toolUseBlock(date: string, locale: Locale = "en") {
   return {
     type: "tool_use",
     id: TOOL_USE_ID,
     name: "get_weather",
-    input: { location: "Bruges, Belgium", date },
+    input: { location: pick(WEATHER_TEXT.location, locale), date },
   };
 }
 
@@ -59,7 +61,7 @@ export function toolResultBlock(locale: Locale) {
   return {
     type: "tool_result",
     tool_use_id: TOOL_USE_ID,
-    content: WEATHER_TEXT.serviceReply[locale],
+    content: tr(WEATHER_TEXT.serviceReply, locale),
   };
 }
 
@@ -75,7 +77,7 @@ export interface WeatherStage {
 export const WEATHER_STAGES: WeatherStage[] = [
   {
     actor: "software",
-    title: l("Le logiciel décrit ses outils au modèle", "The software describes its tools to the model"),
+    title: { en: "The software describes its tools to the model" },
     caption: l(
       "Avant même la question, le logiciel envoie la liste des outils : un nom, à quoi il sert, ce qu'il attend.",
       "Before the question, the software sends the list of tools: a name, what it is for, what it expects.",
@@ -84,7 +86,7 @@ export const WEATHER_STAGES: WeatherStage[] = [
   },
   {
     actor: "model",
-    title: l("Le modèle répond… par une demande en JSON", "The model replies… with a request in JSON"),
+    title: { en: "The model replies… with a request in JSON" },
     caption: l(
       "Le modèle n'agit pas : il écrit seulement du texte. C'est le logiciel qui lit ce texte et lance l'outil.",
       "The model does not act: it only writes text. The software reads that text and runs the tool.",
@@ -93,7 +95,7 @@ export const WEATHER_STAGES: WeatherStage[] = [
   },
   {
     actor: "service",
-    title: l("Le logiciel appelle le service météo", "The software calls the weather service"),
+    title: { en: "The software calls the weather service" },
     caption: l(
       "Puis il renvoie la réponse au modèle, avec le même identifiant que la demande.",
       "Then it sends the answer back to the model, with the same id as the request.",
@@ -102,8 +104,8 @@ export const WEATHER_STAGES: WeatherStage[] = [
   },
   {
     actor: "model",
-    title: l("Le modèle répond en langage courant", "The model answers in plain language"),
-    caption: l("Il lit le résultat et rédige la réponse pour vous.", "It reads the result and writes the answer for you."),
+    title: { en: "The model answers in plain language" },
+    caption: { en: "It reads the result and writes the answer for you." },
     highlights: [],
   },
 ];

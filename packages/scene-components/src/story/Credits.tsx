@@ -1,17 +1,17 @@
 import { useState } from "react";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { getStoryImage, type ImageCredit } from "@ai-exhibit/content/assets/media/story/credits.ts";
 import type { SceneRole } from "../contract.ts";
 import { stopShellKeys } from "../evidence/shared.ts";
 import styles from "./Credits.module.css";
 
 const COPY = {
-  photos: { en: "Photos", fr: "Photos" },
-  via: { en: "via Wikimedia Commons", fr: "via Wikimedia Commons" },
-  trademarks: { en: "Logos are trademarks of their owners.", fr: "Les logos sont des marques de leurs propriétaires." },
-  open: { en: "Image credits", fr: "Crédits des images" },
-  close: { en: "Close", fr: "Fermer" },
-  caution: { en: "Check license", fr: "Licence à vérifier" },
+  photos: { en: "Photos" },
+  via: { en: "via Wikimedia Commons" },
+  trademarks: { en: "Logos are trademarks of their owners." },
+  open: { en: "Image credits" },
+  close: { en: "Close" },
+  caution: { en: "Check license" },
 } as const;
 
 export function creditsFor(imageIds: string[]): ImageCredit[] {
@@ -32,9 +32,9 @@ export function creditLine(images: ImageCredit[], locale: Locale): string {
   const photos = images.filter((i) => i.kind === "portrait");
   const parts: string[] = [];
   if (photos.length) {
-    parts.push(`${COPY.photos[locale]}: ${photos.map((p) => `${p.author} (${p.license})`).join(", ")}, ${COPY.via[locale]}.`);
+    parts.push(`${tr(COPY.photos, locale)}: ${photos.map((p) => `${p.author} (${p.license})`).join(", ")}, ${tr(COPY.via, locale)}.`);
   }
-  if (images.some((i) => i.kind === "logo")) parts.push(COPY.trademarks[locale]);
+  if (images.some((i) => i.kind === "logo")) parts.push(tr(COPY.trademarks, locale));
   return parts.join(" ");
 }
 
@@ -52,11 +52,11 @@ export function Credits({ imageIds, role, locale }: { imageIds: string[]; role: 
       <p className={styles.line}>{line}</p>
       {role === "controller" ? (
         <button type="button" className={styles.toggle} aria-expanded={open} onClick={() => setOpen(!open)} onKeyDown={stopShellKeys}>
-          {open ? COPY.close[locale] : COPY.open[locale]}
+          {open ? tr(COPY.close, locale) : tr(COPY.open, locale)}
         </button>
       ) : null}
       {role === "controller" && open ? (
-        <ul className={styles.panel} aria-label={COPY.open[locale]}>
+        <ul className={styles.panel} aria-label={tr(COPY.open, locale)}>
           {images.map((image) => (
             <li key={image.id} className={styles.item}>
               <a href={image.sourcePage} target="_blank" rel="noreferrer">
@@ -71,7 +71,7 @@ export function Credits({ imageIds, role, locale }: { imageIds: string[]; role: 
               {image.notes ? <span className={styles.note}>{image.notes}</span> : null}
               {image.caution ? (
                 <span className={styles.caution}>
-                  <span aria-hidden="true">⚠</span> {COPY.caution[locale]}
+                  <span aria-hidden="true">⚠</span> {tr(COPY.caution, locale)}
                 </span>
               ) : null}
             </li>

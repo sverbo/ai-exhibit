@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { getStoryImage } from "@ai-exhibit/content/assets/media/story/credits.ts";
 import { COUNTRY_NAMES, flagImageId, HEADQUARTERS } from "./countries.ts";
 import styles from "./Flags.module.css";
@@ -12,7 +12,7 @@ import styles from "./Flags.module.css";
 export function Flags({ actorId, locale, className, style }: { actorId: string; locale: Locale; className?: string; style?: CSSProperties }) {
   const hq = HEADQUARTERS[actorId];
   if (!hq) return null;
-  const names = hq.countries.map((c) => COUNTRY_NAMES[c][locale]).join(", ");
+  const names = hq.countries.map((c) => tr(COUNTRY_NAMES[c], locale)).join(", ");
   return (
     <span className={`${styles.flags} ${className ?? ""}`} style={style} role="img" aria-label={names} title={names}>
       {hq.countries.map((code) => {

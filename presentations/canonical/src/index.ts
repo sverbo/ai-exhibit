@@ -1,5 +1,6 @@
-import type { PresentationDefinition } from "@ai-exhibit/presentation-core";
+import { installCatalogs, registerPresentationTexts, type PresentationDefinition } from "@ai-exhibit/presentation-core";
 import { sources } from "@ai-exhibit/content/sources";
+import { catalogs } from "../locales/index.ts";
 import { artifacts } from "./artifacts.ts";
 import { chapters } from "./chapters.ts";
 import { editions } from "./editions.ts";
@@ -13,13 +14,20 @@ export const canonical: PresentationDefinition = {
   id: "canonical",
   title: {
     en: "What AI can do today, how it works, and its risks",
-    fr: "Ce que l'IA sait faire aujourd'hui, comment elle fonctionne, et ses risques",
   },
   chapters,
   scenes: [...chapter01, ...chapter02, ...chapter03, ...chapter04, ...chapter05],
   editions,
+  // The launcher offers these, default first (docs/specs/2026-10-03-locales.md).
+  locales: ["en", "fr"],
   artifacts,
   sources,
 };
 
+// Texts are written in English; each language's catalog (locales/<lang>.json)
+// translates them by key. See docs/authoring/content-guide.md, "Languages".
+registerPresentationTexts(canonical);
+installCatalogs(catalogs);
+
+export { catalogs };
 export default canonical;

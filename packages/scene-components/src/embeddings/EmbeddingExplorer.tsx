@@ -3,6 +3,7 @@ import { cloudEmbed } from "@ai-exhibit/ml-runtime/lm";
 import type { Locale } from "@ai-exhibit/presentation-core";
 import { type FormEvent, type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { decideSource, requestedSource, resetCloudStatus, useCloudStatus } from "../language/source.ts";
 import { SourceBadge } from "../language/ui.tsx";
 import { Cloud3D } from "./Cloud3D.tsx";
@@ -81,9 +82,11 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
       <footer className={styles.footer}>
         <div className={styles.captionBlock}>
           <p className={`${styles.caption} ${styles.wideCaption}`} key={step}>
-            {tr(TRAINING.captions[step]!, locale)}
+            <Rich text={tr(TRAINING.captions[step]!, locale)} />
           </p>
-          <p className={styles.illustrative}>{tr(TRAINING.illustrative, locale)}</p>
+          <p className={styles.illustrative}>
+            <Rich text={tr(TRAINING.illustrative, locale)} />
+          </p>
         </div>
         {role === "controller" && step >= 1 && (
           <div className={styles.controllerBar} onKeyDown={stopKeys}>
@@ -233,7 +236,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
       </div>
       <footer className={styles.footer}>
         <p className={styles.caption} key={step}>
-          {tr(EXPLORER.cloudCaptions[step]!, locale)}
+          <Rich text={tr(EXPLORER.cloudCaptions[step]!, locale)} />
         </p>
         {controller && (
           <div className={styles.controllerBar}>
@@ -395,7 +398,9 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
           {notice && <p className={styles.notice}>{notice}</p>}
           {state.busy && !preview && <p className={styles.busy}>{tr(EXPLORER.thinking, locale)}</p>}
           {query && <Results space={space} query={query} locale={locale} />}
-          {query && query.source !== "unknown" && <p className={styles.faithful}>{tr(EXPLORER.faithful, locale)}</p>}
+          {query && query.source !== "unknown" && <p className={styles.faithful}>
+              <Rich text={tr(EXPLORER.faithful, locale)} />
+            </p>}
         </aside>
       </div>
     </div>

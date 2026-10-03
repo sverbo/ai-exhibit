@@ -1,16 +1,38 @@
 /**
- * Validates the canonical presentation: content model, locales, long dashes,
- * source/artifact/component references and edition durations.
- * Usage: pnpm verify:content [--strict]   (--strict fails on warnings too)
+ * Validates the canonical presentation: content model, long dashes,
+ * source/artifact/component references and edition durations; and, per
+ * locale, the scenes' text and the recordings Simulation replays. Missing text
+ * in a locale the talk offers is an error; in a draft locale (in LOCALES, not
+ * offered) a warning.
+ *
+ * Usage: pnpm verify:content [--strict] [--locale fr]
+ *   --strict      fails on warnings too
+ *   --locale xx   lists every localization issue of that locale (drafts are
+ *                 otherwise only counted)
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import {
+import { parseArgs } from "node:util";
+import { own,
+  checkCatalog,
+  checkLocalized,
+  copyKey,
+  LOCALE_INFO,
+  LOCALES,
+  localizationSummary,
+  presentationTexts,
+  REFERENCE_LOCALE,
+  type CatalogText,
+  parseLocale,
   resolveEdition,
   totalDurationSec,
   validatePresentation,
+  type Issue,
 } from "@ai-exhibit/presentation-core";
-import { canonical } from "@ai-exhibit/canonical";
+import { canonical, catalogs } from "@ai-exhibit/canonical";
+import { glossary } from "@ai-exhibit/content/glossary";
+import { scanCopy } from "../locales/scan.ts";
+import { checkRecordings } from "./recordings.ts";
 
 const root = new URL("../../", import.meta.url).pathname;
 
@@ -31,8 +53,31 @@ function registeredComponents(): string[] {
   return names;
 }
 
-const strict = process.argv.includes("--strict");
-const issues = validatePresentation(canonical, { registeredComponents: registeredComponents() });
+const { values: args } = parseArgs({ options: { strict: { type: "boolean", default: false }, locale: { type: "string" } } });
+const strict = args.strict!;
+const listLocale = parseLocale(args.locale);
+const terms = glossary.map((g) => ({ term: g.term, translation: g.translation }));
+const issues: Issue[] = validatePresentation(canonical, { registeredComponents: registeredComponents(), terms });
+// Catalogs (presentations/canonical/locales/<lang>.json): scene texts and component copy.
+const copy = scanCopy(root);
+for (const locale of LOCALES) {
+  if (locale === REFERENCE_LOCALE) continue;
+  const copyTexts: CatalogText[] = [];
+  const seenCopy = new Set<string>();
+  for (const c of copy) {
+    if (locale in c.inline || seenCopy.has(c.en)) continue;
+    seenCopy.add(c.en);
+    copyTexts.push({ key: copyKey(c.en), value: { en: c.en } });
+  }
+  const file = `presentations/canonical/locales/${locale}.json`;
+  for (const [key, entry] of Object.entries(own(catalogs, locale) ?? {})) {
+    if (/[\u2013\u2014]/.test(entry.text)) issues.push({ level: "error", where: file, locale, message: `long dash in ${key}: "${entry.text.slice(0, 60)}"` });
+  }
+  issues.push(...checkCatalog([...presentationTexts(canonical), ...copyTexts], locale, own(catalogs, locale) ?? {}, { file, offered: canonical.locales.includes(locale) }));
+  // Typography and term glosses of the component copy, as read through the catalog.
+  checkLocalized(copyTexts.map((t) => t.value), "copy", file, { enabled: canonical.locales, terms }, issues);
+}
+await checkRecordings(root, canonical, issues);
 
 const byChapter = new Map<string, { scenes: number; full: number; short: number; todos: number }>();
 for (const s of canonical.scenes) {
@@ -56,8 +101,25 @@ for (const e of canonical.editions) {
 const unverified = canonical.sources.filter((s) => s.verification !== "verified").length;
 console.log(`sources: ${canonical.sources.length} (${unverified} need verification)`);
 
-const errors = issues.filter((i) => i.level === "error");
-const warnings = issues.filter((i) => i.level === "warning");
-for (const i of [...errors, ...warnings]) console.log(`${i.level.toUpperCase()} ${i.where}: ${i.message}`);
+const summary = localizationSummary(issues);
+console.log("\nlocale        offered  missing  outdated  stale  untranslated  typography  term");
+for (const l of LOCALES) {
+  const r = summary[l];
+  const offered = canonical.locales.includes(l) ? "yes" : "draft";
+  const cols = [r.missing, r.outdated, r.stale, r.untranslated, r.typography].map((n, i) => String(n).padEnd([9, 10, 7, 14, 12][i]!));
+  console.log(`${`${l} ${LOCALE_INFO[l].english}`.padEnd(14)}${offered.padEnd(9)}${cols.join("")}${r.term}`);
+}
+
+// A draft locale's issues are only counted, unless asked for with --locale.
+const listed = issues.filter((i) => !i.locale || canonical.locales.includes(i.locale) || i.locale === listLocale);
+const shown = listLocale ? listed.filter((i) => i.locale === listLocale) : listed;
+const errors = listed.filter((i) => i.level === "error");
+const warnings = listed.filter((i) => i.level === "warning");
+console.log("");
+for (const level of ["error", "warning"] as const) {
+  for (const i of shown.filter((x) => x.level === level)) {
+    console.log(`${i.level.toUpperCase()} ${i.locale ? `[${i.locale}] ` : ""}${i.where}: ${i.message}`);
+  }
+}
 console.log(`\n${errors.length} errors, ${warnings.length} warnings`);
 process.exit(errors.length > 0 || (strict && warnings.length > 0) ? 1 : 0);

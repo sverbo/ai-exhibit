@@ -1,3 +1,5 @@
+import { plainText, tr } from "@ai-exhibit/presentation-core";
+import { Rich, RichTspans } from "../../primitives/Rich.tsx";
 import type { SceneComponentProps } from "../../contract.ts";
 import { SceneHeading, cx, l, type L10n } from "../../learning/shared/ui.tsx";
 import { IconG, type IconName } from "../shared/icons.tsx";
@@ -26,34 +28,34 @@ function arcAround(r: number, a1: number, a2: number): string {
 
 const TEXT = {
   heading: {
-    intro: l("Une boucle, pas une réponse", "A loop, not an answer"),
-    tools: l("Des outils dans la boucle", "Tools inside the loop"),
-    "high-stakes": l("La même boucle, avec de vrais leviers", "The same loop, with real levers"),
+    intro: { en: "A loop, not an answer" },
+    tools: { en: "Tools inside the loop" },
+    "high-stakes": { en: "The same loop, with real levers" },
   } satisfies Record<AgentLoopVariant, L10n>,
   introSub: [
-    l("On lui donne un objectif.", "It is given a goal."),
-    l("Il décide d'une première étape.", "It decides on a first step."),
-    l("Il agit.", "It acts."),
-    l("Il regarde ce qui s'est passé.", "It looks at what happened."),
-    l("Il corrige son plan, et la boucle recommence jusqu'à l'objectif.", "It adjusts its plan, and the loop goes around again until the goal is met."),
-    l("Un agent : un modèle placé dans une boucle, avec des outils et la mémoire de ce qui s'est déjà passé.", "An agent: a model placed inside a loop, with tools and a memory of what has happened so far."),
+    { en: "It is given a goal." },
+    { en: "It decides on a first step." },
+    { en: "It acts." },
+    { en: "It looks at what happened." },
+    { en: "It adjusts its plan, and the loop goes around again until the goal is met." },
+    { en: "An agent: a model placed inside a loop, with tools and a memory of what has happened so far." },
   ],
   toolsSub: [
-    l("La boucle du début.", "The loop from the start."),
-    l("« Agir », c'est choisir un outil et l'utiliser.", "“Act” means picking a tool and using it."),
+    { en: "The loop from the start." },
+    { en: "“Act” means picking a tool and using it." },
   ],
   stakesSub: [
-    l("La même boucle.", "The same loop."),
-    l("Mais cette fois, avec des accès larges.", "But this time, with broad access."),
-    l("Chaque tour de boucle peut changer quelque chose dans le monde.", "Every turn of the loop can change something in the world."),
+    { en: "The same loop." },
+    { en: "But this time, with broad access." },
+    { en: "Every turn of the loop can change something in the world." },
   ],
   role: {
-    you: l("vous", "you"),
-    model: l("le modèle", "the model"),
-    software: l("le logiciel", "the software"),
+    you: { en: "you" },
+    model: { en: "the model" },
+    software: { en: "the software" },
   },
-  access: l("Accès", "Access"),
-  world: l("Dans le monde réel", "In the real world"),
+  access: { en: "Access" },
+  world: { en: "In the real world" },
 };
 
 interface Satellite {
@@ -62,27 +64,27 @@ interface Satellite {
 }
 
 const TOOLS: Satellite[] = [
-  { icon: "search", label: l("Recherche web", "Web search") },
-  { icon: "browser", label: l("Navigateur", "Browser") },
-  { icon: "code", label: l("Exécuter du code", "Run code") },
-  { icon: "file", label: l("Fichiers", "Files") },
-  { icon: "calculator", label: l("Calculatrice", "Calculator") },
+  { icon: "search", label: { en: "Web search" } },
+  { icon: "browser", label: { en: "Browser" } },
+  { icon: "code", label: { en: "Run code" } },
+  { icon: "file", label: { en: "Files" } },
+  { icon: "calculator", label: { en: "Calculator" } },
 ];
 
 const ACCESS: Satellite[] = [
-  { icon: "money", label: l("Compte bancaire", "Bank account") },
+  { icon: "money", label: { en: "Bank account" } },
   { icon: "mail", label: l("Messagerie", "Email") },
-  { icon: "terminal", label: l("Terminal", "Terminal") },
-  { icon: "server", label: l("Serveurs en production", "Production servers") },
-  { icon: "globe", label: l("Internet", "The internet") },
+  { icon: "terminal", label: { en: "Terminal" } },
+  { icon: "server", label: { en: "Production servers" } },
+  { icon: "globe", label: { en: "The internet" } },
 ];
 
 const EFFECTS: L10n[] = [
-  l("Paiements envoyés", "Payments sent"),
-  l("E-mails en votre nom", "Emails in your name"),
-  l("Fichiers effacés", "Files deleted"),
-  l("Services modifiés", "Services changed"),
-  l("Messages publiés", "Posts published"),
+  { en: "Payments sent" },
+  { en: "Emails in your name" },
+  { en: "Files deleted" },
+  { en: "Services changed" },
+  { en: "Posts published" },
 ];
 
 const LEGEND: LoopStage[] = ["goal", "plan", "act", "observe", "replan"];
@@ -101,7 +103,7 @@ export function AgentLoop({ props, ctx }: SceneComponentProps<AgentLoopProps>) {
   const variant: AgentLoopVariant =
     props.variant === "tools" || props.variant === "high-stakes" ? props.variant : "intro";
   const { locale, revealStep, role, reducedMotion } = ctx;
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
 
   const step = Math.max(0, revealStep);
   const revealed = variant === "intro" ? Math.min(5, step + 1) : 5;
@@ -126,10 +128,12 @@ export function AgentLoop({ props, ctx }: SceneComponentProps<AgentLoopProps>) {
   return (
     <div className={cx(styles.root, variant === "high-stakes" && styles.stakes)}>
       <div className={styles.head}>
-        <SceneHeading sub={t(sub)}>{t(props.heading ?? TEXT.heading[variant])}</SceneHeading>
+        <SceneHeading sub={<Rich text={t(sub)} />}>
+          <Rich text={t(props.heading ?? TEXT.heading[variant])} />
+        </SceneHeading>
       </div>
 
-      <svg className={styles.svg} viewBox="0 0 1920 1080" role="img" aria-label={t(TEXT.heading[variant])}>
+      <svg className={styles.svg} viewBox="0 0 1920 1080" role="img" aria-label={plainText(t(props.heading ?? TEXT.heading[variant]))}>
         {/* Satellites around "Act": tools, or broad access. */}
         <g className={cx(styles.fade, showSatellites && styles.on)}>
           {satellites.map((s, i) => {
@@ -140,7 +144,7 @@ export function AgentLoop({ props, ctx }: SceneComponentProps<AgentLoopProps>) {
                 <circle cx={x} cy={y} r={44} className={cx(styles.sat, variant === "high-stakes" && styles.satHot)} />
                 <IconG name={s.icon} x={x} y={y} size={44} className={styles.satIcon} />
                 <text x={x + 62} y={y + 10} className={styles.satLabel}>
-                  {t(s.label)}
+                  <RichTspans text={t(s.label)} />
                 </text>
               </g>
             );
@@ -151,11 +155,11 @@ export function AgentLoop({ props, ctx }: SceneComponentProps<AgentLoopProps>) {
         <g className={cx(styles.fade, showEffects && styles.on)}>
           <line x1={1536} y1={300} x2={1536} y2={300 + EFFECTS.length * 108 - 38} className={styles.worldBar} />
           <text x={1560} y={270} className={styles.worldTitle}>
-            {t(TEXT.world)}
+            <RichTspans text={t(TEXT.world)} />
           </text>
           {EFFECTS.map((e, i) => (
             <text key={i} x={1560} y={340 + i * 108} className={styles.effectText}>
-              {t(e)}
+              <RichTspans text={t(e)} />
             </text>
           ))}
         </g>
@@ -185,15 +189,15 @@ export function AgentLoop({ props, ctx }: SceneComponentProps<AgentLoopProps>) {
                 <circle cx={1220} cy={y} r={34} className={styles.legendDisc} />
                 <IconG name={stage === "act" ? "act" : stage} x={1220} y={y} size={34} className={styles.legendIcon} />
                 <text x={1280} y={y - 4} className={styles.legendLabel}>
-                  {t(STAGE_LABEL[stage])}
+                  <RichTspans text={t(STAGE_LABEL[stage])} />
                   {showRoles && (
                     <tspan dx={18} className={cx(styles.roleTag, styles[`role_${role}`])}>
-                      {t(TEXT.role[role])}
+                      <RichTspans text={t(TEXT.role[role])} />
                     </tspan>
                   )}
                 </text>
                 <text x={1280} y={y + 34} className={styles.legendGloss}>
-                  {t(STAGE_GLOSS[stage])}
+                  <RichTspans text={t(STAGE_GLOSS[stage])} />
                 </text>
               </g>
             );

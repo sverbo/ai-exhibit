@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { totalDurationSec, type SceneDefinition } from "@ai-exhibit/presentation-core";
+import { plainText, tr, totalDurationSec, type SceneDefinition } from "@ai-exhibit/presentation-core";
 import { formatDuration, formatMinutes } from "../../control/pace.ts";
 import { useUi, type UiKey } from "../../i18n.ts";
 import {
@@ -104,7 +104,7 @@ export function ConfigPanel({ talk, onClose }: { talk: Talk; onClose: () => void
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  const chapterTitle = (id: string) => presentation.chapters.find((c) => c.id === id)?.title[locale] ?? id;
+  const chapterTitle = (id: string) => plainText(tr(presentation.chapters.find((c) => c.id === id)?.title ?? { en: id }, locale));
 
   const dropAt = (before: number) => {
     if (!drag) return;
@@ -320,12 +320,12 @@ function SceneRow({
         }}
       >
         <div className={styles.main}>
-          <button type="button" data-handle className={styles.handle} title={t("configDrag")} aria-label={`${t("configDrag")}: ${scene.number} ${scene.title[locale]}`}>
+          <button type="button" data-handle className={styles.handle} title={t("configDrag")} aria-label={`${t("configDrag")}: ${scene.number} ${plainText(tr(scene.title, locale))}`}>
             <span aria-hidden="true">⠿</span>
           </button>
           <span className={`${chrome.mono} ${styles.number}`}>{scene.number}</span>
           <span className={styles.sceneTitle}>
-            {scene.title[locale]}
+            {plainText(tr(scene.title, locale))}
             {hidden ? <span className={styles.tag}>{t("configHidden")}</span> : null}
             {note && !noteOpen ? <span className={styles.notePreview}>{note}</span> : null}
           </span>
@@ -363,7 +363,7 @@ function SceneRow({
             rows={3}
             autoFocus
             placeholder={t("configNotePlaceholder")}
-            aria-label={`${t("configNote")}: ${scene.number} ${scene.title[locale]}`}
+            aria-label={`${t("configNote")}: ${scene.number} ${plainText(tr(scene.title, locale))}`}
             onChange={(e) => onNote(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {

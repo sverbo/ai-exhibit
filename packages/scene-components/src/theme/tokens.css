@@ -99,3 +99,12 @@
     --dur: 0ms;
   }
 }
+
+/* Quotation marks follow the language of the text: French guillemets with
+   their no-break spaces, English curly quotes for English inside French. */
+:lang(fr) q {
+  quotes: "«\202F" "\202F»" "“" "”";
+}
+:lang(en) q {
+  quotes: "“" "”" "‘" "’";
+}

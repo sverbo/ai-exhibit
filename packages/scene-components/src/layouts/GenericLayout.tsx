@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
-import { stepCount, type L10n, type SceneVisual } from "@ai-exhibit/presentation-core";
+import { stepCount, tr as coreTr, type L10n, type SceneVisual } from "@ai-exhibit/presentation-core";
 import type { SceneContext } from "../contract.ts";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
+import { Rich } from "../primitives/Rich.tsx";
 import { SourceLabels } from "../primitives/SourceLabel.tsx";
 import { cardColumns, displaySize, statementLines, visibleItemCount } from "./reveal.ts";
 import styles from "./layouts.module.css";
@@ -39,7 +40,7 @@ export function GenericLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Gene
 type Of<L extends GenericVisual["layout"]> = Extract<GenericVisual, { layout: L }>;
 
 function tr(text: L10n | undefined, ctx: SceneContext): string | undefined {
-  return text ? text[ctx.locale] : undefined;
+  return text ? coreTr(text, ctx.locale) : undefined;
 }
 
 /** Visibility class for the i-th revealable item. */
@@ -52,7 +53,9 @@ function useReveal(ctx: SceneContext, itemCount: number, ghost: boolean) {
 
 function Heading({ text }: { text: string | undefined }) {
   if (!text) return null;
-  return <h2 className={styles.heading}>{text}</h2>;
+  return <h2 className={styles.heading}>
+      <Rich text={text} />
+    </h2>;
 }
 
 /* Title, question and statement: one line of big type, hung from a short accent rule. */
@@ -62,11 +65,11 @@ function TitleLayout({ visual, ctx }: LayoutProps<Of<"title">>) {
   return (
     <div className={`${styles.frame} ${styles.displayFrame}`}>
       <span className={styles.rule} aria-hidden="true" />
-      {visual.kicker ? <p className={styles.kicker}>{tr(visual.kicker, ctx)}</p> : null}
+      {visual.kicker ? <p className={styles.kicker}><Rich text={tr(visual.kicker, ctx)} /></p> : null}
       <h1 className={styles.title} data-size={displaySize(heading, 28, 56)}>
-        {heading}
+        <Rich text={heading} />
       </h1>
-      {visual.sub ? <p className={styles.sub}>{tr(visual.sub, ctx)}</p> : null}
+      {visual.sub ? <p className={styles.sub}><Rich text={tr(visual.sub, ctx)} /></p> : null}
     </div>
   );
 }
@@ -77,9 +80,9 @@ function QuestionLayout({ visual, ctx }: LayoutProps<Of<"question">>) {
     <div className={`${styles.frame} ${styles.displayFrame}`}>
       <span className={styles.rule} aria-hidden="true" />
       <p className={styles.question} data-size={displaySize(question, 40, 72)}>
-        {question}
+        <Rich text={question} />
       </p>
-      {visual.hint ? <p className={styles.hint}>{tr(visual.hint, ctx)}</p> : null}
+      {visual.hint ? <p className={styles.hint}><Rich text={tr(visual.hint, ctx)} /></p> : null}
     </div>
   );
 }
@@ -92,9 +95,9 @@ function StatementLayout({ visual, ctx }: LayoutProps<Of<"statement">>) {
     <div className={`${styles.frame} ${styles.displayFrame}`}>
       <span className={styles.rule} aria-hidden="true" />
       <blockquote className={styles.statement} data-size={size}>
-        {lines.length > 1 ? lines.map((line, i) => <span key={i} className={styles.statementLine}>{line}</span>) : text}
+        {lines.length > 1 ? lines.map((line, i) => <span key={i} className={styles.statementLine}><Rich text={line} /></span>) : <Rich text={text} />}
       </blockquote>
-      {visual.attribution ? <p className={styles.attribution}>{tr(visual.attribution, ctx)}</p> : null}
+      {visual.attribution ? <p className={styles.attribution}><Rich text={tr(visual.attribution, ctx)} /></p> : null}
     </div>
   );
 }
@@ -118,8 +121,8 @@ function CardsLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Of<"cards">>)
                 {card.icon}
               </span>
             ) : null}
-            <h3 className={styles.cardTitle}>{tr(card.title, ctx)}</h3>
-            {card.body ? <p className={styles.cardBody}>{tr(card.body, ctx)}</p> : null}
+            <h3 className={styles.cardTitle}><Rich text={tr(card.title, ctx)} /></h3>
+            {card.body ? <p className={styles.cardBody}><Rich text={tr(card.body, ctx)} /></p> : null}
             {(card.evidence && card.evidence !== "none") || card.sourceIds?.length ? (
               <footer className={styles.cardFooter}>
                 {card.evidence ? <EvidenceBadge level={card.evidence} locale={ctx.locale} size="sm" /> : null}
@@ -141,7 +144,7 @@ function ListLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Of<"list">>) {
       <ul className={styles.list} data-dense={visual.items.length > 5 ? "" : undefined}>
         {visual.items.map((item, i) => (
           <li key={i} className={`${styles.listItem} ${cls(i)}`}>
-            {tr(item, ctx)}
+            <Rich text={tr(item, ctx)} />
           </li>
         ))}
       </ul>
@@ -166,15 +169,15 @@ function FlowLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Of<"flow">>) {
       const label = edgeLabel(prev.id, node.id);
       parts.push(
         <div key={`a${i}`} className={`${styles.arrow} ${cls(i)}`} aria-hidden={label ? undefined : "true"}>
-          {label ? <span className={styles.arrowLabel}>{label}</span> : null}
+          {label ? <span className={styles.arrowLabel}><Rich text={label} /></span> : null}
           <span className={styles.arrowLine} />
         </div>,
       );
     }
     parts.push(
       <div key={node.id} className={`${styles.node} ${cls(i)}`}>
-        <span className={styles.nodeLabel}>{tr(node.label, ctx)}</span>
-        {node.detail ? <span className={styles.nodeDetail}>{tr(node.detail, ctx)}</span> : null}
+        <span className={styles.nodeLabel}><Rich text={tr(node.label, ctx)} /></span>
+        {node.detail ? <span className={styles.nodeDetail}><Rich text={tr(node.detail, ctx)} /></span> : null}
       </div>,
     );
   });
@@ -191,7 +194,7 @@ function FlowLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Of<"flow">>) {
             style={{ "--loop-nodes": visual.nodes.length } as CSSProperties}
           >
             <span className={styles.loopLine} />
-            {loopLabel ? <span className={styles.loopLabel}>{loopLabel}</span> : null}
+            {loopLabel ? <span className={styles.loopLabel}><Rich text={loopLabel} /></span> : null}
           </div>
         ) : null}
       </div>
@@ -203,10 +206,10 @@ function CompareLayout({ visual, ctx, ghostUnrevealed }: LayoutProps<Of<"compare
   const cls = useReveal(ctx, 2, ghostUnrevealed);
   const column = (col: Of<"compare">["left"], i: number, side: "left" | "right") => (
     <section className={`${styles.compareCol} ${styles[side]} ${cls(i)}`}>
-      <h3 className={styles.compareTitle}>{tr(col.title, ctx)}</h3>
+      <h3 className={styles.compareTitle}><Rich text={tr(col.title, ctx)} /></h3>
       <ul className={styles.compareItems}>
         {col.items.map((item, j) => (
-          <li key={j}>{tr(item, ctx)}</li>
+          <li key={j}><Rich text={tr(item, ctx)} /></li>
         ))}
       </ul>
     </section>
@@ -228,7 +231,7 @@ function PlaceholderLayout({ visual, ctx }: LayoutProps<Of<"placeholder">>) {
     <div className={`${styles.frame} ${styles.placeholderFrame}`}>
       <div className={styles.placeholder}>
         <p className={styles.placeholderTag}>{ctx.locale === "fr" ? "Scène à construire" : "Scene to be built"}</p>
-        <p className={styles.placeholderText}>{tr(visual.description, ctx)}</p>
+        <p className={styles.placeholderText}><Rich text={tr(visual.description, ctx)} /></p>
       </div>
     </div>
   );

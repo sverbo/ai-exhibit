@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { LOCALES, LOCALE_INFO, parseLocale, tr, type Locale } from "@ai-exhibit/presentation-core";
 import { glossary, resources, type GlossaryEntry } from "@ai-exhibit/content/glossary";
 import { currentStampedTheme } from "../../theme.ts";
 import { guessLocale } from "./locale.ts";
@@ -26,10 +26,13 @@ const COPY = {
 
 const LOCALE_KEY = "ai-exhibit:glossary-locale";
 
+/** `?lang=` first (the QR code carries the talk's language), then this phone's last choice. */
 function readLocale(fallback?: Locale): Locale {
+  const asked = typeof window === "undefined" ? null : parseLocale(new URLSearchParams(window.location.search).get("lang"));
+  if (asked) return asked;
   try {
-    const v = localStorage.getItem(LOCALE_KEY);
-    if (v === "fr" || v === "en") return v;
+    const v = parseLocale(localStorage.getItem(LOCALE_KEY));
+    if (v) return v;
   } catch {
     // storage unavailable
   }
@@ -119,7 +122,7 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
   return (
     <div className={styles.glossary} lang={locale}>
       <header className={styles.top}>
-        <nav className={styles.tabs} aria-label={COPY.sections[locale]}>
+        <nav className={styles.tabs} aria-label={tr(COPY.sections, locale)}>
           {(["glossary", "resources"] as const).map((id) => (
             <button
               key={id}
@@ -128,13 +131,13 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
               aria-pressed={tab === id}
               onClick={() => setTab(id)}
             >
-              {COPY[id][locale]}
+              {tr(COPY[id], locale)}
             </button>
           ))}
         </nav>
-        <span className={styles.lang} role="radiogroup" aria-label={COPY.language[locale]}>
-          {(["en", "fr"] as const).map((l) => (
-            <button key={l} type="button" role="radio" aria-checked={locale === l} className={`${styles.langBtn} ${locale === l ? styles.langOn : ""}`} onClick={() => setLocale(l)}>
+        <span className={styles.lang} role="radiogroup" aria-label={tr(COPY.language, locale)}>
+          {LOCALES.map((l) => (
+            <button key={l} type="button" role="radio" lang={l} title={LOCALE_INFO[l].name} aria-checked={locale === l} className={`${styles.langBtn} ${locale === l ? styles.langOn : ""}`} onClick={() => setLocale(l)}>
               {l.toUpperCase()}
             </button>
           ))}
@@ -151,14 +154,14 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
               enterKeyHint="search"
               autoComplete="off"
               spellCheck={false}
-              placeholder={COPY.search[locale]}
-              aria-label={COPY.search[locale]}
+              placeholder={tr(COPY.search, locale)}
+              aria-label={tr(COPY.search, locale)}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          {!searching ? <p className={styles.intro}>{COPY.intro[locale]}</p> : null}
-          {hits.length === 0 ? <p className={styles.empty}>{COPY.noMatch[locale]}</p> : null}
+          {!searching ? <p className={styles.intro}>{tr(COPY.intro, locale)}</p> : null}
+          {hits.length === 0 ? <p className={styles.empty}>{tr(COPY.noMatch, locale)}</p> : null}
           {groups.map((g) => (
             <section key={g.letter || "hits"} className={styles.group} aria-label={g.letter || undefined}>
               {g.letter ? (
@@ -177,10 +180,10 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
                       </button>
                       {open ? (
                         <div className={styles.body}>
-                          <p className={styles.explanation}>{e.explanation[locale]}</p>
+                          <p className={styles.explanation}>{tr(e.explanation, locale)}</p>
                           {e.seeAlso?.length ? (
                             <p className={styles.seeAlso}>
-                              <span className={styles.seeAlsoLabel}>{COPY.seeAlso[locale]}</span>
+                              <span className={styles.seeAlsoLabel}>{tr(COPY.seeAlso, locale)}</span>
                               {e.seeAlso.map((s) => (
                                 <button key={s} type="button" className={styles.chip} onClick={() => goTo(s)}>
                                   {s}
@@ -196,20 +199,20 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
               </ul>
             </section>
           ))}
-          <p className={styles.note}>{COPY.termsNote[locale]}</p>
+          <p className={styles.note}>{tr(COPY.termsNote, locale)}</p>
         </>
       ) : (
         <section className={styles.resources}>
-          <p className={styles.intro}>{COPY.resourcesIntro[locale]}</p>
+          <p className={styles.intro}>{tr(COPY.resourcesIntro, locale)}</p>
           <ul className={styles.list}>
             {resources.map((r) => (
               <li key={r.url}>
                 <a className={styles.resource} href={r.url} target="_blank" rel="noopener noreferrer">
                   <span className={styles.resourceTitle}>{r.title}</span>
-                  <span className={styles.resourceBy}>{r.by[locale]}</span>
-                  <span className={styles.explanation}>{r.description[locale]}</span>
+                  <span className={styles.resourceBy}>{tr(r.by, locale)}</span>
+                  <span className={styles.explanation}>{tr(r.description, locale)}</span>
                   <span className={styles.online}>
-                    {COPY.online[locale]} {new URL(r.url).hostname.replace(/^www\./, "")}
+                    {tr(COPY.online, locale)} {new URL(r.url).hostname.replace(/^www\./, "")}
                   </span>
                 </a>
               </li>

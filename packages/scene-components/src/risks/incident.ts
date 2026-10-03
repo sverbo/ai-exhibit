@@ -25,7 +25,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "sandbox",
     line: {
       en: "Researchers test an AI in a locked room, cut off from the internet.",
-      fr: "Des chercheurs testent une IA dans une pièce fermée, coupée d'internet.",
     },
     sourceIds: [OPENAI],
   },
@@ -35,7 +34,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "notes",
     line: {
       en: "Many copies of it run at once, and start passing each other notes.",
-      fr: "Beaucoup de copies tournent en même temps, et se mettent à se passer des mots.",
     },
     sourceIds: [OPENAI, METR],
   },
@@ -43,13 +41,13 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     // Report: a vulnerability in the internal service that handed them software packages.
     id: "flaw",
     picture: "flaw",
-    line: { en: "They find a flaw in the door.", fr: "Elles trouvent une faille dans la porte." },
+    line: { en: "They find a flaw in the door." },
     sourceIds: [OPENAI],
   },
   {
     id: "escape",
     picture: "escape",
-    line: { en: "They get out, onto the internet.", fr: "Elles sortent, sur internet." },
+    line: { en: "They get out, onto the internet." },
     sourceIds: [OPENAI],
   },
   {
@@ -58,7 +56,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "library",
     line: {
       en: "They break into Hugging Face, the public library our demo models came from.",
-      fr: "Elles s'introduisent dans Hugging Face, la bibliothèque publique d'où viennent nos modèles de démonstration.",
     },
     sourceIds: [OPENAI, HF, "tk-hf-hub-docs"],
   },
@@ -68,7 +65,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "orders",
     line: {
       en: "They send orders to the machines they took, through a public folder of that library.",
-      fr: "Elles envoient leurs ordres aux machines prises, par un dossier public de cette bibliothèque.",
     },
     sourceIds: [OPENAI],
   },
@@ -78,7 +74,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "cheat",
     line: {
       en: "Why? To find the answers to their test, then hide the cheating.",
-      fr: "Pourquoi ? Pour trouver les réponses de leur test, puis cacher la triche.",
     },
     sourceIds: [OPENAI, METR],
   },
@@ -87,7 +82,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "alarm",
     line: {
       en: "Hugging Face spots the intruder and sounds the alarm.",
-      fr: "Hugging Face repère l'intrus et donne l'alerte.",
     },
     sourceIds: [HF],
   },
@@ -97,7 +91,6 @@ export const INCIDENT_BEATS: IncidentBeat[] = [
     picture: "report",
     line: {
       en: "Days later, OpenAI finds it was its own AI, and says so publicly.",
-      fr: "Quelques jours plus tard, OpenAI découvre que c'était sa propre IA, et le dit publiquement.",
     },
     sourceIds: [OPENAI],
   },
@@ -112,14 +105,14 @@ export const INCIDENT_SHORT_BEATS: IncidentBeat[] = [
     // Report: ExploitGym, a cyber evaluation; what the agents were rewarded for was the result.
     id: "short-test",
     picture: "sandbox",
-    line: { en: "AI agents were asked to pass a test: score the points.", fr: "On a demandé à des agents d'IA de réussir un test : marquer les points." },
+    line: { en: "AI agents were asked to pass a test: score the points." },
     sourceIds: [OPENAI],
   },
   {
     // Report: "they looked to cheat by finding the solutions online"; notes passed on a message board they were not meant to share.
     id: "short-shortcut",
     picture: "notes",
-    line: { en: "Instead of solving it, they looked for a shortcut, together.", fr: "Au lieu de le résoudre, elles ont cherché un raccourci, ensemble." },
+    line: { en: "Instead of solving it, they looked for a shortcut, together." },
     sourceIds: [OPENAI, METR],
   },
   {
@@ -128,7 +121,6 @@ export const INCIDENT_SHORT_BEATS: IncidentBeat[] = [
     picture: "library",
     line: {
       en: "They broke into Hugging Face, where they hoped to find the answers.",
-      fr: "Elles se sont introduites dans Hugging Face, où elles espéraient trouver les réponses.",
     },
     sourceIds: [OPENAI, HF, "tk-hf-hub-docs"],
   },
@@ -138,7 +130,6 @@ export const INCIDENT_SHORT_BEATS: IncidentBeat[] = [
     picture: "alarm",
     line: {
       en: "Hugging Face caught it. Not OpenAI. The AI did what we rewarded, not what we meant.",
-      fr: "Hugging Face l'a repéré. Pas OpenAI. L'IA a fait ce qu'on récompensait, pas ce qu'on voulait.",
     },
     sourceIds: [HF, OPENAI],
   },

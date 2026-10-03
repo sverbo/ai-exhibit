@@ -1,4 +1,4 @@
-import type { L10n, Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
+import { pick, tr, type L10n, type Locale, type SceneDefinition, type SourceRecord } from "@ai-exhibit/presentation-core";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -23,7 +23,7 @@ const locales: Locale[] = ["en", "fr"];
 
 function expectL10n(value: L10n | undefined, where: string) {
   expect(value, `${where} is missing`).toBeDefined();
-  for (const text of [value!.en, value!.fr]) {
+  for (const text of [value!.en, pick(value!, "fr")]) {
     expect(text.trim(), `${where} has an empty locale`).not.toBe("");
     expect(DASHES.test(text), `${where} contains an en or em dash: ${text}`).toBe(false);
   }
@@ -96,7 +96,7 @@ describe("incident story", () => {
         for (let step = 0; step <= INCIDENT_STEPS; step++) {
           const html = render(IncidentStory, {}, ctx(role, step, locale));
           const current = incidentBeatAt(step, role === "preview", "full");
-          expect(html).toContain(INCIDENT_BEATS[current]!.line[locale].replace(/'/g, "&#x27;"));
+          expect(html).toContain(tr(INCIDENT_BEATS[current]!.line, locale).replace(/'/g, "&#x27;"));
           expect(html.match(/data-state="past"/g)?.length ?? 0).toBe(current);
           expect(html.match(/data-state="future"/g)?.length ?? 0).toBe(INCIDENT_BEATS.length - 1 - current);
         }
@@ -160,7 +160,7 @@ describe("chapter 04 notes", () => {
   it("are 3 to 7 bullets in both locales, without dashes", () => {
     for (const scene of chapter04.filter((s) => s.visual.layout === "component" && OWN.has(s.visual.component)))
       for (const locale of locales) {
-        const notes = scene.speakerNotes[locale];
+        const notes = pick(scene.speakerNotes, locale);
         const bullets = notes.split("\n").filter((l) => l.startsWith("- "));
         expect(bullets.length, `${scene.id} ${locale}`).toBeGreaterThanOrEqual(3);
         expect(bullets.length, `${scene.id} ${locale}`).toBeLessThanOrEqual(7);
@@ -260,7 +260,7 @@ describe("ResourceList (05-resources)", () => {
       expect(resources.length).toBeGreaterThan(0);
       for (const r of resources) {
         expect(html).toContain(r.title);
-        expect(html).toContain(r.by[locale].replace(/'/g, "&#x27;"));
+        expect(html).toContain(tr(r.by, locale).replace(/'/g, "&#x27;"));
       }
       expect(html.match(/data-kind=/g)?.length).toBe(resources.length);
       expect(html).toContain("192.168.1.20:4317/glossary");

@@ -4,11 +4,10 @@
  * automated review possible.
  */
 
-export const LOCALES = ["fr", "en"] as const;
-export type Locale = (typeof LOCALES)[number];
+import type { L10n, Locale } from "./locales.ts";
 
-/** Every audience- or presenter-facing string exists in every locale. */
-export type L10n = Record<Locale, string>;
+export type { L10n, Locale };
+export { LOCALES } from "./locales.ts";
 
 export type ChapterId =
   | "00" | "01" | "02" | "03" | "04" | "05"
@@ -201,13 +200,16 @@ export interface ArtifactSpec {
   /** What the scene does when the artifact is missing. */
   fallback: string;
   optional?: boolean;
-  /** Only needed by editions in these locales; omitted means every locale. */
+  /** Only needed when the talk is given in these locales; omitted means every locale. */
   locales?: Locale[];
 }
 
+/**
+ * A cut of the talk: which scenes, for how long. Locale independent: the
+ * language is chosen at launch and lives in the session (docs/specs/2026-10-03-locales.md).
+ */
 export interface EditionDefinition {
   id: string;
-  locale: Locale;
   title: L10n;
   /** Target talk length in minutes, inclusive range. */
   targetMinutes: [number, number];
@@ -234,6 +236,11 @@ export interface PresentationDefinition {
   /** Codes of deleted scenes: never given to another scene. */
   retiredSceneCodes?: string[];
   editions: EditionDefinition[];
+  /**
+   * Locales the launcher offers for this talk, default first. Every text must
+   * exist in them (verify:content fails otherwise); other LOCALES are drafts.
+   */
+  locales: Locale[];
   artifacts: ArtifactSpec[];
   sources: SourceRecord[];
 }

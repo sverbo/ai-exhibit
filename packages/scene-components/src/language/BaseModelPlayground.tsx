@@ -12,9 +12,10 @@
  * In Simulation, both are recorded real runs on the prepared prompt.
  */
 import { useEffect, useRef } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { intlLocale, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudComplete, cloudNextToken, findCloudNext, findCloudRecording } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import styles from "./BaseModelPlayground.module.css";
 import { COPY } from "./copy.ts";
 import { DEFAULT_BASE_PROMPT } from "./data.ts";
@@ -232,77 +233,77 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
   };
 
   const view = role === "preview" || (role === "display" && ctx.state === undefined) ? initial() : state;
-  const modeLabel = (m: Mode) => (m === "one" ? COPY.modeOne[locale] : COPY.modeMany[locale]);
+  const modeLabel = (m: Mode) => <Rich text={m === "one" ? tr(COPY.modeOne, locale) : tr(COPY.modeMany, locale)} />;
 
   const controls =
     role === "controller" ? (
       <>
         <Segmented
-          label={COPY.mode[locale]}
+          label={tr(COPY.mode, locale)}
           value={state.mode}
           options={(["one", "many"] as Mode[]).map((m) => ({ value: m, label: modeLabel(m) }))}
           onChange={(mode) => setState((x) => ({ ...x, mode }))}
         />
         {state.mode === "one" ? (
           <Button primary disabled={state.busy || !state.candidates.length} onClick={() => void oneToken()}>
-            {COPY.addOneToken[locale]}
+            {tr(COPY.addOneToken, locale)}
           </Button>
         ) : (
           <>
             <Segmented
-              label={COPY.howMany[locale]}
+              label={tr(COPY.howMany, locale)}
               value={state.many}
               options={MANY_OPTIONS.map((n) => ({ value: n, label: String(n) }))}
               onChange={(many) => setState((x) => ({ ...x, many }))}
             />
             {state.busy ? (
-              <Button onClick={() => abort.current?.abort()}>{COPY.stop[locale]}</Button>
+              <Button onClick={() => abort.current?.abort()}>{tr(COPY.stop, locale)}</Button>
             ) : (
               <Button primary onClick={() => void severalTokens()}>
-                {COPY.addManyTokens[locale].replace("{n}", String(state.many))}
+                {tr(COPY.addManyTokens, locale).replace("{n}", String(state.many))}
               </Button>
             )}
           </>
         )}
         <Segmented
-          label={COPY.nextToken[locale]}
+          label={tr(COPY.nextToken, locale)}
           value={state.greedy ? "greedy" : "sample"}
           options={[
-            { value: "greedy", label: COPY.greedy[locale] },
-            { value: "sample", label: COPY.sample[locale] },
+            { value: "greedy", label: tr(COPY.greedy, locale) },
+            { value: "sample", label: tr(COPY.sample, locale) },
           ]}
           onChange={(m) => setState((x) => ({ ...x, greedy: m === "greedy" }))}
         />
         {!state.greedy ? (
           <Slider
-            label={COPY.temperature[locale]}
+            label={tr(COPY.temperature, locale)}
             value={state.temperature}
             min={0.1}
             max={2}
             step={0.1}
             disabled={simulation}
-            format={(v) => v.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 1 })}
+            format={(v) => v.toLocaleString(intlLocale(locale), { minimumFractionDigits: 1 })}
             onChange={(temperature) => setState((x) => ({ ...x, temperature }))}
           />
         ) : null}
         <TextField
-          label={COPY.edit[locale]}
+          label={tr(COPY.edit, locale)}
           value={state.prompt}
-          submitLabel={COPY.apply[locale]}
+          submitLabel={tr(COPY.apply, locale)}
           disabled={simulation}
           onSubmit={(v) => v.trim() && restart(v.trim())}
         />
         <Button disabled={!state.appended.length && state.prompt === promptIn(planned, locale)} onClick={() => restart(promptIn(planned, locale))}>
-          {COPY.restart[locale]}
+          {tr(COPY.restart, locale)}
         </Button>
         <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} />
       </>
     ) : null;
 
   return (
-    <Frame controls={controls} label={ctx.scene.title[locale]}>
+    <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
       <header className={styles.head}>
-        <div className={styles.modes} role="group" aria-label={COPY.mode[locale]}>
+        <div className={styles.modes} role="group" aria-label={tr(COPY.mode, locale)}>
           {(["one", "many"] as Mode[]).map((m) => (
             <span key={m} className={cx(styles.modeTab, view.mode === m && styles.modeOn)}>
               {modeLabel(m)}
@@ -310,7 +311,9 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
           ))}
         </div>
         <p className={styles.modelLine}>
-          {COPY.baseTitle[locale]} <b>{BASE_LABEL}</b>: {COPY.baseSub[locale]}
+          <Rich text={tr(COPY.baseTitle, locale)} /> <b>{BASE_LABEL}</b>
+          {locale === "fr" ? "\u00a0: " : ": "}
+          <Rich text={tr(COPY.baseSub, locale)} />
         </p>
       </header>
       <div className={cx(styles.text, view.appended.length > 40 && styles.long)}>
@@ -338,7 +341,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
             </span>
           ) : view.busy && view.mode === "many" ? null : view.busy ? (
             <span className={styles.waiting}>
-              <Pending>{COPY.thinking[locale]}</Pending>
+              <Pending>{tr(COPY.thinking, locale)}</Pending>
             </span>
           ) : null}
         </span>
@@ -346,7 +349,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
       <footer className={styles.footer}>
         {view.mode === "one" && view.bars ? (
           <p className={styles.barsNote}>
-            {(view.bars.recorded ? COPY.barsRecorded : COPY.barsFromCloud)[locale].replace("{model}", view.bars.model)}
+            <Rich text={tr(view.bars.recorded ? COPY.barsRecorded : COPY.barsFromCloud, locale).replace("{model}", view.bars.model)} />
           </p>
         ) : null}
         {view.source === "recorded" && role !== "preview" ? <RecordedTag locale={locale} /> : null}

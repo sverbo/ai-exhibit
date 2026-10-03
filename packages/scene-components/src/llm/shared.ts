@@ -1,9 +1,9 @@
 /** Formatting and timing helpers shared by the llm components (pure, tested). */
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { intlLocale, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { useEffect, useRef, useState } from "react";
 
 export function formatNumber(n: number, locale: Locale, digits = 0): string {
-  return new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-GB", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   })
@@ -111,7 +111,7 @@ export function decimalYear(iso: string): number {
 }
 
 export function pick(l: L10n, locale: Locale): string {
-  return l[locale];
+  return tr(l, locale);
 }
 
 /**

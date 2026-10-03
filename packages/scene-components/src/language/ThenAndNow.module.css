@@ -88,9 +88,6 @@
   overflow: hidden;
   mask-image: linear-gradient(to bottom, var(--color-text) 80%, transparent);
 }
-.answer q {
-  quotes: "\201C" "\201D";
-}
 .footnote {
   margin: auto 0 0;
   font-size: var(--text-xs);
@@ -200,7 +197,6 @@
   font-size: var(--text-sm);
   line-height: 1.25;
   color: var(--color-text);
-  quotes: "\201C" "\201D";
 }
 .mark {
   justify-self: end;
@@ -279,4 +275,29 @@
   .column {
     transition: none;
   }
+}
+
+/* An English model answer translated for the audience: labelled, in italics. */
+.rungText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.translation {
+  display: block;
+  font-size: var(--text-xs);
+  line-height: 1.25;
+  color: var(--color-text-muted);
+}
+.translationLabel {
+  font-style: normal;
+  font-weight: 600;
+}
+/* Translated answers make each rung taller: tighten the ladder to keep it on the stage. */
+.ladder:has(.translation) {
+  gap: 6px;
+}
+.ladder:has(.translation) .rung {
+  padding-block: 6px;
 }

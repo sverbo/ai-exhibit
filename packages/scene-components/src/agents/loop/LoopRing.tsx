@@ -1,3 +1,5 @@
+import { tr } from "@ai-exhibit/presentation-core";
+import { RichTspans } from "../../primitives/Rich.tsx";
 import { useEffect, useState } from "react";
 import { cx, l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 import { IconG, type IconName } from "../shared/icons.tsx";
@@ -13,19 +15,19 @@ export type LoopStage = "goal" | "plan" | "act" | "observe" | "replan";
 export const RING_STAGES: Exclude<LoopStage, "goal">[] = ["plan", "act", "observe", "replan"];
 
 export const STAGE_LABEL: Record<LoopStage, L10n> = {
-  goal: l("Objectif", "Goal"),
-  plan: l("Planifier", "Plan"),
-  act: l("Agir", "Act"),
-  observe: l("Observer", "Observe"),
-  replan: l("Replanifier", "Re-plan"),
+  goal: { en: "Goal" },
+  plan: { en: "Plan" },
+  act: { en: "Act" },
+  observe: { en: "Observe" },
+  replan: { en: "Re-plan" },
 };
 
 export const STAGE_GLOSS: Record<LoopStage, L10n> = {
-  goal: l("ce qu'on lui demande", "what it was asked to do"),
-  plan: l("décider de la prochaine étape", "decide the next step"),
-  act: l("utiliser un outil", "use a tool"),
-  observe: l("lire le résultat", "read the result"),
-  replan: l("corriger le plan", "adjust the plan"),
+  goal: { en: "what it was asked to do" },
+  plan: { en: "decide the next step" },
+  act: { en: "use a tool" },
+  observe: { en: "read the result" },
+  replan: { en: "adjust the plan" },
 };
 
 const ICON: Record<LoopStage, IconName> = {
@@ -107,7 +109,7 @@ export function LoopRing({
   dimOthers?: boolean;
   goalText?: string;
 }) {
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const order: LoopStage[] = ["goal", ...RING_STAGES];
   const visible = (s: LoopStage) => order.indexOf(s) < revealed;
   const lit = highlight ?? stageAt(pulseAngle);
@@ -181,7 +183,7 @@ export function LoopRing({
             <circle cx={x} cy={y} r={r} className={styles.disc} />
             <IconG name={ICON[s]} x={x} y={y - r * 0.22} size={r * 0.6} strokeWidth={1.7} className={styles.icon} />
             <text x={x} y={y + r * 0.42} className={styles.label} style={{ fontSize: Math.round(r * 0.3) }}>
-              {t(STAGE_LABEL[s])}
+              <RichTspans text={t(STAGE_LABEL[s])} />
             </text>
             {glosses && s !== "goal" && (
               <text
@@ -189,12 +191,12 @@ export function LoopRing({
                 y={y + (s === "plan" ? -r - 22 : s === "observe" ? r + 44 : 10)}
                 className={cx(styles.gloss, s === "act" && styles.glossStart, s === "replan" && styles.glossEnd)}
               >
-                {t(STAGE_GLOSS[s])}
+                <RichTspans text={t(STAGE_GLOSS[s])} />
               </text>
             )}
             {s === "goal" && goalText && (
               <text x={x} y={y + r + 46} className={styles.goalText}>
-                {goalText}
+                <RichTspans text={goalText} />
               </text>
             )}
           </g>

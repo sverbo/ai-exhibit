@@ -1,3 +1,5 @@
+import { tr } from "@ai-exhibit/presentation-core";
+import { Rich } from "../../primitives/Rich.tsx";
 import type { SceneComponentProps } from "../../contract.ts";
 import { shortSourceLabel } from "../../primitives/sourceLabel.ts";
 import { SceneHeading, cx, l, type L10n } from "../../learning/shared/ui.tsx";
@@ -8,10 +10,10 @@ import styles from "./ConnectedAssistant.module.css";
 export type ConnectedAssistantProps = Record<string, never>;
 
 const TEXT = {
-  heading: l("Les assistants d'aujourd'hui se branchent sur votre vie", "Today's assistants plug into your life"),
-  hub: l("Assistant", "Assistant"),
-  alone: l("Seul, il ne peut que parler.", "On its own, it can only talk."),
-  aloneSub: l("Chaque branchement lui ouvre une porte de plus.", "Each connection opens one more door."),
+  heading: { en: "Today's assistants plug into your life" },
+  hub: { en: "Assistant" },
+  alone: { en: "On its own, it can only talk." },
+  aloneSub: { en: "Each connection opens one more door." },
 };
 
 /** Stage geometry, in stage pixels. */
@@ -22,7 +24,7 @@ const NODE_R = 50;
 
 export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssistantProps>) {
   const { locale, role, reducedMotion } = ctx;
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const n = CONNECTORS.length;
   const shown = visibleConnectors(ctx.revealStep);
   const current = shown > 0 ? CONNECTORS[shown - 1]! : null;
@@ -33,7 +35,7 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
   return (
     <div className={cx(styles.root, animate && styles.animate)}>
       <div className={styles.heading}>
-        <SceneHeading>{t(TEXT.heading)}</SceneHeading>
+        <SceneHeading><Rich text={t(TEXT.heading)} /></SceneHeading>
       </div>
 
       <svg className={styles.wires} viewBox="0 0 1920 1080" aria-hidden="true">
@@ -63,7 +65,7 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
 
       <div className={styles.hub} style={{ left: CENTER.x - HUB_R, top: CENTER.y - HUB_R, width: HUB_R * 2, height: HUB_R * 2 }}>
         <CapIcon name="chat" size={64} strokeWidth={1.6} />
-        <span className={styles.hubLabel}>{t(TEXT.hub)}</span>
+        <span className={styles.hubLabel}><Rich text={t(TEXT.hub)} /></span>
       </div>
 
       {CONNECTORS.map((c, i) => {
@@ -78,7 +80,7 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
             <span className={styles.disc}>
               <CapIcon name={c.icon} size={46} strokeWidth={1.7} />
             </span>
-            <span className={styles.label}>{t(c.label)}</span>
+            <span className={styles.label}><Rich text={t(c.label)} /></span>
           </div>
         );
       })}
@@ -88,7 +90,7 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
           <>
             <p className={styles.example}>
               <span className={styles.quote}>{locale === "fr" ? "«\u00a0" : "\u201c"}</span>
-              {t(current.example)}
+              <Rich text={t(current.example)} />
               <span className={styles.quote}>{locale === "fr" ? "\u00a0»" : "\u201d"}</span>
             </p>
             <p className={styles.sources}>
@@ -104,8 +106,8 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
           </>
         ) : (
           <>
-            <p className={styles.example}>{t(TEXT.alone)}</p>
-            <p className={styles.aloneSub}>{t(TEXT.aloneSub)}</p>
+            <p className={styles.example}><Rich text={t(TEXT.alone)} /></p>
+            <p className={styles.aloneSub}><Rich text={t(TEXT.aloneSub)} /></p>
           </>
         )}
       </footer>

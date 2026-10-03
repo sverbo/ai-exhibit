@@ -16,7 +16,8 @@ function pres(scenes: SceneDefinition[]): PresentationDefinition {
   return {
     id: "p", title: l("p"), scenes, artifacts: [], sources: [],
     chapters: [{ id: "04", title: l("c"), summary: l("s") }],
-    editions: [{ id: "e", locale: "fr", title: l("e"), targetMinutes: [0, 10], cut: "full" }],
+    editions: [{ id: "e", title: l("e"), targetMinutes: [0, 10], cut: "full" }],
+    locales: ["en", "fr"],
   };
 }
 

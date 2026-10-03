@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { mulberry32 } from "../../learning/ml/mlp.ts";
 import type { LabelledSentence, Sport } from "./text.ts";
 
@@ -229,8 +229,8 @@ export function generateSentences(locale: Locale, seed: number, perSport: number
   const out: LabelledSentence[] = [];
   for (let k = 0; k < perSport; k++) {
     for (const label of ["football", "basketball"] as const) {
-      let text = sentence(r, POOLS[locale], label);
-      while (seen.has(text)) text = sentence(r, POOLS[locale], label);
+      let text = sentence(r, tr(POOLS, locale), label);
+      while (seen.has(text)) text = sentence(r, tr(POOLS, locale), label);
       seen.add(text);
       out.push({ text, label });
     }

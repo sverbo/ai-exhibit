@@ -1,5 +1,7 @@
+import { plainText, tr } from "@ai-exhibit/presentation-core";
 import type { ReactNode } from "react";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { ENVELOPES, type Envelope } from "./data.ts";
 import styles from "./AIEnvelopes.module.css";
 
@@ -26,18 +28,20 @@ export function AIEnvelopes({ ctx }: SceneComponentProps<Record<string, never>>)
         className={`${styles.ring} ${visible ? styles.shown : styles.hidden} ${current ? styles.current : ""}`}
         data-level={index}
         aria-hidden={!visible}
-        aria-label={env.name[locale]}
+        aria-label={plainText(tr(env.name, locale))}
       >
         <header className={styles.band}>
           <div className={styles.what}>
-            <h2 className={styles.name}>{env.name[locale]}</h2>
-            <p className={styles.definition}>{env.definition[locale]}</p>
+            <h2 className={styles.name}><Rich text={tr(env.name, locale)} /></h2>
+            <p className={styles.definition}><Rich text={tr(env.definition, locale)} /></p>
           </div>
           <p className={styles.example}>
             <span className={styles.glyph} aria-hidden="true">
               {env.glyph}
             </span>
-            <span>{env.example[locale]}</span>
+            <span>
+              <Rich text={tr(env.example, locale)} />
+            </span>
           </p>
         </header>
         {index < ENVELOPES.length - 1 ? <div className={styles.inside}>{ring(index + 1)}</div> : null}

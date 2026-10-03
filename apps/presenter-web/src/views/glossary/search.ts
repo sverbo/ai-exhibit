@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import type { GlossaryEntry } from "@ai-exhibit/content/glossary";
 
 /** Lowercase, accents stripped, so "évaluation" finds "evaluation" and back. */
@@ -13,7 +13,7 @@ export function searchGlossary(entries: GlossaryEntry[], query: string, locale: 
   const scored: { entry: GlossaryEntry; score: number }[] = [];
   for (const entry of entries) {
     const term = fold(entry.term);
-    const body = fold(entry.explanation[locale]);
+    const body = fold(tr(entry.explanation, locale));
     if (!words.every((w) => term.includes(w) || body.includes(w))) continue;
     scored.push({ entry, score: words.every((w) => term.includes(w)) ? (term.startsWith(words[0]!) ? 0 : 1) : 2 });
   }

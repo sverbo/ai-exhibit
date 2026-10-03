@@ -91,7 +91,7 @@ export function clampStep(step: number, s: AgentRunScenario): number {
 
 /** How long autoplay stays on a step, in ms. Long enough to read the caption aloud. */
 export function stepDuration(step: RunStep, speed: RunSpeed): number {
-  const caption = Math.max(step.caption.en.length, step.caption.fr.length);
+  const caption = Math.max(...Object.values(step.caption).map((c) => c?.length ?? 0));
   const extra = step.calls ? 1600 : step.kind === "result" ? 2500 : 0;
   return Math.round((2600 + Math.min(5200, caption * 40) + extra) / speed);
 }

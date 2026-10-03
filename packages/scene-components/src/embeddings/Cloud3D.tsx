@@ -147,7 +147,7 @@ export function Cloud3D(props: Cloud3DProps) {
     const out: { index: number; text: string; kind: "cluster" | "word"; cluster: number }[] = [];
     if (clusterNames) {
       medoids.forEach((m, c) => {
-        if (focus === null || focus === c) out.push({ index: m, text: space.json.clusters[c]!.label[locale], kind: "cluster", cluster: c });
+        if (focus === null || focus === c) out.push({ index: m, text: tr(space.json.clusters[c]!.label, locale), kind: "cluster", cluster: c });
       });
     }
     for (const i of highlight.slice(0, 6)) out.push({ index: i, text: space.items[i]!.text, kind: "word", cluster: space.items[i]!.cluster });

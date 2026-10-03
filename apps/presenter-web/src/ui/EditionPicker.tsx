@@ -1,3 +1,4 @@
+import { tr } from "@ai-exhibit/presentation-core";
 import { allEditions } from "../talk/presentation.ts";
 import { useUi } from "../i18n.ts";
 import chrome from "./chrome.module.css";
@@ -9,7 +10,7 @@ export function EditionPicker({ value, onChange }: { value: string; onChange: (i
     <select className={chrome.select} value={value} aria-label={t("edition")} onChange={(e) => onChange(e.target.value)}>
       {allEditions().map(({ presentation, edition }) => (
         <option key={edition.id} value={edition.id}>
-          {edition.title[locale]}
+          {tr(edition.title, locale)}
           {presentation.id === "demo" ? "" : ` (${edition.id})`}
         </option>
       ))}

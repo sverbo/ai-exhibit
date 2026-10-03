@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { intlLocale, type Locale } from "@ai-exhibit/presentation-core";
 import type { ReactNode } from "react";
 import { cx } from "../../learning/shared/ui.tsx";
 import { pushesBasketball, type SimpleActivity, type SimpleView } from "../data/simple.ts";
@@ -53,7 +53,7 @@ export interface SimpleNetProps {
 }
 
 const fmt = (v: number, locale: Locale) => {
-  const s = Math.abs(v).toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const s = Math.abs(v).toLocaleString(intlLocale(locale), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return Math.abs(v) < 0.005 ? s : v < 0 ? `−${s}` : s;
 };
 

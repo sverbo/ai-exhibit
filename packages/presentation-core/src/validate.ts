@@ -1,15 +1,14 @@
 import { resolveEdition, totalDurationSec } from "./edition.ts";
-import { LOCALES, type PresentationDefinition, type SceneDefinition } from "./types.ts";
+import { checkLocalized, type Issue, type LocalizationOptions, type TermTranslation } from "./localization.ts";
+import type { PresentationDefinition, SceneDefinition } from "./types.ts";
 
-export interface Issue {
-  level: "error" | "warning";
-  where: string;
-  message: string;
-}
+export type { Issue };
 
 export interface ValidateOptions {
   /** Names passed to registerSceneComponent; unknown names become warnings. */
   registeredComponents?: string[];
+  /** Glossary terms, so term glosses in content can be checked against them. */
+  terms?: readonly TermTranslation[];
 }
 
 const SCENE_ID = /^(\d\d)-[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -17,14 +16,8 @@ const SCENE_ID = /^(\d\d)-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const SCENE_CODE = /^[a-z0-9]{4,5}$/;
 const LONG_DASH = /[–—]/;
 
-function isL10n(value: unknown): value is Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
-  const keys = Object.keys(value);
-  return keys.length > 0 && keys.every((k) => (LOCALES as readonly string[]).includes(k));
-}
-
-/** Walks any value, reporting incomplete L10n objects and long dashes in strings. */
-function checkStrings(value: unknown, path: string, issues: Issue[], where: string): void {
+/** Walks any value, reporting long dashes in strings. */
+function checkDashes(value: unknown, path: string, issues: Issue[], where: string): void {
   if (typeof value === "string") {
     if (LONG_DASH.test(value)) {
       issues.push({ level: "error", where, message: `long dash in ${path}: "${value.slice(0, 60)}"` });
@@ -32,19 +25,17 @@ function checkStrings(value: unknown, path: string, issues: Issue[], where: stri
     return;
   }
   if (Array.isArray(value)) {
-    value.forEach((v, i) => checkStrings(v, `${path}[${i}]`, issues, where));
+    value.forEach((v, i) => checkDashes(v, `${path}[${i}]`, issues, where));
     return;
   }
   if (!value || typeof value !== "object") return;
-  if (isL10n(value)) {
-    for (const locale of LOCALES) {
-      const text = value[locale];
-      if (typeof text !== "string" || text.trim() === "") {
-        issues.push({ level: "error", where, message: `missing "${locale}" text in ${path}` });
-      }
-    }
-  }
-  for (const [k, v] of Object.entries(value)) checkStrings(v, path ? `${path}.${k}` : k, issues, where);
+  for (const [k, v] of Object.entries(value)) checkDashes(v, path ? `${path}.${k}` : k, issues, where);
+}
+
+/** Long dashes anywhere, and every L10n checked per locale. */
+function checkStrings(value: unknown, path: string, issues: Issue[], where: string, loc: LocalizationOptions): void {
+  checkDashes(value, path, issues, where);
+  checkLocalized(value, path, where, loc, issues);
 }
 
 /** Every string inside any `sourceIds` array nested in a value. */
@@ -57,6 +48,10 @@ function collectSourceIds(value: unknown, out: string[] = []): string[] {
     }
   }
   return out;
+}
+
+function localizationOf(p: PresentationDefinition, opts: ValidateOptions): LocalizationOptions {
+  return { enabled: p.locales, terms: opts.terms };
 }
 
 function checkScene(
@@ -79,7 +74,7 @@ function checkScene(
     err(`code "${scene.code}" is retired: codes are never reused`);
   }
 
-  checkStrings(scene, "", issues, where);
+  checkStrings(scene, "", issues, where, localizationOf(p, opts));
 
   const sourceIds = new Set(p.sources.map((s) => s.id));
   for (const id of scene.sourceIds) if (!sourceIds.has(id)) err(`unknown source "${id}"`);
@@ -140,13 +135,18 @@ export function validatePresentation(p: PresentationDefinition, opts: ValidateOp
     else codeOwner.set(scene.code, scene.id);
   }
   const editionSceneIds = new Set(p.scenes.map((s) => s.id));
+  const loc = localizationOf(p, opts);
+  checkStrings(p.title, "title", issues, "presentation", loc);
+  for (const c of p.chapters) checkStrings(c, "", issues, `chapter ${c.id}`, loc);
+  for (const e of p.editions) checkStrings(e.title, "title", issues, `edition ${e.id}`, loc);
+  if (p.locales.length === 0) issues.push({ level: "error", where: "presentation", message: "no locales: the launcher would offer none" });
 
   const sourceSeen = new Set<string>();
   for (const s of p.sources) {
     const where = `source ${s.id}`;
     if (sourceSeen.has(s.id)) issues.push({ level: "error", where, message: "duplicate id" });
     sourceSeen.add(s.id);
-    checkStrings(s, "", issues, where);
+    checkStrings(s, "", issues, where, localizationOf(p, opts));
     if (s.verification === "verified" && !s.retrieved) {
       issues.push({ level: "warning", where, message: "verified source without a retrieved date" });
     }

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
 import styles from "./IntelligenceScale.module.css";
@@ -32,16 +32,16 @@ interface Figure {
 }
 
 export const FIGURES: Figure[] = [
-  { id: "ant", step: 0, x: -700, w: 40, h: 18, name: { en: "Ant", fr: "Fourmi" } },
-  { id: "human", step: 1, x: -260, w: 200, h: 560, name: { en: "Human", fr: "Humain" } },
+  { id: "ant", step: 0, x: -700, w: 40, h: 18, name: { en: "Ant" } },
+  { id: "human", step: 1, x: -260, w: 200, h: 560, name: { en: "Human" } },
   {
     id: "agi",
     step: 2,
     x: 120,
     w: 200,
     h: 580,
-    name: { en: "AGI", fr: "AGI" },
-    sub: { en: "AI at human level", fr: "IA de niveau humain" },
+    name: { en: "AGI" },
+    sub: { en: "AI at human level" },
   },
   {
     id: "asi",
@@ -49,8 +49,8 @@ export const FIGURES: Figure[] = [
     x: 1000,
     w: 793,
     h: 2300,
-    name: { en: "ASI", fr: "ASI" },
-    sub: { en: "Superintelligence, far beyond us", fr: "Superintelligence, bien au-delà de nous" },
+    name: { en: "ASI" },
+    sub: { en: "Superintelligence, far beyond us" },
   },
 ];
 
@@ -75,20 +75,18 @@ export const LOOP_GROWTH = [1, 1.15, 1.32, 1.5];
 
 /** The loop, top to bottom; the last node feeds back into the first. */
 export const LOOP_NODES: L10n[] = [
-  { en: "AI does AI research", fr: "L'IA fait de la recherche en IA" },
-  { en: "a better AI", fr: "une IA meilleure" },
-  { en: "even faster research", fr: "une recherche encore plus rapide" },
+  { en: "AI does AI research" },
+  { en: "a better AI" },
+  { en: "even faster research" },
 ];
 
 /** Name of the loop, shown above it. */
 export const LOOP_NAME: L10n = {
   en: "RSI: recursive self-improvement",
-  fr: "RSI : auto-amélioration récursive",
 };
 
 export const LOOP_CAPTION: L10n = {
   en: "each turn, it gets better at getting better",
-  fr: "à chaque tour, elle s'améliore plus vite",
 };
 
 /**
@@ -102,9 +100,9 @@ export const CROWD: { x: number; y: number; scale: number; row: "front" | "back"
 
 /** Short traits shown with the crowd. */
 export const CROWD_TRAITS: L10n[] = [
-  { en: "copies without limit", fr: "des copies sans limite" },
-  { en: "never tired, never sleeps", fr: "jamais fatiguée, jamais en pause" },
-  { en: "expert level in every field", fr: "niveau expert dans tous les domaines" },
+  { en: "copies without limit" },
+  { en: "never tired, never sleeps" },
+  { en: "expert level in every field" },
 ];
 
 export const INTELLIGENCE_STEPS = CAMERAS.length - 1;
@@ -115,8 +113,8 @@ export function screenX(x: number, step: number): number {
 }
 
 const COPY = {
-  label: { en: "A thought experiment about scales of intelligence", fr: "Une expérience de pensée sur les échelles d'intelligence" },
-  notMeasured: { en: "not a measurement", fr: "pas une mesure" },
+  label: { en: "A thought experiment about scales of intelligence" },
+  notMeasured: { en: "not a measurement" },
 } as const;
 
 /** Simple silhouettes, filled with the current text color of their wrapper. */
@@ -187,10 +185,10 @@ export function IntelligenceScale({ ctx }: SceneComponentProps<Record<string, ne
   const worldStyle: CSSProperties = { transform: `translateX(${-cam.cx * cam.zoom}px) scale(${cam.zoom})` };
 
   return (
-    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={COPY.label[locale]} data-step={step}>
+    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={tr(COPY.label, locale)} data-step={step}>
       <p className={styles.badge}>
         <EvidenceBadge level="thought-experiment" locale={locale} size="lg" />
-        <span className={styles.notMeasured}>{COPY.notMeasured[locale]}</span>
+        <span className={styles.notMeasured}>{tr(COPY.notMeasured, locale)}</span>
       </p>
 
       <div className={styles.world} style={worldStyle}>
@@ -227,13 +225,13 @@ export function IntelligenceScale({ ctx }: SceneComponentProps<Record<string, ne
       <ul className={`${styles.traits} ${step === CROWD_STEP ? styles.shown : styles.hidden}`} aria-hidden={step !== CROWD_STEP}>
         {CROWD_TRAITS.map((t, i) => (
           <li key={t.en} className={styles.trait} style={{ animationDelay: `${1100 + i * 450}ms` }}>
-            {t[locale]}
+            {tr(t, locale)}
           </li>
         ))}
       </ul>
 
       <figure className={`${styles.loop} ${step === LOOP_STEP ? styles.shown : styles.hidden}`} aria-hidden={step !== LOOP_STEP}>
-        <p className={styles.loopName}>{LOOP_NAME[locale]}</p>
+        <p className={styles.loopName}>{tr(LOOP_NAME, locale)}</p>
         <div className={styles.loopBody}>
         <svg viewBox="0 0 640 330" className={styles.loopSvg} aria-hidden="true">
           <defs>
@@ -251,12 +249,12 @@ export function IntelligenceScale({ ctx }: SceneComponentProps<Record<string, ne
         <ol className={styles.loopNodes}>
           {LOOP_NODES.map((n) => (
             <li key={n.en} className={styles.loopNode}>
-              {n[locale]}
+              {tr(n, locale)}
             </li>
           ))}
         </ol>
         </div>
-        <figcaption className={styles.loopCaption}>{LOOP_CAPTION[locale]}</figcaption>
+        <figcaption className={styles.loopCaption}>{tr(LOOP_CAPTION, locale)}</figcaption>
       </figure>
 
       {FIGURES.map((f) => (
@@ -267,8 +265,8 @@ export function IntelligenceScale({ ctx }: SceneComponentProps<Record<string, ne
           style={{ left: screenX(f.x, step) }}
           aria-hidden={f.step > step}
         >
-          <span className={styles.name}>{f.name[locale]}</span>
-          {f.sub ? <span className={styles.sub}>{f.sub[locale]}</span> : null}
+          <span className={styles.name}>{tr(f.name, locale)}</span>
+          {f.sub ? <span className={styles.sub}>{tr(f.sub, locale)}</span> : null}
         </div>
       ))}
     </div>

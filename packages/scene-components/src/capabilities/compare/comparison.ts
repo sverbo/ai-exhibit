@@ -32,17 +32,17 @@ export const COLUMNS = ["cost", "electricity", "reliability", "science", "memory
 export type ColumnId = (typeof COLUMNS)[number];
 
 export const COLUMN_TITLES: Record<ColumnId, { title: L10n; sub: L10n }> = {
-  cost: { title: l("Coût d'entraînement", "Training cost"), sub: l("en dollars US", "in US dollars") },
-  electricity: { title: l("Électricité", "Electricity"), sub: l("pour l'entraînement", "used for training") },
+  cost: { title: { en: "Training cost" }, sub: { en: "in US dollars" } },
+  electricity: { title: { en: "Electricity" }, sub: { en: "used for training" } },
   reliability: {
-    title: l("Fiabilité", "Reliability"),
-    sub: l("tâche réussie une fois sur deux (METR)", "task it finishes half the time (METR)"),
+    title: { en: "Reliability" },
+    sub: { en: "task it finishes half the time (METR)" },
   },
   science: {
-    title: l("Sciences niveau doctorat", "PhD-level science"),
-    sub: l("questions GPQA Diamond", "GPQA Diamond questions"),
+    title: { en: "PhD-level science" },
+    sub: { en: "GPQA Diamond questions" },
   },
-  memory: { title: l("Mémoire", "Memory"), sub: l("tokens lus d'un coup", "tokens it reads at once") },
+  memory: { title: { en: "Memory" }, sub: { en: "tokens it reads at once" } },
 };
 
 export interface Row {
@@ -60,7 +60,7 @@ export const homesFor = (mwh: number) => (mwh * 1000) / HOME_KWH_PER_YEAR;
 export const pagesFor = (tokens: number) => (tokens * 0.75) / 500;
 
 const EPOCH_MODELS = ["tk-epoch-notable-models"];
-const EST = l("estimation", "estimate");
+const EST = { en: "estimate" };
 
 const GROK3_MWH = (109_948_656 * 2160) / 1e6;
 
@@ -80,31 +80,31 @@ export const ROWS: Row[] = [
     model: "GPT-2",
     year: 2019,
     cells: {
-      cost: { main: l("4 300 $", "$4,300"), small: EST, kind: "estimate", value: 4348, sourceIds: EPOCH_MODELS },
+      cost: { main: { en: "$4,300" }, small: EST, kind: "estimate", value: 4348, sourceIds: EPOCH_MODELS },
       electricity: {
-        main: l("1,7 MWh", "1.7 MWh"),
-        small: l("calculé (mégawattheures), ≈ 2 mois d'un foyer américain", "calculated (megawatt-hours), ≈ 2 months of one US home"),
+        main: { en: "1.7 MWh" },
+        small: { en: "calculated (megawatt-hours), ≈ 2 months of one US home" },
         kind: "calculated",
         value: GPT2_MWH,
         sourceIds: ["tk-strubell-2019-gpt2-hardware", "tk-patterson-2021-tpu-v3-power", "llm-eia-household-electricity"],
       },
       reliability: {
-        main: l("3 secondes", "3 seconds"),
-        small: l("mesuré par METR", "measured by METR"),
+        main: { en: "3 seconds" },
+        small: { en: "measured by METR" },
         kind: "measured",
         value: 0.05,
         sourceIds: ["tk-epoch-benchmarking-hub"],
       },
       science: {
-        main: l("25 %", "25%"),
-        small: l("niveau du hasard (4 choix) ; jamais testé", "guessing level (4 choices); never tested"),
+        main: { en: "25%" },
+        small: { en: "guessing level (4 choices); never tested" },
         kind: "reference",
         value: GPQA_GUESSING,
         sourceIds: ["tk-rein-2023-gpqa-baselines"],
       },
       memory: {
-        main: l("1 024", "1,024"),
-        small: l("environ 1,5 page", "about 1.5 pages"),
+        main: { en: "1,024" },
+        small: { en: "about 1.5 pages" },
         kind: "published",
         value: 1024,
         sourceIds: ["tk-gpt2-context-1024"],
@@ -116,31 +116,31 @@ export const ROWS: Row[] = [
     model: "GPT-3",
     year: 2020,
     cells: {
-      cost: { main: l("2,1 millions $", "$2.1 million"), small: EST, kind: "estimate", value: 2_116_866, sourceIds: EPOCH_MODELS },
+      cost: { main: { en: "$2.1 million" }, small: EST, kind: "estimate", value: 2_116_866, sourceIds: EPOCH_MODELS },
       electricity: {
-        main: l("1,3 GWh", "1.3 GWh"),
-        small: l("estimation (gigawattheures), ≈ 120 foyers américains pendant un an", "estimate (gigawatt-hours), ≈ 120 US homes for a year"),
+        main: { en: "1.3 GWh" },
+        small: { en: "estimate (gigawatt-hours), ≈ 120 US homes for a year" },
         kind: "estimate",
         value: 1287,
         sourceIds: ["llm-patterson-2021", "llm-eia-household-electricity"],
       },
       reliability: {
-        main: l("9 secondes", "9 seconds"),
-        small: l("mesuré sur une version plus récente de GPT-3", "measured on a later GPT-3 version"),
+        main: { en: "9 seconds" },
+        small: { en: "measured on a later GPT-3 version" },
         kind: "measured",
         value: 0.144,
         sourceIds: ["tk-epoch-benchmarking-hub"],
       },
       science: {
-        main: l("30 %", "30%"),
-        small: l("mesuré sur GPT-3.5 (2023) ; hasard : 25 %", "measured on GPT-3.5 (2023); guessing: 25%"),
+        main: { en: "30%" },
+        small: { en: "measured on GPT-3.5 (2023); guessing: 25%" },
         kind: "measured",
         value: 29.6,
         sourceIds: ["tk-rein-2023-gpqa-baselines"],
       },
       memory: {
-        main: l("2 048", "2,048"),
-        small: l("environ 3 pages", "about 3 pages"),
+        main: { en: "2,048" },
+        small: { en: "about 3 pages" },
         kind: "published",
         value: 2048,
         sourceIds: ["tk-gpt3-context-2048"],
@@ -152,31 +152,31 @@ export const ROWS: Row[] = [
     model: "Grok 3",
     year: 2025,
     cells: {
-      cost: { main: l("218 millions $", "$218 million"), small: EST, kind: "estimate", value: 217_835_546, sourceIds: EPOCH_MODELS },
+      cost: { main: { en: "$218 million" }, small: EST, kind: "estimate", value: 217_835_546, sourceIds: EPOCH_MODELS },
       electricity: {
-        main: l("240 GWh", "240 GWh"),
-        small: l("estimation, ≈ 22 000 foyers américains pendant un an", "estimate, ≈ 22,000 US homes for a year"),
+        main: { en: "240 GWh" },
+        small: { en: "estimate, ≈ 22,000 US homes for a year" },
         kind: "estimate",
         value: GROK3_MWH,
         sourceIds: [...EPOCH_MODELS, "llm-eia-household-electricity"],
       },
       reliability: {
-        main: l("1 heure", "1 hour"),
-        small: l("meilleur modèle mesuré début 2025 : Claude 3.7 Sonnet", "best measured model, early 2025: Claude 3.7 Sonnet"),
+        main: { en: "1 hour" },
+        small: { en: "best measured model, early 2025: Claude 3.7 Sonnet" },
         kind: "measured",
         value: 60.39,
         sourceIds: ["tk-metr-early-2025-best"],
       },
       science: {
-        main: l("75 %", "75%"),
-        small: l("publié par xAI ; docteurs du domaine : 65 %", "published by xAI; PhD experts: 65%"),
+        main: { en: "75%" },
+        small: { en: "published by xAI; PhD experts: 65%" },
         kind: "published",
         value: 75.4,
         sourceIds: ["tk-xai-2025-grok3", "tk-rein-2023-gpqa"],
       },
       memory: {
-        main: l("1 000 000", "1,000,000"),
-        small: l("environ 1 500 pages", "about 1,500 pages"),
+        main: { en: "1,000,000" },
+        small: { en: "about 1,500 pages" },
         kind: "published",
         value: 1_000_000,
         sourceIds: ["tk-xai-2025-grok3"],
@@ -214,11 +214,11 @@ export interface ProjectedCell extends Cell {
 }
 
 export const PROJECTION: { label: L10n; cells: Record<ColumnId, ProjectedCell> } = {
-  label: l("Dans un an environ", "In about a year"),
+  label: { en: "In about a year" },
   cells: {
     cost: {
-      main: l("plus d'un milliard $", "over $1 billion"),
-      small: l("tendance Epoch AI : × 2,4 par an", "Epoch AI trend: × 2.4 a year"),
+      main: { en: "over $1 billion" },
+      small: { en: "Epoch AI trend: × 2.4 a year" },
       kind: "projection",
       value: projectedCostUSD(),
       sourceIds: ["tk-epoch-2024-training-cost-trend"],
@@ -228,8 +228,8 @@ export const PROJECTION: { label: L10n; cells: Record<ColumnId, ProjectedCell> }
       ),
     },
     electricity: {
-      main: l("environ 1\u202f000 GWh", "about 1,000 GWh"),
-      small: l("≈ 100\u202f000 foyers américains pendant un an", "≈ 100,000 US homes for a year"),
+      main: { en: "about 1,000 GWh" },
+      small: { en: "≈ 100,000 US homes for a year" },
       kind: "projection",
       value: projectedElectricityMWh(),
       sourceIds: ["tk-epoch-2024-power-trend", "tk-epoch-notable-models", "llm-eia-household-electricity"],
@@ -239,8 +239,8 @@ export const PROJECTION: { label: L10n; cells: Record<ColumnId, ProjectedCell> }
       ),
     },
     reliability: {
-      main: l("environ 2 semaines", "about 2 weeks"),
-      small: l("de travail à plein temps (doublement tous les ~4 mois)", "of full-time work (doubling every ~4 months)"),
+      main: { en: "about 2 weeks" },
+      small: { en: "of full-time work (doubling every ~4 months)" },
       kind: "projection",
       value: projectedHorizonMin(),
       sourceIds: ["tk-metr-2026-time-horizon-1-1", "tk-epoch-benchmarking-hub"],
@@ -250,8 +250,8 @@ export const PROJECTION: { label: L10n; cells: Record<ColumnId, ProjectedCell> }
       ),
     },
     science: {
-      main: l("près du maximum", "near the ceiling"),
-      small: l("on invente des tests plus durs", "new, harder tests are being invented"),
+      main: { en: "near the ceiling" },
+      small: { en: "new, harder tests are being invented" },
       kind: "projection",
       sourceIds: ["tk-epoch-benchmarking-hub"],
       basis: l(
@@ -260,11 +260,11 @@ export const PROJECTION: { label: L10n; cells: Record<ColumnId, ProjectedCell> }
       ),
     },
     memory: {
-      main: l("1 million +", "1M+"),
-      small: l("non projeté", "not projected"),
+      main: { en: "1M+" },
+      small: { en: "not projected" },
       kind: "projection",
       sourceIds: [],
-      basis: l("Pas de tendance publiée pour la mémoire : pas de projection.", "No published trend for context windows: not projected."),
+      basis: { en: "No published trend for context windows: not projected." },
     },
   },
 };
@@ -312,42 +312,42 @@ const dateX = (y: number, m: number) => y + (m - 1) / 12;
 export const CHARTS: Chart[] = [
   {
     id: "cost",
-    title: l("Coût d'entraînement", "Training cost"),
+    title: { en: "Training cost" },
     max: 1.5e9,
-    topTick: l("1 milliard $", "$1 billion"),
+    topTick: { en: "$1 billion" },
     points: [
-      { x: dateX(2019, 2), y: 4348, label: l("4\u202f300 $", "$4,300"), model: "GPT-2", lift: 44 },
-      { x: dateX(2020, 5), y: 2_116_866, label: l("2,1 M$", "$2.1M"), model: "GPT-3", lift: 8 },
-      { x: dateX(2025, 2), y: 217_835_546, label: l("218 M$", "$218M"), model: "Grok 3", align: "end" },
-      { x: PROJECTION_X, y: projectedCostUSD(), label: l("> 1 milliard $", "> $1 billion"), model: "", projection: true },
+      { x: dateX(2019, 2), y: 4348, label: { en: "$4,300" }, model: "GPT-2", lift: 44 },
+      { x: dateX(2020, 5), y: 2_116_866, label: { en: "$2.1M" }, model: "GPT-3", lift: 8 },
+      { x: dateX(2025, 2), y: 217_835_546, label: { en: "$218M" }, model: "Grok 3", align: "end" },
+      { x: PROJECTION_X, y: projectedCostUSD(), label: { en: "> $1 billion" }, model: "", projection: true },
     ],
     sourceIds: ["tk-epoch-notable-models", "tk-epoch-2024-training-cost-trend"],
   },
   {
     id: "electricity",
-    title: l("Électricité d'entraînement", "Training electricity"),
+    title: { en: "Training electricity" },
     max: 1250,
-    topTick: l("1\u202f000 GWh", "1,000 GWh"),
+    topTick: { en: "1,000 GWh" },
     points: [
-      { x: dateX(2019, 2), y: GPT2_MWH / 1000, label: l("1,7 MWh", "1.7 MWh"), model: "GPT-2", lift: 44 },
-      { x: dateX(2020, 5), y: 1.287, label: l("1,3 GWh", "1.3 GWh"), model: "GPT-3", lift: 8, align: "start" },
-      { x: dateX(2025, 2), y: 237.5, label: l("240 GWh", "240 GWh"), model: "Grok 3", align: "end" },
-      { x: PROJECTION_X, y: projectedElectricityMWh() / 1000, label: l("≈ 1\u202f000 GWh", "≈ 1,000 GWh"), model: "", projection: true },
+      { x: dateX(2019, 2), y: GPT2_MWH / 1000, label: { en: "1.7 MWh" }, model: "GPT-2", lift: 44 },
+      { x: dateX(2020, 5), y: 1.287, label: { en: "1.3 GWh" }, model: "GPT-3", lift: 8, align: "start" },
+      { x: dateX(2025, 2), y: 237.5, label: { en: "240 GWh" }, model: "Grok 3", align: "end" },
+      { x: PROJECTION_X, y: projectedElectricityMWh() / 1000, label: { en: "≈ 1,000 GWh" }, model: "", projection: true },
     ],
     sourceIds: ["tk-strubell-2019-gpt2-hardware", "tk-patterson-2021-tpu-v3-power", "llm-patterson-2021", "tk-epoch-notable-models", "tk-epoch-2024-power-trend"],
   },
   {
     id: "science",
-    title: l("Sciences niveau doctorat (GPQA)", "PhD-level science (GPQA)"),
+    title: { en: "PhD-level science (GPQA)" },
     max: 100,
-    topTick: l("100\u202f%", "100%"),
+    topTick: { en: "100%" },
     points: [
-      { x: dateX(2019, 2), y: GPQA_GUESSING, label: l("hasard 25\u202f%", "guessing 25%"), model: "GPT-2", reference: true, align: "start", lift: -42 },
-      { x: dateX(2023, 6), y: 29.6, label: l("30\u202f%", "30%"), model: "GPT-3.5", align: "end" },
-      { x: dateX(2025, 2), y: 75.4, label: l("75\u202f%", "75%"), model: "Grok 3", align: "end" },
+      { x: dateX(2019, 2), y: GPQA_GUESSING, label: { en: "guessing 25%" }, model: "GPT-2", reference: true, align: "start", lift: -42 },
+      { x: dateX(2023, 6), y: 29.6, label: { en: "30%" }, model: "GPT-3.5", align: "end" },
+      { x: dateX(2025, 2), y: 75.4, label: { en: "75%" }, model: "Grok 3", align: "end" },
     ],
-    ceilingBand: l("près du maximum", "near the ceiling"),
-    expert: { y: 65, label: l("docteurs du domaine 65\u202f%", "PhD experts 65%") },
+    ceilingBand: { en: "near the ceiling" },
+    expert: { y: 65, label: { en: "PhD experts 65%" } },
     sourceIds: ["tk-rein-2023-gpqa-baselines", "tk-xai-2025-grok3", "tk-rein-2023-gpqa", "tk-epoch-benchmarking-hub"],
   },
 ];

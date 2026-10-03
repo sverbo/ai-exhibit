@@ -17,6 +17,6 @@ export const exhibits: Exhibit[] = [
     url: "https://ai-exhibit.samverbo.com",
     title: "The original, by Samuel Verboomen",
     description: "Full talk for a non-technical audience with a general knowledge of new technologies; about two hours.",
-    languages: ["English"],
+    languages: ["English", "French"],
   },
 ];

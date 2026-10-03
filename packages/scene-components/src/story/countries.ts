@@ -4,14 +4,14 @@ import type { L10n } from "@ai-exhibit/presentation-core";
 export type CountryCode = "us" | "gb" | "cn" | "fr" | "nl" | "jp" | "kr" | "tw";
 
 export const COUNTRY_NAMES: Record<CountryCode, L10n> = {
-  us: { en: "United States", fr: "États-Unis" },
-  gb: { en: "United Kingdom", fr: "Royaume-Uni" },
-  cn: { en: "China", fr: "Chine" },
-  fr: { en: "France", fr: "France" },
-  nl: { en: "Netherlands", fr: "Pays-Bas" },
-  jp: { en: "Japan", fr: "Japon" },
-  kr: { en: "South Korea", fr: "Corée du Sud" },
-  tw: { en: "Taiwan", fr: "Taïwan" },
+  us: { en: "United States" },
+  gb: { en: "United Kingdom" },
+  cn: { en: "China" },
+  fr: { en: "France" },
+  nl: { en: "Netherlands" },
+  jp: { en: "Japan" },
+  kr: { en: "South Korea" },
+  tw: { en: "Taiwan" },
 };
 
 export interface Headquarters {

@@ -11,9 +11,10 @@
  * answer as the continuation of that text, and the end token that stops it.
  */
 import { Fragment, useRef } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudChat, findCloudRecording, renderChatTemplate } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import styles from "./ChatPlayground.module.css";
 import { type RawSegment, segmentChat } from "./chatRaw.ts";
 import { COPY } from "./copy.ts";
@@ -152,37 +153,37 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
   const controls =
     role === "controller" ? (
       <>
-        <div className={styles.presets} role="group" aria-label={COPY.presetQuestions[locale]}>
-          <span className={styles.presetsLabel}>{COPY.presetQuestions[locale]}</span>
+        <div className={styles.presets} role="group" aria-label={tr(COPY.presetQuestions, locale)}>
+          <span className={styles.presetsLabel}>{tr(COPY.presetQuestions, locale)}</span>
           <div className={styles.presetRow}>
             {presets.map((p) => (
-              <Button key={p.en} disabled={running} onClick={() => void ask(p[locale])} title={p[locale]}>
-                {p[locale].length > 28 ? `${p[locale].slice(0, 27)}…` : p[locale]}
+              <Button key={p.en} disabled={running} onClick={() => void ask(pick(p, locale))} title={tr(p, locale)}>
+                {tr(p, locale).length > 28 ? `${tr(p, locale).slice(0, 27)}…` : tr(p, locale)}
               </Button>
             ))}
-            <Button disabled={running} onClick={() => void ask(GUARDRAIL_PROMPT[locale], "guardrail")}>
-              {COPY.guardrail[locale]}
+            <Button disabled={running} onClick={() => void ask(pick(GUARDRAIL_PROMPT, locale), "guardrail")}>
+              {tr(COPY.guardrail, locale)}
             </Button>
           </div>
         </div>
-        <TextField label={COPY.askQuestion[locale]} clearOnSubmit submitLabel={COPY.send[locale]} disabled={simulation || running} onSubmit={(q) => void ask(q)} />
-        {running ? <Button onClick={() => abort.current?.abort()}>{COPY.stop[locale]}</Button> : null}
+        <TextField label={tr(COPY.askQuestion, locale)} clearOnSubmit submitLabel={tr(COPY.send, locale)} disabled={simulation || running} onSubmit={(q) => void ask(q)} />
+        {running ? <Button onClick={() => abort.current?.abort()}>{tr(COPY.stop, locale)}</Button> : null}
         <Button disabled={!state.turns.length} onClick={() => setState((s) => ({ ...s, turns: [] }))}>
-          {COPY.clearChat[locale]}
+          {tr(COPY.clearChat, locale)}
         </Button>
         <Button primary={!showRaw} active={showRaw} onClick={() => setState((s) => ({ ...s, showRaw: !showRaw }))}>
-          {showRaw ? COPY.hideRaw[locale] : COPY.showRaw[locale]}
+          {showRaw ? tr(COPY.hideRaw, locale) : tr(COPY.showRaw, locale)}
         </Button>
         <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} />
       </>
     ) : null;
 
   return (
-    <Frame controls={controls} label={ctx.scene.title[locale]}>
+    <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
       <header className={styles.head}>
-        <span className={styles.title}>{COPY.assistantTitle[locale]}</span>
+        <span className={styles.title}>{tr(COPY.assistantTitle, locale)}</span>
         <span className={styles.model}>{view.turns.at(-1)?.model ?? CLOUD_LABEL}</span>
-        <span className={styles.sub}>{COPY.assistantSub[locale]}</span>
+        <span className={styles.sub}>{tr(COPY.assistantSub, locale)}</span>
       </header>
       <div className={cx(styles.body, showRaw && styles.split)}>
       <ol className={styles.chat}>
@@ -190,13 +191,13 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
           <li key={i} className={styles.turn}>
             <p className={styles.user}>{t.question}</p>
             <div className={cx(styles.assistant, t.kind === "guardrail" && styles.guardrail)}>
-              {t.kind === "guardrail" ? <span className={styles.guardTag}>{COPY.guardrail[locale]}</span> : null}
+              {t.kind === "guardrail" ? <span className={styles.guardTag}>{tr(COPY.guardrail, locale)}</span> : null}
               <p className={styles.answer}>
-                {t.answer ? stripEmphasis(t.answer) : <Pending>{COPY.writing[locale]}</Pending>}
+                {t.answer ? stripEmphasis(t.answer) : <Pending>{tr(COPY.writing, locale)}</Pending>}
               </p>
               {t.source === "recorded" ? (
                 <span className={styles.recorded}>
-                  {COPY.fallback[locale]}
+                  {tr(COPY.fallback, locale)}
                 </span>
               ) : null}
             </div>
@@ -222,8 +223,8 @@ function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) 
     turn?.raw ? segmentChat(turn.raw, [{ role: "system", content: turn.system }, { role: "user", content: turn.question }]) : [];
   const ended = turn?.state === "done" && turn.stopReason === "eos" && turn.endTag;
   return (
-    <section className={styles.raw} aria-label={COPY.hiddenFormat[locale]}>
-      <header className={styles.rawHead}>{COPY.hiddenFormat[locale]}</header>
+    <section className={styles.raw} aria-label={tr(COPY.hiddenFormat, locale)}>
+      <header className={styles.rawHead}>{tr(COPY.hiddenFormat, locale)}</header>
       {turn && turn.raw ? (
         <>
           <pre className={styles.rawText}>
@@ -245,20 +246,20 @@ function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) 
           <ul className={styles.rawNotes}>
             <li>
               <span className={cx(styles.swatch, styles.roleSystem)} aria-hidden="true" />
-              {COPY.systemExample[locale]}
+              <Rich text={tr(COPY.systemExample, locale)} />
             </li>
             <li>
               <span className={cx(styles.swatch, styles.roleAssistant)} aria-hidden="true" />
-              {COPY.continuesText[locale]}
+              {tr(COPY.continuesText, locale)}
             </li>
             <li>
               <span className={cx(styles.swatch, styles.endSwatch)} aria-hidden="true" />
-              {COPY.endTagNote[locale]}
+              {tr(COPY.endTagNote, locale)}
             </li>
           </ul>
           {turn.firstTokens?.[0]?.top.length ? (
             <p className={styles.odds}>
-              {COPY.firstWordOdds[locale]}{" "}
+              {tr(COPY.firstWordOdds, locale)}{" "}
               {turn.firstTokens[0].top.slice(0, 4).map((t, i) => (
                 <span key={i} className={styles.odd}>
                   <code>{t.token.replace(/\n/g, "↵")}</code> {Math.round(t.p * 100)}
@@ -269,7 +270,7 @@ function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) 
           ) : null}
         </>
       ) : (
-        <p className={styles.rawEmpty}>{COPY.rawEmpty[locale]}</p>
+        <p className={styles.rawEmpty}>{tr(COPY.rawEmpty, locale)}</p>
       )}
     </section>
   );

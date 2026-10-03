@@ -8,9 +8,10 @@
  *   update for the next position, one word per click (three words).
  */
 import { useEffect, useRef } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import { LANGUAGE_MODELS } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { prepareCanvas, readPalette, rgba } from "../learning/shared/canvas.ts";
 import { useThemeName } from "../theme/theme.ts";
 import { NeutralSources } from "./NeutralSources.tsx";
@@ -23,28 +24,24 @@ import common from "./common.module.css";
 import styles from "./NextTokenVsClassifier.module.css";
 
 const COPY = {
-  head0: { en: "Our sports classifier: two possible answers", fr: "Notre classifieur de sport : deux réponses possibles" },
+  head0: { en: "Our sports classifier: two possible answers" },
   head1: {
     en: "A language model does the same with text: which word comes next?",
-    fr: "Un modèle de langage fait pareil avec du texte : quel mot vient ensuite ?",
   },
-  head2: { en: "Pick one, add it to the sentence, ask again", fr: "En choisir un, l'ajouter à la phrase, redemander" },
-  sub0: { en: "Football or basketball: one bar per possible answer.", fr: "Football ou basket : une barre par réponse possible." },
+  head2: { en: "Pick one, add it to the sentence, ask again" },
+  sub0: { en: "Football or basketball: one bar per possible answer." },
   sub1: {
     en: "It reads the start of a sentence and scores every word it knows ({n} of them): not two answers, tens of thousands.",
-    fr: "Il lit le début d'une phrase et note chaque mot qu'il connaît ({n}) : pas deux réponses, des dizaines de milliers.",
   },
   sub2: {
     en: "Here it takes the most likely word, adds it, and scores every word again.",
-    fr: "Ici il prend le mot le plus probable, l'ajoute, et note à nouveau chaque mot.",
   },
-  example: { en: "Real output of our small sports network", fr: "Vraie sortie de notre petit réseau des sports" },
-  real: { en: "Real probabilities from {model}, recorded", fr: "Vraies probabilités de {model}, enregistrées" },
-  others: { en: "{n} other words", fr: "{n} autres mots" },
-  grid: { en: "Every dot is one word the model could choose", fr: "Chaque point est un mot que le modèle pourrait choisir" },
+  example: { en: "Real output of our small sports network" },
+  real: { en: "Real probabilities from {model}, recorded" },
+  others: { en: "{n} other words" },
+  grid: { en: "Every dot is one word the model could choose" },
   sub4: {
     en: "Three clicks, three words. Repeat, and a whole answer appears, one word at a time.",
-    fr: "Trois clics, trois mots. On recommence, et une réponse entière apparaît, mot après mot.",
   },
 } satisfies Record<string, L10n>;
 
@@ -147,23 +144,25 @@ export function NextTokenVsClassifier({ ctx }: SceneComponentProps<Record<string
           ...cands.map((c, i) => ({ key: `r${i}`, label: displayToken(c.text), p: c.p, chosen: i === 0 })),
           {
             key: "rest",
-            label: COPY.others[locale].replace("{n}", formatNumber(size - cands.length, locale)),
+            label: tr(COPY.others, locale).replace("{n}", formatNumber(size - cands.length, locale)),
             p: rest,
             rest: true,
           },
         ];
 
-  const headline = step === 0 ? COPY.head0[locale] : step === 1 ? COPY.head1[locale].replace("{n}", nWords) : COPY.head2[locale];
+  const headline = step === 0 ? tr(COPY.head0, locale) : step === 1 ? tr(COPY.head1, locale).replace("{n}", nWords) : tr(COPY.head2, locale);
   const sub =
-    step === 0 ? COPY.sub0[locale] : step === 1 ? COPY.sub1[locale] : step < NEXT_TOKEN_STEPS ? COPY.sub2[locale] : COPY.sub4[locale];
+    step === 0 ? tr(COPY.sub0, locale) : step === 1 ? tr(COPY.sub1, locale) : step < NEXT_TOKEN_STEPS ? tr(COPY.sub2, locale) : tr(COPY.sub4, locale);
   const modelLabel = LANGUAGE_MODELS[slice.model].label;
 
   return (
     <div className={`${common.root} ${styles.root} ${still ? common.still : ""}`} data-step={step}>
       <h2 className={common.headline} key={`h${Math.min(step, 2)}`} data-entering={!still}>
-        {headline}
+        <Rich text={headline} />
       </h2>
-      <p className={common.sub}>{sub}</p>
+      <p className={common.sub}>
+        <Rich text={sub} />
+      </p>
       {step >= 1 ? (
         <p className={styles.sentence} lang={slice.locale}>
           {slice.text}
@@ -180,14 +179,16 @@ export function NextTokenVsClassifier({ ctx }: SceneComponentProps<Record<string
         <div className={styles.input}>
           {step === 0 ? (
             <blockquote className={styles.classified} lang={locale}>
-              {CLASSIFIER_SENTENCE[locale].text}
+              {tr(CLASSIFIER_SENTENCE, locale).text}
             </blockquote>
           ) : (
             <>
               <figure className={styles.gridFigure}>
                 <TokenCloud size={size} candidates={cands.map((c) => ({ id: c.id, label: displayToken(c.text) }))} still={still} />
                 <figcaption className={styles.gridCaption}>
-                  {COPY.grid[locale]}: <strong>{nWords}</strong>
+                  {tr(COPY.grid, locale)}
+                  {locale === "fr" ? "\u00a0: " : ": "}
+                  <strong>{nWords}</strong>
                 </figcaption>
               </figure>
             </>
@@ -209,7 +210,7 @@ export function NextTokenVsClassifier({ ctx }: SceneComponentProps<Record<string
 
       <div className={common.footer}>
         <span className={common.tag}>
-          {step === 0 ? COPY.example[locale] : COPY.real[locale].replace("{model}", modelLabel)}
+          {step === 0 ? tr(COPY.example, locale) : tr(COPY.real, locale).replace("{model}", modelLabel)}
         </span>
         {step >= 1 ? (
           <NeutralSources

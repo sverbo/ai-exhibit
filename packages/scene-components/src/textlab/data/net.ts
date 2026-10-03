@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { countParameters, createMlp, forward, mulberry32, Trainer, type Mlp } from "../../learning/ml/mlp.ts";
 import { generateSentences } from "./corpus.ts";
 import { SMALL_SET } from "./small.ts";
@@ -38,7 +38,7 @@ const testCache = new Map<Locale, LabelledSentence[]>();
 export function netTrainingSentences(locale: Locale): LabelledSentence[] {
   let v = trainCache.get(locale);
   if (!v) {
-    const small = SMALL_SET[locale];
+    const small = tr(SMALL_SET, locale);
     v = [...generateSentences(locale, NET_TRAIN.seed, NET_TRAIN.perSport, new Set(small.map((s) => s.text))), ...small];
     trainCache.set(locale, v);
   }
@@ -148,7 +148,7 @@ export function trainTextNet(locale: Locale): Mlp & { vocab: string[] } {
 const TRAINED: Record<Locale, TextNetFile> = { en: trainedEn as TextNetFile, fr: trainedFr as TextNetFile };
 
 /** The committed network (no training at runtime). */
-export const textNet = (locale: Locale): TextNetFile => TRAINED[locale];
+export const textNet = (locale: Locale): TextNetFile => tr(TRAINED, locale);
 
 /** Probability of "basketball" for a sentence. */
 export function netBasketballProbability(text: string, locale: Locale, net: Mlp & { vocab: string[] } = textNet(locale)): number {

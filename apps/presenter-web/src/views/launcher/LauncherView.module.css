@@ -204,3 +204,16 @@ a.primary:hover {
     font-size: 28px;
   }
 }
+
+/* The talk's language: every link below opens in it. */
+.language {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.languageLabel {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}

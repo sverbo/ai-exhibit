@@ -50,7 +50,9 @@ spending limit on the Hugging Face account that owns it.
 
 ## Presenting
 
-The home page (`/`) offers two windows and the audience's glossary:
+The home page (`/`) picks the language of the talk (or add `?lang=fr` to any
+view; every window follows the same language) and offers two windows and the
+audience's glossary:
 
 - **Projector**: full screen on the projector. It works alone: the arrows or a
   clicker advance it, scenes are interactive, `N` shows the notes.

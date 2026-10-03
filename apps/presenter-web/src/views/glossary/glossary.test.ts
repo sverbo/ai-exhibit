@@ -21,7 +21,7 @@ describe("glossary data", () => {
   it("explains every term in both languages", () => {
     for (const e of glossary) {
       expect(e.explanation.en.trim(), e.term).not.toBe("");
-      expect(e.explanation.fr.trim(), e.term).not.toBe("");
+      expect(e.explanation.fr!.trim(), e.term).not.toBe("");
     }
   });
 
@@ -29,7 +29,7 @@ describe("glossary data", () => {
     for (const e of glossary) {
       expect(LONG_DASHES.test(e.term), e.term).toBe(false);
       expect(LONG_DASHES.test(e.explanation.en), e.term).toBe(false);
-      expect(LONG_DASHES.test(e.explanation.fr), e.term).toBe(false);
+      expect(LONG_DASHES.test(e.explanation.fr!), e.term).toBe(false);
     }
     for (const r of resources) {
       expect(LONG_DASHES.test(`${r.title} ${r.by.en} ${r.by.fr} ${r.description.en} ${r.description.fr}`), r.title).toBe(false);

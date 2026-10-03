@@ -56,9 +56,9 @@ is downloaded to the browser.
 | `/overview` | See every scene of the edition: number, runtime class (A deterministic, B local compute, C live or networked), duration, reveal steps, optional flag, evidence badge, TODO count. Totals compare planned minutes with the edition target. Click a scene to rehearse from there |
 | `/present` | Rehearse alone, one window, keyboard driven. A HUD docked under the stage (never over it, so a scene's own controls stay usable) shows the scene, steps, timer, the talking points and key hints. "Hide notes" collapses it to one line, `N` hides it, its "Full screen" button fills the screen |
 | `/presenter` | Rehearse exactly as on the day, with notes, transitions and timing |
-| `pnpm rehearse` | Automated health check in a real browser with the internet blocked: every scene and reveal step of the edition in `/present`, live and in fallback; then `/presenter` driving `/projector` in two windows of one browser, and the projector's own keys; then the other views. It reports console errors, uncaught exceptions, crashed scenes and any request to the internet, and exits 1 on any problem (full report in `$TMPDIR/ai-exhibit-rehearsal.json`). It starts its own runtime and Vite on free ports and its own browser, so your windows are untouched. Options: `--headed`, `--viewport 1920x1080`, `--shots <dir>`, `--jobs <n>`, `--base-url <url>` (drives a running app and its session: reset it afterwards). First run: `pnpm exec playwright install chromium` |
+| `pnpm rehearse` | Automated health check in a real browser with the internet blocked: every scene and reveal step of the edition in `/present`, live and in fallback; then `/presenter` driving `/projector` in two windows of one browser, and the projector's own keys; then the other views. It reports console errors, uncaught exceptions, crashed scenes and any request to the internet, and exits 1 on any problem (full report in `$TMPDIR/ai-exhibit-rehearsal.json`). It starts its own runtime and Vite on free ports and its own browser, so your windows are untouched. Every language the talk offers is walked (`--lang fr` for one); raw term markup `(*...*)` on screen or a view in the wrong language counts as a problem. Options: `--headed`, `--viewport 1920x1080`, `--shots <dir>`, `--jobs <n>`, `--base-url <url>` (drives a running app and its session: reset it afterwards). First run: `pnpm exec playwright install chromium` |
 
-Speaker notes are a short bullet list per scene, in the edition's language: the
+Speaker notes are a short bullet list per scene, in the talk's language: the
 concepts to explain, in order, plus optional **Ask:** (a question to the room) and
 **Do:** (an action on stage) bullets. The presenter view shows them large in the
 right-hand panel, numbered, with Ask and Do bullets on a tinted band; the
@@ -75,7 +75,8 @@ entries:
 **Two screens (recommended).** Set the projector as an extended display (not
 mirrored).
 
-1. Open **Presenter** on the laptop screen (`/presenter`).
+1. Pick the language of the talk on the home page, then open **Presenter** on
+   the laptop screen (`/presenter?lang=fr`: every window follows that language).
 2. Open **Projector** (`/projector`) in a second window of the same browser
    (not a private window), drag it to the projector and make it full screen.
    The two windows stay in sync, and either one takes the arrow keys or a
@@ -249,4 +250,5 @@ On the presentation laptop, the day before or on site:
 | Badge says "Hugging Face unreachable" or "the cloud model failed" | No internet, or the provider is down. The scene already plays its recordings; carry on, or switch the "Models" control to Simulation for the rest of the talk |
 | A demo waits on "The model is computing" | A cloud answer takes a few seconds (the first tokenizer call can take longer while the server fetches its files). Press `F` to show the recording and continue. Navigation never waits for a model |
 | Projector stays black or frozen | `B` or `Z` is on: the presenter view's top-left status says which. Press the same key again |
+| Projector shows the wrong edition or language | Both are set by the controller: reopen the Presenter from the home page, or `/presenter?lang=<code>` |
 | A scene crashed | The projector shows a calm slate with the scene title; the error detail stays on the laptop. `F` switches to fallback, which also retries the scene; `Shift+→` moves on |

@@ -126,6 +126,12 @@ function reduce(state: SessionState, command: SessionCommand): Patch | null {
         revealStep: 0,
       };
     }
+    case "setLocale": {
+      if (state.locale === command.locale) return null;
+      // Reserved keys ("__shell": theme, freeze, model source) are not scene content.
+      const kept = Object.fromEntries(Object.entries(state.sceneStates).filter(([k]) => k.startsWith("__")));
+      return { locale: command.locale, sceneStates: kept };
+    }
     case "resetSession": {
       const fresh = createInitialState(state);
       return {

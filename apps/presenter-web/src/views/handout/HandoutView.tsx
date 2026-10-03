@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import type { SourceRecord } from "@ai-exhibit/presentation-core";
+import { tr, type SourceRecord } from "@ai-exhibit/presentation-core";
 import { EvidenceBadge } from "@ai-exhibit/scene-components";
 import { useUi } from "../../i18n.ts";
-import { DEFAULT_EDITION, queryParam, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
-import { EditionPicker, setEditionParam } from "../../ui/EditionPicker.tsx";
+import { DEFAULT_EDITION, defaultTalkLocale, queryParam, requestedLocale, resolveTalk, sourceLookup } from "../../talk/presentation.ts";
+import { LocalePicker, setLangParam } from "../../ui/LocalePicker.tsx";
 import { sceneSourceIds } from "../presenter/panels.tsx";
 import styles from "./HandoutView.module.css";
 
@@ -18,19 +18,20 @@ const COPY = {
   retrieved: { fr: "consultée le", en: "retrieved" },
   evidenceKey: { fr: "Niveaux de preuve", en: "Levels of evidence" },
   objective: { fr: "Objectif", en: "Objective" },
+  language: { fr: "Langue", en: "Language" },
 } as const;
 
-/** Public post-talk page, in the edition's language. */
+/** Public post-talk page, in the language of `?lang=` (default: the talk's). */
 export default function HandoutView() {
   const { t } = useUi();
-  const [editionId, setEditionId] = useState(() => queryParam("edition") ?? DEFAULT_EDITION);
+  const [editionId] = useState(() => queryParam("edition") ?? DEFAULT_EDITION);
+  const [locale, setLocale] = useState(() => requestedLocale() ?? defaultTalkLocale());
   const talk = useMemo(() => resolveTalk(editionId), [editionId]);
   const getSource = useMemo(() => sourceLookup(talk.presentation), [talk.presentation]);
   const { presentation, edition, scenes } = talk;
-  const locale = edition.locale;
 
   useEffect(() => {
-    document.title = `${presentation.title[locale]} · ${t("viewHandout")}`;
+    document.title = `${tr(presentation.title, locale)} · ${t("viewHandout")}`;
     document.documentElement.lang = locale;
   }, [presentation, locale, t]);
 
@@ -45,17 +46,18 @@ export default function HandoutView() {
   return (
     <div className={styles.page} lang={locale}>
       <div className={styles.toolbar}>
-        <EditionPicker
-          value={edition.id}
-          onChange={(id) => {
-            setEditionId(id);
-            setEditionParam(id);
+        <LocalePicker
+          value={locale}
+          label={tr(COPY.language, locale)}
+          onChange={(l) => {
+            setLocale(l);
+            setLangParam(l);
           }}
         />
       </div>
       <header className={styles.header}>
-        <h1 className={styles.h1}>{presentation.title[locale]}</h1>
-        <p className={styles.intro}>{COPY.intro[locale]}</p>
+        <h1 className={styles.h1}>{tr(presentation.title, locale)}</h1>
+        <p className={styles.intro}>{tr(COPY.intro, locale)}</p>
       </header>
 
       <main>
@@ -66,16 +68,16 @@ export default function HandoutView() {
             <section key={chapter.id} className={styles.chapter}>
               <h2 className={styles.h2}>
                 <span className={styles.chapterId}>{chapter.id}</span>
-                {chapter.title[locale]}
+                {tr(chapter.title, locale)}
               </h2>
-              <p className={styles.summary}>{chapter.summary[locale]}</p>
+              <p className={styles.summary}>{tr(chapter.summary, locale)}</p>
               <ol className={styles.scenes}>
                 {chapterScenes.map((scene) => {
                   const ids = sceneSourceIds(scene);
                   return (
                     <li key={scene.id} className={styles.scene}>
-                      <p className={styles.takeaway}>{scene.takeaway[locale]}</p>
-                      <p className={styles.objective}>{scene.objective[locale]}</p>
+                      <p className={styles.takeaway}>{tr(scene.takeaway, locale)}</p>
+                      <p className={styles.objective}>{tr(scene.objective, locale)}</p>
                       {scene.evidenceLevel !== "none" || ids.length ? (
                         <p className={styles.cites}>
                           {scene.evidenceLevel !== "none" ? (
@@ -100,7 +102,7 @@ export default function HandoutView() {
 
         {cited.length ? (
           <section className={styles.chapter}>
-            <h2 className={styles.h2}>{COPY.sources[locale]}</h2>
+            <h2 className={styles.h2}>{tr(COPY.sources, locale)}</h2>
             <ol className={styles.sourceList}>
               {cited.map(([id, source], i) => (
                 <li key={id} id={`src-${id}`} className={styles.source}>
@@ -112,7 +114,7 @@ export default function HandoutView() {
                       </p>
                       <p className={styles.sourceMeta}>
                         {[source.authors?.join(", "), source.publisher, source.date].filter(Boolean).join(", ")}
-                        {source.retrieved ? ` (${COPY.retrieved[locale]} ${source.retrieved})` : ""}
+                        {source.retrieved ? ` (${tr(COPY.retrieved, locale)} ${source.retrieved})` : ""}
                       </p>
                       <p className={styles.sourceStatus}>
                         {source.evidence !== "none" ? (
@@ -121,7 +123,7 @@ export default function HandoutView() {
                           </span>
                         ) : null}
                         <span className={source.verification === "verified" ? styles.verified : styles.unverified}>
-                          {source.verification === "verified" ? `✓ ${COPY.verified[locale]}` : `? ${COPY.unverified[locale]}`}
+                          {source.verification === "verified" ? `✓ ${tr(COPY.verified, locale)}` : `? ${tr(COPY.unverified, locale)}`}
                         </span>
                       </p>
                     </div>

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { intlLocale, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { candidateAt, DEMO_CIPHERTEXT, DEMO_CRIB, DEMO_PLAINTEXT, DEMO_SETTINGS, searchCrib } from "./enigma.ts";
 import styles from "./BombeDemo.module.css";
 
@@ -57,14 +57,14 @@ export function bombeFrame(tick: number): BombeFrame {
 }
 
 const COPY = {
-  crib: { en: "Guessed word", fr: "Mot deviné" },
-  cipher: { en: "Intercepted", fr: "Intercepté" },
-  decoded: { en: "Decoded", fr: "Décodé" },
-  tried: { en: "settings tried", fr: "réglages essayés" },
-  of: { en: "of", fr: "sur" },
+  crib: { en: "Guessed word" },
+  cipher: { en: "Intercepted" },
+  decoded: { en: "Decoded" },
+  tried: { en: "settings tried" },
+  of: { en: "of" },
   stop: { en: "Stop", fr: "Stop" },
-  fits: { en: "the guessed word fits", fr: "le mot deviné colle" },
-  gloss: { en: "“Weather report, rain this evening”", fr: "« Bulletin météo, pluie ce soir »" },
+  fits: { en: "the guessed word fits" },
+  gloss: { en: "“Weather report, rain this evening”" },
 } satisfies Record<string, L10n>;
 
 const ROWS_PER_BANK = 3;
@@ -157,7 +157,7 @@ function Cells({ text, shown, className, lit }: { text: string; shown: number; c
   );
 }
 
-const number = (n: number, locale: Locale) => new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-GB").format(n);
+const number = (n: number, locale: Locale) => new Intl.NumberFormat(intlLocale(locale)).format(n);
 
 export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
   const frame = bombeFrame(tick);
@@ -169,9 +169,9 @@ export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
   return (
     <div className={styles.root} data-phase={frame.phase}>
       <div className={styles.lines}>
-        <span className={styles.lineLabel}>{COPY.crib[locale]}</span>
+        <span className={styles.lineLabel}>{tr(COPY.crib, locale)}</span>
         <Cells text={DEMO_CRIB} shown={DEMO_CRIB.length} className={styles.crib} />
-        <span className={styles.lineLabel}>{COPY.cipher[locale]}</span>
+        <span className={styles.lineLabel}>{tr(COPY.cipher, locale)}</span>
         <Cells text={DEMO_CIPHERTEXT} shown={DEMO_CIPHERTEXT.length} className={styles.cipher} />
       </div>
 
@@ -182,7 +182,7 @@ export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
             <>
               <span className={styles.counter}>{number(frame.tried, locale)}</span>
               <span className={styles.counterLabel}>
-                {COPY.tried[locale]} {COPY.of[locale]} {number(TOTAL_CANDIDATES, locale)}
+                {tr(COPY.tried, locale)} {tr(COPY.of, locale)} {number(TOTAL_CANDIDATES, locale)}
               </span>
               <span className={styles.rejected}>
                 {rejected.map((c) => (
@@ -195,10 +195,10 @@ export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
           ) : (
             <>
               <span className={styles.stop}>
-                {COPY.stop[locale]} {[...FOUND_SETTING].join(" ")}
+                {tr(COPY.stop, locale)} {[...FOUND_SETTING].join(" ")}
               </span>
               <span className={styles.counterLabel}>
-                {COPY.fits[locale]}, {number(frame.tried, locale)} {COPY.tried[locale]}
+                {tr(COPY.fits, locale)}, {number(frame.tried, locale)} {tr(COPY.tried, locale)}
               </span>
             </>
           )}
@@ -206,10 +206,10 @@ export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
       </div>
 
       <div className={styles.lines}>
-        <span className={styles.lineLabel}>{COPY.decoded[locale]}</span>
+        <span className={styles.lineLabel}>{tr(COPY.decoded, locale)}</span>
         <Cells text={plain} shown={frame.decoded} className={styles.plain} lit={frame.phase === "decrypt" ? frame.decoded - 1 : undefined} />
         <span />
-        <span className={`${styles.gloss} ${frame.decoded === plain.length ? styles.shown : ""}`}>{COPY.gloss[locale]}</span>
+        <span className={`${styles.gloss} ${frame.decoded === plain.length ? styles.shown : ""}`}>{tr(COPY.gloss, locale)}</span>
       </div>
     </div>
   );

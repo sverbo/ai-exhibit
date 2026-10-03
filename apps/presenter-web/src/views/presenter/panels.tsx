@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Locale, PresentationDefinition, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
-import { EvidenceBadge, getSceneComponent } from "@ai-exhibit/scene-components";
+import { tr, type Locale, type PresentationDefinition, type SceneDefinition, type SourceRecord } from "@ai-exhibit/presentation-core";
+import { Rich, EvidenceBadge, getSceneComponent } from "@ai-exhibit/scene-components";
 import { formatDuration, type Pace } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
 import { cloudHealthText, useCloudHealth } from "../../talk/runtime.ts";
@@ -74,8 +74,8 @@ export function NotesPanel({
 }) {
   const { t } = useUi();
   if (!scene) return null;
-  const takeaway = scene.takeaway[locale];
-  const transition = scene.transitionOut[locale];
+  const takeaway = tr(scene.takeaway, locale);
+  const transition = tr(scene.transitionOut, locale);
   return (
     <div className={styles.notes} style={{ "--notes-scale": scale } as React.CSSProperties}>
       {takeaway ? (
@@ -84,7 +84,7 @@ export function NotesPanel({
         </p>
       ) : null}
       <div className={styles.pointsScroll}>
-        <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="desk" personal={personalNote} />
+        <SpeakerNotes markdown={tr(scene.speakerNotes, locale)} variant="desk" personal={personalNote} />
       </div>
       <div className={styles.then}>
         {transition ? (
@@ -96,7 +96,7 @@ export function NotesPanel({
           <span className={styles.aside}>{t("upNext")}</span>{" "}
           {next ? (
             <>
-              <span className={chrome.mono}>{next.number}</span> {next.title[locale]}
+              <span className={chrome.mono}>{next.number}</span> <Rich text={tr(next.title, locale)} />
             </>
           ) : (
             t("endOfTalk")
@@ -259,7 +259,7 @@ export function ChapterStrip({
     <div className={styles.strip}>
       <div className={styles.segments}>
         {pace.chapters.map((c) => {
-          const title = presentation.chapters.find((ch) => ch.id === c.id)?.title[locale] ?? c.id;
+          const title = tr(presentation.chapters.find((ch) => ch.id === c.id)?.title ?? { en: c.id }, locale);
           return (
             <div
               key={`${c.id}-${c.plannedStartSec}`}

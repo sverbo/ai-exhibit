@@ -1,5 +1,6 @@
+import { Rich } from "@ai-exhibit/scene-components";
 import { useEffect, useState } from "react";
-import { stepCount } from "@ai-exhibit/presentation-core";
+import { tr, stepCount } from "@ai-exhibit/presentation-core";
 import { useTalkKeyboard } from "../../control/useTalkKeyboard.ts";
 import { formatDuration } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
@@ -109,7 +110,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
             <span className={`${chrome.mono} ${styles.position}`}>
               {scene ? scene.number : "..."} <span className={chrome.muted}>{index + 1}/{scenes.length}</span>
             </span>
-            <span className={styles.title}>{scene?.title[locale] ?? ""}</span>
+            <span className={styles.title}><Rich text={scene ? tr(scene.title, locale) : ""} /></span>
             {steps > 0 ? (
               <span className={styles.steps} aria-label={`${t("step")} ${state?.revealStep ?? 0}/${steps}`}>
                 {Array.from({ length: steps }, (_, i) => (
@@ -143,17 +144,17 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
           {full && scene ? (
             <div className={styles.body}>
               <div className={styles.notesCol}>
-                <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="hud" personal={talk.personal.noteFor(scene)} />
+                <SpeakerNotes markdown={tr(scene.speakerNotes, locale)} variant="hud" personal={talk.personal.noteFor(scene)} />
               </div>
               <div className={styles.sideCol}>
-                {scene.takeaway[locale] ? (
+                {tr(scene.takeaway, locale) ? (
                   <p className={styles.takeaway}>
-                    <span className={styles.aside}>{t("takeaway")}</span> {scene.takeaway[locale]}
+                    <span className={styles.aside}>{t("takeaway")}</span> <Rich text={tr(scene.takeaway, locale)} />
                   </p>
                 ) : null}
-                {scene.transitionOut[locale] ? (
+                {tr(scene.transitionOut, locale) ? (
                   <p className={styles.takeaway}>
-                    <span className={styles.aside}>{t("transitionOut")}</span> {scene.transitionOut[locale]}
+                    <span className={styles.aside}>{t("transitionOut")}</span> <Rich text={tr(scene.transitionOut, locale)} />
                   </p>
                 ) : null}
               </div>

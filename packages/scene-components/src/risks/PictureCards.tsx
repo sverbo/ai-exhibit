@@ -1,5 +1,6 @@
-import type { EvidenceLevel, L10n } from "@ai-exhibit/presentation-core";
+import { tr, type EvidenceLevel, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { visibleItemCount } from "../layouts/reveal.ts";
 import { getStoryImage } from "@ai-exhibit/content/assets/media/story/credits.ts";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
@@ -95,7 +96,7 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
         <div className={styles.picture}>
           <Picture id={c.picture} />
           {c.flags?.length ? (
-            <span className={styles.flags} role="img" aria-label={c.flags.map((f) => COUNTRY_NAMES[f][locale]).join(", ")}>
+            <span className={styles.flags} role="img" aria-label={c.flags.map((f) => tr(COUNTRY_NAMES[f], locale)).join(", ")}>
               {c.flags.map((f) => {
                 const image = getStoryImage(flagImageId(f));
                 return image ? <img key={f} className={styles.flag} src={image.url} alt="" draggable={false} /> : null;
@@ -105,8 +106,14 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
         </div>
 
         <figcaption className={styles.caption}>
-          {c.title ? <span className={styles.title}>{c.title[locale]}</span> : null}
-          <span className={c.title ? styles.lineSmall : styles.line}>{c.line[locale]}</span>
+          {c.title ? (
+            <span className={styles.title}>
+              <Rich text={tr(c.title, locale)} />
+            </span>
+          ) : null}
+          <span className={c.title ? styles.lineSmall : styles.line}>
+            <Rich text={tr(c.line, locale)} />
+          </span>
           {c.evidence && c.evidence !== "none" ? (
             <span className={styles.meta}>
               <EvidenceBadge level={c.evidence} locale={locale} size="sm" />
@@ -124,7 +131,9 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
       data-visible={visible}
       data-footer={props.orgs || props.takeaway ? "" : undefined}
     >
-      {props.heading ? <h2 className={styles.heading}>{props.heading[locale]}</h2> : null}
+      {props.heading ? <h2 className={styles.heading}>
+          <Rich text={tr(props.heading, locale)} />
+        </h2> : null}
       <div className={styles.cards} data-count={cards.length}>
         {layout === "versus" ? (
           <>
@@ -142,7 +151,9 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
         <footer className={styles.footer}>
           {props.orgs ? (
             <div className={`${styles.orgs} ${showOrgs ? styles.shown : styles.hidden}`} data-orgs={showOrgs ? "" : undefined} aria-hidden={!showOrgs}>
-              <span className={styles.orgsLabel}>{props.orgs.label[locale]}</span>
+              <span className={styles.orgsLabel}>
+                <Rich text={tr(props.orgs.label, locale)} />
+              </span>
               <ul className={styles.orgNames}>
                 {props.orgs.names.map((n) => (
                   <li key={n} className={styles.orgName}>
@@ -154,8 +165,14 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
           ) : null}
           {props.takeaway ? (
             <p className={`${styles.takeaway} ${showTakeaway ? styles.shown : styles.hidden}`} data-takeaway={showTakeaway ? "" : undefined} aria-hidden={!showTakeaway}>
-              <span className={styles.takeawayLine}>{props.takeaway.line[locale]}</span>
-              {props.takeaway.attribution ? <span className={styles.attribution}>{props.takeaway.attribution[locale]}</span> : null}
+              <span className={styles.takeawayLine}>
+                <Rich text={tr(props.takeaway.line, locale)} />
+              </span>
+              {props.takeaway.attribution ? (
+                <span className={styles.attribution}>
+                  <Rich text={tr(props.takeaway.attribution, locale)} />
+                </span>
+              ) : null}
             </p>
           ) : null}
         </footer>

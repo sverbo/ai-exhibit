@@ -1,5 +1,5 @@
 /** Pure formatting helpers for the language scenes (tested). */
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { intlLocale, type Locale } from "@ai-exhibit/presentation-core";
 
 const NBSP = " ";
 
@@ -10,7 +10,7 @@ export function formatPercent(p: number, locale: Locale): string {
   if (pct > 0 && pct < 0.1) body = locale === "fr" ? "<0,1" : "<0.1";
   else {
     const digits = pct < 10 ? 1 : 0;
-    body = pct.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", {
+    body = pct.toLocaleString(intlLocale(locale), {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     });
@@ -20,11 +20,11 @@ export function formatPercent(p: number, locale: Locale): string {
 
 /** Thousands separators for IDs and counts: "49 152" / "49,152". */
 export function formatInt(n: number, locale: Locale): string {
-  return n.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB").replace(/ /g, NBSP);
+  return n.toLocaleString(intlLocale(locale)).replace(/ /g, NBSP);
 }
 
 export function formatNumber(x: number, locale: Locale, digits = 3): string {
-  return x.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", {
+  return x.toLocaleString(intlLocale(locale), {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
     signDisplay: "always",

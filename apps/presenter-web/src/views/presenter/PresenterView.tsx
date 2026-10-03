@@ -1,5 +1,6 @@
+import { Rich } from "@ai-exhibit/scene-components";
 import { useEffect, useMemo, useState } from "react";
-import { stepCount } from "@ai-exhibit/presentation-core";
+import { LOCALES, tr, stepCount, type Locale } from "@ai-exhibit/presentation-core";
 import { useTalkKeyboard } from "../../control/useTalkKeyboard.ts";
 import { computePace, formatDelta, formatDuration, formatMinutes } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
@@ -100,9 +101,9 @@ export default function PresenterView() {
             ) : null}
           </span>
           <div className={styles.sceneText}>
-            <span className={styles.sceneTitle}>{scene?.title[locale] ?? t("emptyEdition")}</span>
+            <span className={styles.sceneTitle}><Rich text={scene ? tr(scene.title, locale) : t("emptyEdition")} /></span>
             <span className={styles.sceneMeta}>
-              {chapter ? `${t("chapter")} ${chapter.id} · ${chapter.title[locale]}` : ""}
+              {chapter ? <Rich text={`${t("chapter")} ${chapter.id} · ${tr(chapter.title, locale)}`} /> : ""}
               {scenes.length ? ` · ${t("scene")} ${index + 1}/${scenes.length}` : ""}
             </span>
           </div>
@@ -167,9 +168,12 @@ export default function PresenterView() {
           </button>
           <ThemeToggle />
           <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
-          <select className={chrome.select} value={uiLocale} aria-label={t("interfaceLanguage")} onChange={(e) => setLocale(e.target.value as "fr" | "en")}>
-            <option value="fr">FR</option>
-            <option value="en">EN</option>
+          <select className={chrome.select} value={uiLocale} aria-label={t("interfaceLanguage")} title={t("interfaceLanguage")} onChange={(e) => setLocale(e.target.value as Locale)}>
+            {LOCALES.map((l) => (
+              <option key={l} value={l}>
+                {l.toUpperCase()}
+              </option>
+            ))}
           </select>
         </div>
       </header>
@@ -214,7 +218,7 @@ export default function PresenterView() {
               <span className={styles.thumbTitle}>
                 {next ? (
                   <>
-                    <span className={chrome.mono}>{next.number}</span> {next.title[locale]}
+                    <span className={chrome.mono}>{next.number}</span> <Rich text={tr(next.title, locale)} />
                   </>
                 ) : (
                   t("endOfTalk")

@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { resources, type ResourceEntry } from "@ai-exhibit/content/glossary";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { resolveGlossaryUrl, qrPath } from "../capabilities/agenda/glossaryUrl.ts";
 import qrStyles from "../capabilities/agenda/Agenda.module.css";
 import styles from "./ResourceList.module.css";
@@ -11,20 +12,20 @@ export interface ResourceListProps {
 }
 
 const KIND: Record<ResourceEntry["kind"], L10n> = {
-  video: { en: "Video", fr: "Vidéo" },
-  article: { en: "Article", fr: "Article" },
-  book: { en: "Book", fr: "Livre" },
-  website: { en: "Website", fr: "Site web" },
-  course: { en: "Course", fr: "Cours" },
-  petition: { en: "Petition", fr: "Pétition" },
+  video: { en: "Video" },
+  article: { en: "Article" },
+  book: { en: "Book" },
+  website: { en: "Website" },
+  course: { en: "Course" },
+  petition: { en: "Petition" },
 };
 
 const COPY = {
-  heading: { en: "Resources", fr: "Pour aller plus loin" },
-  sub: { en: "Pointers to explore, not endorsements.", fr: "Des pistes à explorer, pas des recommandations." },
-  qrLabel: { en: "These links on your phone", fr: "Ces liens sur votre téléphone" },
-  qrHint: { en: "In the glossary, under Resources.", fr: "Dans le lexique, rubrique Ressources." },
-} satisfies Record<string, Record<Locale, string>>;
+  heading: { en: "Resources" },
+  sub: { en: "Pointers to explore, not endorsements." },
+  qrLabel: { en: "These links on your phone" },
+  qrHint: { en: "In the glossary, under Resources." },
+} satisfies Record<string, L10n>;
 
 /**
  * ResourceList {heading?}: the further-reading list of the audience glossary,
@@ -43,13 +44,13 @@ export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListPro
     <div className={styles.root}>
       <div className={styles.main}>
         <header className={styles.head}>
-          <h2 className={styles.heading}>{(props.heading ?? COPY.heading)[locale]}</h2>
-          <p className={styles.sub}>{COPY.sub[locale]}</p>
+          <h2 className={styles.heading}><Rich text={tr(props.heading ?? COPY.heading, locale)} /></h2>
+          <p className={styles.sub}>{tr(COPY.sub, locale)}</p>
         </header>
         <ul className={styles.list}>
           {resources.map((r) => (
             <li key={r.url} className={styles.entry} data-kind={r.kind}>
-              <span className={styles.kind}>{KIND[r.kind][locale]}</span>
+              <span className={styles.kind}>{tr(KIND[r.kind], locale)}</span>
               {ctx.role === "preview" ? (
                 <span className={styles.title}>{r.title}</span>
               ) : (
@@ -58,8 +59,12 @@ export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListPro
                 </a>
               )}
               <span className={styles.url}>{r.url.replace(/^https?:\/\/(www\.)?/, "")}</span>
-              <span className={styles.by}>{r.by[locale]}</span>
-              <span className={styles.description}>{r.description[locale]}</span>
+              <span className={styles.by}>
+                <Rich text={tr(r.by, locale)} />
+              </span>
+              <span className={styles.description}>
+                <Rich text={tr(r.description, locale)} />
+              </span>
             </li>
           ))}
         </ul>
@@ -67,14 +72,14 @@ export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListPro
       {qr && url ? (
         <figure className={styles.qr}>
           <div className={qrStyles.code}>
-            <svg viewBox={`-2 -2 ${qr.size + 4} ${qr.size + 4}`} role="img" aria-label={COPY.qrLabel[locale]} shapeRendering="crispEdges">
+            <svg viewBox={`-2 -2 ${qr.size + 4} ${qr.size + 4}`} role="img" aria-label={tr(COPY.qrLabel, locale)} shapeRendering="crispEdges">
               <rect x={-2} y={-2} width={qr.size + 4} height={qr.size + 4} className={qrStyles.light} />
               <path d={qr.d} className={qrStyles.dark} />
             </svg>
           </div>
           <figcaption className={qrStyles.caption}>
-            <span className={qrStyles.label}>{COPY.qrLabel[locale]}</span>
-            <span className={qrStyles.hint}>{COPY.qrHint[locale]}</span>
+            <span className={qrStyles.label}>{tr(COPY.qrLabel, locale)}</span>
+            <span className={qrStyles.hint}>{tr(COPY.qrHint, locale)}</span>
             <span className={qrStyles.url}>{url.replace(/^https?:\/\//, "")}</span>
           </figcaption>
         </figure>

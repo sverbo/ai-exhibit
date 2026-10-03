@@ -1,6 +1,8 @@
+import { plainText, tr } from "@ai-exhibit/presentation-core";
 import { useEffect, useRef, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
 import { SourceList } from "../evidence/SourceList.tsx";
+import { Rich } from "../primitives/Rich.tsx";
 import { stopShellKeys } from "../evidence/shared.ts";
 import { BombeDemo, BOMBE_TICKS, TICK_MS } from "./BombeDemo.tsx";
 import { TIMELINES } from "./data.ts";
@@ -19,14 +21,13 @@ export interface AITimelineState {
 }
 
 const COPY = {
-  label: { en: "A short history of AI", fr: "Une brève histoire de l'IA" },
-  promise: { en: "Promise", fr: "Promesse" },
-  setback: { en: "Setback", fr: "Revers" },
+  label: { en: "A short history of AI" },
+  promise: { en: "Promise" },
+  setback: { en: "Setback" },
   bombeCaption: {
     en: "Given a known word, the machine searched for the settings itself.",
-    fr: "À partir d'un mot connu, la machine a cherché les réglages elle-même.",
   },
-  replay: { en: "Replay the search", fr: "Rejouer la recherche" },
+  replay: { en: "Replay the search" },
 } as const;
 
 /** Shape that carries the track besides color: up for promises, down for setbacks. */
@@ -100,17 +101,21 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
     still || ctx.state?.atStep !== step || typeof ctx.state?.bombe !== "number" ? BOMBE_TICKS : ctx.state.bombe;
 
   return (
-    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={COPY.label[locale]}>
+    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={plainText(tr(COPY.label, locale))}>
       <section className={styles.feature} key={current.id} data-track={current.track} data-demo={demo} aria-live={demo ? undefined : "polite"}>
         <div className={styles.featureText}>
         <p className={styles.kicker}>
-          <span aria-hidden="true">{TRACK_MARK[current.track]}</span> {COPY[current.track][locale]}
+          <span aria-hidden="true">{TRACK_MARK[current.track]}</span> {tr(COPY[current.track], locale)}
         </p>
-        <p className={styles.when} data-long={current.when[locale].length > 8}>
-          {current.when[locale]}
+        <p className={styles.when} data-long={tr(current.when, locale).length > 8}>
+          <Rich text={tr(current.when, locale)} />
         </p>
-        <h2 className={styles.title}>{current.title[locale]}</h2>
-        <p className={styles.text}>{current.text[locale]}</p>
+        <h2 className={styles.title}>
+          <Rich text={tr(current.title, locale)} />
+        </h2>
+        <p className={styles.text}>
+          <Rich text={tr(current.text, locale)} />
+        </p>
         {interactive ? (
           // Presenter only: some publishers are companies, and this scene names none on the projector.
           <div className={styles.sources}>
@@ -118,10 +123,14 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
             <SourceList sourceIds={current.sourceIds} role={role} locale={locale} getSource={ctx.getSource} compact={current.sourceIds.length > 3} />
           </div>
         ) : null}
-        {demo ? <p className={styles.caption}>{COPY.bombeCaption[locale]}</p> : null}
+        {demo ? (
+          <p className={styles.caption}>
+            <Rich text={tr(COPY.bombeCaption, locale)} />
+          </p>
+        ) : null}
         {demo && interactive ? (
           <button type="button" className={styles.replay} onClick={() => setReplay((n) => n + 1)} onKeyDown={stopShellKeys}>
-            {COPY.replay[locale]}
+            {tr(COPY.replay, locale)}
           </button>
         ) : null}
         </div>
@@ -134,8 +143,8 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
           const isFocus = i === focus;
           const label = (
             <span className={styles.label}>
-              <span className={styles.stationWhen}>{visible ? m.when[locale] : ""}</span>
-              <span className={styles.stationShort}>{visible ? m.short[locale] : ""}</span>
+              <span className={styles.stationWhen}>{visible ? <Rich text={tr(m.when, locale)} /> : ""}</span>
+              <span className={styles.stationShort}>{visible ? <Rich text={tr(m.short, locale)} /> : ""}</span>
             </span>
           );
           const body = (

@@ -1,3 +1,5 @@
+import { tr } from "@ai-exhibit/presentation-core";
+import { Rich } from "../../primitives/Rich.tsx";
 import { useEffect, useRef, useState } from "react";
 import type { SceneComponentProps } from "../../contract.ts";
 import { useOnStepChange, useSceneState } from "../../learning/shared/sceneState.ts";
@@ -27,20 +29,20 @@ export interface VideoSceneProps {
 }
 
 const TEXT = {
-  placeholder: l("La vidéo de démonstration personnelle va ici", "Personal demo video goes here"),
+  placeholder: { en: "Personal demo video goes here" },
   placeholderHint: l(
     "Déposez le fichier à cet endroit puis rechargez la page. Instructions : content/assets/media/README.md",
     "Drop the file at this path, then reload. Instructions: content/assets/media/README.md",
   ),
-  unreadable: l("Le fichier est là, mais le navigateur ne peut pas le lire.", "The file is there, but the browser cannot play it."),
-  play: l("Lecture", "Play"),
-  pause: l("Pause", "Pause"),
-  restart: l("Revenir au début", "Back to start"),
-  sound: l("Son", "Sound"),
-  soundOff: l("Coupé", "Off"),
-  soundProjector: l("Projecteur", "Projector"),
-  soundHere: l("Cet écran", "This screen"),
-  seek: l("Position", "Position"),
+  unreadable: { en: "The file is there, but the browser cannot play it." },
+  play: { en: "Play" },
+  pause: { en: "Pause" },
+  restart: { en: "Back to start" },
+  sound: { en: "Sound" },
+  soundOff: { en: "Off" },
+  soundProjector: { en: "Projector" },
+  soundHere: { en: "This screen" },
+  seek: { en: "Position" },
   blocked: l(
     "Le navigateur bloque le son : cliquez une fois dans cette fenêtre.",
     "The browser blocks sound: click once in this window.",
@@ -49,7 +51,7 @@ const TEXT = {
 
 export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, VideoState>) {
   const { locale, role } = ctx;
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const isController = role === "controller";
   const url = mediaUrl(props.src ?? "");
   const posterUrl = props.poster ? mediaUrl(props.poster) : undefined;
@@ -123,16 +125,16 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
     if (step === 0) setState((s) => setPlaying(s, false, pos, Date.now()));
   });
 
-  const caption = props.caption ? <p className={styles.caption}>{t(props.caption)}</p> : null;
+  const caption = props.caption ? <p className={styles.caption}><Rich text={t(props.caption)} /></p> : null;
 
   if (!url || broken) {
     return (
       <div className={styles.root}>
         <div className={styles.placeholder}>
           <CapIcon name="film" size={72} strokeWidth={1.4} className={styles.placeholderIcon} />
-          <p className={styles.placeholderTitle}>{broken ? t(TEXT.unreadable) : t(TEXT.placeholder)}</p>
+          <p className={styles.placeholderTitle}><Rich text={t(broken ? TEXT.unreadable : TEXT.placeholder)} /></p>
           <code className={styles.path}>{expectedPath(props.src ?? "personal-demo.mp4")}</code>
-          {role !== "display" && <p className={styles.hint}>{t(TEXT.placeholderHint)}</p>}
+          {role !== "display" && <p className={styles.hint}><Rich text={t(TEXT.placeholderHint)} /></p>}
         </div>
         {caption}
       </div>
@@ -183,7 +185,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
         >
           {captionsUrl && <track kind="captions" src={captionsUrl} srcLang={locale} label={locale} default />}
         </video>
-        {blocked && role === "display" && <p className={styles.blocked}>{t(TEXT.blocked)}</p>}
+        {blocked && role === "display" && <p className={styles.blocked}><Rich text={t(TEXT.blocked)} /></p>}
       </div>
       {caption}
 
@@ -201,7 +203,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
           >
             <span className={styles.btnInner}>
               <CapIcon name={state.playing ? "pause" : "play"} size={22} />
-              {t(state.playing ? TEXT.pause : TEXT.play)}
+              <Rich text={t(state.playing ? TEXT.pause : TEXT.play)} />
             </span>
           </SceneButton>
           <SceneButton onClick={() => setState((s) => setPlaying(s, false, 0, Date.now()))} title={t(TEXT.restart)}>
@@ -235,7 +237,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
                 label: (
                   <span className={styles.btnInner}>
                     <CapIcon name="mute" size={22} />
-                    {t(TEXT.soundOff)}
+                    <Rich text={t(TEXT.soundOff)} />
                   </span>
                 ),
               },

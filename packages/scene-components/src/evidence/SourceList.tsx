@@ -1,13 +1,13 @@
-import type { Locale, SourceRecord } from "@ai-exhibit/presentation-core";
+import { tr, type Locale, type SourceRecord } from "@ai-exhibit/presentation-core";
 import type { SceneRole } from "../contract.ts";
 import { formatIsoDate, shortSourceLabel } from "./shared.ts";
 import styles from "./SourceList.module.css";
 
 const COPY = {
-  sources: { en: "Sources", fr: "Sources" },
-  unverified: { en: "Needs verification", fr: "À vérifier" },
-  missing: { en: "Unknown source ID", fr: "Identifiant de source inconnu" },
-  retrieved: { en: "checked", fr: "vérifié le" },
+  sources: { en: "Sources" },
+  unverified: { en: "Needs verification" },
+  missing: { en: "Unknown source ID" },
+  retrieved: { en: "checked" },
 } as const;
 
 /**
@@ -33,12 +33,12 @@ export function SourceList({
     const labels = records.map(({ id, source }) => (source ? shortSourceLabel(source) : id));
     return (
       <p className={styles.short}>
-        <span className={styles.shortHead}>{COPY.sources[locale]}</span> {labels.join("; ")}
+        <span className={styles.shortHead}>{tr(COPY.sources, locale)}</span> {labels.join("; ")}
       </p>
     );
   }
   return (
-    <ul className={styles.full} aria-label={COPY.sources[locale]}>
+    <ul className={styles.full} aria-label={tr(COPY.sources, locale)}>
       {records.map(({ id, source }) => (
         <li key={id} className={styles.item}>
           {source ? (
@@ -56,18 +56,18 @@ export function SourceList({
                 {[source.publisher, source.date ? formatIsoDate(source.date, locale) : undefined]
                   .filter(Boolean)
                   .join(", ")}
-                {source.retrieved ? ` (${COPY.retrieved[locale]} ${formatIsoDate(source.retrieved, locale)})` : ""}
+                {source.retrieved ? ` (${tr(COPY.retrieved, locale)} ${formatIsoDate(source.retrieved, locale)})` : ""}
               </span>
               {source.verification === "needs-verification" ? (
                 <span className={styles.warn}>
-                  <span aria-hidden="true">⚠</span> {COPY.unverified[locale]}
+                  <span aria-hidden="true">⚠</span> {tr(COPY.unverified, locale)}
                   {source.notes ? `: ${source.notes}` : ""}
                 </span>
               ) : null}
             </>
           ) : (
             <span className={styles.warn}>
-              <span aria-hidden="true">⚠</span> {COPY.missing[locale]}: <code>{id}</code>
+              <span aria-hidden="true">⚠</span> {tr(COPY.missing, locale)}: <code>{id}</code>
             </span>
           )}
         </li>

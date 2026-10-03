@@ -8,6 +8,7 @@ import {
   nextPosition,
   prevPosition,
   stepCount,
+  type Locale,
   type Position,
   type SceneDefinition,
 } from "@ai-exhibit/presentation-core";
@@ -16,6 +17,8 @@ import { clip, isLocalUrl, normalizeDetail, type Cursor, type Mode, type Problem
 export interface CheckOptions {
   baseUrl: string;
   edition: string;
+  /** Language of the talk for this run (`?lang=` on every talk view). */
+  locale: Locale;
   scenes: SceneDefinition[];
   /** Max time for a scene to show something after a keypress (spec: 2 s). */
   showLimitMs: number;
@@ -141,6 +144,23 @@ async function collectFailures(page: Page, rec: Recorder, cursor: Cursor): Promi
     if (f.failure !== null) rec.add({ ...cursor, scene: f.scene }, "scene-failure", `[${f.role}] ${f.failure}`);
     else rec.add({ ...cursor, scene: f.scene }, "missing-component", `[${f.role}] component "${f.missing}" is not registered`);
   }
+  // Term markup "(*...*)" must render as italics (<Rich>), never as raw text.
+  const raw = await page.evaluate(() => {
+    const out: string[] = [];
+    for (const root of Array.from(document.querySelectorAll("[data-scene-id]"))) {
+      const text = (root as HTMLElement).innerText ?? "";
+      const m = /\(\*|\*\)/.exec(text);
+      if (m) out.push(`${root.getAttribute("data-scene-id")}: ...${text.slice(Math.max(0, m.index - 40), m.index + 30).replace(/\s+/g, " ")}...`);
+    }
+    return out;
+  });
+  for (const r of new Set(raw)) rec.add(cursor, "locale", `raw term markup on screen: ${r}`);
+}
+
+/** The view's root element must carry the requested language. */
+async function checkLang(page: Page, rec: Recorder, cursor: Cursor, locale: Locale): Promise<void> {
+  const ok = await page.evaluate((l) => document.querySelector(`[lang="${l}"]`) !== null || document.documentElement.lang === l, locale);
+  if (!ok) rec.add(cursor, "locale", `no element in lang="${locale}": the view did not open in the requested language`);
 }
 
 /**
@@ -269,8 +289,10 @@ async function newPage(browser: Browser, rec: Recorder, opts: CheckOptions, view
   };
 }
 
+/** A view URL; talk views (those given an edition, and the projector) also get `lang`. */
 function url(opts: CheckOptions, path: string, params: Record<string, string> = {}): string {
   const u = new URL(path, opts.baseUrl);
+  if ("edition" in params || path === "/projector") u.searchParams.set("lang", opts.locale);
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
   return u.href;
 }
@@ -297,6 +319,7 @@ export async function walkPresent(browser: Browser, rec: Recorder, opts: CheckOp
       return 0;
     }
     await collectFailures(page, rec, w.cursor);
+    await checkLang(page, rec, w.cursor, opts.locale);
     // N hides the rehearsal HUD so screenshots show the stage as the audience sees it.
     if (opts.shotsDir) await page.keyboard.press("n");
     for (let i = 0; i < scenes.length; i++) {
@@ -431,6 +454,7 @@ export async function checkViews(browser: Browser, rec: Recorder, opts: CheckOpt
     try {
       await page.goto(url(opts, path, path === "/" || path === "/glossary" ? {} : { edition: opts.edition }));
       await check();
+      if (path === "/handout" || path === "/overview") await checkLang(page, rec, cursor, opts.locale);
       await page.waitForTimeout(opts.settleMs);
       await collectFailures(page, rec, cursor);
     } catch (err) {

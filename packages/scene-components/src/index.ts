@@ -1,5 +1,6 @@
 export * from "./contract.ts";
 export { EvidenceBadge, evidenceLabel } from "./primitives/EvidenceBadge.tsx";
+export { Rich, RichTspans } from "./primitives/Rich.tsx";
 export { SourceLabels } from "./primitives/SourceLabel.tsx";
 export { shortSourceLabel } from "./primitives/sourceLabel.ts";
 export { Stage } from "./renderer/Stage.tsx";

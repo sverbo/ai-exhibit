@@ -1,5 +1,5 @@
 import type { EmbeddingSpace } from "@ai-exhibit/ml-runtime/embeddings";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { type KeyboardEvent, useMemo } from "react";
 import { clusterColor } from "./data.ts";
 import { estimateWidth, type LabelRequest, placeLabels } from "./labels.ts";
@@ -166,7 +166,7 @@ export function MapView(props: MapViewProps) {
         const [x, y] = px(coords[m]!);
         // A group whose centre is off screen is not named at the edge.
         if (!inView(x, y)) return;
-        head.push({ key: `c${c}`, text: space.json.clusters[c]!.label[locale], x, y: y - 30, size: 34, priority: 4000, centered: true });
+        head.push({ key: `c${c}`, text: tr(space.json.clusters[c]!.label, locale), x, y: y - 30, size: 34, priority: 4000, centered: true });
       });
     }
     // Highlighted words and the demo translation pairs come next, before any group noise.

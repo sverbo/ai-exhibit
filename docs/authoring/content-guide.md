@@ -1,7 +1,7 @@
 # Content guide
 
-How to write or adapt scenes, add an edition, and add a scene component. The
-talk as one story: [`docs/narrative.md`](../narrative.md). How the app works:
+How to write or adapt scenes, translate them, add an edition or a language,
+and add a scene component. The talk as one story: [`docs/narrative.md`](../narrative.md). How the app works:
 [`docs/architecture.md`](../architecture.md).
 
 ## Where content lives
@@ -10,7 +10,10 @@ talk as one story: [`docs/narrative.md`](../narrative.md). How the app works:
 | --- | --- |
 | `presentations/canonical/src/scenes/0X-*.ts` | One array of `SceneDefinition` per chapter, in narrative order |
 | `presentations/canonical/src/chapters.ts` | Chapter titles and one-line summaries |
-| `presentations/canonical/src/editions.ts` | The editions (one today: `en`) |
+| `presentations/canonical/src/editions.ts` | Editions: cuts of the talk, independent of language |
+| `packages/presentation-core/src/locales.ts` | `LOCALES`, the one list of languages, and the typography rules |
+| `presentations/canonical/locales/<lang>.json` | One translation catalog per language (scene texts and component copy) |
+| `content/glossary/` | The audience's phone glossary and the term translations |
 | `presentations/canonical/src/artifacts.ts` | Manifest of the bundled data (embedding map, recordings) that scenes refer to |
 | `content/sources/*.ts` | Source registry, one file per area |
 | `content/assets/` | Bundled assets: `embeddings/`, `recordings/`, `scenarios/`, `then-and-now/`, `media/` |
@@ -179,27 +182,104 @@ URL; run it before each talk.
 ## `pnpm verify:content`
 
 Checks, as errors: scene ID format and chapter prefix, unknown chapter, missing
-locale in any `L10n`, long dashes in any string, unknown source IDs (scene and
+text in an offered locale (scenes, chapters),
+missing recordings or translations of recorded answers in an offered locale,
+long dashes in any string, unknown source IDs (scene and
 inside `visual`), unknown artifact IDs, runtime class B or C without fallback,
 implausible duration, evidence without sources or TODO in chapters 04/06/07/08/10,
 duplicate scene or source IDs, edition include/exclude naming unknown scenes,
 edition durations outside target. As warnings: unregistered component,
-`placeholder` layout, verified source without `retrieved`, source without URL.
-`--strict` fails on warnings too.
+`placeholder` layout, verified source without `retrieved`, source without URL,
+and per locale: text identical to English, typography (French: spaces before
+`? ! : ; %`, « »), term glosses that differ from the glossary. A table counts
+these per locale; a draft locale (in `LOCALES`, not offered) is only counted
+unless asked for with `--locale <code>`. `--strict` fails on warnings too.
 
 It does not check that `steps` matches what a component expects: use the table
 above and `/lab`.
 
+## Languages
+
+The language is a launch parameter, not an edition (spec:
+[`2026-10-03-locales.md`](../specs/2026-10-03-locales.md)): `?lang=fr` on any
+view, or the picker on the launcher. It lives in the session, so every screen
+shows the same language.
+
+**Slides are written once, in English.** Scene definitions and component copy
+carry English only (`{ en: "..." }`). Each other language is one file,
+`presentations/canonical/locales/<lang>.json`, with one entry per text:
+
+```json
+"02-tokens/visual.props.items.3": { "source": "<the English it translates>", "text": "<translation>" },
+"copy:Stop": { "source": "Stop", "text": "Arrêter" }
+```
+
+Scene texts are keyed by scene ID and path; component copy (the `{ en }`
+objects and `l()` calls under `packages/scene-components/src`) by its English
+text. At load, `tr(value, locale)` reads the catalog of the session's
+language; a missing entry shows the English. A component text that needs a
+different translation in one place keeps it inline (`{ en: "Stop", fr: "Stop" }`):
+an inline value wins over the catalog.
+
+- **Keep catalogs in sync:** `pnpm locales:extract` adds an empty entry for
+  every new text and never touches existing translations. `pnpm verify:content`
+  then reports, per language, entries that are **missing**, **outdated** (the
+  English changed since it was translated: retranslate, then copy the new
+  English into `source`) or **stale** (the text is gone: `pnpm locales:extract --prune`).
+  Missing or outdated text is an error in a language the talk offers.
+- **Read with `tr(value, locale)`** for display (fallback plus the language's
+  typography), `pick(value, locale)` for text sent to a model or used as a
+  recording key, `own(value, locale)` for an optional extra with no fallback.
+  Never `value[locale]`: a test scans the sources for it.
+- **Typography** is applied by `tr`: write a plain space before `? ! : ; %` and
+  inside `« »` in French; it becomes a no-break space on screen.
+- **Technical terms** stay in English and, on their first prominent use on a
+  slide, are followed by the translation in italics, written
+  `deep learning (*apprentissage profond*)`. Use the translations in
+  `content/glossary/glossary.ts` (`translation`); `verify:content` warns when a
+  gloss differs. Components render the markup with `<Rich text>` (`RichTspans`
+  in SVG, `plainText()` for attributes); a render test and `pnpm rehearse` fail
+  on raw `(*` on screen. Terms with an established word in the language (IA,
+  centre de données, entraînement) are simply translated.
+- **Live examples** (prompts, chat questions, tokenizer examples) are
+  translated like any text, as natural input a person would type, without
+  markup. Simulation replays real recordings per language
+  (`content/assets/recordings/`, one file per kind, entries per locale).
+  Outputs that cannot be recorded in a language (GPT-2's answers) stay
+  verbatim, with a translation shown in italics and labelled as such
+  (`content/assets/then-and-now/`). Never write a model output by hand.
+- **Per-language data**, not text: the classifier datasets
+  (`textlab/data/`), the embedding vocabulary, the model family per language
+  (`language/data.ts`) and the scenarios and then-and-now questions under
+  `content/assets/` keep one value per locale in code.
+
+### Adding a language
+
+1. Add the code to `LOCALES` and its line to `LOCALE_INFO` in
+   `packages/presentation-core/src/locales.ts` (and typography rules there if
+   the language has them). `pnpm typecheck` lists the per-language data that
+   needs a decision (see above).
+2. `pnpm locales:extract --lang <code>`: creates `presentations/canonical/locales/<code>.json`
+   with every slide text to translate, and registers it.
+3. Translate the `text` of every entry (by hand or with Claude), keeping
+   `source` as is. `pnpm verify:content --locale <code>` lists what is left.
+4. Record the live examples in that language (needs `HF_TOKEN` in `.env`):
+   `pnpm tsx scripts/prepare/record-cloud.ts --lang <code> --missing` and
+   `pnpm tsx scripts/prepare/record-tokenizations.ts --missing`; add
+   translations of GPT-2's answers in `content/assets/then-and-now/`.
+5. Offer it: add the code to `locales` in `presentations/canonical/src/index.ts`.
+   From then on, a missing or outdated text in that language is an error.
+6. `pnpm test`, `pnpm verify:content`, `pnpm rehearse --lang <code>`.
+
 ## Adding an edition
 
-An edition is a locale, a cut and optional explicit lists, in
+An edition is a cut and optional explicit lists, in any language, in
 `presentations/canonical/src/editions.ts`:
 
 ```ts
 {
-  id: "en-school",
-  locale: "en",
-  title: { fr: "Édition scolaire, anglais (50 min)", en: "School edition (50 min)" },
+  id: "school",
+  title: { fr: "Édition scolaire (50 min)", en: "School edition (50 min)" },
   targetMinutes: [45, 55],
   cut: "short",
   include: ["02-embedding-search"],   // added back on top of the cut
@@ -208,10 +288,7 @@ An edition is a locale, a cut and optional explicit lists, in
 ```
 
 Then `pnpm verify:content` (duration and IDs) and a pass through
-`/overview?edition=en-school`. `pnpm rehearse` picks it up automatically.
-
-A new language needs a new `Locale` in `presentation-core` and the text in every
-`L10n`: a larger change than an edition.
+`/overview?edition=school`. `pnpm rehearse` covers it automatically.
 
 ## Adding a scene component
 
@@ -247,7 +324,10 @@ Rules:
 6. **Style.** Draw on the 1920x1080 stage in stage pixels, use CSS modules and the
    tokens in `theme/tokens.css` (`--color-*`, `--font-*`, `--text-*`, `--space-*`).
    Respect `ctx.reducedMotion`. Never carry meaning by color alone.
-7. **Strings.** On-screen copy is `L10n`, usually in the area's `copy.ts`.
+7. **Strings.** On-screen copy is English `{ en: "..." }` objects, usually in
+   the area's `copy.ts`, read with `tr(value, ctx.locale)` and rendered with
+   `<Rich text>` wherever it may carry term markup; then `pnpm locales:extract`
+   adds them to the catalogs. Numbers and dates use `intlLocale(locale)`.
 
 Register it in the area's `register.ts` (a new area also needs a line in
 `src/registerAll.ts`):

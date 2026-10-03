@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 
 /**
  * How the text scenes read a sentence: lower case, split into words, plural
@@ -56,7 +56,7 @@ export function tokenize(text: string, locale: Locale): Token[] {
       word: foldWord(lower),
       start: m.index!,
       end: m.index! + surface.length,
-      stop: STOPWORDS[locale].has(lower),
+      stop: tr(STOPWORDS, locale).has(lower),
     });
   }
   return out;

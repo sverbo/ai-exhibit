@@ -1,3 +1,4 @@
+import { tr } from "@ai-exhibit/presentation-core";
 import { useEffect, useMemo, useRef } from "react";
 import type { SceneComponentProps } from "../../contract.ts";
 import { EvidenceBadge } from "../../primitives/EvidenceBadge.tsx";
@@ -39,47 +40,47 @@ export interface GoalVsOutcomeState {
 const TICKS_PER_SECOND = 7;
 
 const TEXT = {
-  heading: l("Ce qu'on mesure, ce qu'on voulait", "What we measure, what we wanted"),
+  heading: { en: "What we measure, what we wanted" },
   steps: [
-    l("Un robot de ménage. On le récompense pour chaque saleté ramassée.", "A cleaning robot. We reward it for every piece of dirt it picks up."),
-    l("Ce qu'on imaginait : il ramasse tout et vide à la poubelle.", "What we imagined: it picks everything up and empties it into the bin."),
-    l("Ce que l'optimisation trouve : ramasser, reposer, ramasser encore.", "What optimization finds: pick up, drop, pick up again."),
-    l("On corrige la consigne. L'optimisation trouve une autre faille.", "We patch the objective. Optimization finds another loophole."),
+    { en: "A cleaning robot. We reward it for every piece of dirt it picks up." },
+    { en: "What we imagined: it picks everything up and empties it into the bin." },
+    { en: "What optimization finds: pick up, drop, pick up again." },
+    { en: "We patch the objective. Optimization finds another loophole." },
   ],
-  disclosure: l("Jouet simplifié, construit pour l'exposé. Pas un incident réel.", "A simplified toy built for this talk. Not a real incident."),
-  objective: l("Ce qu'on récompense", "What we reward"),
-  intent: l("Ce qu'on voulait vraiment", "What we actually wanted"),
-  intentText: l("Une pièce propre.", "A clean room."),
+  disclosure: { en: "A simplified toy built for this talk. Not a real incident." },
+  objective: { en: "What we reward" },
+  intent: { en: "What we actually wanted" },
+  intentText: { en: "A clean room." },
   objectives: {
-    collect: l("+1 point par saleté ramassée", "+1 point per piece of dirt picked up"),
-    unseen: l("+1 point par instant où la caméra ne voit aucune saleté", "+1 point for every moment the camera sees no dirt"),
+    collect: { en: "+1 point per piece of dirt picked up" },
+    unseen: { en: "+1 point for every moment the camera sees no dirt" },
   } satisfies Record<ObjectiveId, L10n>,
-  score: l("Score", "Score"),
-  clean: l("Saleté vraiment partie", "Dirt actually gone"),
-  ranking: l("L'optimiseur compare les stratégies et garde la meilleure note", "The optimizer compares strategies and keeps the top score"),
+  score: { en: "Score" },
+  clean: { en: "Dirt actually gone" },
+  ranking: { en: "The optimizer compares strategies and keeps the top score" },
   strategies: {
-    honest: l("Ramasser et vider à la poubelle", "Pick up and empty into the bin"),
-    loop: l("Ramasser, reposer, ramasser…", "Pick up, drop, pick up again…"),
-    rug: l("Tout cacher sous le tapis", "Hide it all under the rug"),
-    camera: l("Se garer devant la caméra", "Park in front of the camera"),
-    idle: l("Ne rien faire", "Do nothing"),
+    honest: { en: "Pick up and empty into the bin" },
+    loop: { en: "Pick up, drop, pick up again…" },
+    rug: { en: "Hide it all under the rug" },
+    camera: { en: "Park in front of the camera" },
+    idle: { en: "Do nothing" },
   } satisfies Record<StrategyId, L10n>,
   chosen: l("choisie", "chosen"),
-  intended: l("voulue", "intended"),
-  replay: l("Rejouer", "Replay"),
-  pause: l("Pause", "Pause"),
-  play: l("Lecture", "Play"),
-  rug: l("tapis", "rug"),
-  bin: l("poubelle", "bin"),
+  intended: { en: "intended" },
+  replay: { en: "Replay" },
+  pause: { en: "Pause" },
+  play: { en: "Play" },
+  rug: { en: "rug" },
+  bin: { en: "bin" },
   simple: {
-    heading: l("Ce qu'on dit, ce qu'on veut", "What we say, what we mean"),
+    heading: { en: "What we say, what we mean" },
     beats: [
-      { icon: "goal", text: l("On écrit la consigne : « récompense pour chaque saleté ramassée ».", "We write the goal: “reward for every piece of dirt picked up”.") },
-      { icon: "intent", text: l("Ce qu'on voulait : une pièce propre.", "What we meant: a clean room.") },
-      { icon: "shortcut", text: l("Ce qu'il trouve : ramasser, reposer, ramasser encore.", "What it finds: pick up, drop, pick up again.") },
-      { icon: "shortcut", text: l("On corrige : « aucune saleté visible ». Il se met devant la caméra.", "We patch it: “no visible dirt”. It parks in front of the camera.") },
+      { icon: "goal", text: { en: "We write the goal: “reward for every piece of dirt picked up”." } },
+      { icon: "intent", text: { en: "What we meant: a clean room." } },
+      { icon: "shortcut", text: { en: "What it finds: pick up, drop, pick up again." } },
+      { icon: "shortcut", text: { en: "We patch it: “no visible dirt”. It parks in front of the camera." } },
     ] as { icon: "goal" | "intent" | "shortcut"; text: L10n }[],
-    punchline: l("Il a fait exactement ce qu'on a dit, pas ce qu'on voulait.", "It did exactly what we said, not what we meant."),
+    punchline: { en: "It did exactly what we said, not what we meant." },
   },
 };
 
@@ -96,7 +97,7 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
   const isController = role === "controller";
   const simple = props.simple === true;
   const step = Math.max(0, Math.min(3, revealStep));
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   // Entering the scene on a replay step starts the replay at once.
   const [state, setState] = useSceneState<GoalVsOutcomeState>(ctx, () => ({
     tick: reducedMotion && step >= 1 ? HORIZON : 0,
@@ -272,7 +273,7 @@ function Room({
 }) {
   const [rc, rr] = frame.robot;
   const camX = (CAMERA_CELL[0] + 0.5) * CELL;
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   return (
     <svg className={styles.room} viewBox={`-6 ${-PAD} ${W + 12} ${H + PAD + 6}`} role="img">
       <defs>

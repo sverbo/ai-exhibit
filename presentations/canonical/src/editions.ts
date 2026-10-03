@@ -1,11 +1,14 @@
 import type { EditionDefinition } from "@ai-exhibit/presentation-core";
 
-/** The talk has one edition: English, full. French strings stay in the scenes for later. */
+/**
+ * Editions are cuts of the talk, independent of its language (chosen at
+ * launch, see docs/specs/2026-10-03-locales.md). Old links such as
+ * `?edition=en` or `?edition=fr-full` still open this edition in that language.
+ */
 export const editions: EditionDefinition[] = [
   {
-    id: "en",
-    locale: "en",
-    title: { en: "English, full (about 90 min)", fr: "Anglais, complète (environ 90 min)" },
+    id: "full",
+    title: { en: "Full talk (about 90 min)" },
     targetMinutes: [75, 95],
     cut: "full",
   },

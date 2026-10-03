@@ -1,6 +1,7 @@
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../../contract.ts";
 import layout from "../../layouts/layouts.module.css";
+import { Rich } from "../../primitives/Rich.tsx";
 import styles from "./SectionDivider.module.css";
 
 export interface SectionDividerProps {
@@ -10,7 +11,7 @@ export interface SectionDividerProps {
   current: number;
 }
 
-const PART: Record<Locale, string> = { en: "Part", fr: "Partie" };
+const PART: L10n = { en: "Part" };
 
 /**
  * Opens a part of the talk: its number and title, large, over the agenda with
@@ -20,22 +21,24 @@ const PART: Record<Locale, string> = { en: "Part", fr: "Partie" };
 export function SectionDivider({ props, ctx }: SceneComponentProps<SectionDividerProps>) {
   const items = props.items ?? [];
   const current = Math.max(0, Math.min(items.length - 1, props.current ?? 0));
-  const title = items[current]?.[ctx.locale] ?? "";
+  const title = items[current] ? tr(items[current], ctx.locale) : "";
 
   return (
     <div className={`${layout.frame} ${styles.divider}`}>
       <div className={styles.head}>
         <p className={styles.kicker}>
-          {PART[ctx.locale]} {current + 1}
+          {tr(PART, ctx.locale)} {current + 1}
           <span className={styles.of}> / {items.length}</span>
         </p>
-        <h2 className={styles.title}>{title}</h2>
+        <h2 className={styles.title}>
+          <Rich text={title} />
+        </h2>
       </div>
       <ol className={styles.plan}>
         {items.map((item, i) => (
           <li key={i} className={i === current ? styles.current : i < current ? styles.done : styles.next}>
             <span className={styles.num}>{i + 1}</span>
-            {item[ctx.locale]}
+            <Rich text={tr(item, ctx.locale)} />
           </li>
         ))}
       </ol>

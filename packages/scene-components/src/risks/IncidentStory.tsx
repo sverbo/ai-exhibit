@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
 import { SourceLabels } from "../primitives/SourceLabel.tsx";
 import { incidentBeats, incidentSteps, type IncidentVariant } from "./incident.ts";
@@ -14,8 +15,8 @@ export interface IncidentStoryProps {
 }
 
 const COPY = {
-  heading: { en: "A real case, summer 2026", fr: "Un cas réel, été 2026" },
-  strip: { en: "The story so far", fr: "L'histoire jusqu'ici" },
+  heading: { en: "A real case, summer 2026" },
+  strip: { en: "The story so far" },
 } as const;
 
 /** The beat shown at a reveal step; preview shows the last beat with the whole strip. */
@@ -42,7 +43,7 @@ export function IncidentStory({ props, ctx }: SceneComponentProps<IncidentStoryP
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`} data-beat={beat.id} data-variant={props.variant ?? "full"}>
       <header className={styles.head}>
-        <h2 className={styles.heading}>{(props.heading ?? COPY.heading)[locale]}</h2>
+        <h2 className={styles.heading}><Rich text={tr(props.heading ?? COPY.heading, locale)} /></h2>
         <EvidenceBadge level="observed" locale={locale} size="sm" />
       </header>
 
@@ -51,12 +52,14 @@ export function IncidentStory({ props, ctx }: SceneComponentProps<IncidentStoryP
           <Picture id={beat.picture} />
         </div>
         <div className={styles.text}>
-          <p className={styles.line}>{beat.line[locale]}</p>
+          <p className={styles.line}>
+            <Rich text={tr(beat.line, locale)} />
+          </p>
           <SourceLabels ids={beat.sourceIds} getSource={ctx.getSource} className={styles.sources} />
         </div>
       </div>
 
-      <ol className={styles.strip} aria-label={COPY.strip[locale]} style={{ "--frames": beats.length } as CSSProperties}>
+      <ol className={styles.strip} aria-label={tr(COPY.strip, locale)} style={{ "--frames": beats.length } as CSSProperties}>
         {beats.map((b, i) => {
           const state = i < current ? "past" : i === current ? "current" : "future";
           return (

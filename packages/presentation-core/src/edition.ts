@@ -1,11 +1,5 @@
-import type {
-  EditionDefinition,
-  L10n,
-  Locale,
-  PresentationDefinition,
-  ResolvedEdition,
-  SceneDefinition,
-} from "./types.ts";
+import { isLocale, LOCALES, type Locale } from "./locales.ts";
+import type { EditionDefinition, PresentationDefinition, ResolvedEdition, SceneDefinition } from "./types.ts";
 
 export function resolveEdition(
   presentation: PresentationDefinition,
@@ -45,6 +39,24 @@ export function totalDurationSec(scenes: SceneDefinition[]): number {
   return scenes.reduce((sum, s) => sum + s.durationSec, 0);
 }
 
-export function t(text: L10n, locale: Locale): string {
-  return text[locale];
+/** The locale a talk opens in when nothing asks for another: its first enabled locale. */
+export function defaultLocale(presentation: PresentationDefinition): Locale {
+  return presentation.locales[0] ?? LOCALES[0];
+}
+
+/**
+ * Reads an `?edition=` value, including links from before the language became
+ * a launch parameter: "fr", "en-full" or "fr-short" name a locale, then
+ * optionally an edition. An unknown edition part means the default edition.
+ */
+export function parseEditionParam(
+  presentation: PresentationDefinition,
+  value: string | null | undefined,
+): { editionId: string | null; locale: Locale | null } {
+  if (!value) return { editionId: null, locale: null };
+  if (presentation.editions.some((e) => e.id === value)) return { editionId: value, locale: null };
+  const [head, ...rest] = value.split("-");
+  if (!isLocale(head)) return { editionId: null, locale: null };
+  const tail = rest.join("-");
+  return { editionId: presentation.editions.some((e) => e.id === tail) ? tail : null, locale: head };
 }

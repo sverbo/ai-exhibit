@@ -11,6 +11,12 @@
   gap: 16px;
   margin-bottom: 20px;
 }
+.pickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
 .back {
   font-family: var(--font-mono);
   font-size: var(--ui-text-sm);

@@ -1,5 +1,5 @@
 import type { EmbeddingSpace } from "@ai-exhibit/ml-runtime/embeddings";
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { intlLocale, plainText, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TRAINING, tr } from "./copy.ts";
 import { clusterColor } from "./data.ts";
@@ -11,7 +11,7 @@ import styles from "./Training.module.css";
 
 const MARGIN = 40;
 /** The word shown as a list of numbers (in the audience's language); its translation is highlighted at step 2. */
-export const SHOWCASE_WORD: Record<Locale, string> = { en: "cat", fr: "chat" };
+export const SHOWCASE_WORD: L10n = { en: "cat" };
 /** Groups singled out at step 2. */
 export const FOCUS_GROUPS = ["animals", "emotions", "countries", "capitals"];
 /** Total length of the illustrative training animation. */
@@ -53,7 +53,7 @@ export function randomVector(length: number): number[] {
 
 /** Big moves first, then small refinements: the shape of a learning curve. */
 function formatVectorValue(x: number, locale: Locale): string {
-  return x.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+  return x.toLocaleString(intlLocale(locale), { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 }
 
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
@@ -112,7 +112,7 @@ export function TrainingView({ space, locale, width, height, step, replay, still
     const f = fitBox(coords, width, height, MARGIN);
     return coords.map((p) => [f.cx + p[0]! * f.sx, f.cy - p[1]! * f.sy] as [number, number]);
   }, [space, width, height]);
-  const showcase = useMemo(() => space.items.findIndex((it) => it.text === SHOWCASE_WORD[locale]), [space, locale]);
+  const showcase = useMemo(() => space.items.findIndex((it) => it.text === tr(SHOWCASE_WORD, locale)), [space, locale]);
   const partner = showcase >= 0 ? space.items[showcase]!.pair : -1;
   const focus = useMemo(
     () => FOCUS_GROUPS.map((id) => space.json.clusters.findIndex((c) => c.id === id)).filter((i) => i >= 0),
@@ -247,7 +247,7 @@ export function TrainingView({ space, locale, width, height, step, replay, still
           overlay={step >= 2 ? pairOverlay : undefined}
         />
       ) : (
-        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={styles.svg} role="img" aria-label={tr(TRAINING.captions[0]!, locale)}>
+        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={styles.svg} role="img" aria-label={plainText(tr(TRAINING.captions[0]!, locale))}>
           {space.items.map((it) => {
             const [x, y] = start[it.index]!;
             const c = clusterColor(it.cluster, nClusters);
@@ -268,7 +268,7 @@ export function TrainingView({ space, locale, width, height, step, replay, still
           {showcase >= 0 && (
             <g ref={showcaseLabel} transform={`translate(${start[showcase]![0]},${start[showcase]![1]})`} className={styles.showcaseLabel}>
               <text x={14} y={0}>
-                {SHOWCASE_WORD[locale]}
+                {tr(SHOWCASE_WORD, locale)}
               </text>
             </g>
           )}
@@ -280,7 +280,7 @@ export function TrainingView({ space, locale, width, height, step, replay, still
           style={{ left: CARD_RECT.x0, top: CARD_RECT.y0, width: CARD_RECT.x1 - CARD_RECT.x0 }}
           aria-live="polite"
         >
-          <p className={styles.vectorWord}>{SHOWCASE_WORD[locale]}</p>
+          <p className={styles.vectorWord}>{tr(SHOWCASE_WORD, locale)}</p>
           <p className={styles.vectorNumbers}>
             [{vector.map((x) => formatVectorValue(x, locale)).join(locale === "fr" ? " ; " : ", ")} …]
           </p>

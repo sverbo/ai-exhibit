@@ -30,18 +30,17 @@ export const EXAMPLES: TrainingExample[] = [
   {
     text: {
       en: "Every morning the children take the ___ to school.",
-      fr: "Chaque matin, les enfants prennent le ___ pour aller à l'école.",
     },
-    answer: { en: "bus", fr: "bus" },
+    answer: { en: "bus" },
   },
   {
-    text: { en: "She opened the ___ and let the cat in.", fr: "Elle a ouvert la ___ et laissé entrer le chat." },
-    answer: { en: "door", fr: "porte" },
+    text: { en: "She opened the ___ and let the cat in." },
+    answer: { en: "door" },
   },
   {
     // Models also read huge amounts of code: here, the kind of structured line an agent writes.
-    text: { en: '{"city": "Paris", "days": 3___', fr: '{"city": "Paris", "days": 3___' },
-    answer: { en: "}", fr: "}" },
+    text: { en: '{"city": "Paris", "days": 3___' },
+    answer: { en: "}" },
     code: true,
   },
 ];
@@ -51,11 +50,11 @@ export const EXAMPLES: TrainingExample[] = [
  * 1 in the vocabulary size. Multipliers of that uniform chance (illustrative).
  */
 export const RANDOM_GUESSES: { token: L10n; times: number }[] = [
-  { token: { en: "Tuesday", fr: "mardi" }, times: 1.6 },
-  { token: { en: "ology", fr: "isme" }, times: 1.45 },
+  { token: { en: "Tuesday" }, times: 1.6 },
+  { token: { en: "ology" }, times: 1.45 },
   { token: { en: "{", fr: "{" }, times: 1.3 },
-  { token: { en: "zebra", fr: "zèbre" }, times: 1.2 },
-  { token: { en: "7", fr: "7" }, times: 1.12 },
+  { token: { en: "zebra" }, times: 1.2 },
+  { token: { en: "7" }, times: 1.12 },
 ];
 
 /** One nudge barely moves it: the right token's chance after one update, as a multiple of before. */
@@ -72,22 +71,22 @@ export function randomChance(vocabSize: number): number {
  * token the model is asked for.
  */
 export const STREAM: { text: L10n; code?: boolean }[] = [
-  { text: { en: "Free delivery on all orders over $50.", fr: "Livraison gratuite dès 50 euros d'achat." } },
-  { text: { en: "She folded the letter twice and slipped it under the door.", fr: "Elle plia la lettre en deux et la glissa sous la porte." } },
-  { text: { en: "for item in cart: total += item.price", fr: "for item in cart: total += item.price" }, code: true },
-  { text: { en: "Preheat the oven to 180 degrees.", fr: "Préchauffez le four à 180 degrés." } },
-  { text: { en: "The council will vote on the new bridge next week.", fr: "Le conseil votera sur le nouveau pont la semaine prochaine." } },
-  { text: { en: 'print("Hello, world")', fr: 'print("Bonjour, le monde")' }, code: true },
-  { text: { en: "The old dog slept by the fire all winter.", fr: "Le vieux chien a dormi près du feu tout l'hiver." } },
-  { text: { en: "Click here to reset your password.", fr: "Cliquez ici pour réinitialiser votre mot de passe." } },
-  { text: { en: '{"name": "Ada", "age": 36}', fr: '{"name": "Ada", "age": 36}' }, code: true },
-  { text: { en: "Has anyone tried this recipe with oat milk?", fr: "Quelqu'un a testé cette recette avec du lait d'avoine ?" } },
-  { text: { en: "The river rose overnight and flooded the lower fields.", fr: "La rivière est montée dans la nuit et a inondé les champs." } },
-  { text: { en: "if (user.isLoggedIn) { showMenu(); }", fr: "if (user.isLoggedIn) { showMenu(); }" }, code: true },
-  { text: { en: "Store in a cool, dry place.", fr: "À conserver dans un endroit frais et sec." } },
-  { text: { en: "He promised to call as soon as the train arrived.", fr: "Il promit d'appeler dès l'arrivée du train." } },
-  { text: { en: "SELECT name FROM users WHERE age > 30;", fr: "SELECT name FROM users WHERE age > 30;" }, code: true },
-  { text: { en: "Opening hours: Monday to Friday, 9 to 5.", fr: "Horaires : du lundi au vendredi, de 9 h à 17 h." } },
+  { text: { en: "Free delivery on all orders over $50." } },
+  { text: { en: "She folded the letter twice and slipped it under the door." } },
+  { text: { en: "for item in cart: total += item.price" }, code: true },
+  { text: { en: "Preheat the oven to 180 degrees." } },
+  { text: { en: "The council will vote on the new bridge next week." } },
+  { text: { en: 'print("Hello, world")' }, code: true },
+  { text: { en: "The old dog slept by the fire all winter." } },
+  { text: { en: "Click here to reset your password." } },
+  { text: { en: '{"name": "Ada", "age": 36}' }, code: true },
+  { text: { en: "Has anyone tried this recipe with oat milk?" } },
+  { text: { en: "The river rose overnight and flooded the lower fields." } },
+  { text: { en: "if (user.isLoggedIn) { showMenu(); }" }, code: true },
+  { text: { en: "Store in a cool, dry place." } },
+  { text: { en: "He promised to call as soon as the train arrived." } },
+  { text: { en: "SELECT name FROM users WHERE age > 30;" }, code: true },
+  { text: { en: "Opening hours: Monday to Friday, 9 to 5." } },
 ];
 
 /** Split a stream line into what the model sees and the next token it must predict (the last word). */

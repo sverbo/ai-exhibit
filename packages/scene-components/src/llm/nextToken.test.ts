@@ -1,3 +1,4 @@
+import { pick } from "@ai-exhibit/presentation-core";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { NextTokenRecordingFile } from "@ai-exhibit/ml-runtime/lm";
@@ -16,7 +17,7 @@ const recording = JSON.parse(
 describe("NextTokenVsClassifier data", () => {
   it("step 0 is a real, correct, not certain verdict of the sports network on a held-out sentence", () => {
     for (const locale of ["en", "fr"] as const) {
-      const ex = CLASSIFIER_SENTENCE[locale];
+      const ex = pick(CLASSIFIER_SENTENCE, locale);
       expect(netTestSentences(locale).some((s) => s.text === ex.text && s.label === ex.label)).toBe(true);
       const bars = classifierBars(locale);
       expect(bars[0]!.sport).toBe(ex.label);
@@ -41,7 +42,7 @@ describe("NextTokenVsClassifier data", () => {
     for (const locale of ["en", "fr"] as const) {
       const s = sliceFor(locale);
       expect(s.locale).toBe(locale);
-      expect(s.text).toBe(NEXT_TOKEN_SEQUENCE[locale]);
+      expect(s.text).toBe(pick(NEXT_TOKEN_SEQUENCE, locale));
       expect(s.steps).toHaveLength(SEQUENCE_WORDS + 1);
     }
   });

@@ -1,3 +1,4 @@
+import { pick } from "@ai-exhibit/presentation-core";
 import { describe, expect, it } from "vitest";
 import {
   chanceAt, counterAt, COUNTER_MS, errorOf, EXAMPLES, lineDuration, nextAfter, ONE_NUDGE, progressAt, RANDOM_GUESSES,
@@ -8,10 +9,10 @@ describe("TrainingLoop logic", () => {
   it("every example marks the next word and the model only sees the text before it", () => {
     for (const ex of EXAMPLES) {
       for (const locale of ["en", "fr"] as const) {
-        expect(ex.text[locale]).toContain("___");
-        const { context, rest } = splitAtNext(ex.text[locale]);
+        expect(pick(ex.text, locale)).toContain("___");
+        const { context, rest } = splitAtNext(pick(ex.text, locale));
         expect(context.length).toBeGreaterThan(0);
-        expect(context).not.toContain(ex.answer[locale]);
+        expect(context).not.toContain(pick(ex.answer, locale));
         if (!ex.code) expect(nextAfter(rest).length).toBeGreaterThan(0);
       }
     }
@@ -51,7 +52,7 @@ describe("TrainingLoop logic", () => {
     expect(streamLineAt(5000)).toBeGreaterThan(STREAM.length / 2);
     for (const s of STREAM) {
       for (const locale of ["en", "fr"] as const) {
-        const { context, next } = splitLast(s.text[locale]);
+        const { context, next } = splitLast(pick(s.text, locale));
         expect(context.length).toBeGreaterThan(0);
         expect(next.length).toBeGreaterThan(0);
       }

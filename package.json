@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "verify:content": "tsx scripts/verify/content.ts",
+    "locales:extract": "tsx scripts/locales/extract.ts",
     "verify:sources": "tsx scripts/verify/sources.ts",
     "rehearse": "tsx scripts/verify/rehearse.ts",
     "recordings:build": "tsx scripts/prepare/record-cloud.ts && tsx scripts/prepare/record-tokenizations.ts"

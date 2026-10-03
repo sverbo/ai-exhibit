@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { pick, type Locale } from "@ai-exhibit/presentation-core";
 import { cloneMlp, forward, type Mlp } from "../../learning/ml/mlp.ts";
 import { encode, netTestSentences, TextNetTraining } from "./net.ts";
 import curveEn from "./curve.en.json";
@@ -58,7 +58,7 @@ export function learningBeat(locale: Locale): LearningBeat {
   if (!beat) {
     const tr = new TextNetTraining(locale);
     const before = tr.model;
-    const sentence = tr.data[LEARNING_SENTENCE[locale]]!;
+    const sentence = tr.data[pick(LEARNING_SENTENCE, locale)]!;
     const x = encode(sentence.text, before.vocab, locale);
     const after = gradientStep(before, x, sentence.label === "basketball" ? 1 : 0, LEARNING_RATE);
     const p = (n: Net) => forward(n, x)[2]![0]!;
@@ -84,4 +84,4 @@ export function computeAccuracyCurve(locale: Locale): number[] {
 }
 
 const CURVES: Record<Locale, number[]> = { en: curveEn as number[], fr: curveFr as number[] };
-export const accuracyCurve = (locale: Locale): number[] => CURVES[locale];
+export const accuracyCurve = (locale: Locale): number[] => pick(CURVES, locale);

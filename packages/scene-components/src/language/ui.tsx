@@ -5,8 +5,9 @@
  */
 import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { useState } from "react";
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { plainText, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import type { FallbackWhy, SourceDecision } from "./source.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "./copy.ts";
 import { formatPercent, visibleToken } from "./format.ts";
 import type { NoticeKey } from "./runtime.ts";
@@ -16,7 +17,7 @@ export function cx(...names: (string | false | null | undefined)[]): string {
   return names.filter(Boolean).join(" ");
 }
 
-export const t = (text: L10n, locale: Locale) => text[locale];
+export { tr as t } from "@ai-exhibit/presentation-core";
 
 /** Keys the presentation shell listens to; inputs keep them for themselves. */
 const stopKeys = (e: KeyboardEvent) => {
@@ -37,7 +38,7 @@ export function Frame({
   label?: string;
 }) {
   return (
-    <section className={cx(styles.frame, className)} aria-label={label}>
+    <section className={cx(styles.frame, className)} aria-label={label === undefined ? undefined : plainText(label)}>
       <div className={styles.main}>{children}</div>
       {controls ? (
         <div className={styles.rail} data-keys-local="">
@@ -223,7 +224,7 @@ export function Notice({ reason, locale, extra }: { reason: NoticeKey | null; lo
         <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.4" />
       </svg>
       <span>
-        {reason ? COPY[reason][locale] : null}
+        {reason ? <Rich text={tr(COPY[reason], locale)} /> : null}
         {reason && extra ? " " : null}
         {extra}
       </span>
@@ -233,7 +234,7 @@ export function Notice({ reason, locale, extra }: { reason: NoticeKey | null; lo
 
 /** Small "recorded" tag for the projector, so the audience is never misled. */
 export function RecordedTag({ locale }: { locale: Locale }) {
-  return <span className={styles.recordedTag}>{COPY.fallback[locale]}</span>;
+  return <span className={styles.recordedTag}>{tr(COPY.fallback, locale)}</span>;
 }
 
 /** Token text with its leading space shown as a discreet dot. */
@@ -335,9 +336,9 @@ export function SourceBadge({ decision, model, locale }: { decision: SourceDecis
   const fell = decision.active !== decision.requested;
   return (
     <span className={cx(styles.sourceBadge, styles[`source_${decision.active}`], fell && styles.sourceFell)} role="status">
-      <b>{COPY[SOURCE_LABEL[decision.active]][locale]}</b>
+      <b>{tr(COPY[SOURCE_LABEL[decision.active]], locale)}</b>
       {model ? <span>{model}</span> : null}
-      {decision.why ? <span className={styles.sourceWhy}>{COPY[WHY_LABEL[decision.why]][locale]}</span> : null}
+      {decision.why ? <span className={styles.sourceWhy}>{tr(COPY[WHY_LABEL[decision.why]], locale)}</span> : null}
     </span>
   );
 }

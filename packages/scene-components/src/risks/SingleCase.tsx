@@ -1,5 +1,6 @@
-import type { EvidenceLevel, L10n } from "@ai-exhibit/presentation-core";
+import { tr, type EvidenceLevel, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
 import { Picture, type PictureId } from "./pictures.tsx";
 import styles from "./SingleCase.module.css";
@@ -41,11 +42,15 @@ export function SingleCase({ props, ctx }: SceneComponentProps<SingleCaseProps>)
           {props.date ? <span className={styles.date}>{props.date}</span> : null}
           <EvidenceBadge level={props.evidence} locale={locale} size="sm" />
         </p>
-        <h2 className={styles.title}>{props.title[locale]}</h2>
-        <p className={styles.line}>{props.line[locale]}</p>
+        <h2 className={styles.title}>
+          <Rich text={tr(props.title, locale)} />
+        </h2>
+        <p className={styles.line}>
+          <Rich text={tr(props.line, locale)} />
+        </p>
         {props.outcome ? (
           <p className={`${styles.outcome} ${showOutcome ? styles.shown : styles.hidden}`} aria-hidden={!showOutcome}>
-            {props.outcome[locale]}
+            <Rich text={tr(props.outcome, locale)} />
           </p>
         ) : null}
       </div>

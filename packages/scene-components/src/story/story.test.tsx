@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { L10n, Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
+import { pick, tr, type L10n, type Locale, type SceneDefinition, type SourceRecord } from "@ai-exhibit/presentation-core";
 import { STORY_IMAGES } from "@ai-exhibit/content/assets/media/story/credits.ts";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -25,7 +25,7 @@ const DASHES = /[\u2013\u2014]/;
 const mediaDir = fileURLToPath(new URL("../../../../content/assets/media/story/", import.meta.url));
 
 function l10nValues(value: L10n): string[] {
-  return [value.en, value.fr];
+  return [value.en, pick(value, "fr")];
 }
 
 function expectL10n(value: L10n, where: string) {
@@ -181,7 +181,7 @@ describe("rendering", () => {
       for (const locale of locales)
         for (let step = 0; step <= ENVELOPE_STEPS; step++) {
           const html = render(AIEnvelopes, {}, ctx(role, step, locale));
-          expect(html).toContain(ENVELOPES[0]!.name[locale]);
+          expect(html).toContain(tr(ENVELOPES[0]!.name, locale));
           expect(DASHES.test(html)).toBe(false);
         }
     const hiddenRings = (step: number) =>
@@ -196,7 +196,7 @@ describe("rendering", () => {
         for (let step = 0; step <= timelineSteps(); step++) {
           const html = render(AITimeline, { range: "ai" }, ctx(role, step, locale));
           const expected = role === "preview" ? AI_MILESTONES.at(-1)! : AI_MILESTONES[step]!;
-          expect(html).toContain(expected.title[locale].replace(/'/g, "&#x27;"));
+          expect(html).toContain(tr(expected.title, locale).replace(/'/g, "&#x27;").replace(/\(\*([^*]+)\*\)/g, "(<em>$1</em>)"));
         }
     const focused = render(AITimeline, { range: "ai" }, ctx("display", 5, "en", { focus: 0, atStep: 5 }));
     expect(focused).toContain(AI_MILESTONES[0]!.text.en.slice(0, 20));
@@ -341,13 +341,13 @@ describe("IntelligenceScale", () => {
     expect(LOOP_STEP).toBe(4);
     expect(FIGURES.map((f) => [f.id, f.step])).toEqual([["ant", 0], ["human", 1], ["agi", 2], ["asi", 5]]);
     for (const n of [...LOOP_NODES, LOOP_CAPTION, LOOP_NAME]) expectL10n(n, n.en);
-    expect(LOOP_NAME.fr).toBe("RSI : auto-amélioration récursive");
+    expect(pick(LOOP_NAME, "fr")).toBe("RSI : auto-amélioration récursive");
     for (let i = 1; i < LOOP_GROWTH.length; i++) expect(LOOP_GROWTH[i]!).toBeGreaterThan(LOOP_GROWTH[i - 1]!);
     for (const f of FIGURES) {
       expectL10n(f.name, f.id);
       if (f.sub) expectL10n(f.sub, f.id);
     }
-    expect(CROWD_TRAITS.map((t) => t.fr)).toEqual(["des copies sans limite", "jamais fatiguée, jamais en pause", "niveau expert dans tous les domaines"]);
+    expect(CROWD_TRAITS.map((t) => pick(t, "fr"))).toEqual(["des copies sans limite", "jamais fatiguée, ne dort jamais", "niveau expert dans tous les domaines"]);
     for (const t of CROWD_TRAITS) expectL10n(t, t.en);
   });
 
@@ -384,8 +384,8 @@ describe("IntelligenceScale", () => {
           expect(html).toContain(locale === "fr" ? "pas une mesure" : "not a measurement");
           const s = role === "preview" ? 5 : step;
           if (s === LOOP_STEP) {
-            expect(html).toContain(LOOP_NODES[0]![locale].replace(/'/g, "&#x27;"));
-            expect(html).toContain(LOOP_NAME[locale]);
+            expect(html).toContain(tr(LOOP_NODES[0]!, locale).replace(/'/g, "&#x27;"));
+            expect(html).toContain(tr(LOOP_NAME, locale));
           }
           expect(html.includes('aria-hidden="false"') || s !== CROWD_STEP).toBe(true);
           expect(html).toContain(`data-step="${s}"`);

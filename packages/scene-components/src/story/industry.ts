@@ -37,7 +37,7 @@ const l = (en: string, fr = en): L10n => ({ en, fr });
 export const LAYERS: StackLayer[] = [
   {
     id: "labs",
-    name: { en: "AI labs", fr: "Laboratoires d'IA" },
+    name: { en: "AI labs" },
     actors: [
       { id: "google-deepmind", image: "google-deepmind", label: l("Google DeepMind"), lightAt: 1, weight: 1.4, product: { image: "gemini", name: "Gemini" }, sourceIds: ["sc-wiki-google-deepmind", "st-wiki-gemini"] },
       { id: "openai", image: "openai", label: l("OpenAI"), lightAt: 3, weight: 1.15, product: { image: "chatgpt", name: "ChatGPT" }, sourceIds: ["sc-wiki-openai", "st-time-2025-openai-timeline", "st-wiki-chatgpt"] },
@@ -53,7 +53,7 @@ export const LAYERS: StackLayer[] = [
   },
   {
     id: "cloud",
-    name: { en: "Data centers and cloud", fr: "Centres de données et cloud" },
+    name: { en: "Data centers and cloud" },
     actors: [
       { id: "aws", image: "aws", label: l("Amazon Web Services"), sourceIds: ["sc-synergy-2026-q2-cloud"] },
       { id: "microsoft-azure", image: "microsoft-azure", label: l("Microsoft Azure"), sourceIds: ["sc-synergy-2026-q2-cloud"] },
@@ -65,17 +65,17 @@ export const LAYERS: StackLayer[] = [
   },
   {
     id: "chips",
-    name: { en: "Chip designers", fr: "Concepteurs de puces" },
+    name: { en: "Chip designers" },
     actors: [
       { id: "nvidia", image: "nvidia", label: l("NVIDIA"), lightAt: 10, sourceIds: ["sc-wiki-nvidia", "sc-nvidia-2026-fy-results"] },
       { id: "amd", image: "amd", label: l("AMD"), sourceIds: ["sc-wiki-amd-instinct"] },
-      { id: "google-tpu", image: "google", label: { en: "Google (TPU chips)", fr: "Google (puces TPU)" }, sourceIds: ["sc-google-cloud-tpu"] },
-      { id: "huawei", image: "huawei", label: { en: "Huawei (Ascend chips)", fr: "Huawei (puces Ascend)" }, sourceIds: ["sc-wiki-hisilicon"] },
+      { id: "google-tpu", image: "google", label: { en: "Google (TPU chips)" }, sourceIds: ["sc-google-cloud-tpu"] },
+      { id: "huawei", image: "huawei", label: { en: "Huawei (Ascend chips)" }, sourceIds: ["sc-wiki-hisilicon"] },
     ],
   },
   {
     id: "foundries",
-    name: { en: "Chip factories", fr: "Usines de puces" },
+    name: { en: "Chip factories" },
     actors: [
       { id: "tsmc", image: "tsmc", label: l("TSMC"), lightAt: 11, weight: 0.8, sourceIds: ["sc-tsmc-2025-annual-report", "sc-trendforce-2026-foundry-q2"] },
       { id: "samsung", image: "samsung", label: l("Samsung"), sourceIds: ["sc-samsung-foundry", "sc-trendforce-2026-foundry-q2"] },
@@ -85,7 +85,7 @@ export const LAYERS: StackLayer[] = [
   },
   {
     id: "equipment",
-    name: { en: "Machines that make chips", fr: "Machines qui fabriquent les puces" },
+    name: { en: "Machines that make chips" },
     actors: [
       { id: "asml", image: "asml", label: l("ASML"), lightAt: 12, weight: 0.9, sourceIds: ["sc-asml-about", "sc-asml-2021-euv-only"] },
       { id: "applied-materials", image: "applied-materials", label: l("Applied Materials"), sourceIds: ["sc-wiki-applied-materials"] },
@@ -142,7 +142,6 @@ export const MOVES: PersonMove[] = [
     dx: -72,
     what: {
       en: "Musk is among the founders of OpenAI, a non-profit, in December 2015.",
-      fr: "Musk fait partie des fondateurs d'OpenAI, une organisation à but non lucratif, en décembre 2015.",
     },
     sourceIds: ["st-time-2025-openai-timeline", "st-openai-2015-introducing"],
   },
@@ -153,7 +152,6 @@ export const MOVES: PersonMove[] = [
     dx: 72,
     what: {
       en: "Altman is among the founders of OpenAI in December 2015 and stays (CEO, briefly removed in November 2023).",
-      fr: "Altman fait partie des fondateurs d'OpenAI en décembre 2015 et y reste (PDG, brièvement écarté en novembre 2023).",
     },
     sourceIds: ["st-time-2025-openai-timeline", "st-techcrunch-2023-altman-return"],
   },
@@ -164,7 +162,6 @@ export const MOVES: PersonMove[] = [
     dx: 1360,
     what: {
       en: "Musk leaves OpenAI's board in February 2018.",
-      fr: "Musk quitte le conseil d'administration d'OpenAI en février 2018.",
     },
     sourceIds: ["st-fortune-2018-musk-leaves-board", "st-techcrunch-2024-openai-musk-response"],
   },
@@ -176,7 +173,6 @@ export const MOVES: PersonMove[] = [
     from: { org: "openai", dx: -72 },
     what: {
       en: "Dario Amodei works at OpenAI (vice president of research; co-author of the 2019 GPT-2 paper), then co-founds Anthropic in 2021 with Daniela Amodei and other former OpenAI staff; he is its CEO.",
-      fr: "Dario Amodei travaille chez OpenAI (vice-président de la recherche ; coauteur de l'article GPT-2 de 2019), puis cofonde Anthropic en 2021 avec Daniela Amodei et d'autres anciens d'OpenAI ; il en est le PDG.",
     },
     sourceIds: ["st-wiki-anthropic", "st-radford-2019-gpt2", "st-anthropic-2021-series-a"],
   },
@@ -187,7 +183,6 @@ export const MOVES: PersonMove[] = [
     dx: 0,
     what: {
       en: "Musk announces xAI in July 2023.",
-      fr: "Musk annonce xAI en juillet 2023.",
     },
     sourceIds: ["st-cbs-2023-xai-launch", "sc-wiki-xai"],
   },
@@ -199,7 +194,6 @@ export const MOVES: PersonMove[] = [
     from: { org: "google-deepmind", dx: 0 },
     what: {
       en: "Arthur Mensch works at DeepMind in Paris, then co-founds Mistral AI in 2023 with two former Meta researchers; he is its CEO.",
-      fr: "Arthur Mensch travaille chez DeepMind à Paris, puis cofonde Mistral AI en 2023 avec deux anciens chercheurs de Meta ; il en est le PDG.",
     },
     sourceIds: ["st-techcrunch-2023-mistral-seed", "st-wiki-arthur-mensch"],
   },
@@ -211,7 +205,6 @@ export const MOVES: PersonMove[] = [
     inline: true,
     what: {
       en: "Jensen Huang founded NVIDIA in 1993 and has been its CEO ever since.",
-      fr: "Jensen Huang a fondé NVIDIA en 1993 et en est le PDG depuis.",
     },
     sourceIds: ["st-nvidia-jensen-huang"],
   },

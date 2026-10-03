@@ -1,4 +1,4 @@
-import type { Locale, SceneDefinition } from "@ai-exhibit/presentation-core";
+import { plainText, tr, type Locale, type SceneDefinition } from "@ai-exhibit/presentation-core";
 
 function normalize(s: string): string {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -15,7 +15,7 @@ export function filterScenes(scenes: SceneDefinition[], query: string, locale: L
   const rest = scenes.filter((s) => {
     if (s.code === q) return false;
     if (s.number.startsWith(q) || s.id.includes(q) || s.code.startsWith(q)) return true;
-    const title = normalize(`${s.title[locale]} ${s.title.en}`);
+    const title = normalize(`${plainText(tr(s.title, locale))} ${s.title.en}`);
     return q.split(/\s+/).every((w) => title.includes(w));
   });
   return [...exact, ...rest];

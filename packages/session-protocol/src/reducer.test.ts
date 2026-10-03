@@ -79,6 +79,21 @@ describe("navigation and flags", () => {
     ]);
     expect(s).toMatchObject({ editionId: "en-short", locale: "en", sceneId: "00-title", revealStep: 0 });
   });
+
+  it("setLocale keeps the position and timer, clears scene states but not shell keys", () => {
+    const s = run(init(), [
+      { type: "goto", sceneId: "03-x", revealStep: 2 },
+      { type: "setSceneState", sceneId: "03-x", state: { answer: "Bonjour" } },
+      { type: "setSceneState", sceneId: "__shell", state: { theme: "light" } },
+      { type: "timer", action: "start", now: 1000 },
+      { type: "setLocale", locale: "en" },
+    ]);
+    expect(s).toMatchObject({ locale: "en", sceneId: "03-x", revealStep: 2 });
+    expect(s.sceneStates).toEqual({ __shell: { theme: "light" } });
+    expect(s.timer.startedAt).toBe(1000);
+    const same = applyCommand(s, { type: "setLocale", locale: "en" }, "presenter");
+    expect(same.version).toBe(s.version);
+  });
 });
 
 describe("timer", () => {

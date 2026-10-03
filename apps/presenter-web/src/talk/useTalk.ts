@@ -10,7 +10,7 @@ import {
   type SessionState,
 } from "@ai-exhibit/session-protocol";
 import { navCommand, type NavAction } from "../control/navigation.ts";
-import { CONTENT_LOADED_AT, DEFAULT_EDITION, queryParam, resolveTalk, sourceLookup } from "./presentation.ts";
+import { CONTENT_LOADED_AT, DEFAULT_EDITION, defaultTalkLocale, queryParam, requestedLocale, resolveTalk, sourceLookup } from "./presentation.ts";
 import { usePrefersReducedMotion } from "./sceneContext.ts";
 import { adoptTheme, chooseTheme, currentStampedTheme, useTheme } from "../theme.ts";
 import { stepCount } from "@ai-exhibit/presentation-core";
@@ -35,6 +35,8 @@ export interface TalkActions {
   togglePauseMotion: () => void;
   /** Light/dark for every screen of the talk (synced through the session). */
   toggleTheme: () => void;
+  /** Language of the talk on every screen (synced through the session). */
+  setLocale: (locale: Locale) => void;
   /** Model source of the language demos, for every screen (synced through the session). */
   setModelSource: (source: ModelSource) => void;
   /** Clears timer, votes, scene states, blackout and freeze. */
@@ -57,6 +59,7 @@ export interface Talk {
   /** Position of the current scene in `scenes`. */
   index: number;
   personal: PersonalTalk;
+  /** The talk's language, from the session (every screen agrees). */
   locale: Locale;
   getSource: (id: string) => SourceRecord | undefined;
   /** This client may change the session (false while `outOfDate`). */
@@ -106,6 +109,7 @@ function personalFirstSceneId(r: ResolvedEdition): string | undefined {
 export function useTalk(role: ClientRole): Talk {
   const [params] = useState(() => ({
     edition: queryParam("edition"),
+    lang: requestedLocale(),
     scene: queryParam("scene"),
     session: queryParam("s") ?? undefined,
   }));
@@ -115,7 +119,7 @@ export function useTalk(role: ClientRole): Talk {
     return createInitialState({
       presentationId: r.presentation.id,
       editionId: r.edition.id,
-      locale: r.edition.locale,
+      locale: params.lang ?? defaultTalkLocale(r.presentation),
       sceneId: (params.scene && r.scenes.some((s) => s.id === params.scene) ? params.scene : personalFirstSceneId(r)) ?? EMPTY_SCENE,
     });
   }, [params]);
@@ -161,22 +165,29 @@ export function useTalk(role: ClientRole): Talk {
   // One-time URL sync, then repair a session whose edition or scene no longer
   // exists. Only a window that is not out of date may repair: a stale window
   // that does not know the current scene must never pull everyone back.
-  const synced = useRef({ edition: false, scene: false });
+  const synced = useRef({ edition: false, lang: false, scene: false });
   useEffect(() => {
     if (!controller || !state || session.status !== "open") return;
     if (!synced.current.edition) {
       synced.current.edition = true;
-      if (params.edition && params.edition !== state.editionId) {
+      if (params.edition) {
         const target = resolveTalk(params.edition);
-        if (target.edition.id === params.edition) {
+        if (target.edition.id !== state.editionId) {
           dispatch({
             type: "setEdition",
             editionId: target.edition.id,
-            locale: target.edition.locale,
+            locale: params.lang ?? state.locale,
             sceneId: personalFirstSceneId(target) ?? EMPTY_SCENE,
           });
           return;
         }
+      }
+    }
+    if (!synced.current.lang) {
+      synced.current.lang = true;
+      if (params.lang && params.lang !== state.locale) {
+        dispatch({ type: "setLocale", locale: params.lang });
+        return;
       }
     }
     if (params.scene && !synced.current.scene) {
@@ -191,7 +202,7 @@ export function useTalk(role: ClientRole): Talk {
     }
     if (!knowsEdition) {
       // This window's content is the newest the session has seen, and it has no such edition.
-      dispatch({ type: "setEdition", editionId: talk.edition.id, locale: talk.edition.locale, sceneId: personalFirstSceneId(talk) ?? EMPTY_SCENE });
+      dispatch({ type: "setEdition", editionId: talk.edition.id, locale: state.locale, sceneId: personalFirstSceneId(talk) ?? EMPTY_SCENE });
       return;
     }
     if (content === "publish") {
@@ -254,6 +265,7 @@ export function useTalk(role: ClientRole): Talk {
         if (s) send(setShell(s, { pauseMotion: !shellState(s).pauseMotion }));
       },
       toggleTheme: () => chooseTheme(currentStampedTheme().theme === "light" ? "dark" : "light"),
+      setLocale: (locale) => send({ type: "setLocale", locale }),
       setModelSource: (source) => {
         const s = current();
         if (s) send(setShell(s, { modelSource: source }));
@@ -292,7 +304,7 @@ export function useTalk(role: ClientRole): Talk {
     scene,
     index,
     personal,
-    locale: talk.edition.locale,
+    locale: state?.locale ?? params.lang ?? defaultTalkLocale(talk.presentation),
     getSource,
     controller,
     ownsStage,

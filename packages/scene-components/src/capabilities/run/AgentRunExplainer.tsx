@@ -1,3 +1,5 @@
+import { plainText, tr } from "@ai-exhibit/presentation-core";
+import { Rich, RichTspans } from "../../primitives/Rich.tsx";
 import { useEffect, useMemo } from "react";
 import type { ScenarioToolIcon, ToolCall } from "@ai-exhibit/content/assets/scenarios/index.ts";
 import { countUpTo } from "@ai-exhibit/content/assets/scenarios/index.ts";
@@ -27,50 +29,50 @@ export interface AgentRunExplainerProps {
 }
 
 const TEXT = {
-  request: l("Votre demande", "Your request"),
-  missing: l("Scénario introuvable", "Scenario not found"),
-  sent: l("Envoie", "Sends"),
-  answer: l("Reçoit", "Gets back"),
+  request: { en: "Your request" },
+  missing: { en: "Scenario not found" },
+  sent: { en: "Sends" },
+  answer: { en: "Gets back" },
   approve: l("Accepter", "Approve"),
-  decline: l("Refuser", "Decline"),
-  play: l("Lecture", "Play"),
-  pause: l("Pause", "Pause"),
-  restart: l("Recommencer", "Restart"),
-  next: l("Étape suivante", "Next step"),
-  prev: l("Étape précédente", "Previous step"),
-  speed: l("Vitesse", "Speed"),
-  waiting: l("En attente de votre accord", "Waiting for your OK"),
-  legendYou: l("Un carré : vous décidez", "A square: you decide"),
-  legendAct: l("Un rond : l'assistant fait une action", "A circle: the assistant does one thing"),
-  legendNow: l("La bande claire : où nous en sommes", "The shaded band: where we are now"),
+  decline: { en: "Decline" },
+  play: { en: "Play" },
+  pause: { en: "Pause" },
+  restart: { en: "Restart" },
+  next: { en: "Next step" },
+  prev: { en: "Previous step" },
+  speed: { en: "Speed" },
+  waiting: { en: "Waiting for your OK" },
+  legendYou: { en: "A square: you decide" },
+  legendAct: { en: "A circle: the assistant does one thing" },
+  legendNow: { en: "The shaded band: where we are now" },
   stepOf: (a: number, b: number): L10n => ({ fr: `Étape ${a} sur ${b}`, en: `Step ${a} of ${b}` }),
 };
 
 const SPEED_LABEL: Record<RunSpeed, L10n> = {
-  0.6: l("Lente", "Slow"),
-  1: l("Normale", "Normal"),
-  1.6: l("Rapide", "Fast"),
+  0.6: { en: "Slow" },
+  1: { en: "Normal" },
+  1.6: { en: "Fast" },
 };
 
 const COUNTERS: { key: "toolCalls" | "helpers" | "replans" | "approvals"; one: L10n; many: L10n }[] = [
-  { key: "toolCalls", one: l("outil utilisé", "tool call"), many: l("outils utilisés", "tool calls") },
-  { key: "helpers", one: l("aide", "helper"), many: l("aides", "helpers") },
-  { key: "replans", one: l("changement de plan", "change of plan"), many: l("changements de plan", "changes of plan") },
-  { key: "approvals", one: l("accord demandé", "approval asked"), many: l("accords demandés", "approvals asked") },
+  { key: "toolCalls", one: { en: "tool call" }, many: { en: "tool calls" } },
+  { key: "helpers", one: { en: "helper" }, many: { en: "helpers" } },
+  { key: "replans", one: { en: "change of plan" }, many: { en: "changes of plan" } },
+  { key: "approvals", one: { en: "approval asked" }, many: { en: "approvals asked" } },
 ];
 
 const TAG: Record<RunStep["kind"], L10n> = {
-  request: l("Votre demande", "Your request"),
-  plan: l("Fait un plan", "Makes a plan"),
-  tool: l("Utilise un outil", "Uses a tool"),
-  spawn: l("Partage le travail", "Splits the work"),
-  parallel: l("Les aides travaillent en même temps", "Helpers at work, all at once"),
-  merge: l("Rassemble les réponses", "Puts the answers together"),
-  replan: l("Change de plan", "Changes the plan"),
-  approval: l("Vous demande d'abord", "Asks you first"),
-  result: l("Rend compte", "Reports back"),
+  request: { en: "Your request" },
+  plan: { en: "Makes a plan" },
+  tool: { en: "Uses a tool" },
+  spawn: { en: "Splits the work" },
+  parallel: { en: "Helpers at work, all at once" },
+  merge: { en: "Puts the answers together" },
+  replan: { en: "Changes the plan" },
+  approval: { en: "Asks you first" },
+  result: { en: "Reports back" },
 };
-const FAILED_TAG = l("Un problème", "Something goes wrong");
+const FAILED_TAG = { en: "Something goes wrong" };
 
 const KIND_ICON: Record<RunStep["kind"], CapIconName> = {
   request: "chat",
@@ -96,7 +98,7 @@ const TOOL_ICON: Record<ScenarioToolIcon, CapIconName> = {
 export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunExplainerProps, RunState>) {
   const { locale, role, reducedMotion } = ctx;
   const isController = role === "controller";
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const scenario = getScenario(props.scenario ?? "weekend-trip");
   const score = useMemo(() => (scenario ? buildScore(scenario) : null), [scenario]);
   const [state, setState] = useSceneState<RunState>(ctx, initialRunState);
@@ -125,7 +127,7 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
     return (
       <div className={styles.root}>
         <p className={styles.missing}>
-          {t(TEXT.missing)}: {String(props.scenario)}
+          <Rich text={t(TEXT.missing)} />: {String(props.scenario)}
         </p>
       </div>
     );
@@ -141,19 +143,19 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
         <div className={cx(styles.request, step === 0 && styles.requestOn)}>
           <span className={styles.requestLabel}>
             <CapIcon name="person" size={24} />
-            {t(TEXT.request)}
+            <Rich text={t(TEXT.request)} />
           </span>
-          <p className={styles.requestText}>{t(scenario.steps[0]!.text!)}</p>
+          <p className={styles.requestText}><Rich text={t(scenario.steps[0]!.text!)} /></p>
         </div>
         <div className={styles.side}>
-          <Disclosure>{t(scenario.disclaimer)}</Disclosure>
+          <Disclosure><Rich text={t(scenario.disclaimer)} /></Disclosure>
           <ul className={styles.counters}>
             {COUNTERS.map((c) => {
               const n = counts[c.key];
               return (
                 <li key={c.key} className={cx(styles.counter, n > 0 && styles.counterOn)}>
                   <span className={styles.counterN}>{n}</span>
-                  <span className={styles.counterLabel}>{t(n === 1 ? c.one : c.many)}</span>
+                  <span className={styles.counterLabel}><Rich text={t(n === 1 ? c.one : c.many)} /></span>
                 </li>
               );
             })}
@@ -167,9 +169,9 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
         <div className={styles.captionCol}>
           <span className={cx(styles.tag, failed && styles.tagFail)}>
             <CapIcon name={failed ? "cross" : stepIcon(scenario, current)} size={26} />
-            {t(failed ? FAILED_TAG : TAG[current.kind])}
+            <Rich text={t(failed ? FAILED_TAG : TAG[current.kind])} />
           </span>
-          <p className={styles.caption}>{t(current.caption)}</p>
+          <p className={styles.caption}><Rich text={t(current.caption)} /></p>
         </div>
         <div className={styles.detailCol}>
           <Detail
@@ -198,7 +200,7 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
             >
               <span className={styles.btnInner}>
                 <CapIcon name={state.playing ? "pause" : "play"} size={22} />
-                {t(state.playing ? TEXT.pause : step >= last ? TEXT.restart : TEXT.play)}
+                <Rich text={t(state.playing ? TEXT.pause : step >= last ? TEXT.restart : TEXT.play)} />
               </span>
             </SceneButton>
             <SceneButton onClick={() => goto(step + 1)} disabled={step >= last} title={t(TEXT.next)}>
@@ -210,7 +212,7 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
               options={SPEEDS.map((s) => ({ value: s, label: t(SPEED_LABEL[s]) }))}
               onChange={(speed) => setState((s) => ({ ...s, speed }))}
             />
-            <span className={styles.stepOf}>{t(TEXT.stepOf(step + 1, last + 1))}</span>
+            <span className={styles.stepOf}><Rich text={t(TEXT.stepOf(step + 1, last + 1))} /></span>
           </ControlBar>
         </div>
       )}
@@ -257,7 +259,7 @@ function ScoreView({ scenario, score, step, locale }: { scenario: AgentRunScenar
   const radius = (row: number) => (score.rows[row]!.kind === "helper" ? 20 : 25);
 
   return (
-    <svg className={styles.score} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={scenario.title[locale]}>
+    <svg className={styles.score} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={plainText(tr(scenario.title, locale))}>
       <rect
         className={styles.playhead}
         x={LABEL_W + colW * step + 3}
@@ -272,11 +274,11 @@ function ScoreView({ scenario, score, step, locale }: { scenario: AgentRunScenar
           <g key={actor.id} className={cx(styles.lane, !visible && styles.laneHidden, styles[`lane_${actor.kind}`])}>
             <line x1={LABEL_W - 8} x2={W - 8} y1={y(r)} y2={y(r)} className={styles.laneLine} />
             <text x={0} y={y(r) - (actor.detail ? 4 : -8)} className={styles.laneLabel}>
-              {actor.label[locale]}
+              <RichTspans text={tr(actor.label, locale)} />
             </text>
             {actor.detail && (
               <text x={0} y={y(r) + 22} className={styles.laneDetail}>
-                {actor.detail[locale]}
+                <RichTspans text={tr(actor.detail, locale)} />
               </text>
             )}
           </g>
@@ -346,7 +348,7 @@ function Detail({
   locale: Locale;
   onApprove?: () => void;
 }) {
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const actor = (id: string) => scenario.actors.find((a) => a.id === id);
 
   switch (step.kind) {
@@ -357,19 +359,19 @@ function Detail({
             <svg viewBox="0 0 56 56" className={styles.legendMark} aria-hidden="true">
               <rect x="6" y="6" width="44" height="44" rx="9" className={styles.legendPerson} />
             </svg>
-            {t(TEXT.legendYou)}
+            <Rich text={t(TEXT.legendYou)} />
           </li>
           <li>
             <svg viewBox="0 0 56 56" className={styles.legendMark} aria-hidden="true">
               <circle cx="28" cy="28" r="22" className={styles.legendAct} />
             </svg>
-            {t(TEXT.legendAct)}
+            <Rich text={t(TEXT.legendAct)} />
           </li>
           <li>
             <svg viewBox="0 0 56 56" className={styles.legendMark} aria-hidden="true">
               <rect x="10" y="2" width="36" height="52" rx="10" className={styles.legendNow} />
             </svg>
-            {t(TEXT.legendNow)}
+            <Rich text={t(TEXT.legendNow)} />
           </li>
         </ul>
       );
@@ -379,7 +381,7 @@ function Detail({
         <ol className={styles.plan}>
           {step.items!.map((item, i) => (
             <li key={i} className={styles.planItem} style={{ animationDelay: `${i * 260}ms` }}>
-              {t(item)}
+              <Rich text={t(item)} />
             </li>
           ))}
         </ol>
@@ -388,10 +390,10 @@ function Detail({
     case "replan":
       return (
         <ul className={styles.plan}>
-          <li className={cx(styles.planItem, styles.dropped)}>{t(step.dropped!)}</li>
+          <li className={cx(styles.planItem, styles.dropped)}><Rich text={t(step.dropped!)} /></li>
           {step.items!.map((item, i) => (
             <li key={i} className={cx(styles.planItem, styles.added)} style={{ animationDelay: `${500 + i * 260}ms` }}>
-              {t(item)}
+              <Rich text={t(item)} />
             </li>
           ))}
         </ul>
@@ -404,15 +406,15 @@ function Detail({
         <article className={cx(styles.call, call.outcome === "failed" && styles.callFailed)}>
           <header className={styles.callHead}>
             {tool && <CapIcon name={TOOL_ICON[tool.icon]} size={34} />}
-            <span>{tool ? t(tool.label) : call.tool}</span>
+            <span>{tool ? <Rich text={t(tool.label)} /> : call.tool}</span>
           </header>
           <div className={styles.io}>
-            <span className={styles.ioLabel}>{t(TEXT.sent)}</span>
-            <p className={styles.input}>{t(call.input)}</p>
-            <span className={cx(styles.ioLabel, styles.reveal)}>{t(TEXT.answer)}</span>
+            <span className={styles.ioLabel}><Rich text={t(TEXT.sent)} /></span>
+            <p className={styles.input}><Rich text={t(call.input)} /></p>
+            <span className={cx(styles.ioLabel, styles.reveal)}><Rich text={t(TEXT.answer)} /></span>
             <p className={cx(styles.output, styles.reveal)}>
               {call.outcome === "failed" && <CapIcon name="cross" size={28} className={styles.failIcon} />}
-              {t(call.output)}
+              <Rich text={t(call.output)} />
             </p>
           </div>
         </article>
@@ -429,12 +431,12 @@ function Detail({
               <article key={i} className={styles.mini}>
                 <header className={styles.miniHead}>
                   {tool && <CapIcon name={TOOL_ICON[tool.icon]} size={28} />}
-                  <span>{a ? t(a.label) : call.actor}</span>
-                  {a?.detail && <span className={styles.miniDetail}>{t(a.detail)}</span>}
+                  <span>{a ? <Rich text={t(a.label)} /> : call.actor}</span>
+                  {a?.detail && <span className={styles.miniDetail}><Rich text={t(a.detail)} /></span>}
                 </header>
-                <p className={styles.miniInput}>{t(call.input)}</p>
+                <p className={styles.miniInput}><Rich text={t(call.input)} /></p>
                 <p className={cx(styles.miniOutput, styles.reveal)} style={{ animationDelay: `${900 + i * 120}ms` }}>
-                  {t(call.output)}
+                  <Rich text={t(call.output)} />
                 </p>
               </article>
             );
@@ -451,9 +453,9 @@ function Detail({
               <article key={h.actor} className={cx(styles.mini, styles.reveal)} style={{ animationDelay: `${i * 220}ms` }}>
                 <header className={styles.miniHead}>
                   <CapIcon name="robot" size={28} />
-                  <span>{a ? t(a.label) : h.actor}</span>
+                  <span>{a ? <Rich text={t(a.label)} /> : h.actor}</span>
                 </header>
-                <p className={styles.miniOutput}>{t(h.task)}</p>
+                <p className={styles.miniOutput}><Rich text={t(h.task)} /></p>
               </article>
             );
           })}
@@ -468,14 +470,14 @@ function Detail({
               const a = actor(m.actor);
               return (
                 <li key={m.actor} className={cx(styles.report, m.picked && styles.picked)}>
-                  <span className={styles.reportWho}>{a?.detail ? t(a.detail) : a ? t(a.label) : m.actor}</span>
-                  <span className={styles.reportText}>{t(m.summary)}</span>
+                  <span className={styles.reportWho}>{a ? <Rich text={t(a.detail ?? a.label)} /> : m.actor}</span>
+                  <span className={styles.reportText}><Rich text={t(m.summary)} /></span>
                   {m.picked && <CapIcon name="check" size={30} className={styles.pickIcon} />}
                 </li>
               );
             })}
           </ul>
-          <p className={cx(styles.decision, styles.reveal)}>{t(step.text!)}</p>
+          <p className={cx(styles.decision, styles.reveal)}><Rich text={t(step.text!)} /></p>
         </div>
       );
 
@@ -484,11 +486,11 @@ function Detail({
         <article className={styles.approval}>
           <header className={styles.approvalHead}>
             <CapIcon name="lock" size={32} />
-            <span>{t(step.text!)}</span>
+            <span><Rich text={t(step.text!)} /></span>
           </header>
           <ul className={styles.approvalItems}>
             {step.items!.map((item, i) => (
-              <li key={i}>{t(item)}</li>
+              <li key={i}><Rich text={t(item)} /></li>
             ))}
           </ul>
           <div className={styles.approvalButtons}>
@@ -496,20 +498,20 @@ function Detail({
               <SceneButton variant="primary" onClick={onApprove}>
                 <span className={styles.btnInner}>
                   <CapIcon name="check" size={22} />
-                  {t(TEXT.approve)}
+                  <Rich text={t(TEXT.approve)} />
                 </span>
               </SceneButton>
             ) : (
               <span className={cx(styles.pill, styles.pillYes)}>
                 <CapIcon name="check" size={22} />
-                {t(TEXT.approve)}
+                <Rich text={t(TEXT.approve)} />
               </span>
             )}
             <span className={styles.pill}>
               <CapIcon name="cross" size={22} />
-              {t(TEXT.decline)}
+              <Rich text={t(TEXT.decline)} />
             </span>
-            <span className={styles.waiting}>{t(TEXT.waiting)}</span>
+            <span className={styles.waiting}><Rich text={t(TEXT.waiting)} /></span>
           </div>
         </article>
       );
@@ -518,7 +520,7 @@ function Detail({
       return (
         <article className={styles.result}>
           <CapIcon name="check" size={40} className={styles.resultIcon} />
-          <p className={styles.resultText}>{t(step.text!)}</p>
+          <p className={styles.resultText}><Rich text={t(step.text!)} /></p>
         </article>
       );
   }

@@ -4,7 +4,9 @@
  *
  *   content/assets/recordings/cloud.json
  *
- *   pnpm tsx scripts/prepare/record-cloud.ts
+ *   pnpm tsx scripts/prepare/record-cloud.ts                    every locale, from scratch
+ *   pnpm tsx scripts/prepare/record-cloud.ts --lang fr          re-record French, keep the rest
+ *   pnpm tsx scripts/prepare/record-cloud.ts --lang fr --missing  only French prompts not recorded yet
  *
  * Base: meta-llama/Llama-3.1-8B (featherless-ai completions, raw continuation).
  * Assistant: meta-llama/Llama-3.1-8B-Instruct (chat completions, top-5 logprobs),
@@ -12,10 +14,11 @@
  * Greedy (temperature 0). Reads HF_TOKEN from the environment or the repo-root
  * .env; never prints it.
  */
-import { writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { parseArgs } from "node:util";
+import { LOCALES as ALL_LOCALES, parseLocale, pick, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import {
   BASE_MODEL,
   BASE_URL,
@@ -40,7 +43,18 @@ import {
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const outFile = resolve(repoRoot, "content/assets/recordings/cloud.json");
-const LOCALES = ["en", "fr"] as const;
+const { values: args } = parseArgs({
+  options: { lang: { type: "string", multiple: true }, missing: { type: "boolean", default: false } },
+});
+/** Locales to record this run (`--lang`, repeatable); the others are kept from the existing file. */
+const LOCALES: readonly Locale[] = args.lang
+  ? args.lang.map((l) => {
+      const known = parseLocale(l);
+      if (!known) throw new Error(`Unknown locale "${l}" (known: ${ALL_LOCALES.join(", ")})`);
+      return known;
+    })
+  : ALL_LOCALES;
+const merge = Boolean(args.lang) || args.missing!;
 const BASE_TOKENS = 60;
 const CHAT_TOKENS = 120;
 /** Probabilities kept for the first answer tokens only (small file). */
@@ -67,7 +81,7 @@ async function scenePrompts(): Promise<{ base: L10n[]; chat: L10n[] }> {
     for (const scene of canonical.scenes) {
       if (scene.visual.layout !== "component") continue;
       const p = (scene.visual.props as { prompt?: L10n } | undefined)?.prompt;
-      if (!p?.en || !p.fr) continue;
+      if (!p?.en) continue;
       if (scene.visual.component === "BaseModelPlayground") base.push(p);
       if (scene.visual.component === "ChatPlayground") chat.push(p);
     }
@@ -99,6 +113,22 @@ async function main() {
     completions: [],
     nextRuns: [],
   };
+  // Merging keeps what is not re-recorded, so it must come from the same models.
+  const norm = (t: string) => t.replace(/\s+/g, " ").trim().toLowerCase();
+  if (merge && existsSync(outFile)) {
+    const old = JSON.parse(readFileSync(outFile, "utf8")) as CloudRecordingFile;
+    if (old.base.model !== file.base.model || old.chat.model !== file.chat.model || old.next?.model !== file.next?.model) {
+      throw new Error("cloud.json was recorded with other models: record every locale from scratch (no --lang/--missing)");
+    }
+    file.chat.provider = old.chat.provider;
+    const redo = (locale: string) => LOCALES.includes(locale as Locale) && !args.missing;
+    file.completions = old.completions.filter((c) => !redo(c.locale));
+    file.nextRuns = (old.nextRuns ?? []).filter((r) => !redo(r.locale));
+  }
+  const have = (kind: "base" | "chat" | "next", locale: Locale, prompt: string) =>
+    kind === "next"
+      ? file.nextRuns!.some((r) => r.locale === locale && norm(r.prompt) === norm(prompt))
+      : file.completions.some((c) => c.kind === kind && c.locale === locale && norm(c.prompt) === norm(prompt));
   const addUsage = (u: unknown) => {
     const x = u as { prompt_tokens?: number; completion_tokens?: number } | undefined;
     usage.prompt += x?.prompt_tokens ?? 0;
@@ -107,11 +137,12 @@ async function main() {
 
   for (const p of basePrompts) {
     for (const locale of LOCALES) {
-      const json = await post(token, BASE_URL, { model: BASE_MODEL, prompt: p[locale], max_tokens: BASE_TOKENS, temperature: 0 });
+      if (have("base", locale, pick(p, locale))) continue;
+      const json = await post(token, BASE_URL, { model: BASE_MODEL, prompt: pick(p, locale), max_tokens: BASE_TOKENS, temperature: 0 });
       addUsage(json.usage);
       const choice = (json.choices as { text: string; finish_reason?: string }[])[0]!;
-      file.completions.push({ kind: "base", locale, prompt: p[locale], text: choice.text, finishReason: choice.finish_reason ?? null });
-      console.log(`  base [${locale}] ${JSON.stringify(p[locale])} -> ${JSON.stringify(choice.text.slice(0, 80))}`);
+      file.completions.push({ kind: "base", locale, prompt: pick(p, locale), text: choice.text, finishReason: choice.finish_reason ?? null });
+      console.log(`  base [${locale}] ${JSON.stringify(pick(p, locale))} -> ${JSON.stringify(choice.text.slice(0, 80))}`);
     }
   }
 
@@ -119,7 +150,8 @@ async function main() {
   // so they come from Llama 3.3 70B Instruct reading the raw text (see NEXT_URL).
   for (const p of basePrompts) {
     for (const locale of LOCALES) {
-      let text = p[locale];
+      if (have("next", locale, pick(p, locale))) continue;
+      let text = pick(p, locale);
       const steps: NonNullable<CloudRecordingFile["nextRuns"]>[number]["steps"] = [];
       for (let i = 0; i < NEXT_STEPS; i++) {
         const json = await post(token, NEXT_URL, { model: NEXT_MODEL, prompt: text, max_tokens: 1, temperature: 0, logprobs: NEXT_TOP });
@@ -129,15 +161,16 @@ async function main() {
         steps.push({ token: parsed.token, candidates: parsed.candidates.map((c) => ({ text: c.text, p: Number(c.p.toPrecision(3)) })) });
         text += parsed.token;
       }
-      file.nextRuns!.push({ locale, prompt: p[locale], steps });
-      console.log(`  next [${locale}] ${JSON.stringify(p[locale])} -> ${JSON.stringify(steps.map((s) => s.token).join(""))}`);
+      file.nextRuns!.push({ locale, prompt: pick(p, locale), steps });
+      console.log(`  next [${locale}] ${JSON.stringify(pick(p, locale))} -> ${JSON.stringify(steps.map((s) => s.token).join(""))}`);
     }
   }
 
   let templateChecked = 0;
   for (const p of chatPrompts) {
     for (const locale of LOCALES) {
-      const messages = assistantMessages(locale, p[locale]);
+      if (have("chat", locale, pick(p, locale))) continue;
+      const messages = assistantMessages(locale, pick(p, locale));
       let json: Record<string, unknown> | null = null;
       let provider = "";
       for (const model of CHAT_MODELS) {
@@ -160,7 +193,7 @@ async function main() {
       file.completions.push({
         kind: "chat",
         locale,
-        prompt: p[locale],
+        prompt: pick(p, locale),
         system: messages[0]!.content,
         raw,
         endTag: template.eos_token,
@@ -175,7 +208,7 @@ async function main() {
           })),
         promptTokens: typeof promptTokens === "number" ? promptTokens : undefined,
       });
-      console.log(`  chat [${locale}] ${JSON.stringify(p[locale])} (${provider}) -> ${JSON.stringify(choice.message.content.slice(0, 80))}`);
+      console.log(`  chat [${locale}] ${JSON.stringify(pick(p, locale))} (${provider}) -> ${JSON.stringify(choice.message.content.slice(0, 80))}`);
     }
   }
 

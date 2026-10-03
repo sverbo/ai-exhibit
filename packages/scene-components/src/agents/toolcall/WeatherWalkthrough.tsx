@@ -1,3 +1,5 @@
+import { tr } from "@ai-exhibit/presentation-core";
+import { Rich } from "../../primitives/Rich.tsx";
 import { useMemo } from "react";
 import { Disclosure, SceneHeading, cx, l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
 import { Icon, type IconName } from "../shared/icons.tsx";
@@ -6,14 +8,14 @@ import { WEATHER_STAGES, WEATHER_TEXT, tomorrowIso, toolDefinition, toolResultBl
 import styles from "./WeatherWalkthrough.module.css";
 
 const TEXT = {
-  heading: l("Ce que « appeler un outil » veut vraiment dire", "What “calling a tool” really means"),
-  illustrative: l("Données illustratives : aucune vraie météo n'est consultée.", "Illustrative data: no real weather service is queried."),
-  you: l("Vous", "You"),
-  model: l("Le modèle", "The model"),
-  software: l("Le logiciel", "The software"),
-  service: l("Le service météo", "The weather service"),
-  prompt: l("Que se passe-t-il entre la question et la réponse ?", "What happens between the question and the answer?"),
-  only: l("du texte, rien d'autre", "text, nothing else"),
+  heading: { en: "What “calling a tool” really means" },
+  illustrative: { en: "Illustrative data: no real weather service is queried." },
+  you: { en: "You" },
+  model: { en: "The model" },
+  software: { en: "The software" },
+  service: { en: "The weather service" },
+  prompt: { en: "What happens between the question and the answer?" },
+  only: { en: "text, nothing else" },
 };
 
 type Party = "you" | "model" | "software" | "service";
@@ -30,9 +32,9 @@ const FLOW: [Party, Party][] = [
 const WHERE = ['"tools": [ … ]', '"content": [ … ]', '"content": [ … ]'];
 
 export function WeatherWalkthrough({ step, locale, heading }: { step: number; locale: Locale; heading?: L10n }) {
-  const t = (x: L10n) => x[locale];
+  const t = (x: L10n) => tr(x, locale);
   const date = useMemo(() => tomorrowIso(), []);
-  const blocks = useMemo(() => [toolDefinition(locale), toolUseBlock(date), toolResultBlock(locale)], [locale, date]);
+  const blocks = useMemo(() => [toolDefinition(locale), toolUseBlock(date, locale), toolResultBlock(locale)], [locale, date]);
   const stage = step >= 1 ? WEATHER_STAGES[Math.min(4, step) - 1]! : null;
   const json = step >= 1 && step <= 3 ? blocks[step - 1]! : null;
   const party = (p: Party) => t(TEXT[p]);
@@ -40,15 +42,15 @@ export function WeatherWalkthrough({ step, locale, heading }: { step: number; lo
   return (
     <div className={styles.root}>
       <div className={styles.top}>
-        <SceneHeading>{t(heading ?? TEXT.heading)}</SceneHeading>
-        <Disclosure>{t(TEXT.illustrative)}</Disclosure>
+        <SceneHeading><Rich text={t(heading ?? TEXT.heading)} /></SceneHeading>
+        <Disclosure><Rich text={t(TEXT.illustrative)} /></Disclosure>
       </div>
 
       <p className={styles.question}>
         <span className={styles.who}>
-          <Icon name="person" size={30} /> {t(TEXT.you)}
+          <Icon name="person" size={30} /> <Rich text={t(TEXT.you)} />
         </span>
-        {t(WEATHER_TEXT.question)}
+        <Rich text={t(WEATHER_TEXT.question)} />
       </p>
 
       <div className={styles.body}>
@@ -59,7 +61,7 @@ export function WeatherWalkthrough({ step, locale, heading }: { step: number; lo
               <li key={n} className={cx(styles.stage, step === n && styles.current, step > n && styles.done)}>
                 <span className={styles.num}>{step > n ? <Icon name="check" size={24} strokeWidth={2.6} /> : n}</span>
                 <span className={styles.stageText}>
-                  <span className={styles.stageTitle}>{t(s.title)}</span>
+                  <span className={styles.stageTitle}><Rich text={t(s.title)} /></span>
                   <span className={styles.stageFlow}>
                     {party(FLOW[i]![0])} <span aria-hidden="true">→</span> {party(FLOW[i]![1])}
                   </span>
@@ -70,7 +72,7 @@ export function WeatherWalkthrough({ step, locale, heading }: { step: number; lo
         </ol>
 
         <section className={styles.panel} key={step}>
-          {step === 0 && <p className={styles.prompt}>{t(TEXT.prompt)}</p>}
+          {step === 0 && <p className={styles.prompt}><Rich text={t(TEXT.prompt)} /></p>}
 
           {stage && (
             <div className={styles.flowBar}>
@@ -93,13 +95,13 @@ export function WeatherWalkthrough({ step, locale, heading }: { step: number; lo
           {step >= 4 && (
             <p className={styles.answer}>
               <span className={styles.who}>
-                <Icon name="chat" size={30} /> {t(TEXT.model)}
+                <Icon name="chat" size={30} /> <Rich text={t(TEXT.model)} />
               </span>
-              {t(WEATHER_TEXT.answer)}
+              <Rich text={t(WEATHER_TEXT.answer)} />
             </p>
           )}
 
-          {stage && <p className={cx(styles.caption, step === 2 && styles.insight)}>{t(stage.caption)}</p>}
+          {stage && <p className={cx(styles.caption, step === 2 && styles.insight)}><Rich text={t(stage.caption)} /></p>}
         </section>
       </div>
     </div>

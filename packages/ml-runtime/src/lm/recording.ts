@@ -8,7 +8,7 @@
  */
 import type { LanguageModelId } from "./types.ts";
 
-export type RecordingLocale = "fr" | "en";
+export type RecordingLocale = import("@ai-exhibit/presentation-core").Locale;
 
 /** Compact candidate: rounded numbers keep the file small. */
 export interface RecordedCandidate {

@@ -32,7 +32,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "calendar",
     icon: "calendar",
-    label: l("Agenda", "Calendar"),
+    label: { en: "Calendar" },
     example: l(
       "Trouve une soirée la semaine prochaine où toute l'équipe est libre.",
       "Find an evening next week when the whole team is free.",
@@ -42,7 +42,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "files",
     icon: "folder",
-    label: l("Fichiers et documents", "Files and documents"),
+    label: { en: "Files and documents" },
     example: l(
       "Résume le contrat de location dans mes documents et liste les dates à retenir.",
       "Summarise the lease in my documents and list the dates I must not miss.",
@@ -52,7 +52,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "browser",
     icon: "browser",
-    label: l("Navigateur web", "Web browser"),
+    label: { en: "Web browser" },
     example: l(
       "Remplis le formulaire de la mairie pour renouveler ma carte de stationnement.",
       "Fill in the town hall form to renew my parking permit.",
@@ -62,9 +62,9 @@ export const CONNECTORS: Connector[] = [
   {
     id: "shopping",
     icon: "cart",
-    label: l("Achats et paiements", "Shopping and payments"),
+    label: { en: "Shopping and payments" },
     example: l(
-      "Recommande les mêmes cartouches d'encre que la dernière fois, moins de 30 euros.",
+      "Recommande les mêmes cartouches d'encre que la dernière fois, pour moins de 30 euros.",
       "Reorder the same printer ink as last time, under 30 euros.",
     ),
     sourceIds: ["fnd-chatgpt-agent-system-card", "fnd-google-ap2"],
@@ -72,7 +72,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "code",
     icon: "code",
-    label: l("Code", "Code"),
+    label: { en: "Code" },
     example: l(
       "Écris un petit programme qui range mes photos de vacances par date.",
       "Write a small program that sorts my holiday photos by date.",
@@ -82,7 +82,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "messages",
     icon: "phone",
-    label: l("Téléphone et messages", "Phone and messages"),
+    label: { en: "Phone and messages" },
     example: l(
       "Envoie un SMS à Ana pour lui dire que j'ai dix minutes de retard.",
       "Text Ana that I am running ten minutes late.",

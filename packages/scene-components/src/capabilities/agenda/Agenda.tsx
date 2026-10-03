@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { stepCount, type L10n, type Locale } from "@ai-exhibit/presentation-core";
+import { tr, stepCount, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../../contract.ts";
+import { Rich } from "../../primitives/Rich.tsx";
 import { visibleItemCount } from "../../layouts/reveal.ts";
 import layout from "../../layouts/layouts.module.css";
 import { resolveGlossaryUrl, qrPath } from "./glossaryUrl.ts";
@@ -13,9 +14,9 @@ export interface AgendaProps {
 }
 
 const COPY = {
-  qrLabel: { en: "Glossary on your phone", fr: "Lexique sur votre téléphone" },
-  qrHint: { en: "Every word of the talk, explained.", fr: "Tous les mots de la conférence, expliqués." },
-} satisfies Record<string, Record<Locale, string>>;
+  qrLabel: { en: "Glossary on your phone" },
+  qrHint: { en: "Every word of the talk, explained." },
+} satisfies Record<string, L10n>;
 
 /** The talk's plan, with a large QR code to the audience glossary on the side. */
 export function Agenda({ props, ctx }: SceneComponentProps<AgendaProps>) {
@@ -29,11 +30,11 @@ export function Agenda({ props, ctx }: SceneComponentProps<AgendaProps>) {
   return (
     <div className={`${layout.frame} ${styles.agenda}`}>
       <div className={styles.plan}>
-        <h2 className={layout.heading}>{props.heading?.[ctx.locale]}</h2>
+        <h2 className={layout.heading}>{props.heading ? <Rich text={tr(props.heading, ctx.locale)} /> : null}</h2>
         <ul className={layout.list}>
           {items.map((item, i) => (
             <li key={i} className={`${layout.listItem} ${layout.item} ${still} ${i < visible ? layout.shown : layout.hidden}`}>
-              {item[ctx.locale]}
+              <Rich text={tr(item, ctx.locale)} />
             </li>
           ))}
         </ul>
@@ -41,14 +42,14 @@ export function Agenda({ props, ctx }: SceneComponentProps<AgendaProps>) {
       {qr && url ? (
         <figure className={styles.qr}>
           <div className={styles.code}>
-            <svg viewBox={`-2 -2 ${qr.size + 4} ${qr.size + 4}`} role="img" aria-label={COPY.qrLabel[ctx.locale]} shapeRendering="crispEdges">
+            <svg viewBox={`-2 -2 ${qr.size + 4} ${qr.size + 4}`} role="img" aria-label={tr(COPY.qrLabel, ctx.locale)} shapeRendering="crispEdges">
               <rect x={-2} y={-2} width={qr.size + 4} height={qr.size + 4} className={styles.light} />
               <path d={qr.d} className={styles.dark} />
             </svg>
           </div>
           <figcaption className={styles.caption}>
-            <span className={styles.label}>{COPY.qrLabel[ctx.locale]}</span>
-            <span className={styles.hint}>{COPY.qrHint[ctx.locale]}</span>
+            <span className={styles.label}>{tr(COPY.qrLabel, ctx.locale)}</span>
+            <span className={styles.hint}>{tr(COPY.qrHint, ctx.locale)}</span>
             <span className={styles.url}>{url.replace(/^https?:\/\//, "")}</span>
           </figcaption>
         </figure>

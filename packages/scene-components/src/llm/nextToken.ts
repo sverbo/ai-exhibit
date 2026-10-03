@@ -14,7 +14,7 @@
  * ../textlab: a real output of its trained network (committed weights) for a
  * sentence it never trained on.
  */
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { LANGUAGE_MODELS, type LanguageModelId } from "@ai-exhibit/ml-runtime/lm";
 import { netBasketballProbability } from "../textlab/data/net.ts";
 import { SEQUENCE_WORDS } from "./prompts.ts";
@@ -48,16 +48,16 @@ export const CLASSIFIER_SENTENCE: Record<Locale, { text: string; label: "footbal
 };
 
 const SPORT_LABELS = {
-  football: { en: "Football", fr: "Football" },
-  basketball: { en: "Basketball", fr: "Basket" },
+  football: { en: "Football" },
+  basketball: { en: "Basketball" },
 } satisfies Record<string, L10n>;
 
 /** The two bars of step 0, computed by the textlab network (deterministic, cheap). */
 export function classifierBars(locale: Locale): { label: string; p: number; sport: "football" | "basketball" }[] {
-  const pBasket = netBasketballProbability(CLASSIFIER_SENTENCE[locale].text, locale);
+  const pBasket = netBasketballProbability(tr(CLASSIFIER_SENTENCE, locale).text, locale);
   return [
-    { label: SPORT_LABELS.football[locale], p: 1 - pBasket, sport: "football" as const },
-    { label: SPORT_LABELS.basketball[locale], p: pBasket, sport: "basketball" as const },
+    { label: tr(SPORT_LABELS.football, locale), p: 1 - pBasket, sport: "football" as const },
+    { label: tr(SPORT_LABELS.basketball, locale), p: pBasket, sport: "basketball" as const },
   ].sort((a, b) => b.p - a.p);
 }
 

@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { RULE } from "./small.ts";
 import { tokenize, type Sport } from "./text.ts";
 
@@ -28,7 +28,7 @@ function findKeyword(text: string, locale: Locale, keywords: readonly string[]):
 }
 
 export function applyRule(text: string, locale: Locale): RuleTrace {
-  const rule = RULE[locale];
+  const rule = tr(RULE, locale);
   const football = findKeyword(text, locale, rule.football);
   if (football) return { verdict: "football", line: 0, ...football };
   const basketball = findKeyword(text, locale, rule.basketball);

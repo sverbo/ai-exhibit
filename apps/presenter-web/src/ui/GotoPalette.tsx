@@ -1,5 +1,6 @@
+import { Rich } from "@ai-exhibit/scene-components";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Locale, PresentationDefinition, SceneDefinition } from "@ai-exhibit/presentation-core";
+import { tr, type Locale, type PresentationDefinition, type SceneDefinition } from "@ai-exhibit/presentation-core";
 import { useUi } from "../i18n.ts";
 import styles from "./GotoPalette.module.css";
 import { filterScenes } from "./sceneSearch.ts";
@@ -43,7 +44,7 @@ export function GotoPalette({
     list.current?.querySelector<HTMLElement>(`[data-index="${active}"]`)?.scrollIntoView({ block: "nearest" });
   }, [active]);
 
-  const chapterTitle = (id: string) => presentation.chapters.find((c) => c.id === id)?.title[locale] ?? id;
+  const chapterTitle = (id: string) => tr(presentation.chapters.find((c) => c.id === id)?.title ?? { en: id }, locale);
 
   return (
     <div className={styles.backdrop} onMouseDown={onClose}>
@@ -85,7 +86,7 @@ export function GotoPalette({
               >
                 <span className={styles.number}>{s.number}</span>
                 <span className={styles.title}>
-                  {s.title[locale]}
+                  <Rich text={tr(s.title, locale)} />
                   {hiddenIds?.has(s.id) ? <span className={styles.hiddenTag}>{t("configHidden")}</span> : null}
                 </span>
                 <span className={styles.chapter}>{chapterTitle(s.chapter)}</span>

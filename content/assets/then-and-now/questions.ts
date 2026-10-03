@@ -23,7 +23,7 @@
  * `history` notes are for the presenter (English, not on screen). A claim that
  * a question tripped older models is only marked "verified" with a checked source.
  */
-import type { L10n } from "@ai-exhibit/presentation-core";
+import type { L10n, Locale } from "@ai-exhibit/presentation-core";
 
 export interface RecordedAnswer {
   /** Name shown on screen. */
@@ -58,6 +58,11 @@ export interface PublishedRung {
   cost: L10n | null;
   /** Verbatim, in the language it was asked (English). */
   answer: string;
+  /**
+   * The answer translated for the audience, shown in italics under the
+   * verbatim one and labelled as a translation. Never a model output.
+   */
+  translation?: Partial<Record<Exclude<Locale, "en">, string>>;
   /** The source's own correct / incorrect mark. */
   correct: boolean;
 }
@@ -137,6 +142,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           model: "gpt2-xl",
           cost: { en: "~$4.6k", fr: "~4 600 $" },
           answer: "The answer is nine plus six.",
+          translation: { fr: "La réponse est neuf plus six." },
           correct: false,
         },
         {
@@ -145,6 +151,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           model: "davinci",
           cost: { en: "~$690k", fr: "~690 000 $" },
           answer: "The answer is 15.",
+          translation: { fr: "La réponse est 15." },
           correct: false,
         },
         {
@@ -153,6 +160,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           model: "gpt-3.5-turbo-0613",
           cost: null,
           answer: 'So, the answer to the riddle "When ten plus four is two, what is nine plus six?" is 15.',
+          translation: { fr: "Donc, la réponse à l'énigme « Si dix plus quatre font deux, combien font neuf plus six ? » est 15." },
           correct: false,
         },
         {
@@ -162,6 +170,9 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           cost: { en: "~$50m", fr: "~50 M$" },
           answer:
             '"ten plus four" equals two because if it is ten o\'clock and you add four hours, it becomes two o\'clock. So, if we apply the same logic to "nine plus six", we get three.',
+          translation: {
+            fr: "« dix plus quatre » égale deux, car s'il est dix heures et que vous ajoutez quatre heures, il est alors deux heures. Donc, si nous appliquons la même logique à « neuf plus six », nous obtenons trois.",
+          },
           correct: true,
         },
       ],

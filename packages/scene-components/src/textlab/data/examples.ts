@@ -1,4 +1,4 @@
-import type { Locale } from "@ai-exhibit/presentation-core";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { SMALL_SET } from "./small.ts";
 import { tokenize, type LabelledSentence } from "./text.ts";
 import { learnTree, type TreeNode } from "./tree.ts";
@@ -16,7 +16,7 @@ const treeCache = new Map<Locale, TreeNode>();
 export function textTree(locale: Locale): TreeNode {
   let t = treeCache.get(locale);
   if (!t) {
-    t = learnTree(SMALL_SET[locale], locale, TREE_OPTIONS);
+    t = learnTree(tr(SMALL_SET, locale), locale, TREE_OPTIONS);
     treeCache.set(locale, t);
   }
   return t;
@@ -55,7 +55,7 @@ export const SCORES: Record<
 /** How a folded word is shown: its most common spelling in the hand-written sentences. */
 export function displayWord(folded: string, locale: Locale): string {
   const counts = new Map<string, number>();
-  for (const s of SMALL_SET[locale]) {
+  for (const s of tr(SMALL_SET, locale)) {
     for (const t of tokenize(s.text, locale)) {
       if (t.word === folded) counts.set(t.surface.toLowerCase(), (counts.get(t.surface.toLowerCase()) ?? 0) + 1);
     }

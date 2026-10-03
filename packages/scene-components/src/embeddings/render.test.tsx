@@ -59,7 +59,7 @@ describe("embedding components render in every role, step and locale", () => {
       }
     }
     const fallback = render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "fr", undefined, "fallback"));
-    expect(fallback).toContain("Mode secours");
+    expect(fallback).toContain("Mode de secours");
   });
 
   it("EmbeddingExplorer training", () => {

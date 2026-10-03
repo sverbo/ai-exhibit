@@ -1,8 +1,6 @@
-import type { L10n, Locale, SourceRecord } from "@ai-exhibit/presentation-core";
+import { intlLocale, pick, type Locale, type SourceRecord } from "@ai-exhibit/presentation-core";
 
-export function t(value: L10n, locale: Locale): string {
-  return value[locale];
-}
+export { tr as t } from "@ai-exhibit/presentation-core";
 
 /** Short label for the projector: publisher (or title) and year. */
 export function shortSourceLabel(source: SourceRecord): string {
@@ -21,7 +19,7 @@ export function formatIsoDate(iso: string, locale: Locale): string {
   const [y, m, d] = iso.split("-");
   if (!y) return iso;
   if (!m) return y;
-  const month = MONTHS[locale][Number(m) - 1] ?? m;
+  const month = pick(MONTHS, locale)[Number(m) - 1] ?? m;
   if (!d) return `${month} ${y}`;
   const day = String(Number(d));
   return locale === "fr" ? `${day} ${month} ${y}` : `${month} ${day}, ${y}`;
@@ -54,7 +52,7 @@ export function stopShellKeys(event: { key: string; stopPropagation: () => void 
 }
 
 export function formatNumber(n: number, locale: "fr" | "en", digits = 0): string {
-  return new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-GB", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(n);

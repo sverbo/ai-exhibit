@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
+import { intlLocale, pick, tr } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps, SceneRole } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { useSceneState } from "../learning/shared/sceneState.ts";
 import { ControlBar, SceneButton, SceneHeading, cx, l, type L10n, type Locale } from "../learning/shared/ui.tsx";
 import { roundSimple, simpleActivity, simpleSelect, simpleView, type SimpleActivity, type SimpleView } from "./data/simple.ts";
@@ -47,121 +49,121 @@ export const TEXT_STEPS: Record<TextStage, number> = {
 };
 
 const T = {
-  football: l("Football", "Football"),
-  basketball: l("Basket", "Basketball"),
-  right: l("Juste", "Right"),
-  wrong: l("Faux", "Wrong"),
-  toUs: l("Pour nous", "To us"),
+  football: { en: "Football" },
+  basketball: { en: "Basketball" },
+  right: { en: "Right" },
+  wrong: { en: "Wrong" },
+  toUs: { en: "To us" },
   task: {
-    heading: l("Football ou basket ?", "Football or basketball?"),
+    heading: { en: "Football or basketball?" },
     subs: [
-      l("De quel sport parle cette phrase ?", "Which sport is this sentence about?"),
-      l("Facile pour nous. Mais comment une machine peut-elle décider ?", "Easy for us. But how can a machine decide?"),
+      { en: "Which sport is this sentence about?" },
+      { en: "Easy for us. But how can a machine decide?" },
     ],
   },
   rules: {
-    heading: l("IA classique : une personne écrit la règle", "Classic AI: a person writes the rule"),
+    heading: { en: "Classic AI: a person writes the rule" },
     subs: [
-      l("Écrite à la main : quelques mots-clés pour chaque sport.", "Written by hand: a few keywords for each sport."),
-      l("Une nouvelle phrase. La règle s'arrête au premier mot-clé trouvé.", "A new sentence. The rule stops at the first keyword it finds."),
+      { en: "Written by hand: a few keywords for each sport." },
+      { en: "A new sentence. The rule stops at the first keyword it finds." },
     ],
-    says: l("La règle dit", "The rule says"),
+    says: { en: "The rule says" },
   },
   tree: {
-    heading: l("Apprentissage automatique : la règle vient des exemples", "Machine learning: the rule comes from examples"),
+    heading: { en: "Machine learning: the rule comes from examples" },
     subs: [
-      l("24 phrases, chacune étiquetée par une personne.", "24 sentences, each labelled by a person."),
-      l("La machine a choisi ces questions toute seule, à partir des exemples.", "The machine picked these questions by itself, from the examples."),
+      { en: "24 sentences, each labelled by a person." },
+      { en: "The machine picked these questions by itself, from the examples." },
     ],
-    says: l("L'arbre dit", "The tree says"),
-    prev: l("Exemple précédent", "Previous example"),
-    next: l("Exemple suivant", "Next example"),
+    says: { en: "The tree says" },
+    prev: { en: "Previous example" },
+    next: { en: "Next example" },
   },
   unseen: {
-    heading: l("Ce que l'arbre a appris", "What the tree learned"),
+    heading: { en: "What the tree learned" },
     subs: [
-      l("Une phrase nouvelle. Que va répondre l'arbre ?", "A new sentence. What will the tree answer?"),
-      l("Il l'a appris tout seul. Et on peut le lire, et voir le problème.", "It learned this by itself. And we can read it and spot the problem."),
+      { en: "A new sentence. What will the tree answer?" },
+      { en: "It learned this by itself. And we can read it and spot the problem." },
     ],
   },
   learning: {
-    heading: l("Comment un réseau de neurones apprend", "How a neural network learns"),
+    heading: { en: "How a neural network learns" },
     phases: [
-      l("Au début, les connexions sont au hasard", "At first, the connections are random"),
-      l("Comparer avec la bonne réponse", "Compare with the right answer"),
-      l("Ajuster chaque connexion, un tout petit peu", "Nudge every connection, a tiny bit"),
-      l("La même phrase, encore : un peu mieux", "The same sentence again: a bit better"),
-      l("Encore, et encore, sur des milliers de phrases", "Again and again, over thousands of sentences"),
+      { en: "At first, the connections are random" },
+      { en: "Compare with the right answer" },
+      { en: "Nudge every connection, a tiny bit" },
+      { en: "The same sentence again: a bit better" },
+      { en: "Again and again, over thousands of sentences" },
     ],
-    words: [l("Deviner", "Guess"), l("Comparer", "Compare"), l("Ajuster", "Nudge"), l("Encore", "Again")],
-    loop: l("La boucle d'apprentissage", "The learning loop"),
-    itsGuess: l("Sa réponse", "Its guess"),
-    afterNudge: l("Après un ajustement", "After one nudge"),
-    randomNote: l("Connexions au hasard : sa réponse aussi.", "Random connections: a random guess."),
+    words: [{ en: "Guess" }, { en: "Compare" }, { en: "Nudge" }, { en: "Again" }],
+    loop: { en: "The learning loop" },
+    itsGuess: { en: "Its guess" },
+    afterNudge: { en: "After one nudge" },
+    randomNote: { en: "Random connections: a random guess." },
     gave: (sport: string, p: string) =>
       l(`La bonne réponse était ${sport}. Il lui donnait ${p} ; il faudrait 100 %.`, `The right answer was ${sport}. It gave it ${p}; it should be 100%.`),
-    wrongBy: l("Faux de tout ça.", "Wrong by this much."),
+    wrongBy: { en: "Wrong by this much." },
     nudgeNote: l(
       "Chaque connexion bouge un peu, dans le sens qui aurait aidé.",
       "Each connection moves a little, in the direction that would have helped.",
     ),
     better: (a: string, b: string) => l(`Un peu mieux : ${a} → ${b}. Il en faut des milliers.`, `A bit better: ${a} → ${b}. It takes thousands of these.`),
-    randomNet: l("Ses connexions, au hasard", "Its connections, random"),
-    net: l("Ses connexions", "Its connections"),
-    seen: l("Phrases vues", "Sentences seen"),
+    randomNet: { en: "Its connections, random" },
+    net: { en: "Its connections" },
+    seen: { en: "Sentences seen" },
     of: (n: string) => l(`sur ${n}`, `of ${n}`),
-    curve: l("Juste sur 200 phrases nouvelles :", "Right on 200 new sentences:"),
-    start: l("début", "start"),
-    end: l("fin", "end"),
-    real: l("Vrais nombres de ce petit réseau", "Real numbers from this small network"),
+    curve: { en: "Right on 200 new sentences:" },
+    start: { en: "start" },
+    end: { en: "end" },
+    real: { en: "Real numbers from this small network" },
   },
   network: {
-    heading: l("Ce qu'il y a dans un réseau de neurones", "What is inside a neural network"),
-    chips: [l("Les mots", "Words"), l("Les poids", "Weights"), l("Les neurones", "Neurons"), l("Les scores", "Scores")],
+    heading: { en: "What is inside a neural network" },
+    chips: [{ en: "Words" }, { en: "Weights" }, { en: "Neurons" }, { en: "Scores" }],
     headlines: [
-      l("Les mots entrent", "Words go in"),
-      l("Chaque connexion est un nombre : un poids", "Every connection is a number: a weight"),
-      l("Chaque neurone additionne ce qui lui arrive", "Each neuron adds up what reaches it"),
-      l("Il en sort deux scores, en pourcentages", "Out come two scores, as percentages"),
+      { en: "Words go in" },
+      { en: "Every connection is a number: a weight" },
+      { en: "Each neuron adds up what reaches it" },
+      { en: "Out come two scores, as percentages" },
     ],
     captions: [
-      l("Chaque mot qu'il connaît est une entrée : 1 si la phrase le contient.", "Each word it knows is an input: 1 if the sentence has it."),
-      l("Épaisseur : la taille du nombre. Couleur : le sport vers lequel il pousse.", "Thickness: how big the number is. Colour: the sport it pushes toward."),
-      l("Plus il reçoit de lignes épaisses depuis des mots allumés, plus il s'allume.", "The more thick lines reach it from lit words, the more it lights up."),
+      { en: "Each word it knows is an input: 1 if the sentence has it." },
+      { en: "Thickness: how big the number is. Colour: the sport it pushes toward." },
+      { en: "The more thick lines reach it from lit words, the more it lights up." },
     ],
     compare: (tree: string, net: string) =>
       l(`Sur 200 phrases nouvelles : arbre ${tree}, réseau ${net}. Et il ne tombe pas dans le piège.`, `On 200 new sentences: tree ${tree}, network ${net}. And it gets the trap sentence right.`),
-    restart: l("Recommencer l'apprentissage", "Train again"),
-    skip: l("Aller à la fin", "Skip to the end"),
+    restart: { en: "Train again" },
+    skip: { en: "Skip to the end" },
   },
   simplified: (words: string, conns: string) =>
     l(`Vue simplifiée du vrai réseau : ${words} mots, 16 neurones, ${conns} connexions. Vrais nombres.`, `Simplified view of the real network: ${words} words, 16 neurons, ${conns} connections. Real numbers.`),
   fail: {
-    heading: l("Il se trompe encore sur certaines phrases", "It still gets some sentences wrong"),
+    heading: { en: "It still gets some sentences wrong" },
     headlines: [
-      l("Une phrase nouvelle, écrite comme les autres", "A new sentence, written like the others"),
-      l("On ouvre le capot", "Open the hood"),
-      l("On ouvre le capot", "Open the hood"),
+      { en: "A new sentence, written like the others" },
+      { en: "Open the hood" },
+      { en: "Open the hood" },
     ],
-    sure: l("Sûr de lui, et faux.", "Confident, and wrong."),
+    sure: { en: "Confident, and wrong." },
     neuron: (n: number) => l(`neurone ${n}`, `neuron ${n}`),
-    toOutput: l("\u2192 basket", "\u2192 basketball"),
-    hood: l("Toutes les lignes et tous les nombres sont là. Aucun ne dit pourquoi.", "All the lines and numbers are there. None of them says why."),
-    takeaway1: l("On peut le tester.", "We can test it."),
-    takeaway2: l("On ne peut pas savoir à l'avance où il se trompera.", "We cannot know in advance where it will fail."),
+    toOutput: { en: "\u2192 basketball" },
+    hood: { en: "All the lines and numbers are there. None of them says why." },
+    takeaway1: { en: "We can test it." },
+    takeaway2: { en: "We cannot know in advance where it will fail." },
   },
   edit: {
-    hint: l("Cliquer sur un mot pour le retirer ou le remettre.", "Click a word to remove or put it back."),
-    restore: l("Remettre la phrase", "Restore the sentence"),
+    hint: { en: "Click a word to remove or put it back." },
+    restore: { en: "Restore the sentence" },
   },
 };
 
 type Tr = (x: L10n) => string;
 
-const fmtInt = (n: number, locale: Locale) => n.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB");
+const fmtInt = (n: number, locale: Locale) => n.toLocaleString(intlLocale(locale));
 const fmtPct = (v: number, locale: Locale) => {
   const p = Math.round(v * 1000) / 10;
-  const s = p.toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", { maximumFractionDigits: 1 });
+  const s = p.toLocaleString(intlLocale(locale), { maximumFractionDigits: 1 });
   return locale === "fr" ? `${s}\u202f%` : `${s}%`;
 };
 const sportName = (t: Tr, s: Sport) => t(s === "football" ? T.football : T.basketball);
@@ -173,7 +175,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
   const step = Math.max(0, Math.min(TEXT_STEPS[stage], ctx.revealStep));
   const isController = role === "controller";
   const [state, setState] = useSceneState<TextClassifierLabState>(ctx, () => ({}), { throttleMs: 100 });
-  const t = useCallback((x: L10n) => x[locale], [locale]);
+  const t = useCallback((x: L10n) => tr(x, locale), [locale]);
 
   const sub: L10n = (() => {
     switch (stage) {
@@ -213,7 +215,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
       body = <RulesStage step={step} t={t} locale={locale} />;
       break;
     case "tree": {
-      const n = SMALL_SET[locale].length;
+      const n = pick(SMALL_SET, locale).length;
       const example = (((state.example ?? TREE_EXAMPLE) % n) + n) % n;
       body = <TreeStage step={step} t={t} locale={locale} example={example} />;
       if (isController && step >= 1) {
@@ -228,7 +230,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
     }
     case "tree-unseen":
     case "network-fail": {
-      const picked = stage === "tree-unseen" ? TREE_TRAP[locale] : NET_FAIL[locale];
+      const picked = stage === "tree-unseen" ? pick(TREE_TRAP, locale) : pick(NET_FAIL, locale);
       const nTokens = tokenize(picked.text, locale).length;
       const removed = new Set((state.removed ?? []).filter((i) => Number.isInteger(i) && i >= 0 && i < nTokens));
       const editable = isController && (stage === "tree-unseen" ? step >= 1 : step === 0);
@@ -355,7 +357,7 @@ function Labelled({ s, locale, className }: { s: LabelledSentence; locale: Local
 /* ---------------------------------------------------------------- task */
 
 function TaskStage({ step, t, locale }: { step: number; t: Tr; locale: Locale }) {
-  const set = SMALL_SET[locale];
+  const set = pick(SMALL_SET, locale);
   if (step === 0) {
     return (
       <div className={styles.taskHero}>
@@ -412,9 +414,9 @@ function KeywordList({ words, sport, locale }: { words: string[]; sport: Sport; 
 }
 
 function RulesStage({ step, t, locale }: { step: number; t: Tr; locale: Locale }) {
-  const rule = RULE[locale];
+  const rule = pick(RULE, locale);
   const failing = step >= 1;
-  const sentence = failing ? RULE_FAIL[locale] : SMALL_SET[locale][RULE_RIGHT]!;
+  const sentence = failing ? pick(RULE_FAIL, locale) : pick(SMALL_SET, locale)[RULE_RIGHT]!;
   const trace = applyRule(sentence.text, locale);
   // The deciding keyword, and (faint) any other keyword the rule never got to.
   const marks = new Map<number, Tone>();
@@ -499,7 +501,7 @@ function pathMarks(text: string, locale: Locale, steps: TreeStep[]): Map<number,
 }
 
 function TreeStage({ step, t, locale, example }: { step: number; t: Tr; locale: Locale; example: number }) {
-  const set = SMALL_SET[locale];
+  const set = pick(SMALL_SET, locale);
   if (step === 0) {
     return (
       <div className={styles.columns}>
@@ -660,7 +662,7 @@ function NetFrame({
           </ol>
         )}
         <h2 className={styles.learnHeadline} key={headline}>
-          {headline}
+          <Rich text={headline} />
         </h2>
         {children}
       </div>
@@ -730,7 +732,7 @@ function biggestLines(view: SimpleView, locale: Locale, n = 3): LineLabel[] {
 }
 
 const fmtSigned = (v: number, locale: Locale) => {
-  const s = Math.abs(v).toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const s = Math.abs(v).toLocaleString(intlLocale(locale), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return Math.abs(v) < 0.005 ? s : v < 0 ? `−${s}` : s;
 };
 
@@ -743,11 +745,11 @@ const fmtSigned = (v: number, locale: Locale) => {
  */
 function NetworkStage({ step, t, locale, still }: { step: number; t: Tr; locale: Locale; still: boolean }) {
   const net = textNet(locale);
-  const s = TREE_TRAP[locale];
+  const s = pick(TREE_TRAP, locale);
   const scale = useMemo(() => netScale(locale), [locale]);
   const view = useMemo(() => simpleView(net, simpleSelect(net, s.text, locale)), [net, s.text, locale]);
   const act = useMemo(() => simpleActivity(net, view, s.text, locale), [net, view, s.text, locale]);
-  const sc = SCORES[locale];
+  const sc = pick(SCORES, locale);
   const verdict: Sport = act.p >= 0.5 ? "basketball" : "football";
   return (
     <NetFrame

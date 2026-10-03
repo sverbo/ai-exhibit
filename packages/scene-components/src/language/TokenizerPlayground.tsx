@@ -1,7 +1,8 @@
 import { type CSSProperties, useEffect, useMemo, useRef } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "./copy.ts";
 import { DEFAULT_TOKENIZER_EXAMPLES } from "./data.ts";
 import { charCount, formatInt } from "./format.ts";
@@ -40,7 +41,7 @@ function tokenizerLabel(id: CloudTokenizerId): string {
  */
 export function TokenizerPlayground({ props, ctx }: SceneComponentProps<TokenizerPlaygroundProps, TokenizerState>) {
   const { locale, role } = ctx;
-  const examples = (props.examples?.length ? props.examples : DEFAULT_TOKENIZER_EXAMPLES).map((e) => e[locale]);
+  const examples = (props.examples?.length ? props.examples : DEFAULT_TOKENIZER_EXAMPLES).map((e) => pick(e, locale));
   const defaultTokenizer: CloudTokenizerId = props.tokenizer && props.tokenizer in TOKENIZER_LABELS ? props.tokenizer : "llama-3.1";
   const recording = useTokenizationRecording();
 
@@ -99,13 +100,13 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
       <>
         <TextField
           wide
-          label={COPY.typeHere[locale]}
+          label={tr(COPY.typeHere, locale)}
           value={state.text}
           disabled={!live}
           onChange={(text) => setState((s) => ({ ...s, text }))}
         />
-        <div className={styles.examples} role="group" aria-label={COPY.examples[locale]}>
-          <span className={styles.examplesLabel}>{COPY.examples[locale]}</span>
+        <div className={styles.examples} role="group" aria-label={tr(COPY.examples, locale)}>
+          <span className={styles.examplesLabel}>{tr(COPY.examples, locale)}</span>
           <div className={styles.exampleRow}>
             {examples.map((ex, i) => (
               <Button key={i} active={ex === state.text} onClick={() => setState((s) => ({ ...s, text: ex }))} title={ex}>
@@ -115,23 +116,23 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
           </div>
         </div>
         <Segmented
-          label={COPY.tokenizer[locale]}
+          label={tr(COPY.tokenizer, locale)}
           value={state.tokenizerId}
           options={(Object.keys(TOKENIZER_LABELS) as CloudTokenizerId[]).map((id) => ({ value: id, label: TOKENIZER_LABELS[id] }))}
           onChange={(tokenizerId) => setState((s) => ({ ...s, tokenizerId }))}
         />
         {props.showIds ? (
           <Button active={idsVisible} onClick={() => setState((s) => ({ ...s, idsShown: !idsVisible }))}>
-            {idsVisible ? COPY.hideIds[locale] : COPY.showIds[locale]}
+            {idsVisible ? tr(COPY.hideIds, locale) : tr(COPY.showIds, locale)}
           </Button>
         ) : null}
-        {live && state.source !== "live" ? <Pending>{COPY.loadingTokenizer[locale]}</Pending> : null}
+        {live && state.source !== "live" ? <Pending>{tr(COPY.loadingTokenizer, locale)}</Pending> : null}
         <SourceBadge decision={decision} model={tokenizerLabel(state.tokenizerId)} locale={locale} />
       </>
     ) : null;
 
   return (
-    <Frame controls={controls} label={ctx.scene.title[locale]}>
+    <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
       <TokenizedText
         text={view.text}
         tokens={view.tokens}
@@ -143,22 +144,22 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
         {view.tokens.length > 0 ? (
           <p className={styles.count}>
             <b>{formatInt(view.tokens.length, locale)}</b>{" "}
-            {view.tokens.length > 1 ? COPY.tokens[locale] : COPY.token[locale]}
+            <Rich text={view.tokens.length > 1 ? tr(COPY.tokens, locale) : tr(COPY.token, locale)} />
             <span className={styles.countSep}>/</span>
-            <b>{formatInt(charCount(view.text), locale)}</b> {COPY.characters[locale]}
+            <b>{formatInt(charCount(view.text), locale)}</b> {tr(COPY.characters, locale)}
             <span className={styles.tokenizerName}>{tokenizerLabel(view.tokenizerId)}</span>
           </p>
         ) : null}
         <p className={styles.legend}>
           {view.tokens.some((t) => view.text.slice(t.start, t.end).startsWith(" ")) ? (
-            <span>{COPY.spaceLegend[locale]}</span>
+            <span>{tr(COPY.spaceLegend, locale)}</span>
           ) : null}
-          {view.tokens.some((t) => t.partial) ? <span>{COPY.partialLegend[locale]}</span> : null}
+          {view.tokens.some((t) => t.partial) ? <span><Rich text={tr(COPY.partialLegend, locale)} /></span> : null}
         </p>
         {view.source === "recorded" && role !== "preview" ? (
           <div className={styles.status}>
             <RecordedTag locale={locale} />
-            {view.notice ? <Notice reason={null} locale={locale} extra={COPY.typingNeedsTokenizer[locale]} /> : null}
+            {view.notice ? <Notice reason={null} locale={locale} extra={tr(COPY.typingNeedsTokenizer, locale)} /> : null}
           </div>
         ) : null}
       </footer>

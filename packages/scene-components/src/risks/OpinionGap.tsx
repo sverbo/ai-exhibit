@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { EvidenceBadge } from "../primitives/EvidenceBadge.tsx";
 import styles from "./OpinionGap.module.css";
 
@@ -56,7 +57,7 @@ export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>)
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`} data-visible={visible}>
       <header className={styles.head}>
-        {props.heading ? <h2 className={styles.heading}>{props.heading[locale]}</h2> : null}
+        {props.heading ? <h2 className={styles.heading}><Rich text={tr(props.heading, locale)} /></h2> : null}
         <EvidenceBadge level="observed" locale={locale} size="sm" />
       </header>
       <div className={styles.rows}>
@@ -70,10 +71,12 @@ export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>)
               data-shown={shown ? "" : undefined}
               aria-hidden={!shown}
             >
-              <h3 className={styles.question}>{row.question[locale]}</h3>
+              <h3 className={styles.question}><Rich text={tr(row.question, locale)} /></h3>
               {row.bars.map((b, j) => (
                 <div key={j} className={styles.bar} data-group={b.group}>
-                  <span className={styles.who}>{b.who[locale]}</span>
+                  <span className={styles.who}>
+                    <Rich text={tr(b.who, locale)} />
+                  </span>
                   <span className={styles.track}>
                     <span
                       className={styles.fill}
@@ -86,7 +89,9 @@ export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>)
                   <span className={styles.value}>{barLabel(b, locale)}</span>
                 </div>
               ))}
-              <p className={styles.source}>{row.source[locale]}</p>
+              <p className={styles.source}>
+                <Rich text={tr(row.source, locale)} />
+              </p>
             </section>
           );
         })}

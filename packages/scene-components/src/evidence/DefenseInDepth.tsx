@@ -1,6 +1,7 @@
-import type { L10n } from "@ai-exhibit/presentation-core";
+import { plainText, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { useMemo } from "react";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { formatNumber, stopShellKeys } from "./shared.ts";
 import { SourceList } from "./SourceList.tsx";
 import {
@@ -14,34 +15,33 @@ export interface DefenseInDepthProps {
 }
 
 export const DEFAULT_LAYERS: L10n[] = [
-  { en: "Training", fr: "Entraînement" },
-  { en: "Evaluations", fr: "Évaluations" },
-  { en: "Interpretability", fr: "Interprétabilité" },
-  { en: "Monitoring", fr: "Surveillance" },
-  { en: "Sandboxing and permissions", fr: "Bac à sable et permissions" },
-  { en: "Governance", fr: "Gouvernance" },
+  { en: "Training" },
+  { en: "Evaluations" },
+  { en: "Interpretability" },
+  { en: "Monitoring" },
+  { en: "Sandboxing and permissions" },
+  { en: "Governance" },
 ];
 
 /** Source for the Swiss-cheese model itself (registry: content/sources/control-and-governance.ts). */
 export const SWISS_CHEESE_SOURCE = "cg-reason-2000-swiss-cheese";
 
 const COPY = {
-  firstLayer: { en: "Every safety layer has holes.", fr: "Chaque couche de sécurité a des trous." },
-  moreLayers: { en: "Another layer can cover a gap in the previous one.", fr: "Une autre couche peut couvrir le trou de la précédente." },
-  demo: { en: "Most problems are stopped by one layer or another.", fr: "La plupart des problèmes sont arrêtés par l'une ou l'autre couche." },
-  aligned: { en: "Rarely, the holes line up. No single layer is enough.", fr: "Parfois, les trous s'alignent. Aucune couche ne suffit seule." },
-  hazard: { en: "Problem", fr: "Problème" },
-  harm: { en: "Harm", fr: "Dommage" },
-  send1: { en: "Send a problem", fr: "Envoyer un problème" },
-  send20: { en: "Send 20", fr: "En envoyer 20" },
-  reset: { en: "Reset counts", fr: "Remettre à zéro" },
-  attempts: { en: "sent", fr: "envoyés" },
-  passed: { en: "got through", fr: "sont passés" },
+  firstLayer: { en: "Every safety layer has holes." },
+  moreLayers: { en: "Another layer can cover a gap in the previous one." },
+  demo: { en: "Most problems are stopped by one layer or another." },
+  aligned: { en: "Rarely, the holes line up. No single layer is enough." },
+  hazard: { en: "Problem" },
+  harm: { en: "Harm" },
+  send1: { en: "Send a problem" },
+  send20: { en: "Send 20" },
+  reset: { en: "Reset counts" },
+  attempts: { en: "sent" },
+  passed: { en: "got through" },
   note: {
     en: "Holes are drawn for illustration. These counts come from this drawing, not from real systems.",
-    fr: "Les trous sont dessinés pour l'illustration. Ces chiffres viennent du dessin, pas de systèmes réels.",
   },
-  model: { en: "Swiss-cheese model, after James Reason", fr: "Modèle du fromage suisse, d'après James Reason" },
+  model: { en: "Swiss-cheese model, after James Reason" },
 } as const;
 
 // Stage geometry (SVG units = stage pixels).
@@ -91,10 +91,10 @@ export function DefenseInDepth({ props, ctx }: SceneComponentProps<DefenseInDept
   return (
     <div className={`${styles.root} ${ctx.reducedMotion || role === "preview" ? common.still : ""}`}>
       <p className={styles.caption} key={caption.en}>
-        {caption[locale]}
+        <Rich text={tr(caption, locale)} />
       </p>
 
-      <svg className={styles.svg} viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} role="img" aria-label={caption[locale]}>
+      <svg className={styles.svg} viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} role="img" aria-label={plainText(tr(caption, locale))}>
         <defs>
           <marker id="did-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
             <path d="M0 0 L10 5 L0 10 z" className={styles.arrowHead} />
@@ -102,11 +102,11 @@ export function DefenseInDepth({ props, ctx }: SceneComponentProps<DefenseInDept
         </defs>
 
         <text className={styles.endLabel} x={0} y={Y0 + FH / 2 + SKEW / 2} dominantBaseline="middle">
-          {COPY.hazard[locale]}
+          {tr(COPY.hazard, locale)}
         </text>
         {step >= n + 1 ? (
           <text className={`${styles.endLabel} ${styles.harm}`} x={VIEW_W - 40} y={Y0 + FH / 2 + SKEW / 2} textAnchor="end" dominantBaseline="middle">
-            {COPY.harm[locale]}
+            {tr(COPY.harm, locale)}
           </text>
         ) : null}
 
@@ -130,7 +130,9 @@ export function DefenseInDepth({ props, ctx }: SceneComponentProps<DefenseInDept
                 ))}
               </g>
               <foreignObject x={x0 - 60} y={Y0 + FH + SKEW + 24} width={FW + 120} height={110}>
-                <div className={styles.layerName}>{name[locale]}</div>
+                <div className={styles.layerName}>
+                  <Rich text={tr(name, locale)} />
+                </div>
               </foreignObject>
             </g>
           );
@@ -155,23 +157,23 @@ export function DefenseInDepth({ props, ctx }: SceneComponentProps<DefenseInDept
         <SourceList sourceIds={[SWISS_CHEESE_SOURCE]} role={role} locale={locale} getSource={ctx.getSource} compact />
         {interactive && allShown ? (
           <div className={common.controls} onKeyDown={stopShellKeys}>
-            <button type="button" className={common.button} onClick={() => send(1)}>{COPY.send1[locale]}</button>
-            <button type="button" className={common.button} onClick={() => send(20)}>{COPY.send20[locale]}</button>
+            <button type="button" className={common.button} onClick={() => send(1)}>{tr(COPY.send1, locale)}</button>
+            <button type="button" className={common.button} onClick={() => send(20)}>{tr(COPY.send20, locale)}</button>
             <button
               type="button"
               className={common.button}
               disabled={!ctx.state}
               onClick={() => ctx.setState({ attempts: 0, passed: 0, recent: [] })}
             >
-              {COPY.reset[locale]}
+              {tr(COPY.reset, locale)}
             </button>
           </div>
         ) : null}
         {ctx.state && ctx.state.attempts > 0 && allShown ? (
           <p className={styles.counts}>
-            <span>{formatNumber(ctx.state.attempts, locale)} {COPY.attempts[locale]}</span>
-            <span className={styles.passedCount}>{formatNumber(ctx.state.passed, locale)} {COPY.passed[locale]}</span>
-            <span className={styles.note}>{COPY.note[locale]}</span>
+            <span>{formatNumber(ctx.state.attempts, locale)} {tr(COPY.attempts, locale)}</span>
+            <span className={styles.passedCount}>{formatNumber(ctx.state.passed, locale)} {tr(COPY.passed, locale)}</span>
+            <span className={styles.note}>{tr(COPY.note, locale)}</span>
           </p>
         ) : null}
       </footer>

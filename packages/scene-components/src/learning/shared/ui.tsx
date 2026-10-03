@@ -1,5 +1,6 @@
 import type { ReactNode, MouseEvent, KeyboardEvent } from "react";
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { typeset, type L10n, type Locale } from "@ai-exhibit/presentation-core";
+import { Rich } from "../../primitives/Rich.tsx";
 import styles from "./ui.module.css";
 
 export type { L10n, Locale };
@@ -7,20 +8,14 @@ export type { L10n, Locale };
 /**
  * French punctuation takes a non-breaking space before ? ! ; : % and inside
  * guillemets, so a projector never wraps a lone "?" onto its own line.
+ * `tr` applies it to every French string it reads.
  */
 export function frenchSpacing(text: string): string {
-  return text
-    .replace(/ ([?!;%])/g, "\u202f$1")
-    .replace(/ ([:»])/g, "\u00a0$1")
-    .replace(/« /g, "«\u00a0");
+  return typeset(text, "fr");
 }
 
-/** Small helper to build bilingual strings inline (French spacing applied). */
-export const l = (fr: string, en: string): L10n => ({ fr: frenchSpacing(fr), en });
-
-export function tr(text: L10n, locale: Locale): string {
-  return text[locale];
-}
+/** Bilingual strings inline (`l(fr, en)`) and the one way to read them (`tr`). */
+export { l, tr } from "@ai-exhibit/presentation-core";
 
 export function fmtPercent(value: number, locale: Locale): string {
   const n = Math.round(value * 100);
@@ -102,8 +97,8 @@ export function Segmented<T extends string | number>({
 export function SceneHeading({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
   return (
     <header className={styles.heading}>
-      <h2 className={styles.h}>{children}</h2>
-      {sub && <p className={styles.sub}>{sub}</p>}
+      <h2 className={styles.h}>{typeof children === "string" ? <Rich text={children} /> : children}</h2>
+      {sub && <p className={styles.sub}>{typeof sub === "string" ? <Rich text={sub} /> : sub}</p>}
     </header>
   );
 }

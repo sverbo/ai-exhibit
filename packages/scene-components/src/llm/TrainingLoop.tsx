@@ -10,8 +10,9 @@
  * Steps: 0 text up to a point, 1 random guess, 2 compare and error, 3 nudge,
  * 4 repeat over many texts.
  */
-import type { L10n, Locale } from "@ai-exhibit/presentation-core";
+import { tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps } from "../contract.ts";
+import { Rich } from "../primitives/Rich.tsx";
 import { NeutralSources } from "./NeutralSources.tsx";
 import { LANGUAGE_MODELS } from "@ai-exhibit/ml-runtime/lm";
 import { languageModelFor } from "../language/data.ts";
@@ -25,58 +26,51 @@ import common from "./common.module.css";
 import styles from "./TrainingLoop.module.css";
 
 const HEADLINES: L10n[] = [
-  { en: "Take ordinary text, up to some point", fr: "Prendre un texte ordinaire, jusqu'à un certain point" },
-  { en: "At first, the model guesses at random", fr: "Au début, le modèle devine au hasard" },
-  { en: "Compare with the actual next word", fr: "Comparer avec le vrai mot suivant" },
-  { en: "Nudge the numbers, a tiny bit", fr: "Ajuster les nombres, un tout petit peu" },
-  { en: "Again and again, over trillions of words", fr: "Encore, et encore, et encore…" },
+  { en: "Take ordinary text, up to some point" },
+  { en: "At first, the model guesses at random" },
+  { en: "Compare with the actual next word" },
+  { en: "Nudge the numbers, a tiny bit" },
+  { en: "Again and again, over trillions of words" },
 ];
 
 /** For the code example the next piece is a token (a symbol), not a word. */
 const CODE_HEADLINES: Partial<Record<number, L10n>> = {
-  2: { en: "Compare with the actual next token", fr: "Comparer avec le vrai token suivant" },
+  2: { en: "Compare with the actual next token" },
 };
 
 const COPY = {
   source: {
     en: "Web pages, books… and huge amounts of code (17% of Llama 3's training text)",
-    fr: "Pages web, livres… et énormément de code (17 % des textes d'entraînement de Llama 3)",
   },
-  illustration: { en: "Illustration: invented numbers", fr: "Illustration : nombres inventés" },
-  guesses: { en: "Its top guesses: random tokens", fr: "Ses meilleures propositions : des tokens au hasard" },
+  illustration: { en: "Illustration: invented numbers" },
+  guesses: { en: "Its top guesses: random tokens" },
   randomNote: {
     en: "Random at first: the right word gets about 1 chance in {n}.",
-    fr: "Au hasard au début : le bon mot a environ 1 chance sur {n}.",
   },
-  afterNudge: { en: "After one nudge", fr: "Après un ajustement" },
-  gave: { en: "The next word was “{w}”. It gave it {p}; it should be 100%.", fr: "Le mot suivant était « {w} ». Il lui donnait {p}\u00a0; il faudrait 100\u00a0%." },
-  gaveCode: { en: "The next token was “{w}”. It gave it {p}; it should be 100%.", fr: "Le token suivant était « {w} ». Il lui donnait {p}\u00a0; il faudrait 100\u00a0%." },
+  afterNudge: { en: "After one nudge" },
+  gave: { en: "The next word was “{w}”. It gave it {p}; it should be 100%." },
+  gaveCode: { en: "The next token was “{w}”. It gave it {p}; it should be 100%." },
   codeNote: {
     en: "Code is text too. In one study, adding it to training improved reasoning by up to 8%.",
-    fr: "Le code est aussi du texte. Dans une étude, en ajouter à l'entraînement a amélioré le raisonnement jusqu'à 8 %.",
   },
-  error: { en: "Error: almost 100%", fr: "Erreur : presque 100 %" },
+  error: { en: "Error: almost 100%" },
   better: {
     en: "Barely better: {a} → {b}. It takes trillions of these.",
-    fr: "À peine mieux : {a} → {b}. Il en faut des milliers de milliards.",
   },
-  network: { en: "A few of the model's numbers", fr: "Quelques nombres du modèle" },
+  network: { en: "A few of the model's numbers" },
   networkNote: {
     en: "The small model in this talk has about {n} of them; large models, hundreds of billions.",
-    fr: "Le petit modèle de cet exposé en a environ {n} ; les grands, des centaines de milliards.",
   },
   nudgeNote: {
     en: "Each one moves slightly, in the direction that makes the actual next word more likely.",
-    fr: "Chacun bouge légèrement, dans le sens qui rend le vrai mot suivant plus probable.",
   },
-  counter: { en: "Guesses so far", fr: "Propositions jusqu'ici" },
+  counter: { en: "Guesses so far" },
   counterNote: {
     en: "One guess per token. Llama 3.1 405B (2024) was trained on {n} tokens.",
-    fr: "Une proposition par token. Llama 3.1 405B (2024) a été entraîné sur {n} de tokens.",
   },
-  curve: { en: "Chance it gives the right next word", fr: "Chance donnée au bon mot suivant" },
-  start: { en: "random", fr: "hasard" },
-  another: { en: "Another sentence", fr: "Autre phrase" },
+  curve: { en: "Chance it gives the right next word" },
+  start: { en: "random" },
+  another: { en: "Another sentence" },
 } satisfies Record<string, L10n>;
 
 // Network drawing: 4 inputs, 5 hidden, 4 outputs.
@@ -178,7 +172,7 @@ function Curve({ f, start, locale }: { f: number; start: number; locale: Locale 
       <path className={styles.curveLine} d={pts.join(" ")} />
       <circle className={styles.curveDot} cx={cx(f)} cy={cy(now)} r={9} />
       <text className={styles.curveLabel} x={cx(0)} y={CURVE_H - 6}>
-        {COPY.start[locale]}
+        {tr(COPY.start, locale)}
       </text>
     </svg>
   );
@@ -196,7 +190,7 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
   const f = step === 4 ? progressAt(elapsed) : 0;
   const count = counterAt(elapsed);
   const flicker = step === 4 && Number.isFinite(elapsed) ? Math.floor(elapsed / 120) : 0;
-  const { context, rest } = splitAtNext(ex.text[locale]);
+  const { context, rest } = splitAtNext(tr(ex.text, locale));
 
   // What the text card shows.
   let shown: string;
@@ -209,16 +203,16 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
     slot = { text: "?", revealed: false };
   } else if (step < 4) {
     shown = context;
-    slot = { text: ex.answer[locale], revealed: true };
+    slot = { text: tr(ex.answer, locale), revealed: true };
   } else if (!streaming) {
     // One word forward in the same sentence.
-    shown = `${context}${ex.code ? "" : " "}${ex.answer[locale]}`;
+    shown = `${context}${ex.code ? "" : " "}${tr(ex.answer, locale)}`;
     slot = nextAfter(rest) ? { text: "?", revealed: false } : null;
   } else {
     // Then many different texts, faster and faster (the last one when motion is off).
     const i = Number.isFinite(elapsed) ? streamLineAt(elapsed - FIRST_SLIDE_MS) : STREAM.length - 1;
     const line = STREAM[i % STREAM.length]!;
-    const { context: c, next } = splitLast(line.text[locale]);
+    const { context: c, next } = splitLast(tr(line.text, locale));
     shown = c;
     slot = { text: next, revealed: true };
     code = Boolean(line.code);
@@ -226,15 +220,15 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
   }
 
   const nudged = p0 * ONE_NUDGE;
-  const randomRows = RANDOM_GUESSES.map((g) => ({ key: g.token.en, word: g.token[locale], p: p0 * g.times, answer: false }));
-  const answerRow = { key: "answer", word: ex.answer[locale], p: step >= 3 ? nudged : p0, answer: true };
+  const randomRows = RANDOM_GUESSES.map((g) => ({ key: g.token.en, word: tr(g.token, locale), p: p0 * g.times, answer: false }));
+  const answerRow = { key: "answer", word: tr(ex.answer, locale), p: step >= 3 ? nudged : p0, answer: true };
   const rows = step >= 2 ? [...randomRows, answerRow] : randomRows;
   const showBar = (p: number) => `max(3px, ${(p * 100).toFixed(4)}%)`;
 
   return (
     <div className={`${common.root} ${styles.root} ${still ? common.still : ""}`} data-step={step}>
       <h2 className={common.headline} key={`h${step}`} data-entering={!still}>
-        {((ex.code && CODE_HEADLINES[step]) || HEADLINES[step]!)[locale]}
+        <Rich text={tr((ex.code && CODE_HEADLINES[step]) || HEADLINES[step]!, locale)} />
       </h2>
 
       <figure className={styles.textCard}>
@@ -242,11 +236,11 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
         <figcaption className={styles.textSource}>
           {ex.code && step < 4 ? (
             <>
-              {COPY.codeNote[locale]} <NeutralSources ids={["llm-aryabumi-2024"]} getSource={ctx.getSource} />
+              {tr(COPY.codeNote, locale)} <NeutralSources ids={["llm-aryabumi-2024"]} getSource={ctx.getSource} />
             </>
           ) : (
             <>
-              {COPY.source[locale]} <NeutralSources ids={["llm-llama3-paper"]} getSource={ctx.getSource} />
+              {tr(COPY.source, locale)} <NeutralSources ids={["llm-llama3-paper"]} getSource={ctx.getSource} />
             </>
           )}
         </figcaption>
@@ -261,7 +255,7 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
         <section className={styles.left}>
           {step >= 1 && step <= 3 ? (
             <>
-              <h3 className={styles.panelTitle}>{step === 3 ? COPY.afterNudge[locale] : COPY.guesses[locale]}</h3>
+              <h3 className={styles.panelTitle}><Rich text={step === 3 ? tr(COPY.afterNudge, locale) : tr(COPY.guesses, locale)} /></h3>
               <ol className={styles.bars}>
                 {rows.map((r) => (
                   <li key={r.key} className={`${styles.row} ${r.answer ? styles.answer : ""}`}>
@@ -275,18 +269,18 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
                 ))}
               </ol>
               {step === 1 ? (
-                <p className={styles.verdict}>{COPY.randomNote[locale].replace("{n}", formatNumber(demo.vocabSize, locale))}</p>
+                <p className={styles.verdict}>{tr(COPY.randomNote, locale).replace("{n}", formatNumber(demo.vocabSize, locale))}</p>
               ) : null}
               {step === 2 ? (
                 <p className={styles.verdict}>
-                  {(ex.code ? COPY.gaveCode : COPY.gave)[locale].replace("{w}", ex.answer[locale]).replace("{p}", formatChance(p0, locale))}{" "}
-                  <strong className={styles.errorText}>{errorOf(p0) > 0.999 ? COPY.error[locale] : ""}</strong>
+                  {tr(ex.code ? COPY.gaveCode : COPY.gave, locale).replace("{w}", tr(ex.answer, locale)).replace("{p}", formatChance(p0, locale))}{" "}
+                  <strong className={styles.errorText}>{errorOf(p0) > 0.999 ? tr(COPY.error, locale) : ""}</strong>
                 </p>
               ) : null}
               {step === 3 ? (
                 <p className={styles.verdict}>
                   <strong className={styles.betterText}>
-                    {COPY.better[locale].replace("{a}", formatChance(p0, locale)).replace("{b}", formatChance(nudged, locale))}
+                    {tr(COPY.better, locale).replace("{a}", formatChance(p0, locale)).replace("{b}", formatChance(nudged, locale))}
                   </strong>
                 </p>
               ) : null}
@@ -294,16 +288,18 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
           ) : null}
           {step === 4 ? (
             <div className={styles.counter}>
-              <h3 className={styles.panelTitle}>{COPY.counter[locale]}</h3>
+              <h3 className={styles.panelTitle}>{tr(COPY.counter, locale)}</h3>
               <p className={styles.count} aria-live="off">
                 {formatNumber(count, locale)}
               </p>
               <h3 className={styles.panelTitle}>
-                {COPY.curve[locale]}: <span className={styles.curveNow}>{formatChance(chanceAt(f, p0), locale)}</span>
+                {tr(COPY.curve, locale)}
+                {locale === "fr" ? "\u00a0: " : ": "}
+                <span className={styles.curveNow}>{formatChance(chanceAt(f, p0), locale)}</span>
               </h3>
               <Curve f={f} start={p0} locale={locale} />
               <p className={styles.countNote}>
-                {COPY.counterNote[locale].replace("{n}", numberInWords(TOKENS_SEEN, locale))}{" "}
+                {tr(COPY.counterNote, locale).replace("{n}", numberInWords(TOKENS_SEEN, locale))}{" "}
                 <NeutralSources ids={["llm-llama3-paper"]} getSource={ctx.getSource} />
               </p>
             </div>
@@ -311,12 +307,12 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
         </section>
 
         <section className={styles.right} data-visible={step >= 1}>
-          <h3 className={styles.panelTitle}>{COPY.network[locale]}</h3>
+          <h3 className={styles.panelTitle}>{tr(COPY.network, locale)}</h3>
           <Network step={step} flicker={flicker} locale={locale} />
           <p className={styles.netNote}>
             {step === 3
-              ? COPY.nudgeNote[locale]
-              : COPY.networkNote[locale].replace("{n}", numberInWords(roundSig(demo.parameters, 1), locale))}
+              ? tr(COPY.nudgeNote, locale)
+              : tr(COPY.networkNote, locale).replace("{n}", numberInWords(roundSig(demo.parameters, 1), locale))}
             {step !== 3 ? (
               <>
                 {" "}
@@ -328,7 +324,7 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
       </div>
 
       <div className={common.footer}>
-        <span className={common.tag}>{COPY.illustration[locale]}</span>
+        <span className={common.tag}>{tr(COPY.illustration, locale)}</span>
         {role === "controller" ? (
           <div className={common.controls}>
             <button
@@ -336,7 +332,7 @@ export function TrainingLoop({ ctx }: SceneComponentProps<Record<string, never>,
               className={common.button}
               onClick={() => ctx.setState({ example: (exIndex + 1) % EXAMPLES.length })}
             >
-              {COPY.another[locale]}
+              {tr(COPY.another, locale)}
             </button>
           </div>
         ) : null}
