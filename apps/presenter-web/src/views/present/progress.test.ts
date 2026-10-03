@@ -10,23 +10,21 @@ describe("talkProgress", () => {
   const chapters = [ch("00"), ch("01"), ch("02")];
   const scenes = [sc("intro", "00", 60), sc("a", "01", 100, 2), sc("b", "01", 100), sc("c", "02", 200)];
 
-  it("sizes one segment per part by planned time, the introduction left out", () => {
+  it("sizes one segment per part by its number of slides, the introduction left out", () => {
     const p = talkProgress(chapters, scenes, scenes[0]);
-    expect(p.parts).toEqual([
-      { id: "01", share: 0.5 },
-      { id: "02", share: 0.5 },
-    ]);
+    expect(p.parts[0]).toEqual({ id: "01", share: 2 / 3 });
+    expect(p.parts[1]!.share).toBeCloseTo(1 / 3);
     expect(p.at).toBe(0);
   });
 
-  it("moves the cursor once per slide, at the slide's planned start", () => {
+  it("moves the cursor one slide at a time, whatever the slides' durations", () => {
     expect(talkProgress(chapters, scenes, scenes[1]).at).toBe(0);
-    expect(talkProgress(chapters, scenes, scenes[2]).at).toBeCloseTo(100 / 400);
-    expect(talkProgress(chapters, scenes, scenes[3]).at).toBeCloseTo(0.5);
+    expect(talkProgress(chapters, scenes, scenes[2]).at).toBeCloseTo(1 / 3);
+    expect(talkProgress(chapters, scenes, scenes[3]).at).toBeCloseTo(2 / 3);
   });
 
   it("ignores hidden scenes, which count zero seconds", () => {
     const timed = scenes.map((s) => (s.id === "b" ? { ...s, durationSec: 0 } : s));
-    expect(talkProgress(chapters, timed, scenes[3]).at).toBeCloseTo(100 / 300);
+    expect(talkProgress(chapters, timed, scenes[3]).at).toBeCloseTo(1 / 2);
   });
 });

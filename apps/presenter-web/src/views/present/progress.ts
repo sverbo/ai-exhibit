@@ -14,24 +14,20 @@ export interface Progress {
 
 /**
  * Where the talk stands, for the projector's progress rail: one segment per
- * part (chapters except the introduction "00"), sized by planned time, and a
- * cursor at the start of the current scene: it moves once per slide, never
- * per click. `timed` is the personal sequence with hidden scenes counting zero
- * seconds.
+ * part (chapters except the introduction "00"), sized by its number of
+ * slides, and a cursor that moves one slide at a time, never per click.
+ * `timed` is the personal sequence; hidden scenes (zero seconds) do not count.
  */
 export function talkProgress(chapters: ChapterDefinition[], timed: SceneDefinition[], current: SceneDefinition | undefined): Progress {
   const partIds = chapters.filter((c) => c.id !== "00").map((c) => c.id as string);
-  const inParts = timed.filter((s) => partIds.includes(s.chapter));
-  const total = inParts.reduce((t, s) => t + s.durationSec, 0);
-  if (total <= 0) return { parts: [], at: 0 };
+  const inParts = timed.filter((s) => partIds.includes(s.chapter) && s.durationSec > 0);
+  const total = inParts.length;
+  if (total === 0) return { parts: [], at: 0 };
   const parts = partIds
-    .map((id) => ({ id, share: inParts.filter((s) => s.chapter === id).reduce((t, s) => t + s.durationSec, 0) / total }))
+    .map((id) => ({ id, share: inParts.filter((s) => s.chapter === id).length / total }))
     .filter((p) => p.share > 0);
   if (!current || !partIds.includes(current.chapter)) return { parts, at: 0 };
-  let before = 0;
-  for (const s of inParts) {
-    if (s.id === current.id) break;
-    before += s.durationSec;
-  }
+  const i = timed.filter((s) => partIds.includes(s.chapter)).findIndex((s) => s.id === current.id);
+  const before = timed.filter((s) => partIds.includes(s.chapter)).slice(0, Math.max(0, i)).filter((s) => s.durationSec > 0).length;
   return { parts, at: Math.min(1, before / total) };
 }

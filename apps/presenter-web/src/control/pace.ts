@@ -7,6 +7,8 @@ export interface ChapterPace {
   plannedStartSec: number;
   plannedSec: number;
   sceneCount: number;
+  /** Slides that count on the progress bars (hidden scenes, at zero seconds, do not). */
+  slideCount: number;
   status: "done" | "current" | "upcoming";
 }
 
@@ -27,6 +29,15 @@ export interface Pace {
   /** Where the projected finish falls against the edition target range. */
   target: "under" | "within" | "over";
   chapters: ChapterPace[];
+  /**
+   * The same in slides, for the progress bars (one unit per visible slide):
+   * how many slides count, how many come before the current one, and where the
+   * clock falls on that scale (the slide planned at the elapsed time, plus its
+   * elapsed share).
+   */
+  slideTotal: number;
+  slideIndex: number;
+  clockSlides: number;
 }
 
 /** Within this many seconds of schedule counts as on track. */
@@ -50,7 +61,7 @@ export function computePace(
   scenes.forEach((scene, i) => {
     let chapter = chapters[chapters.length - 1];
     if (!chapter || chapter.id !== scene.chapter) {
-      chapter = { id: scene.chapter, plannedStartSec: plannedTotalSec, plannedSec: 0, sceneCount: 0, status: "upcoming" };
+      chapter = { id: scene.chapter, plannedStartSec: plannedTotalSec, plannedSec: 0, sceneCount: 0, slideCount: 0, status: "upcoming" };
       chapters.push(chapter);
     }
     if (i === index) {
@@ -59,6 +70,7 @@ export function computePace(
     }
     chapter.plannedSec += scene.durationSec;
     chapter.sceneCount += 1;
+    if (scene.durationSec > 0) chapter.slideCount += 1;
     plannedTotalSec += scene.durationSec;
     if (i === index) plannedSceneEndSec = plannedTotalSec;
   });
@@ -74,6 +86,19 @@ export function computePace(
   const projectedTotalSec = plannedTotalSec + deltaSec;
   const [minMin, maxMin] = targetMinutes;
   const target = projectedTotalSec < minMin * 60 ? "under" : projectedTotalSec > maxMin * 60 ? "over" : "within";
+  const counted = scenes.filter((sc) => sc.durationSec > 0);
+  const slideTotal = counted.length;
+  const slideIndex = scenes.slice(0, index).filter((sc) => sc.durationSec > 0).length;
+  let clockSlides = slideTotal;
+  let t = 0;
+  for (let k = 0; k < counted.length; k++) {
+    const d = counted[k]!.durationSec;
+    if (elapsedSec < t + d) {
+      clockSlides = k + (elapsedSec - t) / d;
+      break;
+    }
+    t += d;
+  }
   return {
     elapsedSec,
     plannedTotalSec,
@@ -84,6 +109,9 @@ export function computePace(
     projectedTotalSec,
     target,
     chapters,
+    slideTotal,
+    slideIndex,
+    clockSlides,
   };
 }
 

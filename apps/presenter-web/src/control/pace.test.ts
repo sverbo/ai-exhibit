@@ -40,9 +40,17 @@ describe("computePace", () => {
   it("summarises chapters", () => {
     const p = computePace(scenes, "c", 300_000, [9, 11]);
     expect(p.chapters).toEqual([
-      { id: "00", plannedStartSec: 0, plannedSec: 240, sceneCount: 2, status: "done" },
-      { id: "01", plannedStartSec: 240, plannedSec: 360, sceneCount: 1, status: "current" },
+      { id: "00", plannedStartSec: 0, plannedSec: 240, sceneCount: 2, slideCount: 2, status: "done" },
+      { id: "01", plannedStartSec: 240, plannedSec: 360, sceneCount: 1, slideCount: 1, status: "current" },
     ]);
+  });
+
+  it("places the bars in slides: one unit per visible slide, the clock mapped onto them", () => {
+    const p = computePace(scenes, "c", 300_000, [9, 11]);
+    expect(p.slideTotal).toBe(3);
+    expect(p.slideIndex).toBe(2);
+    // 300 s: past the first two slides (240 s), 60 s into the third (360 s long).
+    expect(p.clockSlides).toBeCloseTo(2 + 60 / 360);
   });
 
   it("handles an empty edition", () => {

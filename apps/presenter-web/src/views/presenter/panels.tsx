@@ -253,18 +253,19 @@ export function ChapterStrip({
   locale: Locale;
 }) {
   const { t } = useUi();
-  const total = pace.plannedTotalSec || 1;
-  const pct = (sec: number) => `${Math.min(100, Math.max(0, (sec / total) * 100))}%`;
+  // One unit per visible slide: segments and markers follow slide counts, not time or clicks.
+  const total = pace.slideTotal || 1;
+  const pct = (slides: number) => `${Math.min(100, Math.max(0, (slides / total) * 100))}%`;
   return (
     <div className={styles.strip}>
       <div className={styles.segments}>
-        {pace.chapters.map((c) => {
+        {pace.chapters.filter((c) => c.slideCount > 0).map((c) => {
           const title = tr(presentation.chapters.find((ch) => ch.id === c.id)?.title ?? { en: c.id }, locale);
           return (
             <div
               key={`${c.id}-${c.plannedStartSec}`}
               className={`${styles.segment} ${styles[`seg_${c.status}`]}`}
-              style={{ flexGrow: c.plannedSec || 1 }}
+              style={{ flexGrow: c.slideCount }}
               title={`${c.id} · ${title} · ${formatDuration(c.plannedSec)}`}
             >
               <span className={styles.segLabel}>
@@ -274,10 +275,10 @@ export function ChapterStrip({
           );
         })}
       </div>
-      {pace.plannedTotalSec > 0 ? (
+      {pace.slideTotal > 0 ? (
         <>
-          <span className={styles.markPos} style={{ left: pct(pace.plannedSceneStartSec) }} title={t("scene")} />
-          <span className={styles.markClock} style={{ left: pct(pace.elapsedSec) }} title={t("timer")} />
+          <span className={styles.markPos} style={{ left: pct(pace.slideIndex) }} title={t("scene")} />
+          <span className={styles.markClock} style={{ left: pct(pace.clockSlides) }} title={t("timer")} />
         </>
       ) : null}
     </div>
