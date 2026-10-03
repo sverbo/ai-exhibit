@@ -315,7 +315,7 @@ export const chapter04: SceneDefinition[] = [
             picture: "power",
             title: { en: "Power" },
             line: {
-              en: "A few companies build most leading models. And when AI does the work, fewer people can refuse or blow the whistle.",
+              en: "A few firms build the top models. If AI does the work, fewer people can refuse or blow the whistle.",
             },
             evidence: "projection",
             sourceIds: ["tk-stanford-2025-ai-index", "fm-cma-foundation-models-2023", "tk-davidson-2025-ai-enabled-coups"],
