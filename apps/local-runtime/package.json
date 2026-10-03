@@ -1,0 +1,12 @@
+{
+  "name": "@ai-exhibit/local-runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts --dev"
+  },
+  "dependencies": {
+    "@ai-exhibit/cloud-api": "workspace:*"
+  }
+}

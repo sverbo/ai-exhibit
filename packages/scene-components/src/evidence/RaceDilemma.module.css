@@ -1,0 +1,201 @@
+.root {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--space-5);
+  display: grid;
+  grid-template-columns: 1fr 560px;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-4) var(--space-5);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.analogy {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.matrix {
+  display: grid;
+  grid-template-columns: 56px 230px 1fr 1fr;
+  grid-template-rows: auto auto 1fr 1fr;
+  gap: var(--space-2);
+  min-height: 0;
+}
+.playerB {
+  grid-row: 1;
+  grid-column: 3 / 5;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  color: var(--color-accent-2);
+  border-bottom: 2px solid var(--color-accent-2);
+  padding-bottom: var(--space-1);
+}
+.playerA {
+  grid-row: 3 / 5;
+  grid-column: 1;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  color: var(--color-accent);
+  border-left: 2px solid var(--color-accent);
+  padding-left: var(--space-1);
+}
+.choiceCol,
+.choiceRow {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.choiceCol {
+  grid-row: 2;
+  text-align: center;
+  padding-bottom: var(--space-1);
+}
+.choiceRow {
+  grid-column: 2;
+  align-self: center;
+  padding-right: var(--space-2);
+}
+
+.cell {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  border: 3px solid var(--color-line);
+  min-height: 0;
+  transition: opacity var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+button.cell {
+  cursor: pointer;
+}
+button.cell:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+.hi {
+  border-color: var(--color-text);
+}
+.dim {
+  opacity: 0.38;
+}
+.eq {
+  border-style: dashed;
+  border-color: var(--color-danger);
+}
+.unknown {
+  grid-row: 1 / -1;
+  place-self: center;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-line);
+}
+
+.rank {
+  display: grid;
+  grid-template-columns: 36px auto 1fr;
+  align-items: center;
+  gap: var(--space-2);
+}
+.who {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+.rank:first-child .who { color: var(--color-accent); }
+.rank:nth-child(2) .who { color: var(--color-accent-2); }
+.pips {
+  display: inline-flex;
+  gap: 5px;
+}
+.pip,
+.pipOn {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 2px solid var(--color-text-muted);
+  box-sizing: border-box;
+}
+.pipOn {
+  background: var(--color-text);
+  border-color: var(--color-text);
+}
+.rankWord {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.outcome {
+  align-self: end;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  line-height: 1.2;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.caption {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-lg);
+  line-height: 1.1;
+  text-wrap: balance;
+  animation: rise var(--dur) var(--ease);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.lists {
+  display: grid;
+  gap: var(--space-3);
+}
+.lists h3 {
+  margin: 0 0 var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.lists ul {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+}
+.limits {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-line);
+}
+/* Steps 2 and 3 compare B's options: A's ranks step back. */
+.focusB .rank:first-child {
+  opacity: 0.3;
+}
+.focusB .rank:nth-child(2) .rankWord {
+  color: var(--color-text);
+  font-weight: 600;
+}

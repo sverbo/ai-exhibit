@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you reuse or adapt this talk, please credit it as below."
+title: "ai-exhibit: What AI can do today, how it works, and its risks"
+abstract: >-
+  An interactive web presentation that explains today's AI to a non-technical
+  audience: what it can do, how it works, who builds it, its risks and what
+  can be done, with live demos and sourced claims.
+type: software
+authors:
+  - given-names: Samuel
+    family-names: Verboomen
+repository-code: "https://github.com/sverbo/ai-exhibit"
+url: "https://ai-exhibit.samverbo.com"
+license:
+  - MIT
+  - CC-BY-4.0
+date-released: "2026-10-03"
+keywords:
+  - artificial intelligence
+  - AI safety
+  - presentation
+  - education

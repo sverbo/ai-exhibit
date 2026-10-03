@@ -1,0 +1,172 @@
+.root {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+.heading {
+  position: absolute;
+  left: 80px;
+  top: 52px;
+  right: 80px;
+}
+
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.wire {
+  stroke: var(--color-text-muted);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 0.012 0.018;
+}
+.wireNew {
+  stroke: var(--color-accent);
+  stroke-width: 4;
+  stroke-dasharray: none;
+}
+.animate .wireNew {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 560ms var(--ease) forwards;
+}
+
+.hub {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 50%;
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+.hubLabel {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-variation-settings: "opsz" 36;
+}
+
+.node {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.nodeOn {
+  opacity: 1;
+}
+.disc {
+  position: absolute;
+  left: -50px;
+  top: -50px;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border: 3px solid var(--color-text-muted);
+  color: var(--color-text);
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.nodeCurrent .disc {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.label {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 30px;
+  font-weight: 500;
+}
+.nodeCurrent .label {
+  font-weight: 700;
+}
+.animate .nodeCurrent .disc {
+  animation: pop 460ms var(--ease) 280ms both;
+}
+
+.band {
+  position: absolute;
+  left: 160px;
+  right: 160px;
+  bottom: 48px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  text-align: center;
+}
+.example {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 46px;
+  line-height: 1.18;
+  font-variation-settings: "opsz" 72;
+  text-wrap: balance;
+}
+.quote {
+  color: var(--color-accent);
+}
+.aloneSub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.sources {
+  margin: 0;
+  display: flex;
+  gap: 20px;
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+.animate .example {
+  animation: arrive 480ms var(--ease) 420ms both;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes pop {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

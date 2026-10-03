@@ -1,0 +1,249 @@
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-5) 80px var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+
+.colTitle {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-md);
+}
+
+.switches {
+  flex: none;
+  width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.switchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 14px var(--space-3);
+  border-radius: var(--radius);
+  border: 2px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.switchRow:disabled {
+  cursor: default;
+}
+.switchRow:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.switchOn {
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+.switchIcon {
+  flex: none;
+}
+.switchLabel {
+  flex: 1;
+  font-size: var(--text-sm);
+}
+.track {
+  flex: none;
+  position: relative;
+  width: 72px;
+  height: 38px;
+  border-radius: 19px;
+  background: var(--color-surface-2);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+  transition: background var(--dur) var(--ease);
+}
+.knob {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.switchOn .track {
+  background: var(--color-accent);
+  box-shadow: none;
+}
+.switchOn .knob {
+  transform: translateX(34px);
+  background: var(--color-on-accent);
+}
+
+.caps {
+  flex: 1;
+  min-width: 0;
+}
+.capsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.capList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cap {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px var(--space-2);
+  border-radius: 10px;
+  font-size: 25px;
+  color: var(--color-line);
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.capOn {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+.capRisky {
+  box-shadow: inset 4px 0 0 var(--color-danger);
+}
+.capGated {
+  box-shadow: inset 4px 0 0 var(--color-accent-2);
+}
+.capIcons {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.capLabel {
+  line-height: 1.2;
+}
+.capTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 19px;
+  white-space: nowrap;
+}
+.tagRisk {
+  color: var(--color-danger);
+  border: 2px solid var(--color-danger);
+}
+.tagGate {
+  color: var(--color-accent-2);
+  border: 2px solid var(--color-accent-2);
+}
+.combo {
+  font-size: 18px;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.gateCol {
+  flex: none;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  animation: rise calc(var(--dur) * 1.6) var(--ease) both;
+}
+.request {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  border: 3px solid var(--color-accent-2);
+  background: var(--color-surface);
+}
+.approved {
+  border-color: var(--color-ok);
+}
+.denied {
+  border-color: var(--color-text-muted);
+}
+.reqLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.reqAction {
+  margin: 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: var(--text-sm);
+  line-height: 1.3;
+}
+.reqButtons {
+  display: flex;
+  gap: var(--space-2);
+}
+.reqOutcome,
+.reqWaiting {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-sm);
+}
+.approved .reqOutcome {
+  color: var(--color-ok);
+}
+.reqWaiting {
+  color: var(--color-accent-2);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.withGate .switches {
+  width: 400px;
+}
+.withGate .switchLabel {
+  font-size: var(--text-xs);
+}
+.withGate .combo {
+  display: none;
+}
+.withGate .gateCol {
+  width: 400px;
+}

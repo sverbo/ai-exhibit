@@ -1,0 +1,142 @@
+/*
+ * Solo window: the stage on top, the HUD docked below it. The stage area
+ * shrinks to make room for the HUD, so the HUD never covers a scene's controls.
+ */
+.present {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+.outOfDate {
+  flex: none;
+  border-radius: 0;
+}
+.stageArea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.hud {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--color-line);
+  background: var(--ui-panel);
+  color: var(--color-text);
+  font-size: var(--ui-text-sm);
+}
+.hudStrip {
+  padding: 4px 12px;
+}
+.hudMain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 32px;
+}
+.position {
+  flex: none;
+  color: var(--color-accent);
+}
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.steps {
+  flex: none;
+  display: inline-flex;
+  gap: 4px;
+}
+.stepDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-text-muted);
+}
+.stepOn {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.timer {
+  flex: none;
+  font-size: var(--ui-text-lg);
+}
+.paused {
+  color: var(--color-text-muted);
+}
+.small {
+  min-height: 30px;
+  padding: 3px 10px;
+}
+
+/* Notes in two columns: talking points, then takeaway and transition. */
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  gap: 18px;
+  max-height: min(150px, 22vh);
+  overflow-y: auto;
+}
+.notesCol {
+  min-width: 0;
+}
+.sideCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.takeaway {
+  margin: 0;
+  font-size: var(--ui-text-sm);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+.aside {
+  font-size: var(--ui-text-xs);
+  font-weight: 700;
+  color: var(--color-text);
+}
+.warn {
+  margin: 0;
+  color: var(--color-danger);
+}
+.keys {
+  margin: 0;
+  font-size: var(--ui-text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sideCol {
+    display: none;
+  }
+}
+
+/* Projector: no cursor over the slide while the mouse rests. */
+.idle {
+  cursor: none;
+}
+/* "Linked to the presenter view": the presenter's window runs the stage. */
+.linked {
+  padding: 0 8px;
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  white-space: nowrap;
+}

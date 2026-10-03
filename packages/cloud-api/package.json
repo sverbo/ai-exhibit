@@ -1,0 +1,14 @@
+{
+  "name": "@ai-exhibit/cloud-api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts",
+    "./vercel": "./src/vercel.ts"
+  },
+  "dependencies": {
+    "@huggingface/tokenizers": "0.2.0"
+  }
+}

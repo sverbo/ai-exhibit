@@ -1,0 +1,14 @@
+{
+  "name": "@ai-exhibit/content",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./sources": "./sources/index.ts",
+    "./glossary": "./glossary/index.ts",
+    "./assets/*": "./assets/*"
+  },
+  "dependencies": {
+    "@ai-exhibit/presentation-core": "workspace:*"
+  }
+}

@@ -1,0 +1,46 @@
+import { Stage, type SceneRole } from "@ai-exhibit/scene-components";
+import { projectorView } from "../talk/shell.ts";
+import type { Talk } from "../talk/useTalk.ts";
+import { useUi } from "../i18n.ts";
+import { SceneStage } from "./SceneStage.tsx";
+import styles from "./ProjectorSurface.module.css";
+
+/**
+ * Exactly what the projector shows: the live scene, the held frame while
+ * frozen, or black. Used by /projector, /present and the presenter's mirror.
+ */
+export function ProjectorSurface({
+  talk,
+  role,
+  joinUrl,
+}: {
+  talk: Talk;
+  role: Exclude<SceneRole, "preview">;
+  joinUrl: string | null;
+}) {
+  const { t } = useUi();
+  const { state, scenes } = talk;
+  if (!state) return <Slate text={t("waitingSession")} />;
+  const view = projectorView(state);
+  if (view.kind === "blackout") return <div className={styles.black} data-projector="blackout" />;
+  const scene = scenes.find((s) => s.id === view.sceneId);
+  if (!scene) return <Slate text={scenes.length ? t("waitingSession") : t("emptyEdition")} />;
+  return (
+    <div className={styles.surface} data-projector={view.kind}>
+      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} joinUrl={joinUrl} />
+    </div>
+  );
+}
+
+function Slate({ text }: { text: string }) {
+  return (
+    <div className={styles.surface}>
+      <Stage>
+        <div className={styles.slate}>
+          <span className={styles.slateMark} aria-hidden="true" />
+          <p className={styles.slateText}>{text}</p>
+        </div>
+      </Stage>
+    </div>
+  );
+}

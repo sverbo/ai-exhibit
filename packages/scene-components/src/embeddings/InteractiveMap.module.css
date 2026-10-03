@@ -1,0 +1,70 @@
+.box {
+  position: relative;
+  outline: none;
+  touch-action: none;
+  user-select: none;
+}
+.interactive {
+  cursor: grab;
+}
+.interactive:active {
+  cursor: grabbing;
+}
+.interactive:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius);
+}
+
+.controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  cursor: default;
+}
+.round,
+.reset {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+.round {
+  width: 48px;
+  height: 48px;
+  font-size: 30px;
+  line-height: 1;
+  padding: 0;
+}
+.reset {
+  height: 48px;
+  padding: 0 20px;
+}
+.round:hover:not(:disabled),
+.reset:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+.round:focus-visible,
+.reset:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.round:disabled,
+.reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.reset[aria-pressed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}

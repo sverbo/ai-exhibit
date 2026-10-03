@@ -1,0 +1,51 @@
+/* Faint key reminder over the bottom edge of the stage (projector-only mode). */
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  z-index: 5;
+  margin: 0;
+  padding: 4px 12px;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-panel) 70%, transparent);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.shown {
+  opacity: 0.6;
+  transition-duration: 150ms;
+}
+/* Top-right corner (model source, full screen): invisible and unclickable until shown. */
+.corner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ui-panel) 80%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+.shownCorner {
+  opacity: 0.85;
+  pointer-events: auto;
+  transition-duration: 150ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hint,
+  .shown,
+  .corner,
+  .shownCorner {
+    transition: none;
+  }
+}

@@ -1,0 +1,86 @@
+/*
+ * Pictogram paint. Fills and strokes come only from theme tokens; cut-outs use
+ * --pic-cut, which the container sets to the color behind the picture.
+ */
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  --pic-cut: var(--color-bg);
+}
+
+.ink { fill: var(--color-text); }
+.ai { fill: var(--color-accent); }
+.alt { fill: var(--color-accent-2); }
+.warn { fill: var(--color-danger); }
+.ok { fill: var(--color-ok); }
+.muted { fill: var(--color-line); }
+.cut { fill: var(--pic-cut); }
+
+.stroke,
+.strokeInk,
+.strokeAi,
+.strokeAlt,
+.strokeWarn,
+.strokeOk,
+.strokeMuted,
+.strokeCut,
+.dashAi,
+.dashAlt,
+.dashMuted,
+.strokeNote,
+.crack,
+.smudge,
+.bubble,
+.page,
+.note,
+.warnShape,
+.ground {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.strokeInk { fill: none; stroke: var(--color-text); stroke-width: 7; }
+.strokeAi { fill: none; stroke: var(--color-accent); stroke-width: 7; }
+.strokeAlt { fill: none; stroke: var(--color-accent-2); stroke-width: 6; }
+.strokeWarn { fill: none; stroke: var(--color-danger); stroke-width: 7; }
+.strokeOk { fill: none; stroke: var(--color-ok); stroke-width: 7; }
+.strokeMuted { fill: none; stroke: var(--color-line); stroke-width: 7; }
+.strokeCut { fill: none; stroke: var(--pic-cut); stroke-width: 4; }
+.dashAi { fill: none; stroke: var(--color-accent); stroke-width: 5; stroke-dasharray: 2 11; }
+.dashMuted { fill: none; stroke: var(--color-text-muted); stroke-width: 5; stroke-dasharray: 2 11; }
+.dashAlt { fill: none; stroke: var(--color-accent-2); stroke-width: 5; stroke-dasharray: 2 11; }
+
+.ground { stroke: var(--color-line); stroke-width: 4; }
+
+.crack { fill: none; stroke: var(--color-danger); stroke-width: 8; }
+.smudge { fill: none; stroke: var(--color-line); stroke-width: 16; opacity: 0.7; }
+
+.page { fill: var(--color-surface); stroke: var(--color-text); stroke-width: 5; }
+.bubble { fill: var(--color-surface); stroke: var(--color-text); stroke-width: 4; }
+.note { fill: var(--color-surface); stroke: var(--color-accent-2); stroke-width: 4; }
+.strokeNote { fill: none; stroke: var(--color-accent-2); stroke-width: 3.5; }
+
+.warnShape { fill: var(--color-danger); stroke: var(--color-danger); stroke-width: 14; }
+
+.cone { fill: var(--color-accent-2); opacity: 0.16; }
+
+.chalk {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 500;
+  fill: var(--color-on-accent);
+}
+.section {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 600;
+  fill: var(--color-accent-2);
+}
+.question {
+  font-family: var(--font-display);
+  font-size: 84px;
+  font-weight: 600;
+  fill: var(--color-accent);
+}

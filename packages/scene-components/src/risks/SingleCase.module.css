@@ -1,0 +1,88 @@
+/*
+ * One documented case on the 1920 x 1080 stage: a big picture on the left,
+ * the case told in one line on the right, the outcome added below a rule.
+ */
+.root {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 560px 1fr;
+  align-items: center;
+  gap: var(--space-6);
+  padding: 120px 150px 120px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.picture {
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(closest-side, var(--stage-light), transparent);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 900px;
+}
+
+.meta {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.date {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 420;
+  font-variation-settings: "opsz" 96, "SOFT" 30;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+}
+
+.line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+.outcome {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 3px solid var(--color-line);
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.shown {
+  opacity: 1;
+  transform: none;
+}
+.hidden {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.still,
+.still * {
+  transition: none !important;
+  animation: none !important;
+}

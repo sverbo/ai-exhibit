@@ -1,0 +1,107 @@
+/* Shared frame for the llm scenes: one idea, big type, quiet chrome. */
+.root {
+  position: relative;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  /* The bottom band holds the footer (tag, sources, controls). */
+  padding: var(--space-5) var(--space-6) 132px;
+  box-sizing: border-box;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+.headline {
+  margin: 0;
+  max-width: 1500px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-xl);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.headline[data-entering="true"] {
+  animation: settle var(--dur) var(--ease) both;
+}
+
+.sub {
+  margin: var(--space-2) 0 0;
+  max-width: 1300px;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+
+/* "Illustration" tag: the honest label on invented numbers. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px;
+  border: 2px dashed var(--color-text-muted);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.footer {
+  position: absolute;
+  left: var(--space-6);
+  right: var(--space-6);
+  bottom: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.button {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+.button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.button[aria-pressed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Motion off: reduced motion, presenter pause, preview. */
+.still,
+.still * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "ai-exhibit",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -n runtime,web -c blue,magenta \"pnpm --filter @ai-exhibit/local-runtime dev\" \"pnpm --filter @ai-exhibit/presenter-web dev\"",
+    "build": "pnpm --filter @ai-exhibit/presenter-web build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "verify:content": "tsx scripts/verify/content.ts",
+    "verify:sources": "tsx scripts/verify/sources.ts",
+    "rehearse": "tsx scripts/verify/rehearse.ts",
+    "recordings:build": "tsx scripts/prepare/record-cloud.ts && tsx scripts/prepare/record-tokenizations.ts"
+  },
+  "devDependencies": {
+    "@ai-exhibit/canonical": "workspace:*",
+    "@ai-exhibit/content": "workspace:*",
+    "@ai-exhibit/presentation-core": "workspace:*",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.4",
+    "concurrently": "^10.0.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}

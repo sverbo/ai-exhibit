@@ -1,0 +1,276 @@
+/**
+ * ChatPlayground (scene 3.11): the fine-tuned model as an assistant. Ready
+ * questions and typed ones (controller only), answered by Llama 3.1 8B
+ * Instruct through Hugging Face; in Simulation, its recorded real answers to
+ * the ready questions (typing disabled). The guardrail example asks a harmful
+ * question: live, or its recorded real refusal.
+ *
+ * Reveal step 1 shows, next to the chat, the exact text the model reads: the
+ * hidden (example) system prompt and the role tags of the model's own chat
+ * template (rendered from its published template, never imitated), then the
+ * answer as the continuation of that text, and the end token that stops it.
+ */
+import { Fragment, useRef } from "react";
+import type { L10n } from "@ai-exhibit/presentation-core";
+import { cloudChat, findCloudRecording, renderChatTemplate } from "@ai-exhibit/ml-runtime/lm";
+import type { SceneComponentProps } from "../contract.ts";
+import styles from "./ChatPlayground.module.css";
+import { type RawSegment, segmentChat } from "./chatRaw.ts";
+import { COPY } from "./copy.ts";
+import { assistantMessages, CHAT_PRESETS, GUARDRAIL_PROMPT } from "./data.ts";
+import { stripEmphasis } from "./format.ts";
+import { type NoticeKey, useCloudRecording, useLlamaTemplate } from "./runtime.ts";
+import { useSourceDecision } from "./source.ts";
+import { isL10n } from "./shared.ts";
+import { useOnStepChange, useSceneState } from "./state.ts";
+import { Button, cx, Frame, Notice, Pending, SourceBadge, TextField } from "./ui.tsx";
+
+export interface ChatPlaygroundProps {
+  prompt?: L10n;
+}
+
+interface Turn {
+  question: string;
+  answer: string;
+  state: "running" | "done";
+  kind: "chat" | "guardrail";
+  source: "live" | "recorded";
+  /** The system prompt sent with the question (hidden from the user, shown on reveal). */
+  system: string;
+  /** Exact text the model read (its chat template, rendered), when known. */
+  raw?: string;
+  endTag?: string;
+  stopReason?: string;
+  /** Model that answered (shown to the audience). */
+  model?: string;
+  /** Probabilities of the first answer tokens and their alternatives. */
+  firstTokens?: { token: string; p: number; top: { token: string; p: number }[] }[];
+}
+
+export interface ChatState {
+  turns: Turn[];
+  notice: NoticeKey | null;
+  /** null: follow the reveal step. */
+  showRaw?: boolean | null;
+}
+
+const KEEP_TURNS = 1;
+const CLOUD_LABEL = "Llama 3.1 8B Instruct";
+const REPLAY_MS = 45;
+
+export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroundProps, ChatState>) {
+  const { locale, role } = ctx;
+  const presets = [...(isL10n(props.prompt) ? [props.prompt] : []), ...CHAT_PRESETS].filter(
+    (p, i, all) => all.findIndex((q) => q.en === p.en) === i,
+  );
+  const [state, setState] = useSceneState<ChatState>(ctx, () => ({ turns: [], notice: null }), { throttleMs: 60 });
+  const cloudRec = useCloudRecording();
+  const llamaTemplate = useLlamaTemplate();
+  const { decision, cloudFailed } = useSourceDecision(ctx);
+  const simulation = decision.active === "simulation";
+  const abort = useRef<AbortController | null>(null);
+
+  const push = (turn: Turn) => setState((s) => ({ ...s, turns: [...s.turns, turn].slice(-KEEP_TURNS) }));
+  const updateLast = (patch: Partial<Turn>) =>
+    setState((s) => ({ ...s, turns: s.turns.map((t, i) => (i === s.turns.length - 1 ? { ...t, ...patch } : t)) }));
+
+  /** Shows an answer word by word (cloud answers and recordings arrive whole). */
+  const reveal = async (text: string, ac: AbortController) => {
+    let shown = "";
+    for (const w of text.split(/(?<=\s)/)) {
+      if (ac.signal.aborted) return false;
+      shown += w;
+      updateLast({ answer: shown });
+      if (!ctx.reducedMotion) await new Promise((r) => setTimeout(r, REPLAY_MS));
+    }
+    return true;
+  };
+
+  const replayRecorded = async (q: string, kind: Turn["kind"], ac: AbortController) => {
+    const rec = findCloudRecording(cloudRec, "chat", q);
+    if (!rec) {
+      setState((s) => ({ ...s, notice: "notRecorded" }));
+      return;
+    }
+    setState((s) => ({ ...s, notice: null }));
+    push({
+      question: q,
+      kind,
+      answer: "",
+      state: "running",
+      source: "recorded",
+      system: rec.system ?? "",
+      raw: rec.raw,
+      endTag: rec.endTag,
+      stopReason: rec.finishReason === "stop" ? "eos" : "max-tokens",
+      model: CLOUD_LABEL,
+      firstTokens: rec.firstTokens,
+    });
+    if (await reveal(rec.text, ac)) updateLast({ answer: rec.text, state: "done" });
+  };
+
+  const ask = async (question: string, kind: Turn["kind"] = "chat") => {
+    const q = question.trim();
+    if (!q) return;
+    abort.current?.abort();
+    const ac = new AbortController();
+    abort.current = ac;
+    if (simulation) {
+      await replayRecorded(q, kind, ac);
+      return;
+    }
+    const messages = assistantMessages(locale, q);
+    push({ question: q, answer: "", state: "running", kind, source: "live", system: messages[0]!.content, model: CLOUD_LABEL });
+    setState((s) => ({ ...s, notice: null }));
+    try {
+      const r = await cloudChat({ messages, maxTokens: 120, temperature: 0 }, { signal: ac.signal });
+      if (ac.signal.aborted) return;
+      updateLast({
+        raw: llamaTemplate ? renderChatTemplate(llamaTemplate, messages) : undefined,
+        endTag: llamaTemplate?.eos_token,
+        firstTokens: r.tokens?.slice(0, 3),
+      });
+      if (await reveal(r.text, ac)) {
+        updateLast({ answer: r.text, state: "done", stopReason: r.finishReason === "stop" ? "eos" : "max-tokens" });
+      }
+    } catch {
+      if (ac.signal.aborted) return;
+      // Cloud failed: drop that turn, say so in the badge, show the recording if there is one.
+      setState((s) => ({ ...s, turns: s.turns.slice(0, -1) }));
+      cloudFailed();
+      await replayRecorded(q, kind, ac);
+    }
+  };
+
+  useOnStepChange(ctx.revealStep, () => setState((s) => ({ ...s, showRaw: null })));
+
+  const view: ChatState = role === "preview" || (role === "display" && ctx.state === undefined) ? { turns: [], notice: null } : state;
+  const sceneSteps = ctx.scene.steps ?? 0;
+  const showRaw = role !== "preview" && (view.showRaw ?? (sceneSteps > 0 && ctx.revealStep >= 1));
+  const running = state.turns.at(-1)?.state === "running";
+
+  const controls =
+    role === "controller" ? (
+      <>
+        <div className={styles.presets} role="group" aria-label={COPY.presetQuestions[locale]}>
+          <span className={styles.presetsLabel}>{COPY.presetQuestions[locale]}</span>
+          <div className={styles.presetRow}>
+            {presets.map((p) => (
+              <Button key={p.en} disabled={running} onClick={() => void ask(p[locale])} title={p[locale]}>
+                {p[locale].length > 28 ? `${p[locale].slice(0, 27)}…` : p[locale]}
+              </Button>
+            ))}
+            <Button disabled={running} onClick={() => void ask(GUARDRAIL_PROMPT[locale], "guardrail")}>
+              {COPY.guardrail[locale]}
+            </Button>
+          </div>
+        </div>
+        <TextField label={COPY.askQuestion[locale]} clearOnSubmit submitLabel={COPY.send[locale]} disabled={simulation || running} onSubmit={(q) => void ask(q)} />
+        {running ? <Button onClick={() => abort.current?.abort()}>{COPY.stop[locale]}</Button> : null}
+        <Button disabled={!state.turns.length} onClick={() => setState((s) => ({ ...s, turns: [] }))}>
+          {COPY.clearChat[locale]}
+        </Button>
+        <Button primary={!showRaw} active={showRaw} onClick={() => setState((s) => ({ ...s, showRaw: !showRaw }))}>
+          {showRaw ? COPY.hideRaw[locale] : COPY.showRaw[locale]}
+        </Button>
+        <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} />
+      </>
+    ) : null;
+
+  return (
+    <Frame controls={controls} label={ctx.scene.title[locale]}>
+      <header className={styles.head}>
+        <span className={styles.title}>{COPY.assistantTitle[locale]}</span>
+        <span className={styles.model}>{view.turns.at(-1)?.model ?? CLOUD_LABEL}</span>
+        <span className={styles.sub}>{COPY.assistantSub[locale]}</span>
+      </header>
+      <div className={cx(styles.body, showRaw && styles.split)}>
+      <ol className={styles.chat}>
+        {view.turns.map((t, i) => (
+          <li key={i} className={styles.turn}>
+            <p className={styles.user}>{t.question}</p>
+            <div className={cx(styles.assistant, t.kind === "guardrail" && styles.guardrail)}>
+              {t.kind === "guardrail" ? <span className={styles.guardTag}>{COPY.guardrail[locale]}</span> : null}
+              <p className={styles.answer}>
+                {t.answer ? stripEmphasis(t.answer) : <Pending>{COPY.writing[locale]}</Pending>}
+              </p>
+              {t.source === "recorded" ? (
+                <span className={styles.recorded}>
+                  {COPY.fallback[locale]}
+                </span>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ol>
+      {showRaw ? <RawPanel turn={view.turns.at(-1) ?? null} locale={locale} /> : null}
+      </div>
+      {view.notice && role !== "preview" ? (
+        <div className={styles.footer}>
+          <Notice reason={view.notice} locale={locale} />
+        </div>
+      ) : null}
+    </Frame>
+  );
+}
+
+const ROLE_CLASS = { system: styles.roleSystem, user: styles.roleUser, assistant: styles.roleAssistant };
+
+/** The text the model actually reads, tags coloured by role, then its continuation and end token. */
+function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) {
+  const segments: RawSegment[] =
+    turn?.raw ? segmentChat(turn.raw, [{ role: "system", content: turn.system }, { role: "user", content: turn.question }]) : [];
+  const ended = turn?.state === "done" && turn.stopReason === "eos" && turn.endTag;
+  return (
+    <section className={styles.raw} aria-label={COPY.hiddenFormat[locale]}>
+      <header className={styles.rawHead}>{COPY.hiddenFormat[locale]}</header>
+      {turn && turn.raw ? (
+        <>
+          <pre className={styles.rawText}>
+            {segments.map((seg, i) =>
+              seg.kind === "newline" ? (
+                <Fragment key={i}>{"\n"}</Fragment>
+              ) : (
+                <span key={i} className={cx(seg.kind === "tag" ? styles.tag : styles.content, ROLE_CLASS[seg.role])}>
+                  {seg.text}
+                </span>
+              ),
+            )}
+            <span className={styles.continuation}>{turn.answer}</span>
+            {turn.state === "done" && turn.endTag ? (
+              // Cut by the length limit: the end token it would write next is shown faded.
+              <span className={cx(styles.tag, styles.endTag, !ended && styles.notReached)}>{turn.endTag}</span>
+            ) : null}
+          </pre>
+          <ul className={styles.rawNotes}>
+            <li>
+              <span className={cx(styles.swatch, styles.roleSystem)} aria-hidden="true" />
+              {COPY.systemExample[locale]}
+            </li>
+            <li>
+              <span className={cx(styles.swatch, styles.roleAssistant)} aria-hidden="true" />
+              {COPY.continuesText[locale]}
+            </li>
+            <li>
+              <span className={cx(styles.swatch, styles.endSwatch)} aria-hidden="true" />
+              {COPY.endTagNote[locale]}
+            </li>
+          </ul>
+          {turn.firstTokens?.[0]?.top.length ? (
+            <p className={styles.odds}>
+              {COPY.firstWordOdds[locale]}{" "}
+              {turn.firstTokens[0].top.slice(0, 4).map((t, i) => (
+                <span key={i} className={styles.odd}>
+                  <code>{t.token.replace(/\n/g, "↵")}</code> {Math.round(t.p * 100)}
+                  {locale === "fr" ? "\u00a0%" : "%"}
+                </span>
+              ))}
+            </p>
+          ) : null}
+        </>
+      ) : (
+        <p className={styles.rawEmpty}>{COPY.rawEmpty[locale]}</p>
+      )}
+    </section>
+  );
+}

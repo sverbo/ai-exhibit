@@ -1,0 +1,248 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 680px 1fr;
+  gap: var(--space-6);
+  align-items: center;
+  margin-top: var(--space-3);
+}
+
+/* Left: the input (a sentence to classify, then the whole vocabulary). */
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  justify-content: center;
+  min-height: 0;
+}
+/* Step 0: the sentence the sports classifier reads. */
+.classified {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 8px solid var(--color-accent-2);
+  background: var(--color-surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.2;
+  animation: appear var(--dur) var(--ease) both;
+}
+
+.sentence {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1.15;
+  animation: appear var(--dur) var(--ease) both;
+}
+.added {
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: pre;
+  display: inline-block;
+  animation: dropIn 700ms var(--ease) both;
+}
+.newest {
+  color: var(--color-accent);
+}
+.blank {
+  display: inline-block;
+  width: 1.6em;
+  height: 0.9em;
+  margin-left: 0.25em;
+  vertical-align: -0.08em;
+  border-bottom: 6px solid var(--color-accent);
+  animation: blink 1.2s steps(2, jump-none) infinite;
+}
+
+.gridFigure {
+  margin: 0;
+  animation: appear 900ms var(--ease) 200ms both;
+}
+/* The token cloud: a canvas of dots plus an SVG layer for the highlights. */
+.cloud {
+  position: relative;
+}
+.cloudCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.cloudMarks {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: visible;
+}
+.spot {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.cloudMarks[data-entering="true"] .spot {
+  animation: pop 600ms var(--ease) both;
+}
+.spotRing {
+  fill: none;
+  stroke: var(--color-accent-2);
+  stroke-width: 3;
+}
+.spotDot {
+  fill: var(--color-accent-2);
+}
+.topHalo {
+  fill: var(--color-accent);
+  opacity: 0.16;
+}
+.topRing {
+  fill: var(--color-bg);
+  stroke: var(--color-accent);
+  stroke-width: 4;
+}
+.topDot {
+  fill: var(--color-accent);
+}
+.topLabel {
+  position: absolute;
+  transform: translate(44px, -50%);
+  padding: 4px 16px 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: pre;
+  box-shadow: 0 0 0 6px var(--color-bg);
+}
+.topLabel[data-entering="true"] {
+  animation: appear 600ms var(--ease) 300ms both;
+}
+.gridCaption {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.gridCaption strong {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Right: the bars. The same rows morph from two answers to many. */
+.bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.row {
+  display: grid;
+  grid-template-columns: 330px 1fr 130px;
+  align-items: center;
+  gap: var(--space-3);
+  height: 50px;
+  transition: height var(--dur) var(--ease);
+}
+.bars[data-mode="classifier"] .row {
+  height: 150px;
+}
+.label {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  text-align: right;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bars[data-mode="classifier"] .label {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+.track {
+  position: relative;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--color-surface);
+  transition: height var(--dur) var(--ease);
+}
+.bars[data-mode="classifier"] .track {
+  height: 96px;
+}
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 6px;
+  background: var(--color-accent-2);
+  transition: width 900ms var(--ease);
+}
+.chosen .fill {
+  background: var(--color-accent);
+}
+.value {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-variant-numeric: tabular-nums;
+}
+.bars[data-mode="classifier"] .value {
+  font-size: var(--text-lg);
+}
+
+/* "Everything else": many tokens, each tiny, together a lot. */
+.rest {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+.rest .label {
+  font-family: var(--font-body);
+  font-size: 24px;
+  white-space: nowrap;
+}
+.rest .fill {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-text-muted) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}

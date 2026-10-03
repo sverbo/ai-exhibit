@@ -1,0 +1,25 @@
+{
+  "name": "@ai-exhibit/scene-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./registerAll": "./src/registerAll.ts",
+    "./tokens.css": "./src/theme/tokens.css"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "dependencies": {
+    "@ai-exhibit/content": "workspace:*",
+    "@ai-exhibit/ml-runtime": "workspace:*",
+    "@ai-exhibit/presentation-core": "workspace:*",
+    "@ai-exhibit/session-protocol": "workspace:*",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.0"
+  }
+}

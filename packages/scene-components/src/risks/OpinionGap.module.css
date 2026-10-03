@@ -1,0 +1,135 @@
+/*
+ * Survey answers on the 1920 x 1080 stage: one question per row, a bar per
+ * group on a shared 0 to 100% track. The public in teal, experts in amber.
+ */
+.root {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 96px 150px 90px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 420;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.rows {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.question {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 460;
+  line-height: 1.15;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 300px 1fr 200px;
+  align-items: center;
+  gap: var(--space-3);
+}
+.who {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.bar[data-group="public"] .who,
+.bar[data-group="public"] .value {
+  color: var(--color-accent-2);
+}
+.bar[data-group="experts"] .who,
+.bar[data-group="experts"] .value {
+  color: var(--color-accent);
+}
+
+.track {
+  position: relative;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+.fill,
+.range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transition:
+    width 900ms var(--ease),
+    left 900ms var(--ease);
+}
+.fill {
+  left: 0;
+  width: calc(var(--value) * 1%);
+  border-radius: 6px 0 0 6px;
+}
+.range {
+  left: calc(var(--value) * 1%);
+  width: calc((var(--up) - var(--value)) * 1%);
+  opacity: 0.4;
+}
+.bar[data-group="public"] .fill,
+.bar[data-group="public"] .range {
+  background: var(--color-accent-2);
+}
+.bar[data-group="experts"] .fill,
+.bar[data-group="experts"] .range {
+  background: var(--color-accent);
+}
+
+.value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.source {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.shown {
+  opacity: 1;
+  transform: none;
+}
+.hidden {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.still,
+.still * {
+  transition: none !important;
+  animation: none !important;
+}

@@ -1,0 +1,41 @@
+/* Big, token-coloured JSON for the projector. Size via --json-size. */
+.json {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+  font-family: var(--font-mono);
+  font-size: var(--json-size, 32px);
+  line-height: 1.45;
+  white-space: pre;
+  overflow: hidden;
+}
+.line {
+  display: block;
+  margin: 0 calc(var(--space-4) * -1);
+  padding: 0 var(--space-4);
+  border-left: 6px solid transparent;
+  transition: opacity var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.hot {
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border-left-color: var(--color-accent);
+}
+.cold {
+  opacity: 0.5;
+}
+.t_key {
+  color: var(--color-accent-2);
+}
+.t_string {
+  color: var(--color-accent);
+}
+.t_number,
+.t_literal {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.t_punct {
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@ai-exhibit/ml-runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./lm": "./src/lm/index.ts",
+    "./embeddings": "./src/embeddings/index.ts"
+  },
+  "dependencies": {
+    "@huggingface/jinja": "^0.5.10"
+  }
+}

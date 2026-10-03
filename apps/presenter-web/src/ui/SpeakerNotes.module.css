@@ -1,0 +1,150 @@
+/*
+ * Talking points. The gutter numbers the concepts in the order they are
+ * explained; Ask and Do bullets put their cue word there instead and sit on a
+ * tinted band (teal for questions to the room, ochre for actions on stage).
+ * Sizes come from the container's font-size, so A-/A+ scales everything.
+ */
+.notes {
+  --gutter: 2.1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.item {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 0.4em;
+  padding: 0.42em 0.5em 0.42em 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+}
+.item:first-child {
+  border-top: none;
+}
+.gutter {
+  justify-self: end;
+  font-family: var(--font-mono);
+  font-size: 0.62em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+.body {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.body strong {
+  font-weight: 650;
+}
+.body code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+.body em {
+  font-style: italic;
+}
+
+/* Ask: a question to the room. Do: something to do on stage. */
+.ask,
+.do {
+  margin: 0.25em 0;
+  border-top: none;
+  border-radius: 0 0.3em 0.3em 0;
+}
+.ask + .item,
+.do + .item {
+  border-top: none;
+}
+.ask {
+  background: color-mix(in srgb, var(--color-accent-2) 13%, transparent);
+  box-shadow: inset 0.22em 0 0 var(--color-accent-2);
+}
+.do {
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  box-shadow: inset 0.22em 0 0 var(--color-accent);
+}
+.ask .gutter,
+.do .gutter {
+  font-family: var(--font-body);
+  font-size: 0.6em;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+}
+.ask .gutter {
+  color: var(--color-accent-2);
+}
+.do .gutter {
+  color: var(--color-accent);
+}
+
+.sub {
+  margin: 0.2em 0 0;
+  padding-left: 1em;
+  font-size: 0.78em;
+  color: var(--color-text-muted);
+}
+.sub li + li {
+  margin-top: 0.15em;
+}
+
+.prose {
+  font-size: 0.8em;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 0.6em;
+}
+
+/* Densities ---------------------------------------------------------------- */
+
+/* Presenter desk: read at arm's length. */
+.desk {
+  font-size: var(--notes-size, 28px);
+  line-height: 1.32;
+}
+
+/* Phone remote: thumb distance, narrow column. */
+.phone {
+  --gutter: 1.5em;
+  font-size: 19px;
+  line-height: 1.38;
+}
+.phone .item {
+  padding: 0.5em 0.4em 0.5em 0;
+}
+
+/* /present HUD: one line per bullet, glanceable. */
+.hud {
+  --gutter: 1.6em;
+  font-size: 15px;
+  line-height: 1.35;
+  gap: 0;
+}
+.hud .item {
+  padding: 0.18em 0.4em 0.18em 0;
+  border-top: none;
+}
+.hud .gutter {
+  font-size: 0.75em;
+}
+.hud .ask,
+.hud .do {
+  margin: 0.1em 0;
+}
+.hud .prose {
+  margin: 0;
+  font-size: 1em;
+}

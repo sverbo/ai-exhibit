@@ -1,0 +1,115 @@
+/*
+ * Nested rooms. Each ring is a band (name, definition, example) above the room
+ * that holds the next ring. Deeper rings take a stronger tint of the accent, so
+ * the innermost (LLMs) reads as the core of the whole field.
+ */
+.root {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 48px 64px 96px;
+  display: flex;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.ring {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid color-mix(in srgb, var(--color-accent) 22%, var(--color-line));
+  transition:
+    opacity 640ms var(--ease),
+    transform 640ms var(--ease),
+    border-color var(--dur) var(--ease);
+}
+.ring[data-level="0"] {
+  border-radius: 40px;
+  background: color-mix(in srgb, var(--color-accent) 4%, var(--color-surface));
+}
+.ring[data-level="1"] {
+  border-radius: 32px;
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+.ring[data-level="2"] {
+  border-radius: 26px;
+  background: color-mix(in srgb, var(--color-accent) 17%, var(--color-surface));
+}
+.ring[data-level="3"] {
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--color-accent) 26%, var(--color-surface));
+}
+.current {
+  border-color: var(--color-accent);
+}
+.hidden {
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  pointer-events: none;
+}
+.shown {
+  opacity: 1;
+  transform: none;
+}
+
+.band {
+  flex: none;
+  height: 186px;
+  box-sizing: border-box;
+  padding: 26px 40px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 500px;
+  gap: var(--space-5);
+  align-items: start;
+}
+.what {
+  min-width: 0;
+}
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-lg);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.definition {
+  margin: 12px 0 0;
+  max-width: 34em;
+  font-size: 27px;
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+.example {
+  margin: 6px 0 0;
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  font-size: 25px;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+.glyph {
+  flex: none;
+  width: 48px;
+  font-size: 38px;
+  line-height: 1;
+  text-align: center;
+  color: var(--color-accent);
+}
+
+.inside {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: 0 40px 40px;
+}
+
+/* Preview and reduced motion: no transitions. */
+.still,
+.still * {
+  transition: none !important;
+  animation: none !important;
+}

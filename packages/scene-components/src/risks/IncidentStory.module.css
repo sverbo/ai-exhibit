@@ -1,0 +1,117 @@
+/*
+ * A picture story on the 1920 x 1080 stage: the beat being told fills the
+ * middle, the beats already told line up below like frames of a strip.
+ */
+.root {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-3);
+  padding: 72px 150px 64px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 460;
+  line-height: 1.1;
+  color: var(--color-text-muted);
+}
+
+/* The beat being told. */
+.now {
+  display: grid;
+  grid-template-columns: 520px 1fr;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: 0;
+  animation: beatIn 560ms var(--ease) both;
+}
+@keyframes beatIn {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.picture {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(closest-side, var(--stage-light), transparent);
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 900px;
+}
+.line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  font-variation-settings: "opsz" 96, "SOFT" 40;
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.sources {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* The strip of beats already told. */
+.strip {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(var(--frames, 9), 160px);
+  justify-content: start;
+  gap: 22px;
+}
+.frame {
+  height: 132px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+.frame[data-state="future"] {
+  border-style: dashed;
+  opacity: 0.6;
+}
+.frame[data-state="current"] {
+  border-color: var(--color-accent);
+  border-width: 5px;
+  background: var(--color-surface);
+}
+.mini {
+  width: 112px;
+  height: 112px;
+}
+.frame[data-state="current"] .mini {
+  --pic-cut: var(--color-surface);
+}
+
+.still,
+.still * {
+  transition: none !important;
+  animation: none !important;
+}

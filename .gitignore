@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.vercel/
+# Former local model cache, in case an old checkout left one behind
+.artifacts/
+*.log
+.DS_Store
+test-results/
+playwright-report/
+.vite/
+coverage/
+
+# Presenter-recorded media (large, personal)
+content/assets/media/*.mp4
+content/assets/media/*.webm
+content/assets/media/*.mov
+
+# Local secrets (Hugging Face token)
+.env
+.env.*
+
+# Local archive of code and content no longer used by the talk
+archive/
+
+# Claude Code: personal settings and agent worktrees
+.claude/settings.local.json
+.claude/worktrees/

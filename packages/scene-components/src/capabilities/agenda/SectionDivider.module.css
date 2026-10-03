@@ -1,0 +1,62 @@
+/* A part opener: big title on top, the whole plan below with this part lit. */
+.divider {
+  justify-content: center;
+  gap: var(--space-6);
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.of {
+  color: var(--color-text-muted);
+}
+.title {
+  margin: 0;
+  max-width: 1500px;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 420;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+.plan {
+  margin: 0;
+  padding: var(--space-4) 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 2px solid var(--color-line);
+  font-size: var(--text-sm);
+}
+.plan li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.num {
+  min-width: 1.5em;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+.current {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.done {
+  color: var(--color-text-muted);
+}
+.next {
+  color: var(--color-text-muted);
+  opacity: 0.55;
+}

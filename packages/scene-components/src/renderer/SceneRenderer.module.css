@@ -1,0 +1,143 @@
+/*
+ * Each scene is an exhibit lit from above: a soft pool of light on the stage,
+ * grounded by a faint shade at the bottom (both theme tokens). The catalog
+ * placard (evidence and sources of generic layouts) sits low on the right.
+ */
+.scene {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -8%, var(--stage-light), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 120%, var(--stage-shade), transparent 60%),
+    var(--color-bg);
+  color: var(--color-text);
+}
+
+.enter {
+  animation: sceneIn calc(var(--dur) * 1.4) var(--ease) both;
+}
+@keyframes sceneIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+}
+
+.placard {
+  position: absolute;
+  left: 150px;
+  right: 150px;
+  bottom: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  pointer-events: none;
+}
+.placardSources {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Missing component --------------------------------------------------------- */
+
+.missing {
+  position: absolute;
+  inset: 120px 150px 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border: 3px dashed color-mix(in srgb, var(--color-accent-2) 55%, transparent);
+  border-radius: var(--radius);
+}
+.missingTag {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-accent-2);
+}
+.code {
+  font-family: var(--font-mono);
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+.missingTitle {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.missingLabel {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.missingObjective {
+  margin: 0;
+  max-width: 1300px;
+  font-size: var(--text-md);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* Failure ------------------------------------------------------------------- */
+
+.failure {
+  position: absolute;
+  inset: 120px 150px 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+}
+.failureTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 1.05;
+}
+.failureNote {
+  margin: 0;
+  max-width: 1400px;
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+.failureHint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+.failureError {
+  margin: 0;
+  max-width: 1500px;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

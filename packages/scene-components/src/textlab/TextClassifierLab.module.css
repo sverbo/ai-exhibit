@@ -1,0 +1,1002 @@
+/*
+ * TextClassifierLab. Only theme tokens. One color language throughout:
+ * football is --color-accent-2 (the pitch), basketball is --color-accent (the
+ * ball). A highlighted word wears a marker stroke in the tone of the sport it
+ * points to; network numbers take the same tones by sign (positive pushes
+ * toward basketball). Right and wrong use --color-ok / --color-danger.
+ */
+
+.root {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-5) 96px var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls {
+  position: absolute;
+  left: 96px;
+  right: 96px;
+  bottom: 12px;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------- tones */
+
+.toneFootball {
+  --tone: var(--color-accent-2);
+}
+.toneBasketball {
+  --tone: var(--color-accent);
+}
+
+/* ----------------------------------------------------------- sentences */
+
+.sentence {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.heroSentence {
+  font-size: var(--text-xl);
+  line-height: 1.15;
+  text-align: center;
+  max-width: 1500px;
+}
+.bigSentence {
+  font-size: var(--text-lg);
+  line-height: 1.2;
+}
+
+.word {
+  border-radius: 6px;
+  transition:
+    background-color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+/* The marker: the word sits on a band of its sport's tone, underlined in full tone. */
+.marked {
+  padding: 0 0.1em;
+  margin: 0 -0.02em;
+  background-color: color-mix(in srgb, var(--tone) 30%, transparent);
+  box-shadow: inset 0 -0.09em 0 var(--tone);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+/* A keyword that is there but never got a say (the rule stopped earlier). */
+.markedFaint {
+  background-color: transparent;
+  box-shadow: inset 0 -0.06em 0 color-mix(in srgb, var(--tone) 70%, transparent);
+}
+.removed {
+  text-decoration: line-through;
+  text-decoration-thickness: 0.08em;
+  opacity: 0.4;
+}
+.wordButton {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0 0.04em;
+  margin: 0;
+  cursor: pointer;
+}
+.wordButton:not(.marked) {
+  background-color: transparent;
+}
+.wordButton:hover {
+  outline: 3px dashed var(--color-line);
+  outline-offset: 2px;
+}
+.wordButton:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------ verdicts */
+
+.verdict {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.verdictWho {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.verdictWho:empty {
+  display: none;
+}
+.verdictAnswer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+.verdictGlyph {
+  display: inline-flex;
+  color: var(--tone);
+}
+.verdictSure {
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+.verdictPending {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+.verdictMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+}
+.verdictMark svg {
+  width: 36px;
+  height: 36px;
+}
+.verdictRight .verdictMark {
+  color: var(--color-ok);
+}
+.verdictWrong .verdictAnswer {
+  color: var(--color-danger);
+}
+
+.truth {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+.truthGlyph {
+  display: inline-flex;
+  color: var(--tone);
+}
+.truth strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.score {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------------- task */
+
+.taskHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+}
+.choices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.choice svg {
+  color: var(--tone);
+}
+.choiceOr {
+  font-size: var(--text-xl);
+  color: var(--color-text-muted);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  width: 100%;
+  align-items: start;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.columnHead {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-lg);
+}
+.columnHead svg {
+  color: var(--tone);
+}
+.taskList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.taskItem {
+  padding: 14px 0 14px 28px;
+  border-left: 6px solid var(--tone);
+}
+
+/* Labelled sentence lines (training examples). */
+.exampleList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.labelled {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.labelledGlyph {
+  display: inline-flex;
+  color: var(--tone);
+}
+.labelledText {
+  font-size: var(--text-sm);
+  line-height: 1.25;
+}
+
+/* --------------------------------------------------------------- rules */
+
+.rulesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+}
+.ruleCol,
+.judgedCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.ruleList {
+  margin: 0;
+  padding: var(--space-2) 0 var(--space-2) 88px;
+  border-left: 4px solid var(--color-line);
+  font-size: var(--text-md);
+  line-height: 1.35;
+  counter-reset: rule;
+  list-style: none;
+}
+.ruleLine {
+  position: relative;
+  counter-increment: rule;
+  padding: 14px 0;
+  color: var(--color-text-muted);
+  transition: color var(--dur) var(--ease);
+}
+.ruleLine::before {
+  content: counter(rule);
+  position: absolute;
+  left: -64px;
+  top: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.ruleLine strong {
+  font-weight: 600;
+}
+.ruleLineOn {
+  color: var(--color-text);
+}
+.ruleLineOn::after {
+  content: "";
+  position: absolute;
+  left: -92px;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  background: var(--color-text);
+}
+
+/* ---------------------------------------------------------------- tree */
+
+.treeLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  height: 100%;
+}
+.treeTop {
+  min-height: 132px;
+  display: flex;
+  align-items: center;
+}
+.treeRow {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-5);
+}
+.treeCol {
+  display: flex;
+  justify-content: center;
+}
+.treeSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.tree {
+  display: block;
+  overflow: visible;
+}
+.edge path {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: 4;
+  transition: stroke var(--dur) var(--ease);
+}
+.edgeLabel {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  fill: var(--color-text-muted);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 10px;
+}
+.edgeOn path {
+  stroke: var(--color-text);
+  stroke-width: 7;
+}
+.edgeOn .edgeLabel {
+  fill: var(--color-text);
+  font-weight: 700;
+}
+.faded {
+  opacity: 0.28;
+}
+.split,
+.leaf,
+.edge {
+  transition: opacity var(--dur) var(--ease);
+}
+.splitBox {
+  fill: var(--color-surface);
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.splitOn .splitBox {
+  stroke: var(--color-text);
+  stroke-width: 4;
+}
+.splitInner {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre;
+  font-family: var(--font-body);
+  font-size: 40px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+.splitInner .word {
+  margin: 0;
+  padding: 0 0.08em;
+  font-family: var(--font-display);
+  font-size: 46px;
+  font-weight: 600;
+}
+.splitInner .markedStrong {
+  background-color: color-mix(in srgb, var(--tone) 55%, transparent);
+  box-shadow: inset 0 -0.12em 0 var(--tone);
+}
+.leaf rect {
+  fill: var(--color-surface);
+  stroke: var(--tone);
+  stroke-width: 3;
+}
+.leafGlyph {
+  color: var(--tone);
+}
+.leafText {
+  font-family: var(--font-display);
+  font-size: 40px;
+  fill: var(--color-text);
+}
+.leafOn rect {
+  stroke-width: 6;
+}
+.leafWrong rect {
+  stroke: var(--color-danger);
+}
+.leafWrong .leafText {
+  fill: var(--color-danger);
+}
+
+/* ---------------------------------------------- network scenes: diagram */
+
+.netCaption {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--color-text);
+  min-height: 1.3em;
+}
+.netMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+}
+.netMark svg {
+  width: 32px;
+  height: 32px;
+}
+.netMarkRight {
+  color: var(--color-ok);
+}
+.netMarkWrong {
+  color: var(--color-danger);
+}
+
+/* One big network: lines in SVG, words and outputs in HTML. */
+.simpleNet {
+  position: relative;
+  flex: none;
+  margin: var(--space-3) auto 0;
+}
+.simpleSvg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.simpleLine {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.lineB {
+  stroke: var(--color-accent);
+}
+.lineF {
+  stroke: var(--color-accent-2);
+}
+.lineBare {
+  stroke: var(--color-line);
+  opacity: 0.7;
+}
+.lineOff {
+  opacity: 0.12;
+}
+.linePulse {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0.18;
+}
+.haloMoved {
+  stroke: var(--color-text);
+}
+.simpleAnimate .simpleLine {
+  transition:
+    stroke-width 1.6s var(--ease),
+    stroke 1.6s var(--ease),
+    opacity var(--dur) var(--ease);
+}
+.simpleAnimate .linePulse {
+  animation: pulse 1.4s var(--ease) 3 both;
+}
+.lineLabel rect {
+  fill: var(--color-surface);
+  stroke: var(--color-text);
+  stroke-width: 2;
+}
+.lineLabel text {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+.dirUp {
+  fill: var(--color-ok);
+}
+.dirDown {
+  fill: var(--color-danger);
+}
+.inNode circle {
+  fill: var(--color-surface);
+  stroke: var(--color-line);
+  stroke-width: 3;
+}
+.inNode text {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--color-text-muted);
+}
+.inNodeOn circle {
+  fill: var(--color-text);
+  stroke: var(--color-text);
+}
+.inNodeOn text {
+  fill: var(--color-bg);
+}
+.hidNode circle {
+  fill: var(--tone);
+  fill-opacity: 0;
+  stroke: var(--color-text-muted);
+  stroke-width: 3;
+}
+.simpleAnimate .hidNode circle,
+.simpleAnimate .outNode circle {
+  transition: fill-opacity 1.2s var(--ease);
+}
+.hidNodeOn circle {
+  stroke: var(--tone);
+  stroke-width: 4;
+}
+.hidNode text {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--color-text);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 5px;
+}
+.outNode circle {
+  fill: var(--tone);
+  stroke: var(--tone);
+  stroke-width: 4;
+}
+.chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  position: absolute;
+  display: block;
+  transform: translateY(-50%);
+  padding: 4px 18px;
+  border-radius: 12px;
+  border: 2px solid var(--color-line);
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+}
+.chipOn {
+  border-color: var(--color-text);
+  color: var(--color-text);
+  font-weight: 600;
+}
+.outLabel {
+  position: absolute;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+.outLabel svg {
+  color: var(--tone);
+  flex: none;
+}
+.outLabelOn {
+  color: var(--color-text);
+}
+.outName {
+  min-width: 5em;
+}
+.outRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.outTrack {
+  position: relative;
+  width: 220px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--color-surface-2);
+}
+.outFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 6px;
+  background: var(--tone);
+}
+.simpleAnimate .outFill {
+  transition: width 1.2s var(--ease);
+}
+.outGap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: 0 6px 6px 0;
+  background: repeating-linear-gradient(-45deg, var(--color-danger) 0 6px, transparent 6px 14px);
+  border: 3px solid var(--color-danger);
+  box-sizing: border-box;
+}
+.outPct {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.streamRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.streamRow .simpleNet {
+  margin: var(--space-3) 0 0;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* The hood: every drawn weight, as a table next to the diagram. */
+.hoodRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.hoodRow .simpleNet {
+  margin: var(--space-3) 0 0;
+}
+.weightTable {
+  border-collapse: separate;
+  border-spacing: 6px;
+  font-family: var(--font-mono);
+  font-size: 24px;
+}
+.weightTable th {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 10px;
+}
+.weightTable thead th {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding: 0;
+}
+.weightCell {
+  min-width: 78px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  text-align: center;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--tone) var(--w), transparent);
+}
+
+/* ------------------------------------------------------------ learning */
+/* Same frame and pieces as llm/TrainingLoop, so the language model scene reads as the same loop again. */
+
+.learn {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 44px var(--space-6) 84px;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+.phases {
+  display: flex;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.phase {
+  padding: 4px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--color-line);
+  color: var(--color-text-muted);
+}
+.phaseNow {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+.phaseLater {
+  opacity: 0.45;
+}
+.learnHeadline {
+  margin: 0;
+  max-width: 1600px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-xl);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  animation: settle var(--dur) var(--ease) both;
+}
+
+/* The sentence on a card, the right answer stamped next to it. */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: var(--space-2) var(--space-4);
+  border-left: 8px solid var(--color-accent-2);
+  background: var(--color-surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  /* Fixed height (two lines) so the charts below stay still while sentences stream. */
+  box-sizing: border-box;
+  height: calc(2 * 54px * 1.15 + 2 * var(--space-2));
+}
+.cardSentence {
+  font-size: 54px;
+  line-height: 1.15;
+  animation: slideIn 300ms var(--ease) both;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.cardFast {
+  animation: none;
+}
+.stamp {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 2.4em;
+  width: 7.2em;
+  box-sizing: border-box;
+  justify-content: center;
+  padding: 6px 22px;
+  border-radius: 10px;
+  border: 4px dashed var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.1;
+  color: var(--color-text-muted);
+}
+.stampOn {
+  border-style: solid;
+  border-color: var(--tone);
+  background: var(--tone);
+  color: var(--color-on-accent);
+  transform: rotate(-3deg);
+  animation: stamp 420ms var(--ease) both;
+}
+.stampOn svg {
+  color: var(--color-on-accent);
+}
+
+.panelTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.betterText {
+  color: var(--color-ok);
+}
+
+.counterPanel {
+  animation: fadeIn var(--dur) var(--ease) both;
+}
+.count {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 72px;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+.countOf {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+.curve {
+  display: block;
+  overflow: visible;
+}
+.curveGrid {
+  stroke: var(--color-line);
+  stroke-width: 1;
+}
+.curveTick {
+  font-family: var(--font-body);
+  font-size: 18px;
+  fill: var(--color-text-muted);
+}
+.curveLine {
+  fill: none;
+  stroke: var(--color-ok);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+.curveDot {
+  fill: var(--color-ok);
+  stroke: var(--color-bg);
+  stroke-width: 3;
+}
+.curveNow {
+  color: var(--color-ok);
+  font-variant-numeric: tabular-nums;
+}
+
+.frameContent {
+  display: flex;
+  flex-direction: column;
+  transition: opacity var(--dur) var(--ease);
+}
+.frameDim {
+  opacity: 0.06;
+}
+.smallPrint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.learnFooter {
+  position: absolute;
+  left: var(--space-6);
+  right: var(--space-6);
+  bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+/* Motion off: reduced motion, presenter pause, preview. */
+.still,
+.still * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: rotate(-3deg) scale(1.4);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-3deg);
+  }
+}
+
+/* --------------------------------------------------------- network-fail */
+
+.takeaway {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.1;
+}
+.takeaway p {
+  margin: 0;
+}

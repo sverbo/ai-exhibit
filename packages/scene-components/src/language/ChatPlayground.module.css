@@ -1,0 +1,238 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-2);
+  row-gap: 4px;
+  margin-bottom: var(--space-4);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-text);
+}
+.model {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.sub {
+  flex-basis: 100%;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.chat {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 1500px;
+}
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.user {
+  align-self: flex-end;
+  max-width: 70%;
+  margin: 0;
+  padding: 14px 28px;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border-radius: 28px 28px 6px 28px;
+}
+.assistant {
+  align-self: flex-start;
+  max-width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 4px 0 4px var(--space-3);
+  border-left: 5px solid var(--color-accent-2);
+}
+.guardrail {
+  border-left-color: var(--color-ok);
+}
+.guardTag {
+  align-self: flex-start;
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  border: 2px solid var(--color-ok);
+  border-radius: 999px;
+  padding: 2px 14px;
+}
+.answer {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  white-space: pre-wrap;
+  color: var(--color-text);
+  max-height: 300px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, var(--color-text) 80%, transparent);
+}
+.recorded {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.footer {
+  position: absolute;
+  left: 160px;
+  right: 160px;
+  bottom: var(--space-4);
+}
+
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex-basis: 100%;
+}
+.presetsLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.presetRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* Chat and, on reveal, the raw text the model reads, side by side. */
+.body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+.split {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+}
+.split .user,
+.split .assistant {
+  max-width: 100%;
+}
+.split .answer {
+  max-height: 420px;
+}
+
+.raw {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius);
+}
+.rawHead {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  color: var(--color-text);
+}
+.rawText {
+  margin: 0;
+  max-height: 470px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--color-text);
+  /* "<|" and "|>" stay literal: no programming ligatures. */
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+  mask-image: linear-gradient(to bottom, var(--color-text) 85%, transparent);
+}
+
+/* Role colours: system, user, assistant. Shape (chip) plus colour, and the notes name them. */
+.roleSystem {
+  --role: var(--color-evidence-thought-experiment);
+}
+.roleUser {
+  --role: var(--color-accent-2);
+}
+.roleAssistant {
+  --role: var(--color-accent);
+}
+.tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--role) 24%, transparent);
+  box-shadow: inset 0 0 0 2px var(--role);
+  font-weight: 600;
+}
+.content {
+  box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--role) 70%, transparent);
+}
+.continuation {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.endTag {
+  --role: var(--color-ok);
+  margin-left: 6px;
+}
+.notReached {
+  opacity: 0.45;
+  box-shadow: inset 0 0 0 2px var(--role);
+  border: 0;
+  outline: 2px dashed var(--role);
+  outline-offset: -2px;
+}
+.rawNotes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+.rawNotes li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+.swatch {
+  flex: none;
+  width: 18px;
+  height: 14px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--role) 24%, transparent);
+  box-shadow: inset 0 0 0 2px var(--role);
+}
+.endSwatch {
+  --role: var(--color-ok);
+}
+.rawEmpty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.odds {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.odd code {
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  padding: 0 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}

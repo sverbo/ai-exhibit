@@ -1,0 +1,369 @@
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-5) 80px var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.labels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  flex: none;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+
+.room {
+  flex: none;
+  width: 960px;
+  height: auto;
+  overflow: visible;
+}
+
+.floor {
+  fill: var(--color-surface);
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.gridLine {
+  stroke: var(--color-line);
+  stroke-width: 1;
+  stroke-opacity: 0.5;
+}
+.cone {
+  fill: var(--color-accent-2);
+  fill-opacity: 0.07;
+  stroke: var(--color-accent-2);
+  stroke-opacity: 0.25;
+  stroke-dasharray: 6 6;
+}
+.rugBase {
+  fill: var(--color-surface-2);
+}
+.rugStripe {
+  fill: var(--color-line);
+  fill-opacity: 0.6;
+}
+.rug {
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.roomLabel {
+  font-family: var(--font-body);
+  font-size: 20px;
+  fill: var(--color-text-muted);
+  text-anchor: middle;
+}
+.bin {
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+.binLid {
+  stroke: var(--color-text-muted);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.binCount {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  fill: var(--color-ok);
+  text-anchor: middle;
+}
+.dirt {
+  fill: var(--color-text-muted);
+  fill-opacity: 0.75;
+}
+.dirtCount {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  fill: var(--color-text-muted);
+  text-anchor: middle;
+}
+.camera {
+  fill: var(--color-surface-2);
+  stroke: var(--color-accent-2);
+  stroke-width: 3;
+}
+.cameraBlind {
+  stroke: var(--color-danger);
+}
+.lens {
+  fill: var(--color-accent-2);
+}
+.blindSlash {
+  stroke: var(--color-danger);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.robot {
+  transition: transform calc(1000ms / 7) linear;
+}
+.robotBody {
+  fill: var(--color-accent);
+}
+.robotEye {
+  fill: var(--color-on-accent);
+}
+.robotMouth {
+  fill: none;
+  stroke: var(--color-on-accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.bag {
+  fill: var(--color-text);
+  stroke: var(--color-bg);
+  stroke-width: 3;
+}
+.bagCount {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--color-bg);
+  text-anchor: middle;
+}
+
+.aside {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  border: 2px solid var(--color-line);
+}
+.cardObjective {
+  border-color: var(--color-accent);
+  animation: swap calc(var(--dur) * 1.5) var(--ease);
+}
+.cardIntent {
+  border-style: dashed;
+}
+.cardLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.cardText {
+  font-size: var(--text-sm);
+  line-height: 1.25;
+}
+
+.meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.meterLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.meterValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.meterBad .meterValue {
+  color: var(--color-danger);
+}
+
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.rankingTitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.rankList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rankRow {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-2);
+  border-radius: 10px;
+  font-size: 24px;
+  color: var(--color-text-muted);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.rankPick {
+  cursor: pointer;
+}
+.rankActive {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+.rankScore {
+  font-family: var(--font-mono);
+  text-align: right;
+}
+.rankTags {
+  display: flex;
+  gap: 6px;
+}
+.tagChosen,
+.tagIntended {
+  font-size: 18px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 2px solid;
+}
+.tagChosen {
+  color: var(--color-accent);
+}
+.tagIntended {
+  color: var(--color-ok);
+  border-style: dashed;
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .robot {
+    transition: none;
+  }
+}
+
+/* ---- simple mode: pictures and one line per step ---- */
+.simpleAside {
+  gap: var(--space-4);
+}
+.beats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.beat {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+  line-height: 1.25;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity calc(var(--dur) * 1.4) var(--ease),
+    transform calc(var(--dur) * 1.4) var(--ease),
+    color var(--dur) var(--ease);
+}
+.beatOn {
+  opacity: 1;
+  transform: none;
+}
+.beatNow {
+  color: var(--color-text);
+}
+.beatMark {
+  flex: none;
+  margin-top: 2px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.beat_goal .beatMark {
+  stroke: var(--color-accent);
+}
+.beat_intent .beatMark {
+  stroke: var(--color-ok);
+}
+.beat_shortcut .beatMark {
+  stroke: var(--color-danger);
+}
+.punchline {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 6px solid var(--color-danger);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.12;
+  color: var(--color-text);
+  animation: swap calc(var(--dur) * 1.6) var(--ease) both;
+}
+.binFill {
+  fill: var(--color-ok);
+}
+.cycle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spin 1.6s linear infinite;
+}
+.cycleArc {
+  fill: none;
+  stroke: var(--color-danger);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cycle {
+    animation: none;
+  }
+}

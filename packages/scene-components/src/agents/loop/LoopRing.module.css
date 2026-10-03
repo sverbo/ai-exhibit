@@ -1,0 +1,112 @@
+.ring {
+  font-family: var(--font-body);
+}
+
+.track {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: 2;
+  stroke-dasharray: 2 10;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.trackOn {
+  opacity: 1;
+}
+
+.arc {
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity calc(var(--dur) * 1.5) var(--ease);
+}
+.arrowHead {
+  fill: var(--color-text-muted);
+}
+
+.stage {
+  opacity: 0;
+  transition: opacity calc(var(--dur) * 1.5) var(--ease);
+}
+.on {
+  opacity: 1;
+}
+.dim {
+  opacity: 0.35;
+}
+
+.disc {
+  fill: var(--color-surface);
+  stroke: var(--color-text);
+  stroke-width: 3;
+  transition: fill var(--dur) var(--ease), stroke var(--dur) var(--ease);
+}
+.icon {
+  color: var(--color-text);
+  transition: color var(--dur) var(--ease);
+}
+.label {
+  fill: var(--color-text);
+  font-weight: 600;
+  text-anchor: middle;
+  transition: fill var(--dur) var(--ease);
+}
+
+.goal .disc {
+  fill: color-mix(in srgb, var(--color-accent) 16%, var(--color-bg));
+  stroke: var(--color-accent);
+  stroke-width: 4;
+}
+.goal .icon {
+  color: var(--color-accent);
+}
+.goal .label {
+  fill: var(--color-accent);
+}
+
+.lit .disc {
+  fill: var(--color-accent-2);
+  stroke: var(--color-accent-2);
+}
+.lit .icon {
+  color: var(--color-on-accent);
+}
+.lit .label {
+  fill: var(--color-on-accent);
+}
+.goal.lit .disc {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+.goal.lit .label {
+  fill: var(--color-on-accent);
+}
+.goal.lit .icon {
+  color: var(--color-on-accent);
+}
+
+.pulse {
+  fill: var(--color-accent-2);
+  filter: drop-shadow(0 0 10px var(--color-accent-2));
+}
+
+.gloss {
+  font-size: 26px;
+  fill: var(--color-text-muted);
+  text-anchor: middle;
+  font-style: italic;
+}
+.glossStart {
+  text-anchor: start;
+}
+.glossEnd {
+  text-anchor: end;
+}
+
+.goalText {
+  font-size: 26px;
+  fill: var(--color-text);
+  text-anchor: middle;
+}

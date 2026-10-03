@@ -1,0 +1,52 @@
+.card {
+  position: absolute;
+  box-sizing: border-box;
+  width: 400px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius);
+  pointer-events: none;
+  animation: cardIn var(--dur) var(--ease) both;
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+.title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-xs);
+}
+.list li {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.word {
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+.sim {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}

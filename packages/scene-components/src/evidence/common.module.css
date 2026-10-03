@@ -1,0 +1,40 @@
+/* Shared presenter controls for the evidence components (controller role only). */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.button {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+.button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.button[aria-pressed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+/* Applied to a component root when motion must stop (reduced motion, presenter pause, preview). */
+.still,
+.still * {
+  animation: none !important;
+  transition: none !important;
+}

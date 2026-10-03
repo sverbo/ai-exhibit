@@ -1,0 +1,134 @@
+.map {
+  display: block;
+  overflow: visible;
+}
+/* Zoomed in: dots and labels outside the map box are cut off. */
+.clip {
+  overflow: hidden;
+}
+
+.point {
+  transition:
+    fill var(--dur) var(--ease),
+    stroke var(--dur) var(--ease),
+    opacity var(--dur) var(--ease),
+    r var(--dur) var(--ease);
+}
+.dim {
+  opacity: 0.2;
+}
+.hl {
+  filter: drop-shadow(0 0 6px var(--color-accent));
+}
+
+/* The one entrance moment: dots appear in a left-to-right sweep. */
+.entrance .point {
+  animation: appear 700ms var(--ease) both;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+.point {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.thread {
+  stroke: var(--color-accent-2);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+.threadStrong {
+  stroke: var(--color-accent-2);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.queryLinks line {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 8;
+  opacity: 0.85;
+}
+.queryHalo {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  opacity: 0.6;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: halo 2.4s ease-out infinite;
+}
+@keyframes halo {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.queryStar {
+  fill: var(--color-accent);
+  stroke: var(--color-bg);
+  stroke-width: 2;
+}
+
+.word,
+.wordStrong,
+.clusterLabel,
+.queryLabel {
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-linejoin: round;
+}
+.word {
+  font-family: var(--font-body);
+  fill: var(--color-text-muted);
+  stroke-width: 4px;
+}
+.wordStrong {
+  font-family: var(--font-body);
+  font-weight: 600;
+  fill: var(--color-text);
+  stroke-width: 6px;
+}
+.clusterLabel {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  stroke-width: 8px;
+  transition: fill var(--dur) var(--ease);
+}
+.queryLabel {
+  font-family: var(--font-display);
+  font-weight: 600;
+  fill: var(--color-accent);
+  stroke-width: 10px;
+}
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover {
+  text-decoration: underline;
+}
+.clickable:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* Labels arriving after the training animation. */
+.labelsIn text {
+  animation: labelIn 900ms var(--ease) both;
+}
+@keyframes labelIn {
+  from {
+    opacity: 0;
+  }
+}

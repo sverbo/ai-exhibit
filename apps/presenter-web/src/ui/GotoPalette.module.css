@@ -1,0 +1,85 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 16px 16px;
+  background: var(--ui-scrim);
+  backdrop-filter: blur(3px);
+}
+.palette {
+  width: min(680px, 100%);
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ui-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  box-shadow: var(--ui-shadow);
+  overflow: hidden;
+}
+.input {
+  padding: 18px 20px;
+  border: none;
+  border-bottom: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 20px;
+  outline: none;
+}
+.empty {
+  margin: 0;
+  padding: 18px 20px;
+  color: var(--color-text-muted);
+}
+.list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  overflow-y: auto;
+}
+.item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.active {
+  background: var(--color-surface-2);
+}
+.current .number {
+  color: var(--color-accent);
+}
+.current .title::after {
+  content: " ●";
+  color: var(--color-accent);
+  font-size: 0.7em;
+}
+.number {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+.title {
+  font-size: 16px;
+}
+.chapter {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}

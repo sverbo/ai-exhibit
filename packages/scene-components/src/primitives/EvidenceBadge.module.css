@@ -1,0 +1,17 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.25em 0.75em;
+  border: 2px solid var(--badge-color);
+  border-radius: 999px;
+  color: var(--badge-color);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.sm { font-size: var(--text-xs); }
+.md { font-size: var(--text-sm); }
+.lg { font-size: var(--text-md); }

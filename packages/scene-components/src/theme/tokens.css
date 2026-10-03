@@ -1,0 +1,101 @@
+/*
+ * Design tokens shared by every scene component. Values may be refined, names
+ * are a contract: components must use these variables, never raw colors.
+ * Scenes render on a fixed 1920x1080 logical stage scaled to fit, so sizes
+ * below are in stage pixels.
+ *
+ * Two themes. Light (the default) is ink on warm paper; dark is the original
+ * night gallery. The theme is `data-theme` on <html> ("light" or "dark"); any
+ * element can also carry `data-theme` to force one theme on its subtree.
+ * Colors used as text pass WCAG AA (4.5:1) on --color-bg and --color-surface
+ * in both themes, and 3:1 on --color-surface-2, so they hold on a projector.
+ * Canvas code must read these variables (getComputedStyle) and redraw when the
+ * theme changes: see `useThemeName()` in theme/theme.ts.
+ */
+:root {
+  --stage-w: 1920px;
+  --stage-h: 1080px;
+
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  --text-xs: 22px;
+  --text-sm: 28px;
+  --text-md: 36px;
+  --text-lg: 52px;
+  --text-xl: 76px;
+  --text-xxl: 112px;
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+  --space-5: 64px;
+  --space-6: 96px;
+
+  --radius: 14px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 420ms;
+}
+
+/* Light: ink on warm paper. ------------------------------------------------ */
+:root,
+[data-theme="light"] {
+  --color-bg: #f3ede2;
+  --color-surface: #fbf8f1;
+  --color-surface-2: #e6ddcd;
+  --color-line: #c4b7a2;
+  --color-text: #1f1a14;
+  --color-text-muted: #5c5244;
+  --color-accent: #9a5200;
+  --color-accent-2: #0d6f68;
+  --color-danger: #b3301e;
+  --color-ok: #2c7431;
+  /* Text and icons drawn on a solid --color-accent (or -2, danger, ok) fill. */
+  --color-on-accent: #fffaf2;
+
+  --color-evidence-observed: #b3301e;
+  --color-evidence-evaluation: #9a5200;
+  --color-evidence-projection: #3352b0;
+  --color-evidence-thought-experiment: #7e3aa8;
+  --color-evidence-contested: #675d51;
+
+  /* Overhead gallery light on each scene, and the shade that grounds it. */
+  --stage-light: rgba(255, 253, 248, 0.9);
+  --stage-shade: rgba(90, 64, 28, 0.08);
+
+  color-scheme: light;
+}
+
+/* Dark: the night gallery. ------------------------------------------------- */
+[data-theme="dark"] {
+  --color-bg: #110f0d;
+  --color-surface: #1b1815;
+  --color-surface-2: #26221e;
+  --color-line: #3d3731;
+  --color-text: #f4eee3;
+  --color-text-muted: #ada395;
+  --color-accent: #f2a93b;
+  --color-accent-2: #5fc9c0;
+  --color-danger: #e5604f;
+  --color-ok: #7bc47f;
+  --color-on-accent: #1a1206;
+
+  --color-evidence-observed: #e5604f;
+  --color-evidence-evaluation: #f0a63a;
+  --color-evidence-projection: #8fa7e8;
+  --color-evidence-thought-experiment: #c58fe8;
+  --color-evidence-contested: #d8d2c8;
+
+  --stage-light: rgba(242, 169, 59, 0.11);
+  --stage-shade: rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 0ms;
+  }
+}

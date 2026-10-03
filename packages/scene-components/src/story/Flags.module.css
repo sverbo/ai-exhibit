@@ -1,0 +1,14 @@
+/* Flags keep their own colours; a hairline keeps white fields visible on a light stage. */
+.flags {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  line-height: 0;
+}
+.flag {
+  display: block;
+  height: 22px;
+  width: auto;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--color-line);
+}

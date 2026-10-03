@@ -1,0 +1,263 @@
+import type { CSSProperties } from "react";
+import { getStoryImage } from "@ai-exhibit/content/assets/media/story/credits.ts";
+import type { SceneComponentProps } from "../contract.ts";
+import { SourceList } from "../evidence/SourceList.tsx";
+import { stopShellKeys } from "../evidence/shared.ts";
+import { Credits } from "./Credits.tsx";
+import { Flags } from "./Flags.tsx";
+import { logoBox } from "./data.ts";
+import { INDUSTRY_STEPS, LAYERS, MOVES, PEOPLE, placementsAt, waitingPlace, type LayerId, type PersonMove } from "./industry.ts";
+import styles from "./IndustryStack.module.css";
+
+/* Stage geometry (1920 x 1080 logical px). Everything is placed absolutely so
+   portraits and link lines can travel between organisations. */
+const LEFT = 64;
+const RIGHT = 1856;
+const LOGO_X0 = 372;
+const PORTRAIT = 100;
+const INLINE_PORTRAIT = 84; // a portrait standing beside its logo inside a layer
+const FLAG_GAP = 8; // between a logo and its flags
+const PRODUCT_GAP = 30; // from the top of the flags to the product chip (ChatGPT, Claude)
+const LANE_Y = 46; // top of the portraits in the lane above the labs (room above for hop arrows)
+const LINK_FROM_Y = 190; // just under the names
+const LAYER_BOX: Record<LayerId, { top: number; height: number; rows: number }> = {
+  labs: { top: 206, height: 252, rows: 2 },
+  cloud: { top: 470, height: 124, rows: 1 },
+  chips: { top: 606, height: 124, rows: 1 },
+  foundries: { top: 742, height: 124, rows: 1 },
+  equipment: { top: 878, height: 124, rows: 1 },
+};
+const SIZING = {
+  labs: { area: 9500, maxW: 220, maxH: 58 },
+  other: { area: 7400, maxW: 200, maxH: 54 },
+};
+
+interface Placed {
+  id: string;
+  layer: LayerId;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** Logo centres and sizes, computed once (pure, also used by tests). */
+export function layoutActors(): Map<string, Placed> {
+  const out = new Map<string, Placed>();
+  for (const layer of LAYERS) {
+    const box = LAYER_BOX[layer.id];
+    const rowCount = box.rows;
+    for (let row = 0; row < rowCount; row++) {
+      const actors = layer.actors.filter((a) => (a.row ?? 0) === row);
+      const span = (RIGHT - LOGO_X0) / actors.length;
+      // Logos sit a little above the middle of their row to leave room for the flags below.
+      const y = box.top + (box.height * (row + 0.42)) / rowCount;
+      actors.forEach((actor, i) => {
+        const image = getStoryImage(actor.image);
+        const s = layer.id === "labs" ? SIZING.labs : SIZING.other;
+        const { w, h } = logoBox(image?.aspect ?? 4, s.area * (actor.weight ?? 1), s.maxW, s.maxH);
+        out.set(actor.id, { id: actor.id, layer: layer.id, x: Math.round(LOGO_X0 + span * (i + 0.5)), y: Math.round(y), w, h });
+      });
+    }
+  }
+  return out;
+}
+
+const ACTORS = layoutActors();
+
+/** Portrait centre x for a move. */
+export function personX(move: PersonMove): number {
+  if (move.org === null) return move.dx;
+  return (ACTORS.get(move.org)?.x ?? 0) + move.dx;
+}
+
+/** Top-left corner of a portrait for a move: in the lane, or beside its logo for inline moves. */
+function portraitOrigin(move: PersonMove): { x: number; y: number } {
+  if (move.inline && move.org) {
+    const target = ACTORS.get(move.org)!;
+    return { x: personX(move) - INLINE_PORTRAIT / 2, y: target.y - INLINE_PORTRAIT / 2 - 10 };
+  }
+  return { x: personX(move) - PORTRAIT / 2, y: LANE_Y };
+}
+
+/** Arc over the portrait lane for a hop, from the start organisation to the new one. */
+export function hopArc(move: PersonMove): string | null {
+  if (!move.from) return null;
+  const x1 = personX({ ...move, org: move.from.org, dx: move.from.dx });
+  const x2 = personX(move);
+  const y = LANE_Y - 4;
+  const mid = (x1 + x2) / 2;
+  const toward = x2 > x1 ? -1 : 1;
+  return `M ${x1} ${y} Q ${mid} ${y - 64} ${x2 + toward * 30} ${y}`;
+}
+
+const COPY = {
+  label: { en: "The AI industry, layer by layer", fr: "L'industrie de l'IA, couche par couche" },
+  sources: { en: "Sources for what is lit", fr: "Sources de ce qui est allumé" },
+} as const;
+
+/**
+ * The whole industry as a stack: machines that make chips, chip factories,
+ * chip designers, data centers and cloud, AI labs. Every mark is drawn in one
+ * ink and starts dimmed; each step lights only what the presenter talks about.
+ * Portraits move between organisations, with a line to where each person
+ * works; lines detach before a move and draw in after it. No state.
+ */
+export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>>) {
+  const { locale, role } = ctx;
+  const step = role === "preview" ? INDUSTRY_STEPS : Math.max(0, Math.min(INDUSTRY_STEPS, ctx.revealStep));
+  const still = role === "preview" || ctx.reducedMotion;
+  const placements = placementsAt(step);
+  const litNow = LAYERS.flatMap((l) => l.actors).filter((a) => a.lightAt !== undefined && a.lightAt <= step);
+  const newest = Math.max(0, ...litNow.map((a) => a.lightAt ?? 0));
+
+  const litSources = [
+    ...new Set([...litNow.flatMap((a) => a.sourceIds), ...[...placements.values()].flatMap((m) => m.sourceIds)]),
+  ];
+  const imageIds = [...PEOPLE.map((p) => p.image), ...LAYERS.flatMap((l) => l.actors.map((a) => a.image))];
+
+  return (
+    <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={COPY.label[locale]}>
+      {LAYERS.map((layer) => {
+        const box = LAYER_BOX[layer.id];
+        return (
+          <section
+            key={layer.id}
+            className={styles.layer}
+            data-layer={layer.id}
+            style={{ top: box.top, height: box.height, left: LEFT, width: RIGHT - LEFT }}
+            aria-label={layer.name[locale]}
+          >
+            <h3 className={styles.layerName}>{layer.name[locale]}</h3>
+          </section>
+        );
+      })}
+
+      {LAYERS.flatMap((layer) =>
+        layer.actors.map((actor) => {
+          const p = ACTORS.get(actor.id)!;
+          const image = getStoryImage(actor.image);
+          const on = actor.lightAt !== undefined && actor.lightAt <= step;
+          const style = {
+            left: p.x - p.w / 2,
+            top: p.y - p.h / 2,
+            width: p.w,
+            height: p.h,
+            "--logo": image ? `url("${image.url}")` : "none",
+          } as CSSProperties;
+          const isNewest = on && actor.lightAt === newest;
+          return [
+            <span
+              key={actor.id}
+              className={`${styles.logo} ${on ? styles.on : styles.off}`}
+              style={style}
+              role="img"
+              aria-label={actor.label[locale]}
+              data-lit={on}
+            />,
+            <Flags
+              key={`${actor.id}-flags`}
+              actorId={actor.id}
+              locale={locale}
+              className={`${styles.flagRow} ${on ? styles.on : styles.off}`}
+              style={{ left: p.x, top: p.y + p.h / 2 + FLAG_GAP }}
+            />,
+            actor.product ? (
+              <span
+                key={`${actor.id}-product`}
+                className={`${styles.product} ${on ? styles.on : styles.off}`}
+                style={{ left: p.x, top: p.y + p.h / 2 + FLAG_GAP + PRODUCT_GAP }}
+              >
+                <span
+                  className={styles.productMark}
+                  style={{ "--logo": `url("${getStoryImage(actor.product.image)?.url ?? ""}")` } as CSSProperties}
+                  aria-hidden="true"
+                />
+                {actor.product.name}
+              </span>
+            ) : null,
+            // The accent stroke is a sibling: a child of the masked logo would be masked away.
+            isNewest ? (
+              <span
+                key={`${actor.id}-stroke`}
+                className={styles.stroke}
+                style={{ left: p.x - 24, top: p.y + p.h / 2 + FLAG_GAP + (actor.product ? PRODUCT_GAP + 34 : 28) }}
+              />
+            ) : null,
+          ];
+        }),
+      )}
+
+      <svg className={styles.links} viewBox="0 0 1920 1080" aria-hidden="true">
+        <defs>
+          <marker id="industry-hop-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--color-accent)" />
+          </marker>
+        </defs>
+        {[...placements.values()]
+          .filter((m) => m.org !== null)
+          .map((m) => {
+            const target = ACTORS.get(m.org!)!;
+            const x = personX(m);
+            const hopping = m.step === step && m.from !== undefined;
+            const d = m.inline
+              ? `M ${x - INLINE_PORTRAIT / 2 - 6} ${target.y - 10} L ${target.x + target.w / 2 + 10} ${target.y - 10}`
+              : `M ${x} ${LINK_FROM_Y} L ${target.x} ${target.y - target.h / 2 - 10}`;
+            return <path key={`${m.person}-${m.org}`} className={`${styles.link} ${hopping ? styles.linkLate : ""}`} d={d} pathLength={1} />;
+          })}
+        {MOVES.filter((m) => m.step === step && m.from).map((m) => [
+          <path key={`hop-${m.person}`} className={styles.hop} d={hopArc(m)!} pathLength={1} />,
+          // The arrowhead rides on an unstroked copy so it can appear once the arc is drawn.
+          <path key={`hop-head-${m.person}`} className={styles.hopHead} d={hopArc(m)!} markerEnd="url(#industry-hop-arrow)" />,
+        ])}
+      </svg>
+
+      {PEOPLE.map((person) => {
+        const move = placements.get(person.id) ?? waitingPlace(person.id);
+        if (!move) return null;
+        const shown = placements.has(person.id);
+        const image = getStoryImage(person.image);
+        const at = portraitOrigin(move);
+        const hopping = shown && move.step === step && move.from !== undefined;
+        const fromAt = hopping ? portraitOrigin({ ...move, org: move.from!.org, dx: move.from!.dx }) : at;
+        const style = {
+          transform: `translate(${at.x}px, ${at.y}px)`,
+          "--from-x": `${fromAt.x}px`,
+          "--from-y": `${fromAt.y}px`,
+          "--to-x": `${at.x}px`,
+          "--to-y": `${at.y}px`,
+        } as CSSProperties;
+        return (
+          <figure
+            key={person.id}
+            className={`${styles.person} ${shown ? styles.shown : styles.hidden} ${move.org === null ? styles.apart : ""} ${move.inline ? styles.inline : ""} ${hopping ? styles.hopping : ""}`}
+            style={style}
+            aria-hidden={!shown}
+            data-person={person.id}
+            data-org={shown ? (move.org ?? "none") : undefined}
+          >
+            {image ? <img className={styles.portrait} src={image.url} alt="" draggable={false} /> : <span className={styles.portrait} />}
+            <figcaption className={styles.name}>{person.name}</figcaption>
+          </figure>
+        );
+      })}
+
+      <footer className={styles.footer}>
+        {role === "controller" && litSources.length ? (
+          <details className={styles.sources} onKeyDown={stopShellKeys}>
+            <summary>{COPY.sources[locale]}</summary>
+            <ul className={styles.moves}>
+              {MOVES.filter((m) => m.step <= step).map((m) => (
+                <li key={`${m.person}-${m.step}`}>{m.what[locale]}</li>
+              ))}
+            </ul>
+            <SourceList sourceIds={litSources} role={role} locale={locale} getSource={ctx.getSource} />
+          </details>
+        ) : (
+          <span />
+        )}
+        <Credits imageIds={imageIds} role={role} locale={locale} />
+      </footer>
+    </div>
+  );
+}

@@ -1,0 +1,43 @@
+.chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+}
+.black {
+  color: var(--color-danger);
+}
+.black::before {
+  background: currentColor;
+}
+.frozen {
+  color: var(--color-accent-2);
+}
+.frozen::before {
+  border: 2px solid currentColor;
+  width: 3px;
+  border-top: none;
+  border-bottom: none;
+}
+.fallback {
+  color: var(--color-accent);
+}
+.fallback::before {
+  background: currentColor;
+  transform: rotate(45deg);
+}

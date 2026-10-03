@@ -1,0 +1,326 @@
+/* Shared styles of the language scenes. Stage pixels, tokens only. */
+
+.frame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--space-6) 160px var(--space-5);
+}
+
+/* Controller-only rail. Hairline above, smaller type, never on the projector. */
+.rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-3) 160px var(--space-4);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.groupLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.segRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.button {
+  font: 500 var(--text-xs) / 1.2 var(--font-body);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  padding: 10px 24px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+.button:focus-visible,
+.input:focus-visible,
+.slider input:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.active {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.slider input {
+  width: 300px;
+  accent-color: var(--color-accent);
+}
+.sliderValue {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--color-text);
+  margin-left: var(--space-1);
+}
+
+.field {
+  min-width: 420px;
+}
+.wide {
+  flex: 1;
+  min-width: 560px;
+}
+.fieldRow {
+  display: flex;
+  gap: var(--space-1);
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  font: 400 var(--text-sm) / 1.2 var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 2px solid var(--color-line);
+  border-radius: 10px;
+  padding: 10px 16px;
+}
+.input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+/* Calm notice: muted, dashed circle, no red. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+.notice svg {
+  flex: none;
+  color: var(--color-accent-2);
+}
+
+.recordedTag {
+  display: inline-block;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-line);
+  border-radius: 999px;
+  padding: 4px 16px;
+}
+
+.space {
+  color: var(--color-text-muted);
+  opacity: 0.55;
+  margin-right: 0.08em;
+}
+
+/* ---- The fan: next-token candidates continuing the sentence ---- */
+.fan {
+  --fan-scale: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(10px * var(--fan-scale));
+  min-width: calc(560px * var(--fan-scale));
+}
+.fanRow {
+  --w: 0;
+  --g: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  height: calc(62px * var(--fan-scale));
+  padding: 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: calc(var(--text-md) * var(--fan-scale));
+  font-variation-settings: "opsz" 48;
+  white-space: nowrap;
+}
+.bar,
+.ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 6px;
+  transform-origin: left center;
+}
+.bar {
+  width: 100%;
+  transform: scaleX(var(--w));
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-left: 4px solid var(--color-accent);
+  transition: transform var(--dur) var(--ease);
+}
+.ghost {
+  width: 100%;
+  transform: scaleX(var(--g));
+  border: 2px dashed color-mix(in srgb, var(--color-accent) 45%, transparent);
+  transition: transform var(--dur) var(--ease);
+}
+.fanText,
+.fanValue,
+.fanBadge {
+  position: relative;
+}
+.fanText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fanValue {
+  font-family: var(--font-mono);
+  font-size: calc(var(--text-sm) * var(--fan-scale));
+  color: var(--color-text-muted);
+}
+.fanBadge {
+  position: absolute;
+  left: 100%;
+  margin-left: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-accent-2);
+}
+.chosen .bar {
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+.chosen {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.chosen .fanText {
+  color: var(--color-text);
+  font-weight: 700;
+}
+.chosen .fanValue {
+  color: var(--color-text);
+}
+.roomMatch {
+  outline: 3px solid var(--color-accent-2);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.dim {
+  opacity: 0.35;
+}
+.fanFooter {
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.animate .fanRow {
+  animation: rise var(--dur) var(--ease) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+.animate .bar {
+  animation: grow calc(var(--dur) * 2) var(--ease) both;
+  animation-delay: calc(var(--i) * 70ms + 120ms);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.pending {
+  color: var(--color-text-muted);
+}
+.ellipsis i {
+  font-style: normal;
+  animation: breathe 1.4s ease-in-out infinite;
+}
+.ellipsis i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ellipsis i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes breathe {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate .fanRow,
+  .animate .bar,
+  .ellipsis i {
+    animation: none;
+  }
+}
+
+/* Model source badge (controller only). */
+.sourceBadge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  max-width: 560px;
+  padding: 6px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--source, var(--color-line));
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  align-self: center;
+}
+.sourceBadge b {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.source_hf {
+  --source: var(--color-accent-2);
+}
+.source_simulation {
+  --source: var(--color-line);
+  border-style: dashed;
+}
+.sourceFell .sourceWhy {
+  color: var(--color-text);
+}
+.sourceWhy {
+  flex-basis: 100%;
+}

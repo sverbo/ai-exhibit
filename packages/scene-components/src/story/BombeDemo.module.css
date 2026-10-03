@@ -1,0 +1,241 @@
+/*
+ * A Bombe-like cabinet: three banks of 12 triplets of drums, each drum a
+ * coloured ring of letters (rotor I red, II maroon, III green in this drawing).
+ * While searching, the drums tick round at different speeds (CSS only: no
+ * per-frame React renders); at the stop they all halt, and the message decodes
+ * below, one lamp at a time.
+ */
+.root {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Label column + letter cells. */
+.lines {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  align-items: center;
+  row-gap: 6px;
+  column-gap: 14px;
+}
+.lineLabel {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+.cells {
+  display: flex;
+  gap: 3px;
+  flex-wrap: nowrap;
+}
+.cell {
+  width: 28px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+.cell[data-gap="true"] {
+  width: 12px;
+  background: transparent;
+  border-color: transparent;
+}
+.crib .cell {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.cipher .cell {
+  color: var(--color-text-muted);
+}
+.plain .cell {
+  color: var(--color-text);
+  transition:
+    background 300ms var(--ease),
+    color 300ms var(--ease);
+}
+/* The lamp: the letter that just lit up. */
+.plain .lamp {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
+.gloss {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.gloss.shown {
+  opacity: 1;
+}
+
+/* Cabinet and status side by side. */
+.machine {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.cabinet {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-text) 82%, var(--color-bg));
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--color-text) 60%, var(--color-bg));
+}
+/* The cabinet stays a dark machine in the dark theme too. */
+:global([data-theme="dark"]) .cabinet {
+  background: var(--color-surface-2);
+  box-shadow: inset 0 0 0 3px var(--color-line);
+}
+.bank {
+  display: grid;
+  grid-template-columns: repeat(12, 48px);
+  gap: 6px;
+}
+.triplet {
+  display: grid;
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  border-radius: 28px;
+  transition:
+    opacity 400ms var(--ease),
+    box-shadow 400ms var(--ease);
+}
+.drum {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+/* Rotor colours (I red, II maroon, III green) and speeds: the top row turns fastest. */
+.drum[data-row="0"] {
+  --drum-color: var(--color-danger);
+  --spin: 1.3s;
+}
+.drum[data-row="1"] {
+  --drum-color: color-mix(in srgb, var(--color-danger) 55%, var(--color-text));
+  --spin: 6.5s;
+}
+.drum[data-row="2"] {
+  --drum-color: var(--color-ok);
+  --spin: 22s;
+}
+.ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.window {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  pointer-events: none;
+}
+/* While searching the window letter would be meaningless: the hand shows instead. */
+.spinning .window {
+  opacity: 0;
+}
+.stopped .window {
+  animation: windowIn 300ms var(--ease);
+}
+@keyframes windowIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Searching: every ring ticks round, 26 positions per turn, each row at its own speed. */
+/* steps(26): the ring jumps one letter at a time, like a clicking drum. */
+.spinning .ring {
+  animation: tick var(--spin) steps(26) infinite;
+  animation-delay: inherit;
+}
+/* A small jolt as the whole cabinet works. */
+.spinning .triplet {
+  animation: jolt 260ms steps(2) infinite;
+}
+@keyframes jolt {
+  50% {
+    transform: translateY(1px);
+  }
+}
+@keyframes tick {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Stopped: the triplet holding the found setting stands out. */
+.stopped .triplet {
+  opacity: 0.45;
+}
+.stopped .found {
+  opacity: 1;
+  box-shadow: 0 0 0 4px var(--color-accent);
+}
+
+.status {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+.counter {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.counterLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.rejected {
+  display: grid;
+  gap: 2px;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  color: var(--color-text-muted);
+}
+.reject span {
+  color: var(--color-danger);
+}
+.stop {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  color: var(--color-accent);
+  animation: stopIn 420ms var(--ease);
+}
+@keyframes stopIn {
+  from {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}

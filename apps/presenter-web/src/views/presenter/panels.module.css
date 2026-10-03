@@ -1,0 +1,245 @@
+/* Badges are sized in stage pixels; rescale them for chrome. */
+.badgeScope {
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  margin: 0;
+  display: inline-flex;
+}
+
+/* Notes -------------------------------------------------------------------- */
+
+/*
+ * The talking points are the loudest thing on the desk: about 28 px on a
+ * laptop, scaled by A-/A+. Takeaway and transition stay small and muted.
+ */
+.notes {
+  --notes-size: calc(clamp(24px, 1.95vw, 30px) * var(--notes-scale, 1));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+/* Only the talking points scroll: takeaway and transition stay in view. */
+.pointsScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-right: -10px;
+  padding-right: 10px;
+}
+.aside {
+  margin-right: 0.35em;
+  font-family: var(--font-body);
+  font-size: var(--ui-text-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.takeaway {
+  margin: 0;
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--color-accent);
+  font-family: var(--font-display);
+  font-size: calc(var(--notes-size) * 0.6);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+.takeaway,
+.then {
+  flex: none;
+}
+.then {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: calc(var(--notes-size) * 0.6);
+  line-height: 1.35;
+}
+.transitionOut,
+.nextLine {
+  margin: 0;
+}
+.transitionOut {
+  font-family: var(--font-display);
+}
+.nextLine {
+  color: var(--color-text-muted);
+}
+
+/* Sources ------------------------------------------------------------------ */
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sourceList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.source {
+  padding: 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--ui-panel-2);
+}
+.sourceHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.verify {
+  font-size: var(--ui-text-xs);
+  font-weight: 700;
+}
+.verified {
+  color: var(--color-ok);
+}
+.unverified {
+  color: var(--color-accent);
+}
+.sourceTitle {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.sourceMeta {
+  margin: 2px 0 0;
+  font-size: var(--ui-text-xs);
+  color: var(--color-text-muted);
+}
+.claim {
+  margin: 6px 0 0;
+  font-size: var(--ui-text-sm);
+  color: var(--color-text-muted);
+}
+.unknown {
+  font-family: var(--font-mono);
+  color: var(--color-danger);
+}
+
+/* TODO --------------------------------------------------------------------- */
+
+.todos {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.todos li::marker {
+  color: var(--color-accent);
+}
+
+/* Health ------------------------------------------------------------------- */
+
+.health {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.rows {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.row dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.row dd {
+  margin: 2px 0 0 16px;
+  font-size: var(--ui-text-sm);
+}
+.qrs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+.qr {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.url {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  word-break: break-all;
+}
+.hint {
+  margin: 0;
+  font-size: var(--ui-text-sm);
+  color: var(--color-text-muted);
+}
+.restart {
+  align-self: flex-start;
+  border-color: color-mix(in srgb, var(--color-danger) 60%, var(--color-line));
+}
+
+/* Chapter strip ------------------------------------------------------------ */
+
+.strip {
+  position: relative;
+  height: 30px;
+}
+.segments {
+  display: flex;
+  gap: 3px;
+  height: 100%;
+}
+.segment {
+  min-width: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--ui-panel-2);
+  overflow: hidden;
+  font-size: var(--ui-text-xs);
+  color: var(--color-text-muted);
+}
+.seg_done {
+  background: color-mix(in srgb, var(--color-accent) 22%, var(--ui-panel-2));
+}
+.seg_current {
+  background: color-mix(in srgb, var(--color-accent) 40%, var(--ui-panel-2));
+  color: var(--color-text);
+  font-weight: 600;
+}
+.segLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.markPos,
+.markClock {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  translate: -1px 0;
+  border-radius: 2px;
+  pointer-events: auto;
+}
+.markPos {
+  background: var(--color-text);
+}
+.markClock {
+  background: var(--color-accent-2);
+}

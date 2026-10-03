@@ -1,0 +1,147 @@
+/* Shared chrome pieces: buttons, pills, panels, keycaps. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--ui-panel-2);
+  color: var(--color-text);
+  font-size: var(--ui-text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms;
+}
+.btn:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  border-color: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-line));
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent) 86%, var(--color-text));
+  border-color: color-mix(in srgb, var(--color-accent) 86%, var(--color-text));
+}
+/* A toggle that is currently on. */
+.on {
+  border-color: var(--color-accent-2);
+  background: color-mix(in srgb, var(--color-accent-2) 18%, var(--ui-panel-2));
+  color: var(--color-text);
+}
+.danger.on {
+  border-color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 22%, var(--ui-panel-2));
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 0.4em;
+  border: 1px solid var(--color-line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  flex: none;
+}
+.dotOk {
+  background: var(--color-ok);
+}
+.dotWarn {
+  background: var(--color-accent);
+}
+.dotBad {
+  background: var(--color-danger);
+}
+
+.label {
+  margin: 0;
+  font-size: var(--ui-text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.select {
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--ui-panel-2);
+}
+
+/* A small form shown next to a control (the access code). */
+.inlineForm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+.inlineForm input {
+  width: 9em;
+}
+.inlineError {
+  color: var(--color-danger, var(--color-text));
+  font-size: var(--ui-text-sm);
+}
+
+/* Two or three mutually exclusive choices (theme, language). */
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--ui-panel);
+  flex: none;
+}
+.segment {
+  min-height: 30px;
+  padding: 3px 11px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+.segment:hover {
+  color: var(--color-text);
+}
+.segmentOn {
+  background: var(--ui-panel-2);
+  color: var(--color-text);
+  box-shadow: 0 0 0 1px var(--color-line);
+}

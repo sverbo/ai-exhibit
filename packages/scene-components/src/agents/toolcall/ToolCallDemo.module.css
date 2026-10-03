@@ -1,0 +1,215 @@
+.root {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-5) 80px var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.cols {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: var(--space-5);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.colTools {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--color-line);
+}
+.colTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-md);
+}
+.colSub {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity calc(var(--dur) * 1.4) var(--ease),
+    transform calc(var(--dur) * 1.4) var(--ease);
+}
+.on {
+  opacity: 1;
+  transform: none;
+}
+
+.bubbleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 92%;
+}
+.userRow {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.modelRow {
+  align-self: flex-start;
+}
+.who {
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+.bubble {
+  margin: 0;
+  padding: 14px 22px;
+  border-radius: 22px;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+}
+.user {
+  background: var(--color-surface-2);
+  border-bottom-right-radius: 6px;
+}
+.model {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+  border-bottom-left-radius: 6px;
+}
+.strong {
+  box-shadow: inset 0 0 0 3px var(--color-accent);
+}
+.note {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  max-width: 30em;
+}
+
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.callRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.call,
+.result {
+  margin: 0;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 25px;
+  line-height: 1.35;
+  white-space: pre;
+}
+.call {
+  background: color-mix(in srgb, var(--color-accent-2) 12%, var(--color-bg));
+  box-shadow: inset 0 0 0 2px var(--color-accent-2);
+  color: var(--color-accent-2);
+  align-self: flex-start;
+}
+.callTag {
+  margin: 8px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-accent-2);
+}
+
+.toolRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.toolBox {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border: 3px solid var(--color-text);
+  border-radius: var(--radius);
+  color: var(--color-text);
+}
+.toolName {
+  font-family: var(--font-mono);
+  font-size: 20px;
+}
+.toolFlow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.flowLabel {
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+.result {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.ctl {
+  position: absolute;
+  left: 80px;
+  bottom: var(--space-4);
+  width: 700px;
+}
+
+.toolbox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+.toolboxLabel {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  margin-right: var(--space-1);
+}
+.toolChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--color-line);
+  font-size: 20px;
+  color: var(--color-text-muted);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.toolChipOn {
+  border-color: var(--color-accent-2);
+  color: var(--color-accent-2);
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.frame .ctl {
+  width: 500px;
+}

@@ -1,0 +1,15 @@
+.sources {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.2em 0.9em;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+.source + .source::before {
+  content: "/";
+  margin-right: 0.9em;
+  font-style: normal;
+  opacity: 0.5;
+}

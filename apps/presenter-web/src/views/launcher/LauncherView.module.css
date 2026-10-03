@@ -1,0 +1,206 @@
+/*
+ * Home page: the talk's title, then the three things the presenter opens on
+ * the day, side by side, then one readiness line. The rest folds under "More".
+ */
+.launcher {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+.header {
+  position: relative;
+  margin-bottom: 40px;
+  padding-bottom: 8px;
+  background: radial-gradient(ellipse 50% 120% at 15% -40%, var(--stage-light), transparent 70%);
+}
+.brand {
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: var(--ui-text-sm);
+  color: var(--color-accent);
+}
+.title {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 360;
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.theme {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* The three entries --------------------------------------------------------- */
+
+.entries {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 210px;
+  padding: 24px 24px 22px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--ui-radius);
+  background: var(--ui-panel);
+  color: var(--color-text);
+  text-decoration: none;
+}
+a.entry {
+  transition: border-color 120ms, background 120ms;
+}
+a.entry:hover {
+  border-color: var(--color-accent);
+}
+.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+a.primary:hover {
+  background: color-mix(in srgb, var(--color-accent) 88%, var(--color-text));
+}
+.entryTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 420;
+  line-height: 1.05;
+}
+.entryHint {
+  margin: 0;
+  max-width: 30ch;
+  font-size: var(--ui-text-md);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+.primary .entryHint {
+  color: inherit;
+  opacity: 0.85;
+}
+.remote {
+  min-height: 0;
+}
+.qr {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+.qr .entryHint {
+  font-size: var(--ui-text-sm);
+}
+.entryHint a {
+  color: var(--color-accent);
+}
+
+/* Readiness ------------------------------------------------------------------ */
+
+.ready {
+  margin: 20px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--ui-text-sm);
+  color: var(--color-text-muted);
+}
+.sep {
+  width: 1px;
+  height: 14px;
+  margin: 0 8px;
+  background: var(--color-line);
+}
+
+/* More ----------------------------------------------------------------------- */
+
+/* How the windows work together: three short lines under the entries. */
+.howto {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  line-height: 1.45;
+}
+.howto p {
+  margin: 0;
+}
+.howto b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.about {
+  max-width: 900px;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  line-height: 1.5;
+}
+.aboutTitle {
+  margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: var(--ui-text-md, 1rem);
+  font-weight: 600;
+}
+.about p {
+  margin: 0 0 8px;
+}
+.about b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.about a {
+  color: inherit;
+}
+.exhibits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.languages {
+  margin-left: 4px;
+  padding: 1px 8px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .launcher {
+    padding: 24px 16px 48px;
+  }
+  .header {
+    margin-bottom: 28px;
+  }
+  .theme {
+    position: static;
+    margin-top: 18px;
+  }
+  .entries,
+  .howto {
+    grid-template-columns: 1fr;
+  }
+  .entry {
+    min-height: 0;
+  }
+  .entryTitle {
+    font-size: 28px;
+  }
+}

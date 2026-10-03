@@ -1,0 +1,97 @@
+/*
+ * App chrome (presenter, remote, launcher...). Scene tokens in tokens.css are
+ * stage pixels; chrome uses its own screen-pixel scale below, same palette.
+ * Chrome surfaces follow the theme like the stage does.
+ */
+:root,
+[data-theme="light"] {
+  --ui-bg: #e9e2d5;
+  --ui-panel: #f6f1e8;
+  --ui-panel-2: #fffcf6;
+  /* Floating chrome over a scene (HUD, palette). */
+  --ui-overlay: rgba(251, 248, 241, 0.94);
+  --ui-scrim: rgba(40, 30, 18, 0.35);
+  --ui-shadow: 0 18px 50px rgba(60, 40, 15, 0.18);
+  /* Around a scene in presenter chrome (the projector itself keeps black bars). */
+  --ui-letterbox: #d8cfbf;
+}
+[data-theme="dark"] {
+  --ui-bg: #0b0a09;
+  --ui-panel: #171512;
+  --ui-panel-2: #201d19;
+  --ui-overlay: rgba(14, 12, 10, 0.9);
+  --ui-scrim: rgba(8, 7, 6, 0.72);
+  --ui-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  --ui-letterbox: #000;
+}
+:root {
+  --ui-text-xs: 12px;
+  --ui-text-sm: 14px;
+  --ui-text-md: 16px;
+  --ui-text-lg: 20px;
+  --ui-text-xl: 28px;
+  --ui-radius: 10px;
+  --ui-live: var(--color-accent);
+  --ui-frozen: var(--color-accent-2);
+  --ui-black: var(--color-danger);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ui-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--ui-text-md);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+}
