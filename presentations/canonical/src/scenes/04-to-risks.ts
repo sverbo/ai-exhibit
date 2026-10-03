@@ -315,10 +315,10 @@ export const chapter04: SceneDefinition[] = [
             picture: "power",
             title: { en: "Power" },
             line: {
-              en: "A few companies, in a few countries, build most of the leading models.",
+              en: "A few companies build most leading models. And when AI does the work, fewer people can refuse or blow the whistle.",
             },
-            evidence: "observed",
-            sourceIds: ["tk-stanford-2025-ai-index", "fm-cma-foundation-models-2023"],
+            evidence: "projection",
+            sourceIds: ["tk-stanford-2025-ai-index", "fm-cma-foundation-models-2023", "tk-davidson-2025-ai-enabled-coups"],
           },
           {
             picture: "skills",
@@ -346,6 +346,7 @@ export const chapter04: SceneDefinition[] = [
       en: `- No villain: many sensible choices add up to outcomes nobody chose; competition pushes everyone to adopt, fast (International AI Safety Report, 2026)
 - **Do:** jobs: one firm's support agents solved 14% more issues per hour, 34% for beginners (2025); no overall effect on employment yet, early signs of less demand for juniors in writing; economists disagree
 - **Do:** power: in 2024, US institutions produced 40 notable models, China 15, Europe 3, nearly 90% from industry (Stanford AI Index 2025); UK regulator's warning on market power (2023)
+- **Do:** whistleblowers: inside a company or a state, people who refuse unethical orders or speak up are a check on power; if AI systems do the work, that check can disappear (Davidson, Finnveden and Hadshar, Forethought, 2025: an argument, not a measurement)
 - **Do:** skills: survey of 319 knowledge workers (Microsoft Research and Carnegie Mellon, CHI 2025): the more they trusted the AI, the less critical thinking they reported; self-reported, early
 - **Do:** our say (Kulveit et al., 2025, an argument, not a measurement): firms, states and culture listened partly because they needed our work, votes and attention; as AI replaces that, the pull fades
 - Losing skills is personal, disempowerment is collective, and the first can feed the second`,
@@ -359,6 +360,7 @@ export const chapter04: SceneDefinition[] = [
       "fm-brynjolfsson-2025",
       "tk-stanford-2025-ai-index",
       "fm-cma-foundation-models-2023",
+      "tk-davidson-2025-ai-enabled-coups",
       "tk-lee-2025-critical-thinking",
       "fm-iasr-2026-autonomy",
       "tk-kulveit-2025-gradual-disempowerment",

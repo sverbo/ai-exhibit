@@ -1000,4 +1000,19 @@ export const talkSources: SourceRecord[] = [
     evidence: "projection",
     verification: "verified",
   },
+  // Chapter 04: systemic effects, power card (whistleblowers)
+  {
+    id: "tk-davidson-2025-ai-enabled-coups",
+    title: "AI-Enabled Coups: How a Small Group Could Use AI to Seize Power",
+    url: "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
+    publisher: "Forethought (Tom Davidson, Lukas Finnveden, Rose Hadshar)",
+    date: "2025-04-15",
+    retrieved: "2026-10-03",
+    kind: "report",
+    claim:
+      "\"Throughout history, human reluctance to follow unethical or illegal orders has been a crucial check on power.\" Advanced AI could replace the employees and soldiers whose cooperation is needed, removing that check.",
+    evidence: "projection",
+    verification: "verified",
+    notes: "An argument about what could happen, not a measurement: present it as such.",
+  },
 ];
