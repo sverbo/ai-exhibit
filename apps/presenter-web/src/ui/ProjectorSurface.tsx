@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Stage, type SceneRole } from "@ai-exhibit/scene-components";
 import { projectorView } from "../talk/shell.ts";
 import type { Talk } from "../talk/useTalk.ts";
@@ -13,10 +14,13 @@ export function ProjectorSurface({
   talk,
   role,
   glossaryUrl,
+  overlay,
 }: {
   talk: Talk;
   role: Exclude<SceneRole, "preview">;
   glossaryUrl: string | null;
+  /** Drawn over the live scene, in stage pixels; not on black or on a slate. */
+  overlay?: ReactNode;
 }) {
   const { t } = useUi();
   const { state, scenes } = talk;
@@ -28,7 +32,7 @@ export function ProjectorSurface({
   if (!scene) return <Slate text={scenes.length ? t("waitingSession") : t("emptyEdition")} />;
   return (
     <div className={styles.surface} data-projector={view.kind}>
-      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} glossaryUrl={glossaryUrl} />
+      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} glossaryUrl={glossaryUrl} overlay={overlay} />
     </div>
   );
 }

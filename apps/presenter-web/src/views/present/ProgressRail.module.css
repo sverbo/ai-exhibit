@@ -1,0 +1,39 @@
+/* Top right of the slide (stage pixels): one thin segment per part, a dot where the talk stands. */
+.rail {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  z-index: 4;
+  display: flex;
+  gap: 8px;
+  width: 300px;
+  height: 6px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+.segment {
+  flex-basis: 0;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-text-muted) 35%, transparent);
+}
+.done {
+  background: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
+}
+.current {
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+.cursor {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+  transition: left 400ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    transition: none;
+  }
+}

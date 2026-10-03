@@ -17,6 +17,8 @@ import { ModelSourceToggle } from "../../ui/ModelSourceToggle.tsx";
 import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { useFullscreen, usePointerActivity } from "../../ui/useFullscreen.ts";
 import { KeyHint } from "./KeyHint.tsx";
+import { ProgressRail } from "./ProgressRail.tsx";
+import { talkProgress } from "./progress.ts";
 import styles from "./PresentView.module.css";
 
 type HudMode = "full" | "strip";
@@ -93,7 +95,12 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
     <div className={`${styles.present} ${!hud && !pointerActive ? styles.idle : ""}`} lang={locale} data-stage={talk.ownsStage ? "owner" : talk.linked ? "linked" : "none"}>
       <OutOfDateNotice talk={talk} className={styles.outOfDate} />
       <div className={styles.stageArea}>
-        <ProjectorSurface talk={talk} role="controller" glossaryUrl={glossaryUrlFor(network)} />
+        <ProjectorSurface
+          talk={talk}
+          role="controller"
+          glossaryUrl={glossaryUrlFor(network)}
+          overlay={<ProgressRail progress={talkProgress(talk.talk.presentation.chapters, talk.personal.timed, scene, state?.revealStep ?? 0)} />}
+        />
         {!hud && !palette ? (
           <KeyHint
             fullscreen={fullscreen}

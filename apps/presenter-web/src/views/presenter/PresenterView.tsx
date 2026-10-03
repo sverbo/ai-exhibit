@@ -41,7 +41,8 @@ export default function PresenterView() {
   const [sidebar, setSidebar] = useState(true);
   const [tab, setTab] = useState<Tab>("notes");
   const [palette, setPalette] = useState(false);
-  const [config, setConfig] = useState(false);
+  // `/presenter?config` (the home page's Config button) opens the panel directly.
+  const [config, setConfig] = useState(() => new URLSearchParams(window.location.search).has("config"));
   const elapsed = useElapsedMs(talk.state);
   const notesScale = useNotesScale();
 

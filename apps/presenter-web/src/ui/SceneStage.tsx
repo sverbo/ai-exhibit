@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { SceneDefinition } from "@ai-exhibit/presentation-core";
 import { SceneRenderer, Stage, type SceneRole } from "@ai-exhibit/scene-components";
 import { sceneSlice, useSceneContext } from "../talk/sceneContext.ts";
@@ -15,6 +16,7 @@ export function SceneStage({
   ghost = false,
   bars,
   className,
+  overlay,
 }: {
   talk: Talk;
   scene: SceneDefinition;
@@ -25,6 +27,8 @@ export function SceneStage({
   /** Letterbox color; "transparent" lets presenter chrome show through. */
   bars?: "black" | "transparent";
   className?: string;
+  /** Drawn on top of the scene, in stage pixels (e.g. the projector's progress rail). */
+  overlay?: ReactNode;
 }) {
   const defaultSource = useDefaultModelSource();
   // One window runs the stage (talk.ownsStage); any other controller view mirrors it.
@@ -45,6 +49,7 @@ export function SceneStage({
     <Stage className={className} bars={bars}>
       {/* A new key on hand-over: the scene starts afresh in its new role, from the published state. */}
       <SceneRenderer key={effective} scene={scene} ctx={ctx} ghostUnrevealed={ghost} />
+      {overlay}
     </Stage>
   );
 }

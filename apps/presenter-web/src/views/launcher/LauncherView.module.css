@@ -205,13 +205,17 @@ a.primary:hover {
   }
 }
 
-/* The talk's language: every link below opens in it. */
+/* Config (personal order, hidden scenes, notes) and the language the next talk starts in. */
 .language {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   margin-bottom: 20px;
+}
+.settingHint {
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
 }
 .languageLabel {
   color: var(--color-text-muted);

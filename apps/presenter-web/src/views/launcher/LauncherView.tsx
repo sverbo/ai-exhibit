@@ -62,6 +62,11 @@ export default function LauncherView() {
       </header>
 
       <div className={styles.language}>
+        <a className={chrome.btn} href="/presenter?config">
+          Config
+        </a>
+        <span className={styles.settingHint}>Reorder, hide or annotate scenes for your own talk (saved in this browser).</span>
+        <span className={styles.sep} aria-hidden="true" />
         <span className={styles.languageLabel} id="talk-language">
           Language of the talk
         </span>
@@ -136,7 +141,7 @@ export default function LauncherView() {
         </p>
         <p>
           <b>Feedback, corrections or a new language:</b> contact me on Signal, <b>{SIGNAL}</b>, or open a pull request on
-          GitHub.
+          GitHub. To add your own notes, move or hide scenes, no need for any of that: use <b>Config</b> above.
         </p>
         <p>
           <b>Make your own version</b> (another audience, length or angle): paste this prompt into Claude Code <CopyPrompt />: it checks your tools, forks{" "}
