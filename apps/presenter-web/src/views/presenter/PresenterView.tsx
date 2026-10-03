@@ -1,6 +1,6 @@
 import { Rich } from "@ai-exhibit/scene-components";
 import { useEffect, useMemo, useState } from "react";
-import { LOCALES, tr, stepCount, type Locale } from "@ai-exhibit/presentation-core";
+import { tr, stepCount } from "@ai-exhibit/presentation-core";
 import { useTalkKeyboard } from "../../control/useTalkKeyboard.ts";
 import { computePace, formatDelta, formatDuration, formatMinutes } from "../../control/pace.ts";
 import { useUi } from "../../i18n.ts";
@@ -15,6 +15,7 @@ import { ProjectorSurface } from "../../ui/ProjectorSurface.tsx";
 import { SceneStage } from "../../ui/SceneStage.tsx";
 import { ThemeToggle } from "../../ui/ThemeToggle.tsx";
 import { ModelSourceToggle } from "../../ui/ModelSourceToggle.tsx";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { ChapterStrip, HealthPanel, NotesPanel, SourcesPanel, TodoPanel, sceneSourceIds, sceneTodos, useNotesScale } from "./panels.tsx";
 import styles from "./PresenterView.module.css";
 import { ConfigPanel } from "./ConfigPanel.tsx";
@@ -30,6 +31,10 @@ type Tab = "notes" | "sources" | "todo" | "health";
 export default function PresenterView() {
   const { t, locale: uiLocale, setLocale } = useUi();
   const talk = useTalk("presenter");
+  // The interface follows the talk's language: one switch for both.
+  useEffect(() => {
+    setLocale(talk.locale);
+  }, [talk.locale, setLocale]);
   // The runtime (under pnpm dev) knows the LAN address phones use for the glossary QR.
   const runtime = useRuntime(15000);
   const glossaryUrl = glossaryUrlFor(runtime.network);
@@ -168,13 +173,15 @@ export default function PresenterView() {
           </button>
           <ThemeToggle />
           <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
-          <select className={chrome.select} value={uiLocale} aria-label={t("interfaceLanguage")} title={t("interfaceLanguage")} onChange={(e) => setLocale(e.target.value as Locale)}>
-            {LOCALES.map((l) => (
-              <option key={l} value={l}>
-                {l.toUpperCase()}
-              </option>
-            ))}
-          </select>
+          {/* One language switch: the talk's (slides on every window) and this interface's. */}
+          <LocalePicker
+            compact
+            value={talk.locale}
+            onChange={(l) => {
+              talk.actions.setLocale(l);
+              setLocale(l);
+            }}
+          />
         </div>
       </header>
 

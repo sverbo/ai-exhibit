@@ -60,6 +60,27 @@ export function requestedLocale(
   return asked && presentation.locales.includes(asked) ? asked : null;
 }
 
+/** Where the browser remembers the talk's language, for the next session it starts. */
+export const TALK_LOCALE_KEY = "ai-exhibit:talk-locale";
+
+/** The language last chosen in this browser (launcher or presenter switch), if the talk offers it. */
+export function preferredTalkLocale(presentation: PresentationDefinition = canonical): Locale | null {
+  try {
+    const stored = parseLocale(localStorage.getItem(TALK_LOCALE_KEY));
+    return stored && presentation.locales.includes(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+export function rememberTalkLocale(locale: Locale): void {
+  try {
+    localStorage.setItem(TALK_LOCALE_KEY, locale);
+  } catch {
+    // storage unavailable
+  }
+}
+
 /** The talk's default language (its first offered locale). */
 export function defaultTalkLocale(presentation: PresentationDefinition = canonical): Locale {
   return defaultLocale(presentation);

@@ -14,6 +14,7 @@ import { SpeakerNotes } from "../../ui/SpeakerNotes.tsx";
 import { StatusChips } from "../../ui/StatusChips.tsx";
 import { ThemeToggle } from "../../ui/ThemeToggle.tsx";
 import { ModelSourceToggle } from "../../ui/ModelSourceToggle.tsx";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { useFullscreen, usePointerActivity } from "../../ui/useFullscreen.ts";
 import { KeyHint } from "./KeyHint.tsx";
 import styles from "./PresentView.module.css";
@@ -45,8 +46,12 @@ function readHud(): HudMode {
  * (`?hud=off` hides it, for old links).
  */
 export default function PresentView({ variant = "present" }: { variant?: "present" | "projector" }) {
-  const { t } = useUi();
+  const { t, setLocale } = useUi();
   const talk = useTalk("solo");
+  // The few interface words here follow the talk's language.
+  useEffect(() => {
+    setLocale(talk.locale);
+  }, [talk.locale, setLocale]);
   const { network } = useRuntime(15000);
   const [hud, setHud] = useState(
     () => variant !== "projector" && new URLSearchParams(window.location.search).get("hud") !== "off",
@@ -95,7 +100,10 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
             keys={talk.controller}
             corner={
               talk.ownsStage ? (
-                <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
+                <>
+                  <LocalePicker compact value={talk.locale} onChange={talk.actions.setLocale} />
+                  <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
+                </>
               ) : talk.linked ? (
                 <span className={styles.linked}>{t("linkedToPresenter")}</span>
               ) : null

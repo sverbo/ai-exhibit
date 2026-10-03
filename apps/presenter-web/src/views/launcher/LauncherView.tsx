@@ -1,28 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import { parseLocale, type Locale } from "@ai-exhibit/presentation-core";
-import { DEFAULT_EDITION, defaultTalkLocale, requestedLocale, resolveTalk, talkLocales } from "../../talk/presentation.ts";
+import type { Locale } from "@ai-exhibit/presentation-core";
+import {
+  DEFAULT_EDITION,
+  defaultTalkLocale,
+  preferredTalkLocale,
+  rememberTalkLocale,
+  requestedLocale,
+  resolveTalk,
+} from "../../talk/presentation.ts";
 import { cloudHealthText, lanOrigin, useCloudHealth, useRuntime } from "../../talk/runtime.ts";
 import chrome from "../../ui/chrome.module.css";
-import { LocalePicker, setLangParam } from "../../ui/LocalePicker.tsx";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { QrCode } from "../../ui/QrCode.tsx";
 import { ThemeToggle } from "../../ui/ThemeToggle.tsx";
 import setupPrompt from "../../../../../docs/setup-prompt.md?raw";
 import { exhibits } from "./exhibits.ts";
 import styles from "./LauncherView.module.css";
 
-/** Where the launcher remembers the language last chosen for the talk. */
-const LANG_KEY = "ai-exhibit:talk-locale";
-
 function initialLocale(): Locale {
-  const asked = requestedLocale();
-  if (asked) return asked;
-  try {
-    const stored = parseLocale(localStorage.getItem(LANG_KEY));
-    if (stored && talkLocales().includes(stored)) return stored;
-  } catch {
-    // storage unavailable
-  }
-  return defaultTalkLocale();
+  return requestedLocale() ?? preferredTalkLocale() ?? defaultTalkLocale();
 }
 /** The author's contact and repository, shown in "About this talk". */
 const SIGNAL = "sverbo.39";
@@ -32,23 +28,18 @@ const REPO_URL = "https://github.com/sverbo/ai-exhibit";
  * Home page, reduced to what the presenter uses on the day: the presenter
  * view, the projector window and the audience's glossary QR code, plus one
  * readiness line. English only on this page (product decision: the
- * presenter works in English), apart from the talk's language picker: every
- * link it opens carries `lang`.
+ * presenter works in English), apart from the talk's language picker: it sets
+ * the language the next talk session starts in; during a talk, the presenter's
+ * switch (or the projector's corner) changes it for every window. Links carry
+ * no language: one address per view.
  */
 export default function LauncherView() {
   const talk = useMemo(() => resolveTalk(DEFAULT_EDITION), []);
-  const edition = talk.edition.id;
   const [lang, setLang] = useState(initialLocale);
   const chooseLang = (l: Locale) => {
     setLang(l);
-    setLangParam(l);
-    try {
-      localStorage.setItem(LANG_KEY, l);
-    } catch {
-      // storage unavailable
-    }
+    rememberTalkLocale(l);
   };
-  const q = `edition=${encodeURIComponent(edition)}&lang=${lang}`;
   const runtime = useRuntime(5000);
   const cloud = cloudHealthText(useCloudHealth());
 
@@ -58,7 +49,8 @@ export default function LauncherView() {
 
   // Under pnpm dev the runtime knows the LAN address phones use for the glossary.
   const origin = lanOrigin(runtime.network);
-  const glossaryUrl = origin ? `${origin}/glossary?lang=${lang}` : null;
+  // The glossary has its own language switch: one address, one QR code, whatever the talk's language.
+  const glossaryUrl = origin ? `${origin}/glossary` : null;
 
   return (
     <div className={styles.launcher} lang="en">
@@ -80,13 +72,13 @@ export default function LauncherView() {
       <main className={styles.entries}>
         <a
           className={`${styles.entry} ${styles.primary}`}
-          href={`/presenter?${q}`}
+          href="/presenter"
         >
           <span className={styles.entryTitle}>Presenter</span>
           <span className={styles.entryHint}>Notes, timer and controls.</span>
         </a>
 
-        <a className={styles.entry} href={`/projector?${q}`}>
+        <a className={styles.entry} href="/projector">
           <span className={styles.entryTitle}>Projector</span>
           <span className={styles.entryHint}>
             Works alone: put it full screen on the projector; arrows or a clicker advance it. Open the Presenter too for notes.
@@ -102,7 +94,7 @@ export default function LauncherView() {
               <QrCode value={glossaryUrl} size={156} label="Glossary and resources" />
               <span className={styles.entryHint}>
                 A page for everyone in the room: every term of the talk explained in plain words, and links to go further. They
-                open it by scanning this code, also shown on the agenda slide. <a href={`/glossary?lang=${lang}`}>Open it</a>
+                open it by scanning this code, also shown on the agenda slide. <a href="/glossary">Open it</a>
               </span>
             </div>
           ) : (
@@ -110,7 +102,7 @@ export default function LauncherView() {
               {runtime.reachable && !runtime.network?.addresses.length
                 ? "No network address: join a Wi-Fi network or a phone hotspot."
                 : "Open this page through its network address to show a code phones can reach."}{" "}
-              <a href={`/glossary?lang=${lang}`}>Open it</a>
+              <a href="/glossary">Open it</a>
             </p>
           )}
         </section>

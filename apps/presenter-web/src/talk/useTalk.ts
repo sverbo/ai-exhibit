@@ -10,7 +10,17 @@ import {
   type SessionState,
 } from "@ai-exhibit/session-protocol";
 import { navCommand, type NavAction } from "../control/navigation.ts";
-import { CONTENT_LOADED_AT, DEFAULT_EDITION, defaultTalkLocale, queryParam, requestedLocale, resolveTalk, sourceLookup } from "./presentation.ts";
+import {
+  CONTENT_LOADED_AT,
+  DEFAULT_EDITION,
+  defaultTalkLocale,
+  preferredTalkLocale,
+  queryParam,
+  rememberTalkLocale,
+  requestedLocale,
+  resolveTalk,
+  sourceLookup,
+} from "./presentation.ts";
 import { usePrefersReducedMotion } from "./sceneContext.ts";
 import { adoptTheme, chooseTheme, currentStampedTheme, useTheme } from "../theme.ts";
 import { stepCount } from "@ai-exhibit/presentation-core";
@@ -119,7 +129,7 @@ export function useTalk(role: ClientRole): Talk {
     return createInitialState({
       presentationId: r.presentation.id,
       editionId: r.edition.id,
-      locale: params.lang ?? defaultTalkLocale(r.presentation),
+      locale: params.lang ?? preferredTalkLocale(r.presentation) ?? defaultTalkLocale(r.presentation),
       sceneId: (params.scene && r.scenes.some((s) => s.id === params.scene) ? params.scene : personalFirstSceneId(r)) ?? EMPTY_SCENE,
     });
   }, [params]);
@@ -265,7 +275,10 @@ export function useTalk(role: ClientRole): Talk {
         if (s) send(setShell(s, { pauseMotion: !shellState(s).pauseMotion }));
       },
       toggleTheme: () => chooseTheme(currentStampedTheme().theme === "light" ? "dark" : "light"),
-      setLocale: (locale) => send({ type: "setLocale", locale }),
+      setLocale: (locale) => {
+        rememberTalkLocale(locale);
+        send({ type: "setLocale", locale });
+      },
       setModelSource: (source) => {
         const s = current();
         if (s) send(setShell(s, { modelSource: source }));
@@ -304,7 +317,7 @@ export function useTalk(role: ClientRole): Talk {
     scene,
     index,
     personal,
-    locale: state?.locale ?? params.lang ?? defaultTalkLocale(talk.presentation),
+    locale: state?.locale ?? params.lang ?? preferredTalkLocale(talk.presentation) ?? defaultTalkLocale(talk.presentation),
     getSource,
     controller,
     ownsStage,
