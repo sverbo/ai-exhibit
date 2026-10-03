@@ -1,4 +1,4 @@
-import { stepCount, type ChapterDefinition, type SceneDefinition } from "@ai-exhibit/presentation-core";
+import type { ChapterDefinition, SceneDefinition } from "@ai-exhibit/presentation-core";
 
 export interface ProgressPart {
   id: string;
@@ -15,15 +15,11 @@ export interface Progress {
 /**
  * Where the talk stands, for the projector's progress rail: one segment per
  * part (chapters except the introduction "00"), sized by planned time, and a
- * cursor at the current scene's start plus its revealed share. `timed` is the
- * personal sequence with hidden scenes counting zero seconds.
+ * cursor at the start of the current scene: it moves once per slide, never
+ * per click. `timed` is the personal sequence with hidden scenes counting zero
+ * seconds.
  */
-export function talkProgress(
-  chapters: ChapterDefinition[],
-  timed: SceneDefinition[],
-  current: SceneDefinition | undefined,
-  revealStep: number,
-): Progress {
+export function talkProgress(chapters: ChapterDefinition[], timed: SceneDefinition[], current: SceneDefinition | undefined): Progress {
   const partIds = chapters.filter((c) => c.id !== "00").map((c) => c.id as string);
   const inParts = timed.filter((s) => partIds.includes(s.chapter));
   const total = inParts.reduce((t, s) => t + s.durationSec, 0);
@@ -37,7 +33,5 @@ export function talkProgress(
     if (s.id === current.id) break;
     before += s.durationSec;
   }
-  const steps = stepCount(current);
-  const within = steps > 0 ? Math.min(1, Math.max(0, revealStep / steps)) : 0;
-  return { parts, at: Math.min(1, (before + within * current.durationSec) / total) };
+  return { parts, at: Math.min(1, before / total) };
 }

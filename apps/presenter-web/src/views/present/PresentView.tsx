@@ -99,7 +99,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
           talk={talk}
           role="controller"
           glossaryUrl={glossaryUrlFor(network)}
-          overlay={<ProgressRail progress={talkProgress(talk.talk.presentation.chapters, talk.personal.timed, scene, state?.revealStep ?? 0)} />}
+          overlay={<ProgressRail progress={talkProgress(talk.talk.presentation.chapters, talk.personal.timed, scene)} />}
         />
         {!hud && !palette ? (
           <KeyHint
