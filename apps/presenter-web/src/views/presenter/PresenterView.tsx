@@ -20,6 +20,7 @@ import { ChapterStrip, HealthPanel, NotesPanel, SourcesPanel, TodoPanel, sceneSo
 import styles from "./PresenterView.module.css";
 import { ConfigPanel } from "./ConfigPanel.tsx";
 import { isEmptyConfig } from "../../talk/personal.ts";
+import { openView } from "../../talk/openView.ts";
 
 type Tab = "notes" | "sources" | "todo" | "health";
 
@@ -162,6 +163,9 @@ export default function PresenterView() {
             title={t("health")}
           >
             <span className={`${chrome.dot} ${talk.session.status === "open" ? chrome.dotOk : talk.session.status === "connecting" ? chrome.dotWarn : chrome.dotBad}`} />
+          </button>
+          <button type="button" className={chrome.btn} onClick={() => openView("projector")} title={t("openOtherHint")}>
+            {t("openProjector")}
           </button>
           <button
             type="button"

@@ -17,6 +17,7 @@ import { ModelSourceToggle } from "../../ui/ModelSourceToggle.tsx";
 import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { useFullscreen, usePointerActivity } from "../../ui/useFullscreen.ts";
 import { KeyHint } from "./KeyHint.tsx";
+import { openView } from "../../talk/openView.ts";
 import { ProgressRail } from "./ProgressRail.tsx";
 import { talkProgress } from "./progress.ts";
 import styles from "./PresentView.module.css";
@@ -106,14 +107,19 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
             fullscreen={fullscreen}
             keys={talk.controller}
             corner={
-              talk.ownsStage ? (
-                <>
-                  <LocalePicker compact value={talk.locale} onChange={talk.actions.setLocale} />
-                  <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
-                </>
-              ) : talk.linked ? (
-                <span className={styles.linked}>{t("linkedToPresenter")}</span>
-              ) : null
+              <>
+                {talk.ownsStage ? (
+                  <>
+                    <LocalePicker compact value={talk.locale} onChange={talk.actions.setLocale} />
+                    <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
+                  </>
+                ) : talk.linked ? (
+                  <span className={styles.linked}>{t("linkedToPresenter")}</span>
+                ) : null}
+                <button type="button" className={chrome.btn} onClick={() => openView("presenter")} title={t("openOtherHint")}>
+                  {t("openPresenter")}
+                </button>
+              </>
             }
           />
         ) : null}

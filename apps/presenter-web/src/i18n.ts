@@ -10,6 +10,12 @@ const UI = {
   runsScenes: { fr: "cette fenêtre fait tourner les scènes", en: "this window runs the scenes" },
   linkedElsewhere: { fr: "une autre fenêtre fait tourner les scènes", en: "another window runs the scenes" },
   viewPresenter: { fr: "Vue présentateur", en: "Presenter view" },
+  openProjector: { fr: "Ouvrir le projecteur ↗", en: "Open the projector ↗" },
+  openPresenter: { fr: "Ouvrir le présentateur ↗", en: "Open the presenter ↗" },
+  openOtherHint: {
+    fr: "Dans un autre onglet du même navigateur : les deux restent liés.",
+    en: "In another tab of the same browser: the two stay linked.",
+  },
   viewOverview: { fr: "Vue d'ensemble", en: "Overview" },
   viewHandout: { fr: "Document public", en: "Handout" },
   viewLab: { fr: "Atelier des composants", en: "Component lab" },
