@@ -146,6 +146,18 @@
 .optional {
   color: var(--color-accent-2);
 }
+/* Hidden by the presenter's personal config (this browser). */
+.hiddenCard {
+  opacity: 0.45;
+  border-style: dashed;
+}
+.hiddenTag {
+  margin-left: 6px;
+  padding: 0 5px;
+  border: 1px dashed var(--color-line);
+  border-radius: 4px;
+  font-family: var(--font-body);
+}
 .todo {
   color: var(--color-accent);
   font-weight: 700;

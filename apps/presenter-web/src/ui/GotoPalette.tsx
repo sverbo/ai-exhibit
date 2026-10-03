@@ -2,28 +2,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale, PresentationDefinition, SceneDefinition } from "@ai-exhibit/presentation-core";
 import { useUi } from "../i18n.ts";
 import styles from "./GotoPalette.module.css";
+import { filterScenes } from "./sceneSearch.ts";
 
-function normalize(s: string): string {
-  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-}
+export { filterScenes };
 
-/** Filters scenes by number prefix ("3.2"), ID or title words. */
-export function filterScenes(scenes: SceneDefinition[], query: string, locale: Locale): SceneDefinition[] {
-  const q = normalize(query.trim());
-  if (!q) return scenes;
-  return scenes.filter((s) => {
-    if (s.number.startsWith(q) || s.id.includes(q)) return true;
-    const title = normalize(`${s.title[locale]} ${s.title.en}`);
-    return q.split(/\s+/).every((w) => title.includes(w));
-  });
-}
-
-/** G: jump to any scene of the edition. */
+/**
+ * G: jump to any scene of the edition, by number, code or title. Hidden
+ * scenes (personal config) stay listed, greyed: jumping to one is deliberate.
+ */
 export function GotoPalette({
   scenes,
   presentation,
   locale,
   currentId,
+  hiddenIds,
   onGo,
   onClose,
 }: {
@@ -31,6 +23,7 @@ export function GotoPalette({
   presentation: PresentationDefinition;
   locale: Locale;
   currentId: string | undefined;
+  hiddenIds?: Set<string>;
   onGo: (sceneId: string) => void;
   onClose: () => void;
 }) {
@@ -86,13 +79,17 @@ export function GotoPalette({
               <button
                 type="button"
                 data-index={i}
-                className={`${styles.item} ${i === active ? styles.active : ""} ${s.id === currentId ? styles.current : ""}`}
+                className={`${styles.item} ${i === active ? styles.active : ""} ${s.id === currentId ? styles.current : ""} ${hiddenIds?.has(s.id) ? styles.hidden : ""}`}
                 onMouseEnter={() => setActive(i)}
                 onClick={() => onGo(s.id)}
               >
                 <span className={styles.number}>{s.number}</span>
-                <span className={styles.title}>{s.title[locale]}</span>
+                <span className={styles.title}>
+                  {s.title[locale]}
+                  {hiddenIds?.has(s.id) ? <span className={styles.hiddenTag}>{t("configHidden")}</span> : null}
+                </span>
                 <span className={styles.chapter}>{chapterTitle(s.chapter)}</span>
+                <span className={styles.code}>{s.code}</span>
               </button>
             </li>
           ))}

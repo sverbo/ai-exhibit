@@ -188,6 +188,32 @@ when running late (`Shift+→`).
 
 Scenes carry `localizationNotes` for adapting examples to a local audience.
 
+## 11. Your own version of the talk
+
+**Config** (top right of the presenter view) makes the talk yours without
+touching the repository:
+
+- **Reorder** scenes by dragging them, with the ↑/↓ buttons, or `Alt+↑`/`Alt+↓`
+  on a focused row. Chapter headers follow the scenes.
+- **Hide** scenes: navigation skips them, so the projector never shows them.
+  `G` still lists them, greyed, if you decide to show one anyway. Hiding the
+  scene you are on keeps you there until you move on.
+- **Note**: your own line for a scene, shown first in its speaker notes
+  (marked "Mine"), never on the slide.
+
+The panel shows the new planned total live; the pace, finish estimate and
+chapter strip use your sequence. Everything is saved in this browser at once and
+applies to every window of it: the projector follows the same order and hidden
+scenes, whether it is linked to the presenter view or running alone. **Export** downloads a JSON
+file you can keep, edit by hand or bring to another machine with **Import**;
+**Reset to the default talk** clears it.
+
+Scenes are referred to by a short code (shown under the scene number, and
+accepted by `G`), so your configuration keeps working when the talk is updated:
+new scenes appear after the scene that precedes them, and codes of removed
+scenes are listed once in the panel. The configuration belongs to the browser
+profile: open the presenter and the projector in the same one.
+
 ## Before each talk
 
 Online, a few days ahead:

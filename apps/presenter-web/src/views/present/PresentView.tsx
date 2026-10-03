@@ -143,7 +143,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
           {full && scene ? (
             <div className={styles.body}>
               <div className={styles.notesCol}>
-                <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="hud" />
+                <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="hud" personal={talk.personal.noteFor(scene)} />
               </div>
               <div className={styles.sideCol}>
                 {scene.takeaway[locale] ? (
@@ -174,7 +174,8 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
 
       {palette ? (
         <GotoPalette
-          scenes={scenes}
+          scenes={talk.personal.sequence.ordered}
+          hiddenIds={talk.personal.sequence.hiddenIds}
           presentation={talk.talk.presentation}
           locale={locale}
           currentId={scene?.id}

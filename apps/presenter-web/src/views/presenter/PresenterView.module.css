@@ -142,6 +142,29 @@
   font-size: var(--ui-text-xs);
   font-weight: 700;
 }
+/* Personal config: the scene code (discreet) and a hidden current scene. */
+.sceneId {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.sceneCode {
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+.hiddenChip {
+  flex: none;
+  padding: 3px 10px;
+  border: 1.5px dashed var(--color-text-muted);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-xs);
+  font-weight: 700;
+}
 
 .clock {
   flex: none;

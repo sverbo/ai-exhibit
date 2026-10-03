@@ -5,7 +5,7 @@ import type { SceneDefinition } from "./types.ts";
 const l = (s: string) => ({ fr: s, en: s });
 function scene(id: string, steps: number): SceneDefinition {
   return {
-    id, chapter: "00", number: "0.0", title: l(id), objective: l(""), takeaway: l(""),
+    id, code: `c${id}`.slice(0, 5).padEnd(4, "0"), chapter: "00", number: "0.0", title: l(id), objective: l(""), takeaway: l(""),
     visual: { layout: "placeholder", description: l("") }, steps, interaction: "none",
     speakerNotes: l(""), transitionIn: l(""), transitionOut: l(""), evidenceLevel: "none",
     sourceIds: [], runtimeClass: "A", artifacts: [], fallback: { kind: "none" },

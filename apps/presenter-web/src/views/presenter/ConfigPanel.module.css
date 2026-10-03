@@ -1,0 +1,241 @@
+/* Personal config: a large dialog over the presenter view, same chrome as the go-to palette. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 5vh 16px 16px;
+  background: var(--ui-scrim);
+  backdrop-filter: blur(3px);
+}
+.panel {
+  width: min(1040px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ui-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  box-shadow: var(--ui-shadow);
+  overflow: hidden;
+  outline: none;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+.headText {
+  flex: 1;
+  min-width: 0;
+}
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--ui-text-lg);
+  font-weight: 600;
+}
+.hint {
+  margin: 4px 0 0;
+  font-size: var(--ui-text-sm);
+  color: var(--color-text-muted);
+}
+.total {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  flex: none;
+}
+.totalValue {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.totalMeta {
+  font-size: var(--ui-text-xs);
+  color: var(--color-text-muted);
+}
+.off .totalValue {
+  color: var(--color-danger);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--color-line);
+}
+.grow {
+  flex: 1;
+}
+.message,
+.unknown {
+  margin: 0;
+  padding: 8px 20px;
+  font-size: var(--ui-text-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+.message {
+  color: var(--color-ok);
+}
+.messageBad {
+  color: var(--color-danger);
+}
+.unknown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--color-text-muted);
+}
+
+.list {
+  margin: 0;
+  padding: 6px 10px 14px;
+  list-style: none;
+  overflow-y: auto;
+}
+.chapter {
+  padding: 14px 10px 4px 44px;
+  font-size: var(--ui-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
+}
+.row {
+  border-radius: 8px;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+.row:hover,
+.row:focus-within {
+  background: var(--color-surface-2);
+}
+.main {
+  display: grid;
+  grid-template-columns: 30px 46px minmax(0, 1fr) 3.6em 3.6em auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 4px;
+}
+.handle {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: grab;
+}
+.handle:focus-visible {
+  outline: 2px solid var(--color-accent-2);
+}
+.number {
+  font-size: var(--ui-text-sm);
+  color: var(--color-text-muted);
+}
+.sceneTitle {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--ui-text-md);
+}
+.notePreview {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ui-text-xs);
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+.code,
+.duration {
+  font-size: var(--ui-text-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+.actions {
+  display: inline-flex;
+  gap: 4px;
+}
+.small {
+  min-height: 28px;
+  padding: 2px 9px;
+  font-size: var(--ui-text-xs);
+}
+.tag {
+  flex: none;
+  padding: 0 6px;
+  border: 1px dashed var(--color-line);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.hidden .number,
+.hidden .sceneTitle,
+.hidden .duration {
+  opacity: 0.5;
+}
+.hidden .sceneTitle {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--color-text-muted) 60%, transparent);
+}
+.current .number {
+  color: var(--color-accent);
+}
+.current .sceneTitle::after {
+  content: "●";
+  color: var(--color-accent);
+  font-size: 0.6em;
+}
+.dragging {
+  opacity: 0.45;
+}
+.dropBefore {
+  border-top-color: var(--color-accent-2);
+}
+.dropAfter {
+  border-bottom-color: var(--color-accent-2);
+}
+.note {
+  display: block;
+  width: calc(100% - 92px);
+  margin: 2px 8px 8px 84px;
+  padding: 8px 10px;
+  border: 1px dashed var(--color-line);
+  border-radius: 8px;
+  background: var(--ui-panel-2);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--ui-text-sm);
+  resize: vertical;
+}
+.note:focus {
+  outline: 2px solid var(--color-accent-2);
+  outline-offset: -1px;
+}
+
+@media (max-width: 760px) {
+  .main {
+    grid-template-columns: 30px 40px minmax(0, 1fr) auto;
+  }
+  .code,
+  .duration {
+    display: none;
+  }
+  .head {
+    flex-wrap: wrap;
+  }
+}

@@ -84,6 +84,31 @@
   color: var(--color-accent);
 }
 
+/* The presenter's own note (personal config): first, dashed edge, never on the slide. */
+.personal {
+  margin: 0 0 0.3em;
+  border-top: none;
+  border-radius: 0 0.3em 0.3em 0;
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+  box-shadow: inset 0.22em 0 0 var(--color-text-muted);
+  outline: 1px dashed color-mix(in srgb, var(--color-text-muted) 55%, transparent);
+  outline-offset: -1px;
+}
+.personal + .item {
+  border-top: none;
+}
+.personal .gutter {
+  font-family: var(--font-body);
+  font-size: 0.6em;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+}
+.personalText {
+  font-style: italic;
+  white-space: pre-line;
+}
+
 .sub {
   margin: 0.2em 0 0;
   padding-left: 1em;

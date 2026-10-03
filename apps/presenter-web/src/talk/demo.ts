@@ -20,6 +20,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "00-demo-title",
+    code: "dtitl",
     chapter: "00",
     number: "0.1",
     title: { fr: "Titre", en: "Title" },
@@ -41,6 +42,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "00-demo-question",
+    code: "dques",
     chapter: "00",
     number: "0.2",
     title: { fr: "Question", en: "Question" },
@@ -59,6 +61,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "00-demo-statement",
+    code: "dstat",
     chapter: "00",
     number: "0.3",
     title: { fr: "Affirmation", en: "Statement" },
@@ -76,6 +79,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "01-demo-cards",
+    code: "dcard",
     chapter: "01",
     number: "1.1",
     title: { fr: "Cartes", en: "Cards" },
@@ -104,6 +108,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "01-demo-list",
+    code: "dlist",
     chapter: "01",
     number: "1.2",
     title: { fr: "Liste", en: "List" },
@@ -126,6 +131,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "02-demo-flow",
+    code: "dflow",
     chapter: "02",
     number: "2.1",
     title: { fr: "Flux", en: "Flow" },
@@ -150,6 +156,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "02-demo-compare",
+    code: "dcomp",
     chapter: "02",
     number: "2.2",
     title: { fr: "Comparaison", en: "Compare" },
@@ -169,6 +176,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "02-demo-component",
+    code: "dcmpn",
     chapter: "02",
     number: "2.3",
     title: { fr: "Composant", en: "Component" },
@@ -185,6 +193,7 @@ const scenes: SceneDefinition[] = [
   {
     ...base,
     id: "02-demo-placeholder",
+    code: "dplac",
     chapter: "02",
     number: "2.4",
     title: { fr: "À construire", en: "To be built" },

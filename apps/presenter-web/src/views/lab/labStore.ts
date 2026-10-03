@@ -12,6 +12,7 @@ export const LAB_SCENE_ID = "lab-scene";
 export function labScene(name: string, props: Record<string, unknown>, steps: number, base?: SceneDefinition): SceneDefinition {
   return {
     id: LAB_SCENE_ID,
+    code: "lab0",
     chapter: base?.chapter ?? "00",
     number: base?.number ?? "lab",
     title: base?.title ?? { fr: name, en: name },

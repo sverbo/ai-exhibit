@@ -7,9 +7,10 @@ import { partOpener } from "../chapters.ts";
  * dates and names live in the speaker notes.
  */
 export const chapter04: SceneDefinition[] = [
-  partOpener("04"),
+  partOpener("04", "prisk"),
   {
     id: "04-already-here",
+    code: "here",
     steps: 4,
     chapter: "04",
     number: "4.1",
@@ -110,6 +111,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-to-risks",
+    code: "risk",
     steps: 3,
     chapter: "04",
     number: "4.2",
@@ -169,6 +171,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-opinions",
+    code: "worry",
     steps: 2,
     chapter: "04",
     number: "4.3",
@@ -240,6 +243,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-misuse",
+    code: "abuse",
     steps: 2,
     chapter: "04",
     number: "4.4",
@@ -318,6 +322,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-systemic",
+    code: "syst",
     steps: 4,
     chapter: "04",
     number: "4.5",
@@ -416,6 +421,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-agi",
+    code: "isagi",
     steps: 0,
     chapter: "04",
     number: "4.6",
@@ -471,6 +477,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-asi",
+    code: "super",
     steps: 5,
     chapter: "04",
     number: "4.7",
@@ -519,6 +526,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-loss-of-control",
+    code: "goal",
     steps: 3,
     chapter: "04",
     number: "4.8",
@@ -558,6 +566,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-hf-incident",
+    code: "hack",
     steps: 3,
     chapter: "04",
     number: "4.9",
@@ -612,6 +621,7 @@ export const chapter04: SceneDefinition[] = [
   },
   {
     id: "04-evaluations",
+    code: "evals",
     chapter: "04",
     number: "4.10",
     title: { en: "Already seen in tests", fr: "Déjà vu en test" },

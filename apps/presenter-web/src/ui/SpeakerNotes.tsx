@@ -1,25 +1,32 @@
 import { useMemo } from "react";
 import { marked } from "marked";
+import { useUi } from "../i18n.ts";
 import { Markdown } from "./Markdown.tsx";
-import { parseNotes, plainInline, type NoteBullet } from "./notes.ts";
+import { parseNotes, plainInline, withPersonalNote, type NoteBullet } from "./notes.ts";
 import styles from "./SpeakerNotes.module.css";
 
 /**
  * Speaker notes as a numbered run of talking points. "Ask" and "Do" bullets
  * carry their cue word in the gutter and a tinted band, so they stand out at
- * arm's length. Three densities: the presenter desk, the phone remote, and
+ * arm's length; the presenter's own note (personal config) comes first, with
+ * a dashed edge. Three densities: the presenter desk, the phone remote, and
  * the compact /present HUD.
  */
 export function SpeakerNotes({
   markdown,
   variant,
+  personal,
   className,
 }: {
   markdown: string;
   variant: "desk" | "phone" | "hud";
+  /** The presenter's personal note for this scene, plain text. */
+  personal?: string;
   className?: string;
 }) {
-  const parsed = useMemo(() => parseNotes(markdown), [markdown]);
+  const { t } = useUi();
+  const parsed = useMemo(() => withPersonalNote(parseNotes(markdown), personal), [markdown, personal]);
+  const hasContentBullets = parsed.bullets.some((b) => b.kind !== "personal");
   let n = 0;
   return (
     <div className={`${styles.notes} ${styles[variant]} ${className ?? ""}`}>
@@ -27,17 +34,26 @@ export function SpeakerNotes({
         <ol className={styles.list}>
           {parsed.bullets.map((b, i) => {
             if (b.kind === "point") n += 1;
-            return <Bullet key={i} bullet={b} number={n} plain={variant === "hud"} />;
+            return <Bullet key={i} bullet={b} number={n} plain={variant === "hud"} mine={t("personalNoteCue")} />;
           })}
         </ol>
       ) : null}
       {parsed.prose && variant !== "hud" ? <Markdown className={styles.prose} text={parsed.prose} /> : null}
-      {parsed.prose && variant === "hud" && !parsed.bullets.length ? <p className={styles.prose}>{plainInline(parsed.prose)}</p> : null}
+      {parsed.prose && variant === "hud" && !hasContentBullets ? <p className={styles.prose}>{plainInline(parsed.prose)}</p> : null}
     </div>
   );
 }
 
-function Bullet({ bullet, number, plain }: { bullet: NoteBullet; number: number; plain: boolean }) {
+function Bullet({ bullet, number, plain, mine }: { bullet: NoteBullet; number: number; plain: boolean; mine: string }) {
+  if (bullet.kind === "personal") {
+    // Plain text only: a personal note may come from an imported file.
+    return (
+      <li className={`${styles.item} ${styles.personal}`} data-note-kind="personal">
+        <span className={styles.gutter}>{mine}</span>
+        <div className={`${styles.body} ${styles.personalText}`}>{bullet.text}</div>
+      </li>
+    );
+  }
   return (
     <li className={`${styles.item} ${styles[bullet.kind]}`} data-note-kind={bullet.kind}>
       <span className={styles.gutter} aria-hidden={bullet.kind === "point" ? true : undefined}>

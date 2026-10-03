@@ -4,7 +4,8 @@
  * splits them into typed bullets so every view can show them its own way.
  * Anything that is not a list (older paragraph notes) comes back as `prose`.
  */
-export type NoteKind = "point" | "ask" | "do";
+/** "personal": the presenter's own note (personal config), plain text, always first. */
+export type NoteKind = "point" | "ask" | "do" | "personal";
 
 export interface NoteBullet {
   kind: NoteKind;
@@ -22,7 +23,7 @@ export interface ParsedNotes {
   prose: string;
 }
 
-const CUES: Record<string, Exclude<NoteKind, "point">> = {
+const CUES: Record<string, Exclude<NoteKind, "point" | "personal">> = {
   ask: "ask",
   question: "ask",
   demander: "ask",
@@ -70,6 +71,16 @@ export function parseNotes(markdown: string): ParsedNotes {
     prose.push(raw);
   }
   return { bullets, prose: prose.join("\n").trim() };
+}
+
+/**
+ * Puts the presenter's personal note first. Its text is plain (never parsed as
+ * markdown): an imported config is not repository content. Blank notes add nothing.
+ */
+export function withPersonalNote(parsed: ParsedNotes, note: string | undefined): ParsedNotes {
+  const text = note?.trim();
+  if (!text) return parsed;
+  return { ...parsed, bullets: [{ kind: "personal", cue: null, text, sub: [] }, ...parsed.bullets] };
 }
 
 function cueOf(body: string): Pick<NoteBullet, "kind" | "cue" | "text"> {

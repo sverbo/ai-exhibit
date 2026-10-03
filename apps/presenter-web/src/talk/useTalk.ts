@@ -17,6 +17,8 @@ import { stepCount } from "@ai-exhibit/presentation-core";
 import type { ModelSource } from "@ai-exhibit/scene-components";
 import { contentDecision, contentHash, freezeCommands, setShell, shellState, themeDecision, type ShellState } from "./shell.ts";
 import { useSession, type SessionView } from "./useSession.ts";
+import { navigableScenes, personalSequence, talkCodes, timingScenes, type PersonalConfig, type PersonalSequence } from "./personal.ts";
+import { readPersonalConfig, usePersonalConfig } from "./personalStore.ts";
 
 /** Scene ID used while an edition has no scenes (the relay rejects empty IDs). */
 export const EMPTY_SCENE = "__empty";
@@ -44,10 +46,17 @@ export interface Talk {
   session: SessionView;
   state: SessionState | null;
   talk: ResolvedEdition;
+  /**
+   * What navigation walks: the personal sequence (docs/specs/2026-10-03-personal-config.md),
+   * visible scenes in personal order plus the current scene if it is hidden.
+   * `talk.scenes` stays the edition's default list.
+   */
   scenes: SceneDefinition[];
   /** Current scene, undefined before the session is known or for an empty edition. */
   scene: SceneDefinition | undefined;
+  /** Position of the current scene in `scenes`. */
   index: number;
+  personal: PersonalTalk;
   locale: Locale;
   getSource: (id: string) => SourceRecord | undefined;
   /** This client may change the session (false while `outOfDate`). */
@@ -72,6 +81,23 @@ export interface Talk {
   actions: TalkActions;
 }
 
+export interface PersonalTalk {
+  config: PersonalConfig;
+  sequence: PersonalSequence;
+  /** `scenes` with hidden ones counting zero seconds: what every time estimate uses. */
+  timed: SceneDefinition[];
+  /** The presenter's note for a scene, if any. */
+  noteFor: (scene: SceneDefinition | undefined) => string | undefined;
+  /** Persists a new config; every window of this browser profile follows. */
+  set: (config: PersonalConfig) => void;
+}
+
+/** First scene of an edition in the personal order of this browser profile. */
+function personalFirstSceneId(r: ResolvedEdition): string | undefined {
+  const seq = personalSequence(r.scenes, readPersonalConfig(r.presentation), talkCodes(r.presentation));
+  return (seq.visible[0] ?? r.scenes[0])?.id;
+}
+
 /**
  * Everything a view needs: the session, the resolved edition and current
  * scene, and controller actions. Controllers also apply `?edition=` and
@@ -90,7 +116,7 @@ export function useTalk(role: ClientRole): Talk {
       presentationId: r.presentation.id,
       editionId: r.edition.id,
       locale: r.edition.locale,
-      sceneId: (params.scene && r.scenes.some((s) => s.id === params.scene) ? params.scene : r.scenes[0]?.id) ?? EMPTY_SCENE,
+      sceneId: (params.scene && r.scenes.some((s) => s.id === params.scene) ? params.scene : personalFirstSceneId(r)) ?? EMPTY_SCENE,
     });
   }, [params]);
 
@@ -102,9 +128,26 @@ export function useTalk(role: ClientRole): Talk {
   const editionId = state?.editionId ?? params.edition ?? DEFAULT_EDITION;
   const talk = useMemo(() => resolveTalk(editionId), [editionId]);
   const getSource = useMemo(() => sourceLookup(talk.presentation), [talk.presentation]);
+  // The edition's default list decides validity and content versions; the
+  // personal sequence decides navigation and timing.
   const scenes = talk.scenes;
-  const index = state ? scenes.findIndex((s) => s.id === state.sceneId) : -1;
-  const scene = index >= 0 ? scenes[index] : undefined;
+  const editionIndex = state ? scenes.findIndex((s) => s.id === state.sceneId) : -1;
+  const scene = editionIndex >= 0 ? scenes[editionIndex] : undefined;
+  const [personalConfig, setPersonalConfig] = usePersonalConfig(talk.presentation);
+  const knownCodes = useMemo(() => talkCodes(talk.presentation), [talk.presentation]);
+  const sequence = useMemo(() => personalSequence(scenes, personalConfig, knownCodes), [scenes, personalConfig, knownCodes]);
+  const navScenes = useMemo(() => navigableScenes(sequence, scene?.id), [sequence, scene?.id]);
+  const index = scene ? navScenes.indexOf(scene) : -1;
+  const personal = useMemo<PersonalTalk>(
+    () => ({
+      config: personalConfig,
+      sequence,
+      timed: timingScenes(navScenes, sequence.hiddenIds),
+      noteFor: (s) => (s ? sequence.notes.get(s.id) : undefined),
+      set: setPersonalConfig,
+    }),
+    [personalConfig, sequence, navScenes, setPersonalConfig],
+  );
   const shellNow = shellState(state);
 
   // Content version: which window's scene list is the session following?
@@ -130,7 +173,7 @@ export function useTalk(role: ClientRole): Talk {
             type: "setEdition",
             editionId: target.edition.id,
             locale: target.edition.locale,
-            sceneId: target.scenes[0]?.id ?? EMPTY_SCENE,
+            sceneId: personalFirstSceneId(target) ?? EMPTY_SCENE,
           });
           return;
         }
@@ -148,22 +191,22 @@ export function useTalk(role: ClientRole): Talk {
     }
     if (!knowsEdition) {
       // This window's content is the newest the session has seen, and it has no such edition.
-      dispatch({ type: "setEdition", editionId: talk.edition.id, locale: talk.edition.locale, sceneId: scenes[0]?.id ?? EMPTY_SCENE });
+      dispatch({ type: "setEdition", editionId: talk.edition.id, locale: talk.edition.locale, sceneId: personalFirstSceneId(talk) ?? EMPTY_SCENE });
       return;
     }
     if (content === "publish") {
       dispatch(setShell(state, { content: localContent }));
       return;
     }
-    if (scenes.length > 0 && index < 0) {
-      dispatch({ type: "goto", sceneId: scenes[0]!.id, revealStep: 0 });
+    if (scenes.length > 0 && editionIndex < 0) {
+      dispatch({ type: "goto", sceneId: (sequence.visible[0] ?? scenes[0]!).id, revealStep: 0 });
     }
-  }, [controller, state, session.status, scenes, index, params, dispatch, knowsEdition, content, hash, talk.edition]);
+  }, [controller, state, session.status, scenes, editionIndex, sequence, params, dispatch, knowsEdition, content, hash, talk]);
 
   const stateRef = useRef(state);
   stateRef.current = state;
-  const scenesRef = useRef(scenes);
-  scenesRef.current = scenes;
+  const sequenceRef = useRef(sequence);
+  sequenceRef.current = sequence;
   const controllerRef = useRef(controller);
   controllerRef.current = controller;
 
@@ -180,7 +223,7 @@ export function useTalk(role: ClientRole): Talk {
     return {
       nav: (action) => {
         const s = current();
-        if (s) send(navCommand(scenesRef.current, { sceneId: s.sceneId, revealStep: s.revealStep }, action));
+        if (s) send(navCommand(navigableScenes(sequenceRef.current, s.sceneId), { sceneId: s.sceneId, revealStep: s.revealStep }, action));
       },
       goto: (id, revealStep = 0) => send({ type: "goto", sceneId: id, revealStep }),
       toggleFallback: () => {
@@ -245,9 +288,10 @@ export function useTalk(role: ClientRole): Talk {
     session,
     state,
     talk,
-    scenes,
+    scenes: navScenes,
     scene,
     index,
+    personal,
     locale: talk.edition.locale,
     getSource,
     controller,

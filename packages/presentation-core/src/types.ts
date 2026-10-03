@@ -90,6 +90,13 @@ export type FallbackSpec =
 export interface SceneDefinition {
   /** Stable identifier: `${chapter}-${kebab-slug}`, e.g. "03-probability-bars". */
   id: string;
+  /**
+   * Short stable code, 4 or 5 lowercase letters or digits derived from the
+   * topic ("tokn", "race"). Personal presenter configurations refer to scenes
+   * by code only, so a code is never changed and never reused: a deleted
+   * scene's code moves to `PresentationDefinition.retiredSceneCodes`.
+   */
+  code: string;
   chapter: ChapterId;
   /** Position in the talk, e.g. "3.2". */
   number: string;
@@ -224,6 +231,8 @@ export interface PresentationDefinition {
   parkedScenes?: SceneDefinition[];
   /** Chapters the parked scenes refer to. */
   parkedChapters?: ChapterDefinition[];
+  /** Codes of deleted scenes: never given to another scene. */
+  retiredSceneCodes?: string[];
   editions: EditionDefinition[];
   artifacts: ArtifactSpec[];
   sources: SourceRecord[];

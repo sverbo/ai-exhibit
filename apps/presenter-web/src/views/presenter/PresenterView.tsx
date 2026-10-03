@@ -16,6 +16,8 @@ import { ThemeToggle } from "../../ui/ThemeToggle.tsx";
 import { ModelSourceToggle } from "../../ui/ModelSourceToggle.tsx";
 import { ChapterStrip, HealthPanel, NotesPanel, SourcesPanel, TodoPanel, sceneSourceIds, sceneTodos, useNotesScale } from "./panels.tsx";
 import styles from "./PresenterView.module.css";
+import { ConfigPanel } from "./ConfigPanel.tsx";
+import { isEmptyConfig } from "../../talk/personal.ts";
 
 type Tab = "notes" | "sources" | "todo" | "health";
 
@@ -33,6 +35,7 @@ export default function PresenterView() {
   const [sidebar, setSidebar] = useState(true);
   const [tab, setTab] = useState<Tab>("notes");
   const [palette, setPalette] = useState(false);
+  const [config, setConfig] = useState(false);
   const elapsed = useElapsedMs(talk.state);
   const notesScale = useNotesScale();
 
@@ -45,7 +48,7 @@ export default function PresenterView() {
       } else if (action === "goto") setPalette(true);
       else setPalette(false);
     },
-    !palette,
+    !palette && !config,
   );
 
   useEffect(() => {
@@ -60,12 +63,13 @@ export default function PresenterView() {
   const reveal = state?.revealStep ?? 0;
   const chapter = chapterOf(presentation, scene);
   const pace = useMemo(
-    () => computePace(scenes, state?.sceneId ?? "", elapsed, edition.targetMinutes),
-    [scenes, state?.sceneId, elapsed, edition.targetMinutes],
+    () => computePace(talk.personal.timed, state?.sceneId ?? "", elapsed, edition.targetMinutes),
+    [talk.personal.timed, state?.sceneId, elapsed, edition.targetMinutes],
   );
   const view = state ? projectorView(state) : null;
   const air = view?.kind ?? "live";
-  const frozenScene = view?.kind === "frozen" ? scenes.find((s) => s.id === view.sceneId) : undefined;
+  const frozenScene = view?.kind === "frozen" ? talk.talk.scenes.find((s) => s.id === view.sceneId) : undefined;
+  const currentHidden = Boolean(scene && talk.personal.sequence.hiddenIds.has(scene.id));
   const fallbackOn = Boolean(scene && state?.fallback[scene.id]);
   const timerRunning = state?.timer.startedAt != null;
   const sourceCount = scene ? sceneSourceIds(scene).length : 0;
@@ -87,7 +91,14 @@ export default function PresenterView() {
         </div>
 
         <div className={styles.sceneInfo}>
-          <span className={`${chrome.mono} ${styles.sceneNumber}`}>{scene?.number ?? "..."}</span>
+          <span className={styles.sceneId}>
+            <span className={`${chrome.mono} ${styles.sceneNumber}`}>{scene?.number ?? "..."}</span>
+            {scene ? (
+              <span className={`${chrome.mono} ${styles.sceneCode}`} title="code">
+                {scene.code}
+              </span>
+            ) : null}
+          </span>
           <div className={styles.sceneText}>
             <span className={styles.sceneTitle}>{scene?.title[locale] ?? t("emptyEdition")}</span>
             <span className={styles.sceneMeta}>
@@ -95,6 +106,7 @@ export default function PresenterView() {
               {scenes.length ? ` · ${t("scene")} ${index + 1}/${scenes.length}` : ""}
             </span>
           </div>
+          {currentHidden ? <span className={styles.hiddenChip}>{t("configHiddenCurrent")}</span> : null}
           {steps > 0 ? (
             <span className={styles.steps} title={`${t("step")} ${reveal}/${steps}`}>
               {Array.from({ length: steps }, (_, i) => (
@@ -143,6 +155,15 @@ export default function PresenterView() {
             title={t("health")}
           >
             <span className={`${chrome.dot} ${talk.session.status === "open" ? chrome.dotOk : talk.session.status === "connecting" ? chrome.dotWarn : chrome.dotBad}`} />
+          </button>
+          <button
+            type="button"
+            className={`${chrome.btn} ${isEmptyConfig(talk.personal.config) ? "" : chrome.on}`}
+            onClick={() => setConfig(true)}
+            aria-haspopup="dialog"
+            title={`${t("configTitle")}${isEmptyConfig(talk.personal.config) ? "" : ` (${t("configPersonal")})`}`}
+          >
+            {t("config")}
           </button>
           <ThemeToggle />
           <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
@@ -238,7 +259,9 @@ export default function PresenterView() {
             ) : null}
           </nav>
           <div className={`${styles.panel} ${tab === "notes" ? styles.panelNotes : ""}`}>
-            {tab === "notes" ? <NotesPanel scene={scene} next={next} locale={locale} scale={notesScale.scale} /> : null}
+            {tab === "notes" ? (
+              <NotesPanel scene={scene} next={next} locale={locale} scale={notesScale.scale} personalNote={talk.personal.noteFor(scene)} />
+            ) : null}
             {tab === "sources" ? <SourcesPanel scene={scene} locale={locale} getSource={talk.getSource} /> : null}
             {tab === "todo" ? <TodoPanel scene={scene} /> : null}
             {tab === "health" ? <HealthPanel talk={talk} /> : null}
@@ -253,7 +276,8 @@ export default function PresenterView() {
 
       {palette ? (
         <GotoPalette
-          scenes={scenes}
+          scenes={talk.personal.sequence.ordered}
+          hiddenIds={talk.personal.sequence.hiddenIds}
           presentation={presentation}
           locale={locale}
           currentId={scene?.id}
@@ -264,6 +288,7 @@ export default function PresenterView() {
           }}
         />
       ) : null}
+      {config ? <ConfigPanel talk={talk} onClose={() => setConfig(false)} /> : null}
     </div>
   );
 }

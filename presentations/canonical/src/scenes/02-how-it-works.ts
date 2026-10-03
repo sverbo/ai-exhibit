@@ -17,9 +17,10 @@ const baseVsInstructPrompt: L10n = { fr: "Comment mieux dormir ?", en: "How can 
  * scenes and the training scene.
  */
 export const chapter02: SceneDefinition[] = [
-  partOpener("02"),
+  partOpener("02", "phow"),
   {
     id: "02-envelopes",
+    code: "nest",
     steps: 3,
     chapter: "02",
     number: "2.1",
@@ -58,6 +59,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-short-history",
+    code: "hist",
     steps: 9,
     chapter: "02",
     number: "2.2",
@@ -126,6 +128,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-task",
+    code: "ball",
     steps: 1,
     chapter: "02",
     number: "2.3",
@@ -164,6 +167,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-rules",
+    code: "rule",
     steps: 1,
     chapter: "02",
     number: "2.4",
@@ -202,6 +206,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-tree",
+    code: "tree",
     steps: 1,
     chapter: "02",
     number: "2.5",
@@ -240,6 +245,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-tree-unseen",
+    code: "weird",
     steps: 1,
     chapter: "02",
     number: "2.6",
@@ -280,6 +286,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-network",
+    code: "nnet",
     steps: 3,
     chapter: "02",
     number: "2.7",
@@ -320,6 +327,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-learning",
+    code: "learn",
     steps: 4,
     chapter: "02",
     number: "2.8",
@@ -360,6 +368,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-text-network-fail",
+    code: "nums",
     steps: 2,
     chapter: "02",
     number: "2.9",
@@ -396,6 +405,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-google-photos",
+    code: "photo",
     steps: 1,
     chapter: "02",
     number: "2.10",
@@ -458,6 +468,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-next-token",
+    code: "next",
     steps: 4,
     chapter: "02",
     number: "2.11",
@@ -499,6 +510,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-two-superpowers",
+    code: "scale",
     steps: 3,
     chapter: "02",
     number: "2.12",
@@ -567,6 +579,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-how-training-works",
+    code: "train",
     steps: 4,
     chapter: "02",
     number: "2.13",
@@ -615,6 +628,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-tokens",
+    code: "tokn",
     steps: 1,
     chapter: "02",
     number: "2.14",
@@ -654,6 +668,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-embedding-training",
+    code: "embed",
     steps: 2,
     chapter: "02",
     number: "2.15",
@@ -692,6 +707,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-embedding-play",
+    code: "play",
     steps: 0,
     chapter: "02",
     number: "2.16",
@@ -735,6 +751,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-base-model",
+    code: "base",
     steps: 0,
     chapter: "02",
     number: "2.17",
@@ -778,6 +795,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-fine-tuned",
+    code: "tuned",
     steps: 1,
     chapter: "02",
     number: "2.18",
@@ -824,6 +842,7 @@ export const chapter02: SceneDefinition[] = [
   },
   {
     id: "02-shaping-assistant",
+    code: "shape",
     steps: 3,
     chapter: "02",
     number: "2.19",

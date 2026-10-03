@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseNotes, plainInline } from "./notes.ts";
+import { parseNotes, plainInline, withPersonalNote } from "./notes.ts";
 
 describe("parseNotes", () => {
   it("splits a bullet list into points", () => {
@@ -32,6 +32,21 @@ describe("parseNotes", () => {
     const n = parseNotes("A paragraph of notes.\n\nAnother one.");
     expect(n.bullets).toEqual([]);
     expect(n.prose).toBe("A paragraph of notes.\nAnother one.");
+  });
+});
+
+describe("withPersonalNote", () => {
+  it("puts the personal note first, as plain text, before every content bullet", () => {
+    const n = withPersonalNote(parseNotes("- **Ask:** who?\n- One idea"), "  My *own* <b>story</b>\nsecond line ");
+    expect(n.bullets.map((b) => b.kind)).toEqual(["personal", "ask", "point"]);
+    expect(n.bullets[0]).toEqual({ kind: "personal", cue: null, text: "My *own* <b>story</b>\nsecond line", sub: [] });
+  });
+
+  it("adds nothing for a missing or blank note, and keeps prose", () => {
+    const parsed = parseNotes("Prose only.");
+    expect(withPersonalNote(parsed, undefined)).toBe(parsed);
+    expect(withPersonalNote(parsed, "   ")).toBe(parsed);
+    expect(withPersonalNote(parsed, "Mine").prose).toBe("Prose only.");
   });
 });
 

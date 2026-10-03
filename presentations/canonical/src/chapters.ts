@@ -55,15 +55,18 @@ export const agendaItems: L10n[] = parts.map((c) => c.title);
 
 /**
  * The first scene of a part: its number and title over the agenda, this part
- * lit. Numbered "N.0" so the part's own scenes keep their numbers.
+ * lit. Numbered "N.0" so the part's own scenes keep their numbers. The scene
+ * code is passed explicitly (never derived from the chapter number), so it
+ * stays stable if parts are renumbered.
  */
-export function partOpener(chapterId: ChapterId): SceneDefinition {
+export function partOpener(chapterId: ChapterId, code: string): SceneDefinition {
   const index = parts.findIndex((c) => c.id === chapterId);
   const part = parts[index];
   if (!part) throw new Error(`No part for chapter "${chapterId}"`);
   const n = index + 1;
   return {
     id: `${chapterId}-part`,
+    code,
     chapter: chapterId,
     number: `${n}.0`,
     title: part.title,

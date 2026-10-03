@@ -24,6 +24,7 @@ Every scene is structured data, never markup. Fields of `SceneDefinition`:
 | Field | Guidance |
 | --- | --- |
 | `id` | `<chapter>-<kebab-slug>`, e.g. `02-tokens`. Stable: rehearsal links and polls refer to it |
+| `code` | 4 or 5 lowercase letters or digits from the topic, e.g. `tokn`, `race`. Presenters' personal configurations (order, hidden scenes, notes) refer to scenes by code only, so **never change a code and never reuse one**. When you delete a scene, add its code to `retiredSceneCodes` in the presentation. A scene rewritten on another topic gets a new code. `pnpm verify:content` checks format, uniqueness and retired codes. See [the personal config spec](../specs/2026-10-03-personal-config.md) |
 | `chapter` | `"00"` to `"11"`; must match the ID prefix |
 | `number` | Position in the talk, e.g. `"3.2"`. Shown to the presenter, used by the go-to palette |
 | `title` | Internal title; may never appear on the projector |

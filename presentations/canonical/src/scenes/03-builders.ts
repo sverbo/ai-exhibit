@@ -7,9 +7,10 @@ import { partOpener } from "../chapters.ts";
  * assigned motives. The drama is told from the notes, not shown on screen.
  */
 export const chapter03: SceneDefinition[] = [
-  partOpener("03"),
+  partOpener("03", "pbld"),
   {
     id: "03-industry",
+    code: "stack",
     steps: 12,
     chapter: "03",
     number: "3.1",
@@ -98,6 +99,7 @@ export const chapter03: SceneDefinition[] = [
   },
   {
     id: "03-race",
+    code: "race",
     steps: 5,
     chapter: "03",
     number: "3.2",

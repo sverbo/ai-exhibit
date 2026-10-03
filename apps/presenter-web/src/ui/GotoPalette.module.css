@@ -44,7 +44,7 @@
 .item {
   width: 100%;
   display: grid;
-  grid-template-columns: 56px 1fr auto;
+  grid-template-columns: 56px 1fr auto 3.4em;
   align-items: baseline;
   gap: 14px;
   padding: 10px 14px;
@@ -82,4 +82,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 220px;
+}
+/* Personal-config scene code: discreet, for the presenter's own reference. */
+.code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  opacity: 0.8;
+  text-align: right;
+}
+.hidden .title,
+.hidden .number {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+.hiddenTag {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px dashed var(--color-line);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--color-text-muted);
 }

@@ -3,9 +3,10 @@ import { partOpener } from "../chapters.ts";
 
 /** Chapter 05: what we can do, and the closing question. */
 export const chapter05: SceneDefinition[] = [
-  partOpener("05"),
+  partOpener("05", "pact"),
   {
     id: "05-defense-in-depth",
+    code: "swiss",
     steps: 7,
     chapter: "05",
     number: "5.1",
@@ -44,6 +45,7 @@ export const chapter05: SceneDefinition[] = [
   },
   {
     id: "05-governance",
+    code: "laws",
     steps: 7,
     chapter: "05",
     number: "5.2",
@@ -201,6 +203,7 @@ export const chapter05: SceneDefinition[] = [
   },
   {
     id: "05-closing-question",
+    code: "close",
     chapter: "05",
     number: "5.3",
     title: { en: "Closing question", fr: "La question de clôture" },
@@ -245,6 +248,7 @@ export const chapter05: SceneDefinition[] = [
   },
   {
     id: "05-resources",
+    code: "more",
     steps: 0,
     chapter: "05",
     number: "5.4",

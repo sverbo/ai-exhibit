@@ -13,6 +13,8 @@ export interface ValidateOptions {
 }
 
 const SCENE_ID = /^(\d\d)-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/** Scene codes: 4 or 5 lowercase letters or digits. */
+export const SCENE_CODE = /^[a-z0-9]{4,5}$/;
 const LONG_DASH = /[–—]/;
 
 function isL10n(value: unknown): value is Record<string, unknown> {
@@ -71,6 +73,11 @@ function checkScene(
   if (!m) err(`id must match <chapter>-<kebab-slug>`);
   else if (m[1] !== scene.chapter) err(`id prefix ${m[1]} does not match chapter ${scene.chapter}`);
   if (!p.chapters.some((c) => c.id === scene.chapter)) err(`unknown chapter ${scene.chapter}`);
+  if (typeof scene.code !== "string" || !SCENE_CODE.test(scene.code)) {
+    err(`code "${String(scene.code)}" must be 4 or 5 lowercase letters or digits`);
+  } else if (p.retiredSceneCodes?.includes(scene.code)) {
+    err(`code "${scene.code}" is retired: codes are never reused`);
+  }
 
   checkStrings(scene, "", issues, where);
 
@@ -124,6 +131,13 @@ export function validatePresentation(p: PresentationDefinition, opts: ValidateOp
     const sceneIssues: Issue[] = [];
     checkScene(scene, parkedView, { ...opts, registeredComponents: undefined }, sceneIssues);
     for (const i of sceneIssues) issues.push({ ...i, level: "warning", where });
+  }
+  const codeOwner = new Map<string, string>();
+  for (const scene of [...p.scenes, ...(p.parkedScenes ?? [])]) {
+    if (typeof scene.code !== "string") continue;
+    const owner = codeOwner.get(scene.code);
+    if (owner) issues.push({ level: "error", where: `scene ${scene.id}`, message: `code "${scene.code}" is already used by ${owner}` });
+    else codeOwner.set(scene.code, scene.id);
   }
   const editionSceneIds = new Set(p.scenes.map((s) => s.id));
 

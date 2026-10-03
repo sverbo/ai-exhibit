@@ -5,7 +5,7 @@ import { validatePresentation } from "./validate.ts";
 const l = (s: string) => ({ fr: s, en: s });
 function scene(over: Partial<SceneDefinition> = {}): SceneDefinition {
   return {
-    id: "04-case", chapter: "04", number: "4.2", title: l("t"), objective: l("o"), takeaway: l("k"),
+    id: "04-case", code: "case", chapter: "04", number: "4.2", title: l("t"), objective: l("o"), takeaway: l("k"),
     visual: { layout: "statement", text: l("x") }, interaction: "none",
     speakerNotes: l("n"), transitionIn: l("i"), transitionOut: l("o"), evidenceLevel: "none",
     sourceIds: [], runtimeClass: "A", artifacts: [], fallback: { kind: "none" },
@@ -36,5 +36,20 @@ describe("validatePresentation", () => {
     expect(messages.some((m) => m.includes('missing "en"'))).toBe(true);
     expect(messages.some((m) => m.includes("without sources"))).toBe(true);
     expect(messages.some((m) => m.includes('unknown source "nope" in visual'))).toBe(true);
+  });
+
+  it("checks scene codes: format, uniqueness across parked scenes, never a retired one", () => {
+    const errors = (p: PresentationDefinition) => validatePresentation(p).filter((i) => i.level === "error").map((i) => i.message);
+    for (const code of ["ab", "toolong", "Tokn", "to-k", ""]) {
+      expect(errors(pres([scene({ code })])).some((m) => m.includes("4 or 5 lowercase"))).toBe(true);
+    }
+    expect(errors(pres([scene({ code: "tokn" }), scene({ id: "04-other", code: "race1" })]))).toEqual([]);
+    expect(errors(pres([scene({ code: "tokn" }), scene({ id: "04-other", code: "tokn" })]))).toContain(
+      'code "tokn" is already used by 04-case',
+    );
+    const parked = { ...pres([scene({ code: "tokn" })]), parkedScenes: [scene({ id: "04-parked", code: "tokn" })] };
+    expect(errors(parked)).toContain('code "tokn" is already used by 04-case');
+    const retired = { ...pres([scene({ code: "bomb" })]), retiredSceneCodes: ["bomb"] };
+    expect(errors(retired).some((m) => m.includes("retired"))).toBe(true);
   });
 });

@@ -63,11 +63,14 @@ export function NotesPanel({
   next,
   locale,
   scale,
+  personalNote,
 }: {
   scene: SceneDefinition | undefined;
   next: SceneDefinition | undefined;
   locale: Locale;
   scale: number;
+  /** The presenter's own note (personal config), shown as the first bullet. */
+  personalNote?: string;
 }) {
   const { t } = useUi();
   if (!scene) return null;
@@ -81,7 +84,7 @@ export function NotesPanel({
         </p>
       ) : null}
       <div className={styles.pointsScroll}>
-        <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="desk" />
+        <SpeakerNotes markdown={scene.speakerNotes[locale]} variant="desk" personal={personalNote} />
       </div>
       <div className={styles.then}>
         {transition ? (

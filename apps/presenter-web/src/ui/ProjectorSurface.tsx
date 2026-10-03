@@ -23,7 +23,8 @@ export function ProjectorSurface({
   if (!state) return <Slate text={t("waitingSession")} />;
   const view = projectorView(state);
   if (view.kind === "blackout") return <div className={styles.black} data-projector="blackout" />;
-  const scene = scenes.find((s) => s.id === view.sceneId);
+  // The full edition: a hidden scene the presenter still stands on (or froze) must render.
+  const scene = talk.talk.scenes.find((s) => s.id === view.sceneId);
   if (!scene) return <Slate text={scenes.length ? t("waitingSession") : t("emptyEdition")} />;
   return (
     <div className={styles.surface} data-projector={view.kind}>

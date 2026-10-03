@@ -9,6 +9,7 @@ import { agendaItems, partOpener } from "../chapters.ts";
 export const chapter01: SceneDefinition[] = [
   {
     id: "00-agenda",
+    code: "agnd",
     chapter: "00",
     number: "0.1",
     title: { en: "Today", fr: "Aujourd'hui" },
@@ -56,6 +57,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "00-not-this",
+    code: "isnt",
     chapter: "00",
     number: "0.2",
     title: { en: "What this talk is not", fr: "Ce que cette conférence n'est pas" },
@@ -132,9 +134,10 @@ export const chapter01: SceneDefinition[] = [
     optional: true,
     localizationNotes: "The French quote translates the CAIS statement; the original is in English. Say clearly that the order-of-magnitude comparison is the presenter's opinion.",
   },
-  partOpener("01"),
+  partOpener("01", "pcap"),
   {
     id: "01-opening",
+    code: "open",
     chapter: "01",
     number: "1.1",
     title: { en: "Opening", fr: "Ouverture" },
@@ -174,6 +177,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-then-and-now",
+    code: "then",
     steps: 5,
     chapter: "01",
     number: "1.2",
@@ -222,6 +226,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-model-comparison",
+    code: "side",
     steps: 4,
     chapter: "01",
     number: "1.3",
@@ -287,6 +292,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-connected",
+    code: "conn",
     steps: 7,
     chapter: "01",
     number: "1.4",
@@ -336,6 +342,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-permissions",
+    code: "perm",
     steps: 5,
     chapter: "01",
     number: "1.5",
@@ -380,6 +387,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-personal-demo",
+    code: "demo",
     steps: 1,
     chapter: "01",
     number: "1.6",
@@ -428,6 +436,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-tool-call",
+    code: "tool",
     steps: 5,
     chapter: "01",
     number: "1.7",
@@ -477,6 +486,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-one-request",
+    code: "steps",
     steps: 15,
     chapter: "01",
     number: "1.8",
@@ -523,6 +533,7 @@ export const chapter01: SceneDefinition[] = [
   },
   {
     id: "01-agent-loop",
+    code: "loop",
     steps: 5,
     chapter: "01",
     number: "1.9",
