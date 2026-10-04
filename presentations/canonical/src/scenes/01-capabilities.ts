@@ -233,9 +233,9 @@ export const chapter01: SceneDefinition[] = [
 - **Do:** click 3, GPT-3.5 (2022): still wrong
 - **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m
 - **Do:** click 5, today's reasoning model, recorded answer with name and date
-- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told "Answer briefly."
+- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive, each shown with its year and size: Qwen2.5 0.5B (2024), a base model never trained to chat; Llama 3.1 8B Instruct (2024); GLM-5.3 (Z.ai, 2026, 753 billion parameters), which thinks first and keeps its thinking hidden. No instruction shortens them: a long answer scrolls inside its column
 - Simulation (no Hugging Face): the field is locked on "How many r's are in the word strawberry?" and shows the three models' real answers, recorded on 4 October 2026 and labelled "recorded answer": 1, then 2, then 3 (correct)
-- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size`,
+- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its year and size`,
     },
     transitionIn: {
       en: "From the question to a quick test.",

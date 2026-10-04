@@ -212,5 +212,15 @@ export const COPY = {
   liveStreamCut: { en: "the connection ended before this answer did" },
   liveNoAnswer: { en: "No answer:" },
   liveEmpty: { en: "(empty answer)" },
-  billionParams: { en: "billion parameters" },
 } satisfies Record<string, L10n>;
+
+/**
+ * The size of each live ladder model, by rung id (LADDER_MODELS in
+ * ml-runtime). Whole labels, so each language gets its own grammar: French
+ * "0,5 milliard de paramètres" below two, "8 milliards" from two on.
+ */
+export const LADDER_SIZES: Record<string, L10n> = {
+  "qwen2.5-0.5b-base": { en: "0.5 billion parameters" },
+  "llama-3.1-8b": { en: "8 billion parameters" },
+  "glm-5.3": { en: "753 billion parameters" },
+};

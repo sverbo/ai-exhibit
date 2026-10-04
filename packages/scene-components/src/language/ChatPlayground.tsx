@@ -12,7 +12,7 @@
  */
 import { Fragment, useRef } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
-import { cloudChat, findCloudRecording, renderChatTemplate } from "@ai-exhibit/ml-runtime/lm";
+import { cloudChat, findCloudRecording, MAX_OUTPUT_TOKENS, renderChatTemplate } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
@@ -125,7 +125,7 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
     push({ question: q, answer: "", state: "running", kind, source: "live", system: messages[0]!.content, model: CLOUD_LABEL });
     setState((s) => ({ ...s, notice: null }));
     try {
-      const r = await cloudChat({ messages, maxTokens: 120, temperature: 0 }, { signal: ac.signal });
+      const r = await cloudChat({ messages, maxTokens: MAX_OUTPUT_TOKENS, temperature: 0 }, { signal: ac.signal });
       if (ac.signal.aborted) return;
       updateLast({
         raw: llamaTemplate ? renderChatTemplate(llamaTemplate, messages) : undefined,

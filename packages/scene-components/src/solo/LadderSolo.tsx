@@ -5,9 +5,9 @@
  * answers of four GPT generations to the talk's riddle.
  */
 import { type FormEvent, useEffect, useRef, useState } from "react";
-import { intlLocale, own, tr, typeset, type Locale } from "@ai-exhibit/presentation-core";
+import { own, tr, typeset, type Locale } from "@ai-exhibit/presentation-core";
 import { cloudLadder, CloudLlmError, LADDER_MODELS } from "@ai-exhibit/ml-runtime/lm";
-import { COPY } from "../language/copy.ts";
+import { COPY, LADDER_SIZES } from "../language/copy.ts";
 import { stripEmphasis } from "../language/format.ts";
 import {
   applyLadderEvent,
@@ -101,10 +101,10 @@ export default function LadderSolo({ env }: { env: SoloEnv }) {
           {LADDER_MODELS.map((m) => (
             <li key={m.id} className={styles.card}>
               <header className={styles.cardHead}>
-                <h3 className={styles.cardTitle}>{m.name}</h3>
-                <span className={styles.cardMeta}>
-                  {new Intl.NumberFormat(intlLocale(locale), { maximumFractionDigits: 1 }).format(m.paramsB)} {tr(COPY.billionParams, locale)}
-                </span>
+                <h3 className={styles.cardTitle}>
+                  {m.name}, {m.year}
+                </h3>
+                {LADDER_SIZES[m.id] ? <span className={styles.cardMeta}>{tr(LADDER_SIZES[m.id]!, locale)}</span> : null}
               </header>
               <LiveText answer={live.answers[m.id] ?? null} locale={locale} />
             </li>

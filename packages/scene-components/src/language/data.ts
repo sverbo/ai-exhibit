@@ -47,7 +47,7 @@ export function modelLabel(id: LanguageModelId): string {
  * answering French questions in Spanish).
  */
 export const EXAMPLE_SYSTEM_PROMPT: L10n = {
-  en: "You are a helpful assistant. Answer clearly and briefly. Refuse requests that could cause harm.",
+  en: "You are a helpful assistant. Answer clearly. Refuse requests that could cause harm.",
 };
 
 /** The messages the chat scene sends: the hidden example system prompt, then the question. */

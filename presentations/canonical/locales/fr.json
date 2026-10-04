@@ -224,8 +224,8 @@
     "text": "La plupart des pièges qui trompaient l'IA ne marchent plus."
   },
   "01-then-and-now/speakerNotes": {
-    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told \"Answer briefly.\"\n- Simulation (no Hugging Face): the field is locked on \"How many r's are in the word strawberry?\" and shows the three models' real answers, recorded on 4 October 2026 and labelled \"recorded answer\": 1, then 2, then 3 (correct)\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size",
-    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots : Qwen2.5 0.5B, un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct ; gpt-oss-120b, qui réfléchit d'abord. Les modèles de conversation reçoivent la consigne « Answer briefly. »\n- Simulation (sans Hugging Face) : le champ est verrouillé sur « Combien y a-t-il de r dans le mot strawberry ? » et montre les vraies réponses des trois modèles, enregistrées le 4 octobre 2026 et signalées « réponse enregistrée » : 1, puis 2, puis 3 (juste)\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec sa taille"
+    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive, each shown with its year and size: Qwen2.5 0.5B (2024), a base model never trained to chat; Llama 3.1 8B Instruct (2024); GLM-5.3 (Z.ai, 2026, 753 billion parameters), which thinks first and keeps its thinking hidden. No instruction shortens them: a long answer scrolls inside its column\n- Simulation (no Hugging Face): the field is locked on \"How many r's are in the word strawberry?\" and shows the three models' real answers, recorded on 4 October 2026 and labelled \"recorded answer\": 1, then 2, then 3 (correct)\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its year and size",
+    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots, chacun avec son année et sa taille : Qwen2.5 0.5B (2024), un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct (2024) ; GLM-5.3 (Z.ai, 2026, 753 milliards de paramètres), qui réfléchit d'abord et garde sa réflexion cachée. Aucune consigne ne les raccourcit : une longue réponse défile dans sa colonne\n- Simulation (sans Hugging Face) : le champ est verrouillé sur « Combien y a-t-il de r dans le mot strawberry ? » et montre les vraies réponses des trois modèles, enregistrées le 4 octobre 2026 et signalées « réponse enregistrée » : 1, puis 2, puis 3 (juste)\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec son année et sa taille"
   },
   "01-then-and-now/transitionIn": {
     "source": "From the question to a quick test.",
@@ -3639,13 +3639,21 @@
     "source": "(empty answer)",
     "text": "(réponse vide)"
   },
-  "copy:billion parameters": {
-    "source": "billion parameters",
-    "text": "milliards de paramètres"
+  "copy:0.5 billion parameters": {
+    "source": "0.5 billion parameters",
+    "text": "0,5 milliard de paramètres"
   },
-  "copy:You are a helpful assistant. Answer clearly and briefly. Refuse requests that could cause harm.": {
-    "source": "You are a helpful assistant. Answer clearly and briefly. Refuse requests that could cause harm.",
-    "text": "Tu es un assistant utile. Réponds clairement et brièvement, en français. Refuse les demandes qui pourraient causer du tort."
+  "copy:8 billion parameters": {
+    "source": "8 billion parameters",
+    "text": "8 milliards de paramètres"
+  },
+  "copy:753 billion parameters": {
+    "source": "753 billion parameters",
+    "text": "753 milliards de paramètres"
+  },
+  "copy:You are a helpful assistant. Answer clearly. Refuse requests that could cause harm.": {
+    "source": "You are a helpful assistant. Answer clearly. Refuse requests that could cause harm.",
+    "text": "Tu es un assistant utile. Réponds clairement, en français. Refuse les demandes qui pourraient causer du tort."
   },
   "copy:Hello everyone!": {
     "source": "Hello everyone!",

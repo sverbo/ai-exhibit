@@ -12,15 +12,18 @@ import {
 import { Tokenizer } from "@huggingface/tokenizers";
 import {
   ACCESS_CODE_HEADER,
+  AUDIENCE_LIMITS,
   createCloudApi,
   isBusy,
   LADDER,
   LADDER_BASE_TOKENS,
   LADDER_REASONING_TOKENS,
-  LADDER_SYSTEM,
   type LadderEvent,
   ladderPayload,
+  type Limits,
+  LOCAL_LIMITS,
   MAX_INPUT_CHARS,
+  MAX_OUTPUT_TOKENS,
   NEXT_MODEL,
   parseLadderBody,
   parseStreamData,
@@ -85,6 +88,26 @@ describe("cloud API", () => {
     expect(checked.json).toMatchObject({ codeRequired: true, codeAccepted: false });
     const ok = await call(api, req("GET", "/api/llm/status", undefined, { [ACCESS_CODE_HEADER]: "open-sesame" }));
     expect(ok.json).toMatchObject({ codeRequired: true, codeAccepted: true });
+  });
+
+  it("caps the input at 300 characters but leaves the output free, up to a 1024-token ceiling, inside Vercel's 30 s", async () => {
+    expect(MAX_OUTPUT_TOKENS).toBe(1024);
+    for (const l of [LOCAL_LIMITS, PUBLIC_LIMITS, AUDIENCE_LIMITS.limits]) {
+      expect(l.maxTokens).toBe(MAX_OUTPUT_TOKENS);
+      expect(l.promptChars).toBe(MAX_INPUT_CHARS);
+    }
+    expect(PUBLIC_LIMITS.timeoutMs).toBeLessThan(30_000);
+    expect(PUBLIC_LIMITS.ladderTimeoutMs).toBeLessThan(30_000);
+    const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) => okJson({ choices: [{ text: "x" }] }));
+    const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS });
+    // The base model's explicit counts (+1, +10, +30) are sent as asked.
+    for (const n of [1, 10, 30]) await call(api, req("POST", "/api/llm/complete", { prompt: "a", maxTokens: n }));
+    expect(f.mock.calls.map((c) => JSON.parse(String(c[1]!.body)).max_tokens)).toEqual([1, 10, 30]);
+    // The reasoning rung gets room to think on top of the answer's ceiling; no instruction shortens any rung.
+    const top = LADDER.find((r) => r.kind === "reasoning")!;
+    const body = ladderPayload(top, top.targets[0]!, "Why?", AUDIENCE_LIMITS.limits as Limits);
+    expect(body.max_tokens).toBe(MAX_OUTPUT_TOKENS + LADDER_REASONING_TOKENS);
+    expect(JSON.stringify(LADDER.map((r) => ladderPayload(r, r.targets[0]!, "Why?", PUBLIC_LIMITS)))).not.toMatch(/brief|system/i);
   });
 
   it("applies the public caps and a budget per client", async () => {
@@ -368,10 +391,7 @@ describe("/api/llm/ladder", () => {
     expect(b).toMatchObject({ prompt: "Q: Why?\nA:", max_tokens: LADDER_BASE_TOKENS, stream: true });
     const c = ladderPayload(small!, small!.targets[0]!, "Why?", PUBLIC_LIMITS);
     expect(c).toMatchObject({
-      messages: [
-        { role: "system", content: LADDER_SYSTEM },
-        { role: "user", content: "Why?" },
-      ],
+      messages: [{ role: "user", content: "Why?" }],
       max_tokens: PUBLIC_LIMITS.maxTokens,
     });
     const r = ladderPayload(reasoning!, reasoning!.targets[0]!, "Why?", PUBLIC_LIMITS);
@@ -393,7 +413,7 @@ describe("/api/llm/ladder", () => {
       // The only provider of the base rung is busy, twice.
       if (String(url).includes("featherless-ai/v1/completions")) return new Response(`overloaded ${FAKE}`, { status: 503 });
       if (body.model === "meta-llama/Llama-3.1-8B-Instruct:nscale") return new Response("down", { status: 500 });
-      if (body.model.includes("gpt-oss")) {
+      if (body.model.includes("GLM-5.3")) {
         // Together-style chunks repeat the words in "text": they must be read once.
         return sse(
           [
@@ -418,18 +438,18 @@ describe("/api/llm/ladder", () => {
         .map((e) => (e as { text: string }).text)
         .join("");
     expect(textOf("llama-3.1-8b")).toBe("Fifteen");
-    expect(textOf("gpt-oss-120b")).toBe("3");
+    expect(textOf("glm-5.3")).toBe("3");
     expect(events).toContainEqual({ type: "start", rung: "llama-3.1-8b", model: "meta-llama/Llama-3.1-8B-Instruct", provider: "novita" });
-    expect(events).toContainEqual({ type: "reasoning", rung: "gpt-oss-120b" });
+    expect(events).toContainEqual({ type: "reasoning", rung: "glm-5.3" });
     expect(events).toContainEqual(expect.objectContaining({ type: "done", rung: "llama-3.1-8b", finishReason: "length" }));
     expect(events).toContainEqual(expect.objectContaining({ type: "error", rung: "qwen2.5-0.5b-base", error: "upstream" }));
     expect(events.at(-1)).toEqual({ type: "end" });
-    // Base: two tries at its busy provider; 8B: nscale, then novita; gpt-oss: one call.
+    // Base: two tries at its busy provider; 8B: nscale, then novita; GLM-5.3: one call.
     expect(f).toHaveBeenCalledTimes(5);
   });
 
   it("asks three models of increasing size, with a fallback provider where one exists", () => {
-    expect(LADDER.map((r) => r.hubId)).toEqual(["Qwen/Qwen2.5-0.5B", "meta-llama/Llama-3.1-8B-Instruct", "openai/gpt-oss-120b"]);
+    expect(LADDER.map((r) => r.hubId)).toEqual(["Qwen/Qwen2.5-0.5B", "meta-llama/Llama-3.1-8B-Instruct", "zai-org/GLM-5.3"]);
     expect(LADDER[1]!.targets.length).toBeGreaterThan(1);
     expect(LADDER[2]!.targets.length).toBeGreaterThan(1);
   });

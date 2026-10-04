@@ -2,9 +2,9 @@
   "about": "Real answers of the live ladder (POST /api/llm/ladder, LADDER in packages/cloud-api), recorded once through the local runtime and shown in Simulation, labelled as recorded. Never edit the texts.",
   "date": "2026-10-04",
   "settings": {
-    "chat": "system \"Answer briefly.\", the question as the user message, max_tokens 160, temperature 0",
-    "base": "raw text \"Q: <question>\\nA:\", max_tokens 60, temperature 0, stop \"\\nQ:\"",
-    "reasoning": "system \"Answer briefly.\", the question as the user message, max_tokens 800 (reasoning included), reasoning_effort low"
+    "chat": "the question alone as the user message, no system prompt, max_tokens 1024, temperature 0",
+    "base": "raw text \"Q: <question>\\nA:\", max_tokens 200, temperature 0, stop \"\\nQ:\"",
+    "reasoning": "the question alone as the user message, no system prompt, max_tokens 4096 (thinking included, hidden)"
   },
   "runs": [
     {
@@ -26,10 +26,10 @@
           "finishReason": "stop"
         },
         {
-          "rung": "gpt-oss-120b",
-          "model": "openai/gpt-oss-120b",
-          "provider": "groq",
-          "text": "There are **3** r’s in “strawberry.”",
+          "rung": "glm-5.3",
+          "model": "zai-org/GLM-5.3",
+          "provider": "together",
+          "text": "There are **3** r's in the word \"strawberry\":\n\n**s - t - r - a - w - b - e - r - r - y**\n\nOne r in \"straw\" and two r's in \"berry.\"",
           "finishReason": "stop"
         }
       ]
@@ -53,10 +53,10 @@
           "finishReason": "stop"
         },
         {
-          "rung": "gpt-oss-120b",
-          "model": "openai/gpt-oss-120b",
-          "provider": "groq",
-          "text": "Il y a **3** r dans le mot « strawberry ».",
+          "rung": "glm-5.3",
+          "model": "zai-org/GLM-5.3",
+          "provider": "together",
+          "text": "Il y a **3 r** dans le mot \"strawberry\" :\n\ns-t-**r**-a-w-b-e-**r**-**r**-y\n\n- Le premier **r** se trouve dans \"str\"\n- Les deux autres sont consécutifs dans \"berry\"",
           "finishReason": "stop"
         }
       ]

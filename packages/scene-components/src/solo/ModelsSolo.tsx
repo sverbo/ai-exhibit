@@ -1,13 +1,13 @@
 /**
  * Base model and assistant, solo: the base model (Llama 3.1 8B, pretraining
  * only) continues a text by 10 tokens at a time; the assistant (Llama 3.1 8B
- * Instruct) answers a question, briefly. With live calls off, the recorded
+ * Instruct) answers a question as long as it likes. With live calls off, the recorded
  * real answers to the prepared prompts. Reuses the playground scenes'
  * presets, messages, recordings and copy.
  */
 import { type FormEvent, useRef, useState } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
-import { cloudChat, cloudComplete, findCloudRecording, MAX_INPUT_CHARS } from "@ai-exhibit/ml-runtime/lm";
+import { cloudChat, cloudComplete, findCloudRecording, MAX_INPUT_CHARS, MAX_OUTPUT_TOKENS } from "@ai-exhibit/ml-runtime/lm";
 import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "../language/copy.ts";
 import { assistantMessages, CHAT_PRESETS, DEFAULT_BASE_PROMPT } from "../language/data.ts";
@@ -19,8 +19,8 @@ import { AsksLeft, BusyNotice, Chips, cx, RecordedTag, SoloRoot, soloStyles as s
 
 /** Tokens the base model adds per press. */
 export const ADD_TOKENS = 10;
-/** Longest assistant answer asked for (the audience budget allows 60). */
-export const ANSWER_TOKENS = 60;
+/** The assistant answers freely: the server's ceiling, which models stop well before. */
+export const ANSWER_TOKENS = MAX_OUTPUT_TOKENS;
 const TEMPERATURE = 0.8;
 const BASE_LABEL = "Llama 3.1 8B";
 const CHAT_LABEL = "Llama 3.1 8B Instruct";

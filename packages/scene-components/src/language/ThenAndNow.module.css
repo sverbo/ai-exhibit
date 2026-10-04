@@ -388,8 +388,9 @@
   overflow-wrap: anywhere;
   color: var(--color-text);
   max-height: 420px;
-  overflow: hidden;
-  mask-image: linear-gradient(to bottom, var(--color-text) 85%, transparent);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 .liveNote {
   margin: 0;

@@ -90,6 +90,14 @@ const FEATHERLESS_COMPLETIONS = "https://router.huggingface.co/featherless-ai/v1
  * so the smallest rung is the smallest base model a provider serves. Each rung
  * falls back to its next provider; every target below answered a real
  * streamed call on 2026-10-04 (Qwen2.5 0.5B has a single provider).
+ *
+ * The top rung is GLM-5.3 (Z.ai, 753B, open weights, reasoning). Compared on
+ * 2026-10-04 on "How many r's are in the word strawberry?" (English and
+ * French) and the clock riddle, without any instruction: GLM-5.3 was right in
+ * 15 runs out of 15 on three providers, the full answer in 1 to 4 s at
+ * together (about 250 tokens). gpt-oss-120b at low effort once answered "deux"
+ * in French; DeepSeek-R1-0528 took 20 to 25 s; GLM-4.6 and Qwen3-235B-Thinking
+ * took up to 14 s; Kimi-K3 was right and fast but three times the price.
  */
 export const LADDER: LadderRung[] = [
   {
@@ -105,19 +113,20 @@ export const LADDER: LadderRung[] = [
     targets: ["nscale", "novita", "deepinfra"].map((p) => ({ url: CHAT_URL, model: `meta-llama/Llama-3.1-8B-Instruct:${p}`, provider: p })),
   },
   {
-    id: "gpt-oss-120b",
-    hubId: "openai/gpt-oss-120b",
+    id: "glm-5.3",
+    hubId: "zai-org/GLM-5.3",
     kind: "reasoning",
-    targets: ["groq", "together", "novita"].map((p) => ({ url: CHAT_URL, model: `openai/gpt-oss-120b:${p}`, provider: p })),
+    targets: ["together", "deepinfra", "novita"].map((p) => ({ url: CHAT_URL, model: `zai-org/GLM-5.3:${p}`, provider: p })),
   },
 ];
 
-/** The same short instruction for every chat rung, so answers fit side by side. */
-export const LADDER_SYSTEM = "Answer briefly.";
-/** Answer length of the base rung (it rambles; its first line is the answer). */
-export const LADDER_BASE_TOKENS = 60;
-/** Extra tokens for the reasoning rung's hidden reasoning, on top of the answer's. */
-export const LADDER_REASONING_TOKENS = 640;
+/**
+ * A base model has no end of answer: it continues the text until the next
+ * "Q:" or this many tokens. Chat rungs stop on their own, under the ceiling.
+ */
+export const LADDER_BASE_TOKENS = 200;
+/** Extra tokens for the reasoning rung's hidden thinking, on top of the answer's ceiling. */
+export const LADDER_REASONING_TOKENS = 3072;
 /** Pause before trying a busy provider again. */
 export const LADDER_RETRY_MS = 1500;
 
@@ -161,32 +170,40 @@ export interface Limits {
 /** Longest text any endpoint accepts in one field (prompt, message, text to embed or tokenize). */
 export const MAX_INPUT_CHARS = 300;
 
+/**
+ * Output is free: a generous safety ceiling for answers, which models stop
+ * well before on their own. The time deadlines below cut what runs longer,
+ * and a cut answer says so.
+ */
+export const MAX_OUTPUT_TOKENS = 1024;
+
 /** The presenter's own machine. */
 export const LOCAL_LIMITS: Limits = {
   promptChars: MAX_INPUT_CHARS,
   messages: 4,
-  maxTokens: 160,
+  maxTokens: MAX_OUTPUT_TOKENS,
   defaultMaxTokens: 60,
   embedTexts: 16,
   embedChars: MAX_INPUT_CHARS,
   tokenizeChars: MAX_INPUT_CHARS,
-  timeoutMs: 20_000,
+  timeoutMs: 25_000,
   ladderTimeoutMs: 50_000,
   perMinute: 30,
   perHour: 100,
   bodyBytes: 32_000,
 };
 
-/** A public deployment: smaller prompts and answers, a budget per visitor. */
+/** A public deployment: fewer texts and requests, a budget per visitor; answers as free as on the presenter's machine. */
 export const PUBLIC_LIMITS: Limits = {
   promptChars: MAX_INPUT_CHARS,
   messages: 4,
-  maxTokens: 120,
+  maxTokens: MAX_OUTPUT_TOKENS,
   defaultMaxTokens: 60,
   embedTexts: 4,
   embedChars: MAX_INPUT_CHARS,
   tokenizeChars: MAX_INPUT_CHARS,
-  timeoutMs: 20_000,
+  // Inside the 30 s a Vercel function may run (vercel.json maxDuration).
+  timeoutMs: 25_000,
   // Inside the 30 s a Vercel function may run (vercel.json maxDuration).
   ladderTimeoutMs: 27_000,
   perMinute: 20,
@@ -257,7 +274,7 @@ export const AUDIENCE_LIMITS: AudienceLimits = {
   limits: {
     promptChars: MAX_INPUT_CHARS,
     messages: 2,
-    maxTokens: 60,
+    maxTokens: MAX_OUTPUT_TOKENS,
     defaultMaxTokens: 40,
     embedTexts: 1,
     embedChars: MAX_INPUT_CHARS,
@@ -400,12 +417,10 @@ export function ladderPayload(rung: LadderRung, target: LadderTarget, question: 
       stream: true,
     };
   }
-  const messages = [
-    { role: "system", content: LADDER_SYSTEM },
-    { role: "user", content: question },
-  ];
+  // The question alone, no instruction: each model answers the way it was trained to.
+  const messages = [{ role: "user", content: question }];
   if (rung.kind === "reasoning") {
-    return { model: target.model, messages, max_tokens: limits.maxTokens + LADDER_REASONING_TOKENS, reasoning_effort: "low", stream: true };
+    return { model: target.model, messages, max_tokens: limits.maxTokens + LADDER_REASONING_TOKENS, stream: true };
   }
   return { model: target.model, messages, max_tokens: limits.maxTokens, temperature: 0, stream: true };
 }

@@ -74,8 +74,9 @@
   white-space: pre-wrap;
   color: var(--color-text);
   max-height: 300px;
-  overflow: hidden;
-  mask-image: linear-gradient(to bottom, var(--color-text) 80%, transparent);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 .recorded {
   font-size: var(--text-xs);

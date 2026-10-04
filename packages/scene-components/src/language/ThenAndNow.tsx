@@ -18,7 +18,7 @@ import { type ThenAndNowQuestion } from "@ai-exhibit/content/assets/then-and-now
 import { cloudLadder, CloudLlmError, LADDER_MODELS, type LadderModel } from "@ai-exhibit/ml-runtime/lm";
 import { GPT2_ANSWER_TRANSLATIONS } from "@ai-exhibit/content/assets/then-and-now/translations.ts";
 import type { SceneComponentProps } from "../contract.ts";
-import { COPY } from "./copy.ts";
+import { COPY, LADDER_SIZES } from "./copy.ts";
 import { useGpt2Answers, useLiveLadderRecording } from "./runtime.ts";
 import { keepKeys } from "../primitives/Controls.tsx";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
@@ -324,13 +324,13 @@ function LiveField({
 }
 
 function LiveHead({ model, locale }: { model: LadderModel; locale: Locale }) {
-  const size = new Intl.NumberFormat(intlLocale(locale), { maximumFractionDigits: 1 }).format(model.paramsB);
+  const size = LADDER_SIZES[model.id];
   return (
     <header className={styles.liveHead}>
-      <span className={styles.colTitle}>{model.name}</span>
-      <span className={styles.liveSize}>
-        {size} {tr(COPY.billionParams, locale)}
+      <span className={styles.colTitle}>
+        {model.name}, {model.year}
       </span>
+      {size ? <span className={styles.liveSize}>{tr(size, locale)}</span> : null}
     </header>
   );
 }

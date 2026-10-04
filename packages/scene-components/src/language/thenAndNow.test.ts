@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { thenAndNowQuestions, type Gpt2AnswersFile } from "@ai-exhibit/content/assets/then-and-now/questions.ts";
 import { LADDER_MODELS } from "@ai-exhibit/ml-runtime/lm";
+import { LADDER_SIZES } from "./copy.ts";
 import {
   applyLadderEvent,
   failLive,
@@ -128,13 +129,13 @@ describe("live step", () => {
   it("fills each column as its events arrive", () => {
     let live = startLive("Q", ids);
     expect(Object.values(live.answers).every((a) => a.state === "waiting")).toBe(true);
-    live = applyLadderEvent(live, { type: "start", rung: "gpt-oss-120b", model: "openai/gpt-oss-120b", provider: "groq" });
-    live = applyLadderEvent(live, { type: "reasoning", rung: "gpt-oss-120b" });
-    expect(live.answers["gpt-oss-120b"]).toMatchObject({ state: "thinking", provider: "groq" });
-    live = applyLadderEvent(live, { type: "text", rung: "gpt-oss-120b", text: "On a clock" });
-    live = applyLadderEvent(live, { type: "text", rung: "gpt-oss-120b", text: ", 3." });
-    live = applyLadderEvent(live, { type: "done", rung: "gpt-oss-120b", finishReason: "stop", ms: 900 });
-    expect(live.answers["gpt-oss-120b"]).toMatchObject({ state: "done", text: "On a clock, 3." });
+    live = applyLadderEvent(live, { type: "start", rung: "glm-5.3", model: "zai-org/GLM-5.3", provider: "together" });
+    live = applyLadderEvent(live, { type: "reasoning", rung: "glm-5.3" });
+    expect(live.answers["glm-5.3"]).toMatchObject({ state: "thinking", provider: "together" });
+    live = applyLadderEvent(live, { type: "text", rung: "glm-5.3", text: "On a clock" });
+    live = applyLadderEvent(live, { type: "text", rung: "glm-5.3", text: ", 3." });
+    live = applyLadderEvent(live, { type: "done", rung: "glm-5.3", finishReason: "stop", ms: 900 });
+    expect(live.answers["glm-5.3"]).toMatchObject({ state: "done", text: "On a clock, 3." });
     live = applyLadderEvent(live, { type: "error", rung: "qwen2.5-0.5b-base", error: "timeout", message: "No full answer within 27 s" });
     expect(live.answers["qwen2.5-0.5b-base"]).toMatchObject({ state: "error", error: "No full answer within 27 s" });
     // A rung the scene does not know is ignored.
@@ -146,12 +147,12 @@ describe("live step", () => {
   it("marks only unfinished columns when the whole request fails", () => {
     let live = startLive("Q", ids);
     live = applyLadderEvent(live, { type: "text", rung: "llama-3.1-8b", text: "Fif" });
-    live = applyLadderEvent(live, { type: "done", rung: "gpt-oss-120b", finishReason: "stop", ms: 1 });
+    live = applyLadderEvent(live, { type: "done", rung: "glm-5.3", finishReason: "stop", ms: 1 });
     const failed = failLive(live, "offline");
     expect(failed.running).toBe(false);
     expect(failed.failure).toBe("offline");
     expect(failed.answers["llama-3.1-8b"]).toMatchObject({ state: "error", text: "Fif", error: "offline" });
-    expect(failed.answers["gpt-oss-120b"]?.state).toBe("done");
+    expect(failed.answers["glm-5.3"]?.state).toBe("done");
     expect(failed.answers["qwen2.5-0.5b-base"]?.state).toBe("error");
   });
 
@@ -190,5 +191,15 @@ describe("recorded live ladder (Simulation)", () => {
     expect(recordedLive(file, "fr")!.question).toMatch(/strawberry/);
     expect(recordedLive(file, "de" as string)!.question).toBe(en.question);
     expect(recordedLive(null, "en")).toBeNull();
+  });
+});
+
+describe("ladder labels", () => {
+  it("give every rung a whole size label matching its parameter count, and a release year", () => {
+    for (const m of LADDER_MODELS) {
+      expect(LADDER_SIZES[m.id]?.en).toBe(`${m.paramsB} billion parameters`);
+      expect(m.year).toBeGreaterThanOrEqual(2019);
+    }
+    expect(LADDER_MODELS.map((m) => m.paramsB)).toEqual([...LADDER_MODELS.map((m) => m.paramsB)].sort((a, b) => a - b));
   });
 });

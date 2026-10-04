@@ -92,7 +92,7 @@ or deterministic data.
 | `POST /api/llm/complete` | Base model continuation (Llama 3.1 8B) |
 | `POST /api/llm/next` | Top next-token probabilities of a raw text (Llama 3.3 70B Instruct) |
 | `POST /api/llm/chat` | Assistant answer with first-token probabilities (Llama 3.1 8B Instruct) |
-| `POST /api/llm/ladder` | One question, answers of three open models of increasing power (Qwen2.5 0.5B base, Llama 3.1 8B Instruct, gpt-oss-120b) streamed side by side (NDJSON); costs three requests of the hourly budget |
+| `POST /api/llm/ladder` | One question, answers of three open models of increasing power (Qwen2.5 0.5B base, Llama 3.1 8B Instruct, GLM-5.3 reasoning) streamed side by side (NDJSON); costs three requests of the hourly budget |
 | `POST /api/embed` | Sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2) |
 | `POST /api/tokenize` | Tokens with Llama 3.1's or GPT-2's tokenizer |
 

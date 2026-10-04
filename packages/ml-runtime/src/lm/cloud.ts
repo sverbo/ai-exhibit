@@ -180,6 +180,11 @@ async function request<T>(path: string, init: RequestInit, opts: CloudOptions): 
  * matters for the next words; other texts keep their start.
  */
 export const MAX_INPUT_CHARS = 300;
+/**
+ * Output is free (MAX_OUTPUT_TOKENS in packages/cloud-api): ask for the
+ * server's ceiling and let the model stop on its own.
+ */
+export const MAX_OUTPUT_TOKENS = 1024;
 const keepEnd = (text: string) => (text.length > MAX_INPUT_CHARS ? text.slice(-MAX_INPUT_CHARS) : text);
 const keepStart = (text: string) => text.slice(0, MAX_INPUT_CHARS);
 
@@ -211,7 +216,8 @@ export function cloudChat(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ...req, messages: req.messages.map((m) => ({ ...m, content: keepStart(m.content) })) }),
     },
-    opts,
+    // A long answer may take the server's whole 25 s.
+    { timeoutMs: 30_000, ...opts },
   );
 }
 
@@ -279,8 +285,10 @@ export function cloudNextToken(req: { prompt: string; temperature?: number }, op
 /**
  * The rungs of /api/llm/ladder as the audience sees them, in order. The ids
  * match LADDER in packages/cloud-api (a test checks it); the server decides
- * the providers. Sizes are the Hub's safetensors totals, years the public
- * releases (model cards on huggingface.co, checked 2026-10-04).
+ * the providers. Sizes are the Hub's safetensors totals (494M, 8.03B, 753B),
+ * years the publication of each model's repository on huggingface.co
+ * (Qwen2.5-0.5B 2024-09, Llama-3.1-8B-Instruct 2024-07, GLM-5.3 2026-08;
+ * checked 2026-10-04).
  */
 export interface LadderModel {
   id: string;
@@ -297,7 +305,7 @@ export interface LadderModel {
 export const LADDER_MODELS: readonly LadderModel[] = [
   { id: "qwen2.5-0.5b-base", name: "Qwen2.5 0.5B", maker: "Alibaba", paramsB: 0.5, year: 2024, kind: "base" },
   { id: "llama-3.1-8b", name: "Llama 3.1 8B Instruct", maker: "Meta", paramsB: 8, year: 2024, kind: "chat" },
-  { id: "gpt-oss-120b", name: "gpt-oss-120b", maker: "OpenAI (open weights)", paramsB: 117, year: 2025, kind: "reasoning" },
+  { id: "glm-5.3", name: "GLM-5.3", maker: "Z.ai", paramsB: 753, year: 2026, kind: "reasoning" },
 ];
 
 /** One line of the ladder stream (packages/cloud-api LadderEvent). */
