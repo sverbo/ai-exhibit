@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   ACCESS_CODE_HEADER,
+  AUDIENCE_HEADER,
   cloudChat,
   cloudComplete,
   cloudEmbed,
@@ -99,6 +100,23 @@ describe("cloudLadder", () => {
   it("turns a refused request into a coded error", async () => {
     const f = vi.fn(async () => json(429, { error: "rate-limited", message: "More than 100 model requests in an hour from this address" }));
     await expect(cloudLadder("Hi", () => {}, { fetch: f as unknown as typeof fetch })).rejects.toMatchObject({ code: "rate-limited" });
+  });
+
+  it("marks audience calls, reports the budget left, and says which window refused", async () => {
+    const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) =>
+      new Response(JSON.stringify({ text: "hi" }), { status: 200, headers: { "x-ai-exhibit-remaining": "7" } }),
+    );
+    const left: number[] = [];
+    await cloudComplete({ prompt: "Once" }, { fetch: f as unknown as typeof fetch, audience: "phone-1234abcd", onRemaining: (n) => left.push(n) });
+    expect(new Headers(f.mock.calls[0]![1]!.headers).get(AUDIENCE_HEADER)).toBe("phone-1234abcd");
+    expect(left).toEqual([7]);
+    const refused = vi.fn(async () => json(429, { error: "rate-limited", message: "used up", window: "hour", remaining: 0 }));
+    const err = await cloudComplete({ prompt: "Once" }, { fetch: refused as unknown as typeof fetch, audience: "phone-1234abcd" }).catch((e) => e);
+    expect(err).toBeInstanceOf(CloudLlmError);
+    expect((err as CloudLlmError).budget).toEqual({ window: "hour", remaining: 0 });
+    // The presenter's calls carry no audience header.
+    await cloudComplete({ prompt: "Once" }, { fetch: f as unknown as typeof fetch });
+    expect(new Headers(f.mock.calls[1]![1]!.headers).has(AUDIENCE_HEADER)).toBe(false);
   });
 
   it("labels every rung with a name, a size and a year", () => {

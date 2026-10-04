@@ -64,6 +64,24 @@
   background: var(--color-text);
   color: var(--color-bg);
 }
+/* Three tabs and the language switch on one row, down to 360 px wide. */
+@media (max-width: 420px) {
+  .top {
+    gap: 6px;
+  }
+  .tabs {
+    gap: 0;
+    min-width: 0;
+  }
+  .tab {
+    padding: 6px 7px;
+    font-size: 17px;
+  }
+  .langBtn {
+    min-width: 34px;
+    padding: 2px 6px;
+  }
+}
 
 .searchBar {
   position: sticky;

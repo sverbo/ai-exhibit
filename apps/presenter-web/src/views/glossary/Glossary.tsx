@@ -1,14 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { LOCALES, LOCALE_INFO, parseLocale, tr, type Locale } from "@ai-exhibit/presentation-core";
 import { glossary, resources, type GlossaryEntry } from "@ai-exhibit/content/glossary";
+import { cloudStatus } from "@ai-exhibit/ml-runtime/lm";
 import { currentStampedTheme } from "../../theme.ts";
 import { guessLocale } from "./locale.ts";
 import { letterOf, searchGlossary, termId } from "./search.ts";
 import styles from "./Glossary.module.css";
 
+/** The Play tab and its demos load only when opened, so the glossary stays fast. */
+const Play = lazy(() => import("./play/Play.tsx"));
+
+type Tab = "glossary" | "resources" | "play";
+const TABS: readonly Tab[] = ["glossary", "resources", "play"];
+
 const COPY = {
   glossary: { en: "Glossary", fr: "Glossaire" },
   resources: { en: "Resources", fr: "Ressources" },
+  play: { en: "Play", fr: "Jouer" },
+  loading: { en: "Loading…", fr: "Chargement…" },
   intro: {
     en: "The words of today's talk, in plain language. Tap a word to read it.",
     fr: "Les mots de la présentation, en langage simple. Touchez un mot pour le lire.",
@@ -59,13 +68,46 @@ function useSystemTheme(): void {
 }
 
 /**
- * The audience's phone companion: every term of the talk, searchable, plus a
- * few resources. Works offline (only the resource links need the internet)
+ * The audience's phone companion: every term of the talk, searchable, a few
+ * resources, and the talk's demos to try (Play). Works offline (only the resource links need the internet)
  * and needs no session. Used by /glossary.
  */
-export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
+/**
+ * The Play tab exists only where its demos can run live: the server has a
+ * Hugging Face key that works and needs no access code (phones have none).
+ * Without that, the tab is simply not offered.
+ */
+function usePlayAvailable(): boolean {
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    cloudStatus({ accessCode: null })
+      .then((s) => {
+        if (alive) setOk(Boolean(s.configured && s.reachable !== false && s.key?.valid !== false && !s.codeRequired));
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return ok;
+}
+
+export function Glossary({
+  initialLocale,
+  initialTab = "glossary",
+  playAvailable: playOverride,
+}: {
+  initialLocale?: Locale;
+  initialTab?: Tab;
+  /** Overrides the live check (tests, previews). */
+  playAvailable?: boolean;
+}) {
   const [locale, setLocaleState] = useState<Locale>(() => readLocale(initialLocale));
-  const [tab, setTab] = useState<"glossary" | "resources">("glossary");
+  const playChecked = usePlayAvailable();
+  const playAvailable = playOverride ?? playChecked;
+  const [chosenTab, setTab] = useState<Tab>(initialTab);
+  const tab: Tab = chosenTab === "play" && !playAvailable ? "glossary" : chosenTab;
   const [query, setQuery] = useState("");
   const [openTerms, setOpenTerms] = useState<Set<string>>(() => new Set());
   const pendingScroll = useRef<string | null>(null);
@@ -125,7 +167,7 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
     <div className={styles.glossary} lang={locale}>
       <header className={styles.top}>
         <nav className={styles.tabs} aria-label={tr(COPY.sections, locale)}>
-          {(["glossary", "resources"] as const).map((id) => (
+          {TABS.filter((id) => id !== "play" || playAvailable).map((id) => (
             <button
               key={id}
               type="button"
@@ -203,6 +245,10 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
             </section>
           ))}
         </>
+      ) : tab === "play" ? (
+        <Suspense fallback={<p className={styles.intro}>{tr(COPY.loading, locale)}</p>}>
+          <Play locale={locale} />
+        </Suspense>
       ) : (
         <section className={styles.resources}>
           <p className={styles.intro}>{tr(COPY.resourcesIntro, locale)}</p>

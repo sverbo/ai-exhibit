@@ -4,6 +4,11 @@
   touch-action: none;
   user-select: none;
 }
+/* Fluid (phones): the map scales with its box, which keeps the map's ratio. */
+.fluid > svg {
+  width: 100%;
+  height: auto;
+}
 .interactive {
   cursor: grab;
 }

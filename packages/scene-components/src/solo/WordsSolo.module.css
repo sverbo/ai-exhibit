@@ -1,0 +1,58 @@
+/* The word map and its neighbour list, phone sized. */
+.map {
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-surface);
+  overflow: hidden;
+  padding: 4px;
+}
+/* Map buttons sized for a thumb, whatever the stage tokens say. */
+.map button {
+  min-height: 44px;
+}
+
+.matched {
+  display: block;
+  font-weight: 400;
+  color: var(--color-text);
+}
+.list {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) 64px 40px;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+}
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.word {
+  overflow-wrap: anywhere;
+}
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+}
+.sim {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  color: var(--color-text-muted);
+}

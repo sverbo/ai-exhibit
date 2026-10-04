@@ -4251,6 +4251,86 @@
     "source": "Hugging Face caught it. Not OpenAI. The AI did what we rewarded, not what we meant.",
     "text": "Hugging Face l'a repéré. Pas OpenAI. L'IA a fait ce qu'on récompensait, pas ce qu'on voulait."
   },
+  "copy:Many people are playing right now. Try again in a few seconds.": {
+    "source": "Many people are playing right now. Try again in a few seconds.",
+    "text": "Beaucoup de monde joue en ce moment. Réessayez dans quelques secondes."
+  },
+  "copy:Recorded real examples: live answers are not available right now.": {
+    "source": "Recorded real examples: live answers are not available right now.",
+    "text": "Exemples réels enregistrés : les réponses en direct ne sont pas disponibles pour l'instant."
+  },
+  "copy:Your sentence": {
+    "source": "Your sentence",
+    "text": "Votre phrase"
+  },
+  "copy:Free: cutting into tokens does not use your live answers.": {
+    "source": "Free: cutting into tokens does not use your live answers.",
+    "text": "Gratuit : découper en tokens n'utilise pas vos réponses en direct."
+  },
+  "copy:Pick an example: typing needs the live tokenizer.": {
+    "source": "Pick an example: typing needs the live tokenizer.",
+    "text": "Choisissez un exemple : taper une phrase demande le tokenizer en direct."
+  },
+  "copy:A word or a short phrase": {
+    "source": "A word or a short phrase",
+    "text": "Un mot ou une courte phrase"
+  },
+  "copy:Drag to move, pinch to zoom, tap a dot to see its neighbours.": {
+    "source": "Drag to move, pinch to zoom, tap a dot to see its neighbours.",
+    "text": "Glissez pour vous déplacer, pincez pour zoomer, touchez un point pour voir ses voisins."
+  },
+  "copy:A word already on the map is free; any other word uses one live answer.": {
+    "source": "A word already on the map is free; any other word uses one live answer.",
+    "text": "Un mot déjà sur la carte est gratuit ; tout autre mot utilise une réponse en direct."
+  },
+  "copy:A model fresh out of pretraining. It only continues your text.": {
+    "source": "A model fresh out of pretraining. It only continues your text.",
+    "text": "Un modèle tout juste sorti du pré-entraînement. Il ne fait que continuer votre texte."
+  },
+  "copy:The start of a text": {
+    "source": "The start of a text",
+    "text": "Le début d'un texte"
+  },
+  "copy:+10 tokens": {
+    "source": "+10 tokens",
+    "text": "+10 tokens"
+  },
+  "copy:Show the recorded continuation": {
+    "source": "Show the recorded continuation",
+    "text": "Voir la suite enregistrée"
+  },
+  "copy:The same kind of model, trained further to answer questions.": {
+    "source": "The same kind of model, trained further to answer questions.",
+    "text": "Le même genre de modèle, entraîné en plus pour répondre aux questions."
+  },
+  "copy:Your question": {
+    "source": "Your question",
+    "text": "Votre question"
+  },
+  "copy:Answers are kept short here to share the budget.": {
+    "source": "Answers are kept short here to share the budget.",
+    "text": "Les réponses sont courtes ici, pour partager le budget."
+  },
+  "copy:Pick a question: these answers were recorded.": {
+    "source": "Pick a question: these answers were recorded.",
+    "text": "Choisissez une question : ces réponses ont été enregistrées."
+  },
+  "copy:One question, three open models of increasing size, answering at the same time.": {
+    "source": "One question, three open models of increasing size, answering at the same time.",
+    "text": "Une question, trois modèles ouverts de plus en plus grands, qui répondent en même temps."
+  },
+  "copy:One question uses three live answers, one per model.": {
+    "source": "One question uses three live answers, one per model.",
+    "text": "Une question utilise trois réponses en direct, une par modèle."
+  },
+  "copy:The talk's riddle, as four generations of GPT answered it.": {
+    "source": "The talk's riddle, as four generations of GPT answered it.",
+    "text": "La devinette de la présentation, telle que quatre générations de GPT y ont répondu."
+  },
+  "copy:Not enough live answers left for three models.": {
+    "source": "Not enough live answers left for three models.",
+    "text": "Il ne reste pas assez de réponses en direct pour trois modèles."
+  },
   "copy:A short history of AI": {
     "source": "A short history of AI",
     "text": "Une brève histoire de l'IA"

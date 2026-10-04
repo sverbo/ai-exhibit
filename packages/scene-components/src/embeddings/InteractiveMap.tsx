@@ -38,6 +38,11 @@ export interface InteractiveMapProps extends Omit<MapViewProps, "camera"> {
   /** Click on a word (index) or on empty space (null). */
   onSelect?: (index: number | null) => void;
   reducedMotion: boolean;
+  /**
+   * Fill the parent's width, keeping the width:height ratio (phones); `width`
+   * and `height` stay the map's own units. Default: fixed stage pixels.
+   */
+  fluid?: boolean;
 }
 
 function useThrottled<T>(fn: ((value: T) => void) | undefined, ms: number) {
@@ -84,6 +89,9 @@ export function InteractiveMap(props: InteractiveMapProps) {
   const cameraRef = useRef(camera);
   cameraRef.current = camera;
   const dragging = useRef<{ x: number; y: number; moved: boolean; id: number } | null>(null);
+  // Fingers on the map (touch screens): two of them pinch to zoom and pan together.
+  const pointers = useRef(new Map<number, [number, number]>());
+  const pinch = useRef<{ dist: number; mid: [number, number] } | null>(null);
   // Cameras this controller published recently, so their delayed echoes from
   // the session are not mistaken for a new target (which would pull the view back).
   const published = useRef<Camera[]>([]);
@@ -164,15 +172,41 @@ export function InteractiveMap(props: InteractiveMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interactive, frame]);
 
+  const pinchOf = (): { dist: number; mid: [number, number] } | null => {
+    const [a, b] = [...pointers.current.values()];
+    if (!a || !b) return null;
+    return { dist: Math.max(1, Math.hypot(a[0] - b[0], a[1] - b[1])), mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] };
+  };
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (!interactive || e.button !== 0) return;
     if ((e.target as Element).closest?.("button")) return;
     cancelAnimationFrame(tween.current);
     const [x, y] = toLocal(e.clientX, e.clientY);
+    pointers.current.set(e.pointerId, [x, y]);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {
+      // The pointer is already gone: nothing to capture.
+    }
+    if (pointers.current.size === 2) {
+      // A second finger: pinch from now on, and this gesture never selects a word.
+      pinch.current = pinchOf();
+      dragging.current = null;
+      return;
+    }
     dragging.current = { x, y, moved: false, id: e.pointerId };
-    e.currentTarget.setPointerCapture?.(e.pointerId);
   };
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (pointers.current.has(e.pointerId)) pointers.current.set(e.pointerId, toLocal(e.clientX, e.clientY));
+    if (pinch.current) {
+      const now = pinchOf();
+      if (!now) return;
+      const prev = pinch.current;
+      const zoomed = zoomAbout(cameraRef.current, now.dist / prev.dist, now.mid, frame);
+      setNow(panBy(zoomed, now.mid[0] - prev.mid[0], now.mid[1] - prev.mid[1], frame));
+      pinch.current = now;
+      return;
+    }
     const d = dragging.current;
     if (!d || d.id !== e.pointerId) return;
     const [x, y] = toLocal(e.clientX, e.clientY);
@@ -183,6 +217,13 @@ export function InteractiveMap(props: InteractiveMapProps) {
     d.y = y;
   };
   const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    pointers.current.delete(e.pointerId);
+    if (pinch.current) {
+      // Lifting one finger ends the pinch; the gesture selects nothing.
+      if (pointers.current.size < 2) pinch.current = null;
+      dragging.current = null;
+      return;
+    }
     const d = dragging.current;
     dragging.current = null;
     if (!d || d.id !== e.pointerId || d.moved) return;
@@ -229,19 +270,21 @@ export function InteractiveMap(props: InteractiveMapProps) {
     () => [...(props.avoid ?? []), { x0: width - 520, y0: height - 60, x1: width, y1: height }],
     [props.avoid, width, height],
   );
-  const { interactive: _i, onCamera: _c, onSelect: _s, reducedMotion: _r, zoomTarget: _z, onShowAll: _a, ...mapProps } = props;
+  const { interactive: _i, onCamera: _c, onSelect: _s, reducedMotion: _r, zoomTarget: _z, onShowAll: _a, fluid, ...mapProps } = props;
 
   return (
     <div
       ref={box}
-      className={`${styles.box} ${interactive ? styles.interactive : ""}`}
-      style={{ width, height }}
+      className={`${styles.box} ${interactive ? styles.interactive : ""} ${fluid ? styles.fluid : ""}`}
+      style={fluid ? { width: "100%", aspectRatio: `${width} / ${height}` } : { width, height }}
       tabIndex={interactive ? 0 : undefined}
       aria-label={interactive ? tr(MAP_CONTROLS.mapLabel, locale) : undefined}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerCancel={() => {
+      onPointerCancel={(e) => {
+        pointers.current.delete(e.pointerId);
+        pinch.current = null;
         dragging.current = null;
       }}
       onDoubleClick={onDoubleClick}

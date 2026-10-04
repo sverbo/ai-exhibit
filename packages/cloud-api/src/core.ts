@@ -12,6 +12,10 @@
 //
 // The token never leaves the server: it is not logged, not echoed in errors,
 // and the status only says whether one is configured.
+//
+// Audience calls (the Play tab of /glossary, docs/specs/2026-10-04-audience-play.md)
+// carry AUDIENCE_HEADER with a random device id. They are counted in their own
+// budgets (per device and per address), never in the presenter's.
 import { EMBED_MODEL, EMBED_URL, roundVector, toSentenceVectors } from "./embed.js";
 import { CLOUD_TOKENIZERS, isCloudTokenizerId, loadCloudTokenizer, tokenizeWith } from "./tokenize.js";
 
@@ -189,6 +193,66 @@ export const PUBLIC_LIMITS: Limits = {
   bodyBytes: 16_000,
 };
 
+/**
+ * Audience requests carry a random device id in this header (generated once
+ * per phone, never personal data). Its presence moves the request to the
+ * audience budgets below.
+ */
+export const AUDIENCE_HEADER = "x-ai-exhibit-audience";
+/** On audience answers: model requests this device may still make this hour. */
+export const REMAINING_HEADER = "x-ai-exhibit-remaining";
+const DEVICE_ID = /^[A-Za-z0-9_-]{8,64}$/;
+
+/** Endpoints the audience may call. */
+export const AUDIENCE_PATHS: ReadonlySet<string> = new Set([
+  "/api/llm/status",
+  "/api/llm/complete",
+  "/api/llm/chat",
+  "/api/llm/ladder",
+  "/api/embed",
+  "/api/tokenize",
+]);
+
+/**
+ * Budgets of audience requests, separate from the presenter's. Phones on a
+ * venue's Wi-Fi share one public address (often the presenter's too), so the
+ * fair unit is the device. A determined user can reset the device id, so the
+ * per-address room cap (and the Hugging Face spending limit) remain the real
+ * safeguards. In memory, per server instance: best effort.
+ */
+export interface AudienceLimits {
+  /**
+   * Request shapes for audience calls (smaller answers), and the per-device
+   * budget: `perMinute` and `perHour` count model requests of one device.
+   * Timeouts come from the server's own limits.
+   */
+  limits: Omit<Limits, "timeoutMs" | "ladderTimeoutMs">;
+  /** Model requests per rolling minute from one address, all audience devices together. */
+  roomPerMinute: number;
+  /** Model requests per rolling hour from one address, all audience devices together. */
+  roomPerHour: number;
+  /** Free requests (tokenizing, status) per rolling minute and device. */
+  freePerMinute: number;
+}
+
+export const AUDIENCE_LIMITS: AudienceLimits = {
+  limits: {
+    promptChars: MAX_INPUT_CHARS,
+    messages: 2,
+    maxTokens: 60,
+    defaultMaxTokens: 40,
+    embedTexts: 1,
+    embedChars: MAX_INPUT_CHARS,
+    tokenizeChars: MAX_INPUT_CHARS,
+    perMinute: 3,
+    perHour: 10,
+    bodyBytes: 4_000,
+  },
+  roomPerMinute: 30,
+  roomPerHour: 200,
+  freePerMinute: 30,
+};
+
 export type CloudErrorCode =
   | "not-configured"
   | "forbidden"
@@ -214,6 +278,8 @@ export class CloudError extends Error {
   constructor(
     readonly code: CloudErrorCode,
     message: string,
+    /** Audience refusals: which window is full, and the device's model requests left this hour. */
+    readonly budget?: { window: "minute" | "hour"; remaining: number },
   ) {
     super(message);
     this.name = "CloudError";
@@ -448,6 +514,8 @@ export interface CloudApiOptions {
   limits?: Limits;
   /** "global": one budget for the whole server (local runtime). "per-client": one per IP. */
   rateLimit?: "global" | "per-client";
+  /** Budgets of audience requests (AUDIENCE_HEADER); false refuses them. Default AUDIENCE_LIMITS. */
+  audience?: AudienceLimits | false;
   fetch?: typeof fetch;
   /** Fetch for public Hub files (tokenizers); the local runtime adds a disk cache. Defaults to `fetch`. */
   hubFetch?: typeof fetch;
@@ -477,7 +545,46 @@ export function jsonResponse(status: number, body: unknown): Response {
 
 export function errorResponse(err: unknown): Response {
   const e = err instanceof CloudError ? err : new CloudError("upstream", "Unexpected error");
-  return jsonResponse(ERROR_STATUS[e.code], { error: e.code, message: e.message });
+  const budget = e.budget ? { window: e.budget.window, remaining: e.budget.remaining } : {};
+  const res = jsonResponse(ERROR_STATUS[e.code], { error: e.code, message: e.message, ...budget });
+  if (e.budget) res.headers.set(REMAINING_HEADER, String(e.budget.remaining));
+  return res;
+}
+
+/** The audience device id of a request; null for the presenter's requests. */
+export function audienceDevice(request: Request): string | null {
+  const v = request.headers.get(AUDIENCE_HEADER);
+  if (v === null) return null;
+  if (!DEVICE_ID.test(v)) throw new CloudError("bad-request", "Bad device id");
+  return v;
+}
+
+/**
+ * Rolling-window counters keyed by client (an address, a device...). Idle
+ * keys are forgotten so a long-lived instance does not grow without bound.
+ */
+export class RollingCounter {
+  private readonly lists = new Map<string, number[]>();
+  constructor(private readonly windowMs: number) {}
+
+  private list(key: string, t: number): number[] {
+    if (this.lists.size > 5000) {
+      for (const [k, l] of this.lists) if (!l.length || t - l[l.length - 1]! > this.windowMs) this.lists.delete(k);
+    }
+    const l = this.lists.get(key) ?? [];
+    while (l.length && t - l[0]! > this.windowMs) l.shift();
+    this.lists.set(key, l);
+    return l;
+  }
+
+  used(key: string, t: number): number {
+    return this.list(key, t).length;
+  }
+
+  take(key: string, t: number, cost = 1): void {
+    const l = this.list(key, t);
+    for (let i = 0; i < cost; i++) l.push(t);
+  }
 }
 
 async function readJson(request: Request, limits: Limits): Promise<unknown> {
@@ -497,8 +604,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const doFetch = options.fetch ?? ((input, init) => fetch(input, init));
   const now = options.now ?? Date.now;
   const perClient = options.rateLimit === "per-client";
-  const windows = new Map<string, number[]>();
-  const hours = new Map<string, number[]>();
+  const minutes = new RollingCounter(60_000);
+  const hours = new RollingCounter(3_600_000);
   let reachable: { value: boolean; at: number } | null = null;
   let keyInfo: { value: Omit<KeyStatus, "creditsExhausted">; at: number } | null = null;
   let paymentRefusedAt: number | null = null;
@@ -506,42 +613,77 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const requiredCode = () => options.accessCode?.()?.trim() || null;
 
   /**
-   * The hourly model budget, always per client address (in-memory: per server
-   * instance). `cost` model requests are taken at once, or none.
+   * The presenter's hourly model budget, always per client address (in-memory:
+   * per server instance). `cost` model requests are taken at once, or none.
    */
   const allowHour = (ip: string, cost = 1) => {
     const key = ip || "unknown";
     const t = now();
-    if (hours.size > 5000) {
-      for (const [k, list] of hours) if (!list.length || t - list[list.length - 1]! > 3_600_000) hours.delete(k);
-    }
-    const list = hours.get(key) ?? [];
-    while (list.length && t - list[0]! > 3_600_000) list.shift();
-    if (list.length + cost > limits.perHour) {
-      hours.set(key, list);
-      return false;
-    }
-    for (let i = 0; i < cost; i++) list.push(t);
-    hours.set(key, list);
+    if (hours.used(key, t) + cost > limits.perHour) return false;
+    hours.take(key, t, cost);
     return true;
   };
 
+  /** The presenter's per-minute budget (per client, or one for the whole server). */
   const allow = (ip: string) => {
     const key = perClient ? ip || "unknown" : "*";
     const t = now();
-    // Forget idle clients so a long-lived instance does not grow without bound.
-    if (windows.size > 5000) {
-      for (const [k, list] of windows) if (!list.length || t - list[list.length - 1]! > 60_000) windows.delete(k);
-    }
-    const list = windows.get(key) ?? [];
-    while (list.length && t - list[0]! > 60_000) list.shift();
-    if (list.length >= limits.perMinute) {
-      windows.set(key, list);
-      return false;
-    }
-    list.push(t);
-    windows.set(key, list);
+    if (minutes.used(key, t) >= limits.perMinute) return false;
+    minutes.take(key, t);
     return true;
+  };
+
+  // Audience budgets. Their keys never collide with the presenter's ("*", "local" or an address).
+  const aud = options.audience === false ? null : (options.audience ?? AUDIENCE_LIMITS);
+  const audLimits: Limits | null = aud ? { ...aud.limits, timeoutMs: limits.timeoutMs, ladderTimeoutMs: limits.ladderTimeoutMs } : null;
+  const deviceKey = (device: string) => `aud:d:${device}`;
+  const roomKey = (ip: string) => `aud:r:${ip || "unknown"}`;
+
+  /** Model requests this device may still make this hour, the room's cap included. */
+  const audienceRemaining = (device: string, ip: string, t = now()) => {
+    if (!aud) return 0;
+    const own = aud.limits.perHour - hours.used(deviceKey(device), t);
+    const room = aud.roomPerHour - hours.used(roomKey(ip), t);
+    return Math.max(0, Math.min(own, room));
+  };
+
+  /** Free audience requests (tokenizing, status, a code check): a per-device minute cap only. */
+  const audienceFree = (device: string, ip: string) => {
+    const t = now();
+    const key = `aud:f:${device}`;
+    if (minutes.used(key, t) >= aud!.freePerMinute) {
+      throw new CloudError("rate-limited", "Too many requests from this device in a minute", {
+        window: "minute",
+        remaining: audienceRemaining(device, ip, t),
+      });
+    }
+    minutes.take(key, t);
+  };
+
+  /**
+   * Takes `cost` model requests from the device's and the room's budgets, or
+   * none. Returns what the device has left this hour.
+   */
+  const audienceTake = (device: string, ip: string, cost: number): number => {
+    const a = aud!;
+    const t = now();
+    const left = audienceRemaining(device, ip, t);
+    if (minutes.used(deviceKey(device), t) >= a.limits.perMinute || minutes.used(roomKey(ip), t) >= a.roomPerMinute) {
+      throw new CloudError("rate-limited", "Too many live requests this minute: try again in a few seconds", { window: "minute", remaining: left });
+    }
+    if (left < cost) {
+      const roomFull = a.roomPerHour - hours.used(roomKey(ip), t) < cost;
+      throw new CloudError(
+        "rate-limited",
+        roomFull ? "The audience has used its live requests for this hour" : "This device has used its live requests for this hour",
+        { window: "hour", remaining: left },
+      );
+    }
+    minutes.take(deviceKey(device), t);
+    minutes.take(roomKey(ip), t);
+    hours.take(deviceKey(device), t, cost);
+    hours.take(roomKey(ip), t, cost);
+    return left - cost;
   };
 
   const post = async (url: string, body: unknown): Promise<unknown> => {
@@ -623,6 +765,18 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     }
   };
 
+  /** The audience's status: no key details, and this device's budget. */
+  const audienceStatus = async (device: string, client: ClientInfo) => {
+    audienceFree(device, client.ip);
+    const configured = Boolean(options.token());
+    return {
+      configured,
+      reachable: configured ? await probe() : null,
+      codeRequired: Boolean(requiredCode()),
+      audience: { remaining: audienceRemaining(device, client.ip), perHour: aud!.limits.perHour },
+    };
+  };
+
   const status = async (request: Request, client: ClientInfo) => {
     const configured = Boolean(options.token());
     const code = requiredCode();
@@ -641,8 +795,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     return out;
   };
 
-  const complete = async (body: unknown) => {
-    const { prompt, maxTokens, temperature } = parseCompleteBody(body, limits);
+  const complete = async (body: unknown, lim: Limits) => {
+    const { prompt, maxTokens, temperature } = parseCompleteBody(body, lim);
     const t0 = now();
     const json = (await post(BASE_URL, {
       model: BASE_MODEL,
@@ -662,8 +816,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     };
   };
 
-  const chat = async (body: unknown) => {
-    const { messages, maxTokens, temperature } = parseChatBody(body, limits);
+  const chat = async (body: unknown, lim: Limits) => {
+    const { messages, maxTokens, temperature } = parseChatBody(body, lim);
     const t0 = now();
     let lastError: unknown = null;
     for (const model of CHAT_MODELS) {
@@ -695,8 +849,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     throw lastError instanceof CloudError ? lastError : new CloudError("upstream", String(lastError));
   };
 
-  const next = async (body: unknown) => {
-    const { prompt, temperature } = parseNextBody(body, limits);
+  const next = async (body: unknown, lim: Limits) => {
+    const { prompt, temperature } = parseNextBody(body, lim);
     const t0 = now();
     const json = (await post(NEXT_URL, {
       model: NEXT_MODEL,
@@ -716,7 +870,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
    * reports every word as it arrives. Never throws: failures become an
    * "error" event for this rung only.
    */
-  const runRung = async (rung: LadderRung, question: string, key: string, send: (e: LadderEvent) => void, outer: AbortSignal) => {
+  const runRung = async (rung: LadderRung, question: string, key: string, send: (e: LadderEvent) => void, outer: AbortSignal, lim: Limits) => {
     const t0 = now();
     const ac = new AbortController();
     const onAbort = () => ac.abort();
@@ -740,7 +894,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
           const res = await doFetch(target.url, {
             method: "POST",
             headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-            body: JSON.stringify(ladderPayload(rung, target, question, limits)),
+            body: JSON.stringify(ladderPayload(rung, target, question, lim)),
             signal: ac.signal,
           });
           if (!res.ok || !res.body) {
@@ -790,8 +944,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   };
 
   /** Every rung at once, one NDJSON line per event, as the words arrive. */
-  const ladder = async (body: unknown): Promise<Response> => {
-    const { question } = parseLadderBody(body, limits);
+  const ladder = async (body: unknown, lim: Limits): Promise<Response> => {
+    const { question } = parseLadderBody(body, lim);
     const key = options.token();
     if (!key) throw new CloudError("not-configured", "HF_TOKEN is not set");
     const ac = new AbortController();
@@ -806,7 +960,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
             ac.abort();
           }
         };
-        await Promise.all(LADDER.map((rung) => runRung(rung, question, key, send, ac.signal)));
+        await Promise.all(LADDER.map((rung) => runRung(rung, question, key, send, ac.signal, lim)));
         send({ type: "end" });
         try {
           controller.close();
@@ -825,8 +979,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     });
   };
 
-  const tokenize = async (body: unknown) => {
-    const { text, tokenizer } = parseTokenizeBody(body, limits);
+  const tokenize = async (body: unknown, lim: Limits) => {
+    const { text, tokenizer } = parseTokenizeBody(body, lim);
     const t0 = now();
     let tok;
     try {
@@ -837,8 +991,8 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     return { tokenizer, label: CLOUD_TOKENIZERS[tokenizer].label, tokens: tokenizeWith(tok, text), ms: now() - t0 };
   };
 
-  const embed = async (body: unknown) => {
-    const { texts } = parseEmbedBody(body, limits);
+  const embed = async (body: unknown, lim: Limits) => {
+    const { texts } = parseEmbedBody(body, lim);
     const t0 = now();
     const json = await post(EMBED_URL, { inputs: texts });
     const vectors = toSentenceVectors(json, texts.length);
@@ -846,7 +1000,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     return { model: EMBED_MODEL, dims: vectors[0]!.length, vectors: vectors.map(roundVector), ms: now() - t0 };
   };
 
-  const routes: Record<string, (body: unknown) => Promise<unknown>> = {
+  const routes: Record<string, (body: unknown, lim: Limits) => Promise<unknown>> = {
     "/api/llm/complete": complete,
     "/api/llm/chat": chat,
     "/api/llm/next": next,
@@ -859,11 +1013,43 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   /** Model requests one call makes, for the hourly budget (default 1). */
   const cost: Record<string, number> = { "/api/llm/ladder": LADDER.length };
 
+  /** An audience request: its own budgets, smaller answers, the device's budget in a header. */
+  const handleAudience = async (request: Request, client: ClientInfo, pathname: string, device: string): Promise<Response> => {
+    if (!aud || !audLimits) throw new CloudError("forbidden", "Audience requests are off on this server");
+    if (pathname === "/api/llm/status") {
+      if (request.method !== "GET") throw new CloudError("not-found", "Use GET");
+      return jsonResponse(200, await audienceStatus(device, client));
+    }
+    const route = routes[pathname];
+    if (!route || !AUDIENCE_PATHS.has(pathname) || request.method !== "POST") throw new CloudError("not-found", "Unknown endpoint");
+    const code = requiredCode();
+    if (code && !sameSecret(request.headers.get(ACCESS_CODE_HEADER) ?? "", code)) {
+      audienceFree(device, client.ip);
+      throw new CloudError("access-code", "An access code is required");
+    }
+    const body = await readJson(request, audLimits);
+    const free = tokenless.has(pathname);
+    if (!free && !options.token()) throw new CloudError("not-configured", "HF_TOKEN is not set");
+    let remaining: number;
+    if (free) {
+      audienceFree(device, client.ip);
+      remaining = audienceRemaining(device, client.ip);
+    } else {
+      remaining = audienceTake(device, client.ip, cost[pathname] ?? 1);
+    }
+    const out = await route(body, audLimits);
+    const res = out instanceof Response ? out : jsonResponse(200, out);
+    res.headers.set(REMAINING_HEADER, String(remaining));
+    return res;
+  };
+
   return {
     async handle(request, client) {
       const { pathname } = new URL(request.url);
       if (!isCloudPath(pathname)) return null;
       try {
+        const device = audienceDevice(request);
+        if (device !== null) return await handleAudience(request, client, pathname, device);
         if (pathname === "/api/llm/status") {
           if (request.method !== "GET") throw new CloudError("not-found", "Use GET");
           return jsonResponse(200, await status(request, client));
@@ -881,7 +1067,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
         if (!tokenless.has(pathname) && !allowHour(client.ip, cost[pathname] ?? 1)) {
           throw new CloudError("rate-limited", `More than ${limits.perHour} model requests in an hour from this address`);
         }
-        const out = await route(body);
+        const out = await route(body, limits);
         return out instanceof Response ? out : jsonResponse(200, out);
       } catch (err) {
         return errorResponse(err);

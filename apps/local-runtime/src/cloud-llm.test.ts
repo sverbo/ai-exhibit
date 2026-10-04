@@ -10,12 +10,21 @@ import type { RuntimeContext } from "./http.ts";
 const FAKE = "fake-test-token";
 const ctx: RuntimeContext = { repoRoot: "/nonexistent", cacheRoot: "/tmp", port: 0, dev: true };
 
-function request(method: string, path: string, body?: unknown, opts: { address?: string; host?: string; forwarded?: string } = {}) {
+function request(
+  method: string,
+  path: string,
+  body?: unknown,
+  opts: { address?: string; host?: string; forwarded?: string; audience?: string } = {},
+) {
   const req = Readable.from(body === undefined ? [] : [Buffer.from(JSON.stringify(body))]) as unknown as IncomingMessage;
   Object.assign(req, {
     method,
     url: path,
-    headers: { host: opts.host ?? "127.0.0.1:4404", ...(opts.forwarded ? { "x-forwarded-for": opts.forwarded } : {}) },
+    headers: {
+      host: opts.host ?? "127.0.0.1:4404",
+      ...(opts.forwarded ? { "x-forwarded-for": opts.forwarded } : {}),
+      ...(opts.audience ? { "x-ai-exhibit-audience": opts.audience } : {}),
+    },
     socket: { remoteAddress: opts.address ?? "127.0.0.1" },
   });
   return req;
@@ -63,6 +72,24 @@ describe("cloud LLM module", () => {
     expect((await call(h, request("GET", "/api/llm/status", undefined, { host: "192.168.1.20:5204" }))).status).toBe(403);
     expect((await call(h, request("GET", "/api/llm/status", undefined, { forwarded: "192.168.1.20" }))).status).toBe(403);
     expect((await call(h, request("GET", "/api/llm/status", undefined, { forwarded: "127.0.0.1", host: "localhost:5204" }))).status).toBe(200);
+  });
+
+  it("lets audience phones on the LAN use the audience endpoints only, in their own budget", async () => {
+    const f = vi.fn(async (u: string | URL | Request) => (String(u).includes("/v1/models") ? okJson({ data: [] }) : okJson({ choices: [{ text: " ok" }] })));
+    const h = createCloudLlmModule(ctx, { token: () => FAKE, fetch: f as unknown as typeof fetch });
+    const phone = { host: "192.168.1.20:5173", forwarded: "192.168.1.31", audience: "phone-1234abcd" };
+    const status = await call(h, request("GET", "/api/llm/status", undefined, phone));
+    expect(status.status).toBe(200);
+    expect(status.json().audience).toMatchObject({ perHour: 10 });
+    expect(status.raw).not.toContain(FAKE);
+    expect((await call(h, request("POST", "/api/llm/complete", { prompt: "Hi" }, phone))).status).toBe(200);
+    // Not an audience endpoint, and no header at all: still this machine only.
+    expect((await call(h, request("POST", "/api/llm/next", { prompt: "Hi" }, phone))).status).toBe(403);
+    expect((await call(h, request("POST", "/api/llm/complete", { prompt: "Hi" }, { ...phone, audience: undefined }))).status).toBe(403);
+    // The presenter's budget is untouched by the phone's calls.
+    for (let i = 0; i < LIMITS.perMinute; i++) {
+      expect((await call(h, request("POST", "/api/llm/complete", { prompt: "Hi" }))).status).toBe(200);
+    }
   });
 
   it("reports not-configured without a token and never calls out", async () => {
