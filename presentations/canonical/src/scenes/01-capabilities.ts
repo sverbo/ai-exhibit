@@ -1,17 +1,105 @@
 import type { SceneDefinition } from "@ai-exhibit/presentation-core";
-import { agendaItems, partOpener } from "../chapters.ts";
+import { agendaItems, partOpener, talkTitle } from "../chapters.ts";
 
 /**
- * Introduction (agenda and framing, 0.1 and 0.2, chapter "00"), then chapter 01:
+ * Introduction (chapter "00": holding slide 0.1, opening video 0.2, agenda 0.3,
+ * framing 0.4), then chapter 01:
  * what AI can do today, opened by its part slide (1.0).
  * Answers first, then agents acting on our behalf, then what it took to build them.
  */
 export const chapter01: SceneDefinition[] = [
   {
+    id: "00-holding",
+    code: "wait",
+    chapter: "00",
+    number: "0.1",
+    title: { en: "Before the talk" },
+    objective: {
+      en: "Hold the screen while the room fills up: the talk's title, a calm line, the glossary QR code and a quiet readiness dot.",
+    },
+    takeaway: {
+      en: "The talk starts in a moment.",
+    },
+    visual: {
+      layout: "component",
+      component: "HoldingSlide",
+      props: { title: talkTitle },
+    },
+    steps: 0,
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- Check the Ready dot: language demos (Hugging Face status, or Simulation) and the YouTube player script; your screen says which one is still waiting
+- Nothing moves by itself: press Next when you begin
+- Start the timer with T when you begin`,
+    },
+    transitionIn: { en: "The room fills up." },
+    transitionOut: { en: "Let's begin with a short video." },
+    evidenceLevel: "none",
+    sourceIds: [],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "none", reason: "Static slide; offline it simply stays on \"Getting ready\"." },
+    // The waiting time before the talk is not talk time: only the moment of moving on counts.
+    durationSec: 10,
+    optional: false,
+    online: {
+      hosts: ["www.youtube.com"],
+      why: "Checks that the YouTube player script loads, for the opening video.",
+    },
+    localizationNotes: "The title is the presentation title (talkTitle in chapters.ts).",
+  },
+  {
+    id: "00-welcome-video",
+    code: "stake",
+    chapter: "00",
+    number: "0.2",
+    title: { en: "This is not science fiction" },
+    objective: {
+      en: "Open the talk with a one-minute video from AI In Context that sets the stakes before the presenter speaks.",
+    },
+    takeaway: {
+      en: "AI may soon change everything; this talk is about understanding how, and what we can do.",
+    },
+    visual: {
+      layout: "component",
+      component: "YouTubeScene",
+      props: {
+        videoId: "uX-Cq-rvlv8",
+        durationSec: 57,
+        kicker: { en: "Before we start" },
+        heading: { en: "This is not science fiction" },
+        caption: { en: "\"Welcome to AI In Context\", AI In Context on YouTube, 57 s" },
+      },
+    },
+    steps: 0,
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- **Do:** press Play on the presenter screen; sound comes from the projector only
+- "Welcome to AI In Context" (YouTube channel AI In Context, by 80,000 Hours), 57 seconds
+- Subtitles ask for the talk's language, but this video has English captions only: a French talk shows English subtitles (checked 2026-10-04). The voice was the English original in tests; YouTube may still pick an automatic dub, no embed setting prevents it: check on the projector before the talk
+- Offline, the slide shows the address instead: say it in one sentence and move on`,
+    },
+    transitionIn: { en: "From the waiting room to a short video." },
+    transitionOut: { en: "That is the question. Here is the plan." },
+    evidenceLevel: "none",
+    sourceIds: [],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "none", reason: "Offline, the slide shows the video's address instead of the player." },
+    durationSec: 57,
+    optional: true,
+    online: {
+      hosts: ["www.youtube.com", "www.youtube-nocookie.com", "youtube.com", "ytimg.com", "googlevideo.com", "ggpht.com", "google.com", "doubleclick.net", "googleapis.com", "gstatic.com"],
+      why: "Embeds the YouTube video; offline it shows the address instead.",
+    },
+    localizationNotes:
+      "The video is in English with English captions only (2026-10-04). Captions ask for the talk's language (cc_lang_pref, hl), which YouTube honours only when it has that track; no embed parameter selects the audio track.",
+  },
+  {
     id: "00-agenda",
     code: "agnd",
     chapter: "00",
-    number: "0.1",
+    number: "0.3",
     title: { en: "Today" },
     objective: {
       en: "Welcome the room and show the five parts of the talk.",
@@ -37,7 +125,7 @@ export const chapter01: SceneDefinition[] = [
 - Then the risks, and what we can do about them
 - Questions at the end`,
     },
-    transitionIn: { en: "The talk opens on its plan." },
+    transitionIn: { en: "After the video, the plan." },
     transitionOut: { en: "And two things this talk is not." },
     evidenceLevel: "none",
     sourceIds: [],
@@ -52,7 +140,7 @@ export const chapter01: SceneDefinition[] = [
     id: "00-not-this",
     code: "isnt",
     chapter: "00",
-    number: "0.2",
+    number: "0.4",
     title: { en: "What this talk is not" },
     objective: {
       en: "Set expectations: no tool tutorial, no environmental assessment, and why today's focus is capabilities and risks.",
@@ -148,7 +236,7 @@ export const chapter01: SceneDefinition[] = [
     transitionIn: {
       en: "From the question to a quick test.",
     },
-    transitionOut: { en: "Not just this riddle: everything is going up." },
+    transitionOut: { en: "The riddle is a toy. What about the real world?" },
     evidenceLevel: "observed",
     sourceIds: ["tk-aidigest-2023-progress", "tk-hagendorff-2022-crt", "tk-berglund-2023-reversal-curse", "llm-gpt2-paper"],
     runtimeClass: "A",
@@ -163,64 +251,158 @@ export const chapter01: SceneDefinition[] = [
     ],
   },
   {
-    id: "01-model-comparison",
-    code: "side",
+    id: "01-already-here",
+    code: "here",
     steps: 4,
     chapter: "01",
     number: "1.2",
-    title: { en: "Then and now, side by side" },
+    title: { en: "Already here" },
     objective: {
-      en: "Compare a 2019 model, a 2020 model and a current frontier model on cost, electricity, reliability, skill and memory.",
+      en: "Right after the riddle, show that today's AI is already at work outside the lab: code, driving, robots, mathematics.",
     },
     takeaway: {
-      en: "In six years, everything grew by orders of magnitude: the cost, the power, and what the models can do.",
+      en: "This is not a lab demo: AI already writes most new code at Google and drives paying passengers.",
     },
-    visual: { layout: "component", component: "ModelComparison", props: {} },
+    visual: {
+      layout: "component",
+      component: "PictureCards",
+      props: {
+        heading: {
+          en: "Already here, outside the lab",
+        },
+        cards: [
+          {
+            picture: "code",
+            title: { en: "Code" },
+            line: {
+              en: "Most new code at Google is written by AI, then checked by engineers.",
+            },
+            evidence: "observed",
+            sourceIds: ["tk-google-2026-next-code"],
+          },
+          {
+            picture: "car",
+            title: { en: "Driving" },
+            line: {
+              en: "Taxis with nobody at the wheel carry paying riders every week.",
+            },
+            evidence: "observed",
+            sourceIds: ["tk-waymo-2026-weekly-rides"],
+          },
+          {
+            picture: "runner",
+            title: { en: "Robots" },
+            line: {
+              en: "Humanoid robots ran a half-marathon in Beijing. Next: anything made for two hands.",
+            },
+            evidence: "projection",
+            sourceIds: ["tk-beijing-2025-robot-half-marathon", "tk-figure-2025-bmw"],
+          },
+          {
+            picture: "math",
+            title: { en: "Mathematics" },
+            line: {
+              en: "AI agents claim to have solved a famous open problem. Still under review.",
+            },
+            evidence: "contested",
+            sourceIds: ["tk-quanta-2026-navier-stokes", "tk-clay-2026-navier-stokes"],
+          },
+        ],
+      },
+    },
     interaction: "presenter",
     speakerNotes: {
-      en: `- One row per click: GPT-2 (2019), GPT-3 (2020), then Grok 3 (2025), the recent frontier model with the most published estimates
-- Cost to train: from a few thousand dollars to about $200 million (estimates)
-- Electricity: GPT-3 about 1.3 GWh; Grok 3 about 240 GWh, the yearly use of tens of thousands of homes (estimates)
-- Reliability: the length of task an agent finishes half the time, from seconds to hours on today's models; skill: PhD-level science questions now above the experts' score
-- Memory: from about a page and a half to about 1,500 pages
-- How we know, GPT-2 electricity (1.7 MWh, labelled "calculated"): nobody published it, so we computed it: 168 hours × 32 TPU v3 chips (Strubell et al., second-hand from the authors) × 283 W per chip × 1.10 for the datacenter (Patterson et al.) ≈ 1.7 MWh, about two months of one US home. An order of magnitude only: the real figure may be a few times higher
-- How we know, GPT-2 science (25%): not a GPT-2 score. GPT-2 was never tested on GPQA; with four answer choices, guessing scores 25%
-- How we know, GPT-3 science (30%): measured by the test's authors on GPT-3.5, the 2023 successor (Rein et al.: 29.6%), barely above guessing; the original GPT-3 was never tested
-- How we know, Grok 3 reliability (1 hour): METR never measured Grok 3; the best model METR measured from the same months is Claude 3.7 Sonnet (February 2025), about 60 minutes
-- **Do:** last click, "grew by": tens of thousands of times more expensive. Training concentrates enormous power in one place; across all use, running the models now uses even more
-- **Do:** last row, a projection for about a year from now, from published trends: over $1 billion to train, about 1,000 GWh, tasks of about two weeks of human work; trends, not promises`,
+      en: `- The riddle was a toy; this is what is already happening outside the lab
+- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours
+- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas
+- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); "next" is my projection
+- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed
+- My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly
+- **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)`,
     },
-    transitionIn: { en: "Not just one riddle: everything grew." },
+    transitionIn: { en: "The riddle was a toy. Outside the lab, AI is already at work." },
+    transitionOut: { en: "How did we get here so fast? Seven years, in numbers." },
+    evidenceLevel: "contested",
+    sourceIds: [
+      "tk-google-2026-next-code",
+      "tk-metr-2026-time-horizon-1-1",
+      "tk-waymo-2026-weekly-rides",
+      "tk-figure-2025-bmw",
+      "tk-beijing-2025-robot-half-marathon",
+      "tk-quanta-2026-navier-stokes",
+      "tk-clay-2026-navier-stokes",
+    ],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "none", reason: "Static pictures." },
+    durationSec: 120,
+    optional: false,
+    localizationNotes:
+      "Say the date of every figure out loud. The cards carry the evidence; the presenter's conviction (\"even if AI stopped improving today\") is in the notes, say it as an opinion.",
+  },
+  {
+    id: "01-progress",
+    code: "rise",
+    steps: 9,
+    chapter: "01",
+    number: "1.3",
+    title: { en: "Everything went up" },
+    objective: {
+      en: "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, power, memory, reliability, and the hardest tests, with a labelled one-year projection.",
+    },
+    takeaway: {
+      en: "In seven years, cost, power, memory and reliability grew a thousand to tens of thousands of times, and the hardest tests went from near zero to near the top.",
+    },
+    visual: { layout: "component", component: "FrontierProgress", props: {} },
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection
+- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)
+- Click 2, power while training (estimate, Epoch AI): GPT-3 about 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra about 233 MW (2026), the average draw of about 190,000 US homes (EIA); no estimate for GPT-2
+- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages
+- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)
+- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)
+- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)
+- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)
+- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)
+- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); power about 500 MW (×2.1 a year); tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written`,
+    },
+    transitionIn: { en: "How did we get here so fast? Seven years, in numbers." },
     transitionOut: { en: "So what is all this for? Not just answering: acting." },
     evidenceLevel: "evaluation",
     sourceIds: [
       "tk-epoch-notable-models",
-      "tk-epoch-2024-power-trend",
-      "tk-epoch-2024-training-cost-trend",
-      "tk-xai-2025-grok3",
-      "llm-patterson-2021",
-      "llm-patterson-2022",
-      "tk-metr-2026-time-horizon-1-1",
-      "tk-rein-2023-gpqa",
-      "tk-rein-2023-gpqa-baselines",
-      "tk-strubell-2019-gpt2-hardware",
-      "tk-patterson-2021-tpu-v3-power",
-      "tk-metr-early-2025-best",
+      "llm-eia-household-electricity",
       "tk-gpt2-context-1024",
       "tk-gpt3-context-2048",
+      "tk-openai-2023-gpt4-context",
+      "tk-xai-2025-grok3",
+      "tk-epoch-benchmarks-best-so-far",
+      "tk-metr-2026-time-horizon-1-1",
+      "tk-metr-2025-time-horizon-paper",
+      "tk-rein-2023-gpqa",
+      "tk-swebench-verified",
+      "tk-phan-2025-hle",
+      "tk-glazer-2024-frontiermath",
+      "tk-arcprize-2025-arc-agi-2",
+      "tk-deepmind-2025-imo-gold",
+      "tk-epoch-2024-training-cost-trend",
+      "tk-epoch-2024-power-trend",
     ],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "deterministic" },
-    durationSec: 150,
+    durationSec: 180,
     optional: false,
+    localizationNotes:
+      "Model and test names stay in English. Say \"best score so far\" for the bottom chart and \"projection\" for the last click, out loud.",
   },
   {
     id: "01-connected",
     code: "conn",
     steps: 7,
     chapter: "01",
-    number: "1.3",
+    number: "1.4",
     title: { en: "Connected to your life" },
     objective: {
       en: "Show that today's assistants can be connected to email, calendar, files, the browser, payments and code.",
@@ -261,7 +443,7 @@ export const chapter01: SceneDefinition[] = [
     code: "perm",
     steps: 5,
     chapter: "01",
-    number: "1.4",
+    number: "1.5",
     title: { en: "Permissions" },
     objective: {
       en: "Show that what an assistant can do depends on what we allow it to touch, up to spending money.",
@@ -297,7 +479,7 @@ export const chapter01: SceneDefinition[] = [
     code: "demo",
     steps: 1,
     chapter: "01",
-    number: "1.5",
+    number: "1.6",
     title: { en: "My own demo" },
     objective: {
       en: "Show a real task the presenter gave an AI assistant, recorded on screen.",
@@ -337,7 +519,7 @@ export const chapter01: SceneDefinition[] = [
     code: "tool",
     steps: 5,
     chapter: "01",
-    number: "1.6",
+    number: "1.7",
     title: { en: "Chat or agent: calling a tool" },
     objective: {
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
@@ -376,7 +558,7 @@ export const chapter01: SceneDefinition[] = [
     code: "steps",
     steps: 15,
     chapter: "01",
-    number: "1.7",
+    number: "1.8",
     title: { en: "One request, every step" },
     objective: {
       en: "Make every step of one complex request visible: tool calls, sub-agents in parallel, merged results, a human approval before paying.",
@@ -413,7 +595,7 @@ export const chapter01: SceneDefinition[] = [
     code: "loop",
     steps: 5,
     chapter: "01",
-    number: "1.8",
+    number: "1.9",
     title: { en: "The agent loop" },
     objective: {
       en: "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",

@@ -1,0 +1,325 @@
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 40px 72px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 54px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 96;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---------- Top row ---------- */
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+.panel {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: opacity var(--dur) var(--ease);
+}
+.panelHead {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.panelTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 42px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.invisible {
+  visibility: hidden;
+}
+.panelSub {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 18px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.benchTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.kind {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-line);
+  border-radius: 999px;
+  padding: 1px 10px;
+}
+.waiting .panelTitle,
+.waiting .panelSub,
+.waiting .benchTitle,
+.waiting .kind {
+  color: var(--color-text-muted);
+  opacity: 0.55;
+}
+.panelNote {
+  margin: 0;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+
+.axis {
+  stroke: var(--color-text-muted);
+  stroke-width: 2;
+}
+.grid {
+  stroke: var(--color-line);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 6;
+}
+.tick {
+  font-size: 19px;
+  fill: var(--color-text-muted);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.growth {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-accent);
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
+}
+.line {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+.dot {
+  fill: var(--color-text);
+}
+.val,
+.model,
+.projVal,
+.sStart,
+.sName,
+.sWhat,
+.expertLabel,
+.imoTitle,
+.imoSub {
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.val {
+  font-family: var(--font-display);
+  font-size: 25px;
+  fill: var(--color-text);
+  font-variant-numeric: lining-nums;
+}
+.model {
+  font-size: 17px;
+  fill: var(--color-text-muted);
+}
+
+/* Projection: dashed, hollow arrow, projection color, never mistaken for data. */
+.projLine {
+  fill: none;
+  stroke: var(--color-evidence-projection);
+  stroke-width: 3.5;
+  stroke-dasharray: 8 7;
+}
+.projArrow {
+  fill: none;
+  stroke: var(--color-evidence-projection);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.projVal {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 23px;
+  fill: var(--color-evidence-projection);
+}
+
+/* ---------- Bottom row ---------- */
+
+.benchFig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+.expert {
+  stroke: var(--color-text-muted);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+}
+.expertLabel {
+  font-size: 19px;
+  fill: var(--color-text-muted);
+}
+.imoLine {
+  stroke: var(--color-text-muted);
+  stroke-width: 2;
+  stroke-dasharray: 3 6;
+}
+.medal {
+  fill: var(--color-accent);
+  stroke: var(--color-text);
+  stroke-width: 2;
+}
+.imoTitle {
+  font-size: 21px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+.imoSub {
+  font-size: 17px;
+  fill: var(--color-text-muted);
+}
+
+.series {
+  transition: opacity var(--dur) var(--ease);
+}
+.dim {
+  opacity: 0.4;
+}
+.sLine {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+.sDot {
+  fill: var(--series);
+}
+.sStart {
+  font-family: var(--font-display);
+  font-size: 22px;
+  fill: var(--series);
+  font-variant-numeric: lining-nums;
+}
+.leader {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 5;
+}
+.sName {
+  font-size: 23px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+.sValue {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  fill: var(--series);
+  font-variant-numeric: lining-nums;
+}
+.sWhat {
+  font-size: 18px;
+  fill: var(--color-text-muted);
+}
+
+/* ---------- Footer ---------- */
+
+.foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+.foot p {
+  margin: 0;
+}
+.sources {
+  white-space: pre-wrap;
+}
+.basis {
+  border-left: 3px solid var(--color-evidence-projection);
+  padding-left: 14px;
+}
+.basisTitle {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.basis ul {
+  margin: 2px 0 0;
+  padding-left: 1.1em;
+  font-size: 15px;
+}
+.basis b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* ---------- Motion ---------- */
+
+.animate .reveal {
+  animation: arrive 520ms var(--ease) both;
+}
+.animate .current .line {
+  stroke-dasharray: 1400;
+  animation: draw 900ms var(--ease) both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

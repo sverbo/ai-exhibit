@@ -3,10 +3,11 @@
  * controls, calm notices, token tiles and the "fan" of next-token candidates
  * that continues the sentence on screen.
  */
-import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useState } from "react";
 import { plainText, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import type { FallbackWhy, SourceDecision } from "./source.ts";
+import { ControlBar } from "../primitives/Controls.tsx";
 import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "./copy.ts";
 import { formatPercent, visibleToken } from "./format.ts";
@@ -25,7 +26,7 @@ const stopKeys = (e: KeyboardEvent) => {
 };
 const NAV_KEYS = new Set([" ", "ArrowLeft", "ArrowRight", "PageUp", "PageDown"]);
 
-/** Full-stage frame: content area plus, on the controller, a control rail. */
+/** Full-stage frame: content area plus, in any interactive window, the shared control bar. */
 export function Frame({
   children,
   controls,
@@ -43,180 +44,13 @@ export function Frame({
   return (
     <section className={cx(styles.frame, className)} aria-label={label === undefined ? undefined : plainText(label)}>
       <div className={cx(styles.main, mainClassName)}>{children}</div>
-      {controls ? (
-        <div className={styles.rail} data-keys-local="">
-          {controls}
-        </div>
-      ) : null}
+      {controls ? <ControlBar>{controls}</ControlBar> : null}
     </section>
   );
 }
 
-export function Button({
-  children,
-  onClick,
-  active,
-  disabled,
-  primary,
-  title,
-}: {
-  children: ReactNode;
-  onClick: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  primary?: boolean;
-  title?: string;
-}) {
-  return (
-    <button
-      type="button"
-      title={title}
-      disabled={disabled}
-      aria-pressed={active}
-      className={cx(styles.button, primary && styles.primary, active && styles.active)}
-      onClick={(e: MouseEvent<HTMLButtonElement>) => {
-        onClick();
-        // Keep presentation keys working after a pointer click.
-        if (e.detail > 0) e.currentTarget.blur();
-      }}
-      onKeyDown={(e) => {
-        if (NAV_KEYS.has(e.key)) {
-          e.preventDefault();
-          e.currentTarget.blur();
-        }
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-export function Segmented<T extends string | number>({
-  label,
-  value,
-  options,
-  onChange,
-  disabled,
-}: {
-  label: string;
-  value: T;
-  options: { value: T; label: ReactNode }[];
-  onChange: (v: T) => void;
-  disabled?: boolean;
-}) {
-  return (
-    <div className={styles.group} role="group" aria-label={label}>
-      <span className={styles.groupLabel}>{label}</span>
-      <div className={styles.segRow}>
-        {options.map((o) => (
-          <Button key={String(o.value)} active={o.value === value} disabled={disabled} onClick={() => onChange(o.value)}>
-            {o.label}
-          </Button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export function Slider({
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-  format,
-  disabled,
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  onChange: (v: number) => void;
-  format: (v: number) => string;
-  disabled?: boolean;
-}) {
-  return (
-    <label className={cx(styles.group, styles.slider)}>
-      <span className={styles.groupLabel}>
-        {label} <b className={styles.sliderValue}>{format(value)}</b>
-      </span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        disabled={disabled}
-        onKeyDown={stopKeys}
-        onChange={(e) => onChange(Number(e.currentTarget.value))}
-      />
-    </label>
-  );
-}
-
-/** Single-line input that submits on Enter (and optionally on every change). */
-export function TextField({
-  label,
-  value,
-  placeholder,
-  onSubmit,
-  onChange,
-  submitLabel,
-  disabled,
-  wide,
-  clearOnSubmit,
-}: {
-  label: string;
-  value?: string;
-  placeholder?: string;
-  onSubmit?: (v: string) => void;
-  onChange?: (v: string) => void;
-  submitLabel?: string;
-  disabled?: boolean;
-  wide?: boolean;
-  /** Empty the field after Enter (lists of entries). */
-  clearOnSubmit?: boolean;
-}) {
-  const [draft, setDraft] = useState(value ?? "");
-  const [lastValue, setLastValue] = useState(value);
-  if (value !== lastValue) {
-    setLastValue(value);
-    setDraft(value ?? "");
-  }
-  return (
-    <form
-      className={cx(styles.group, styles.field, wide && styles.wide)}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit?.(draft);
-        if (clearOnSubmit) setDraft("");
-      }}
-    >
-      <span className={styles.groupLabel}>{label}</span>
-      <span className={styles.fieldRow}>
-        <input
-          className={styles.input}
-          value={draft}
-          placeholder={placeholder}
-          disabled={disabled}
-          spellCheck={false}
-          onKeyDown={stopKeys}
-          onChange={(e) => {
-            setDraft(e.currentTarget.value);
-            onChange?.(e.currentTarget.value);
-          }}
-        />
-        {submitLabel ? (
-          <button type="submit" className={cx(styles.button, styles.primary)} disabled={disabled}>
-            {submitLabel}
-          </button>
-        ) : null}
-      </span>
-    </form>
-  );
-}
+/** The shared compact controls (primitives/Controls.tsx), under the names the language scenes use. */
+export { ControlButton as Button, ControlChoice as Segmented, ControlField as TextField } from "../primitives/Controls.tsx";
 
 /** A calm, non-alarming line: what is shown and why. Shape + text, never color alone. */
 export function Notice({ reason, locale, extra }: { reason: NoticeKey | null; locale: Locale; extra?: ReactNode }) {

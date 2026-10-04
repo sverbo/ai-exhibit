@@ -157,7 +157,8 @@ export default function LauncherView() {
           setting; without one, every demo runs on recorded simulation. Run it locally with <code>pnpm dev</code>, or host it
           (easy on Vercel). Big changes such as a new language use many tokens: a generous Claude plan helps. If you host a
           version, send me the link and a short description (for example: kid friendly, 60 minutes) and I will add it to the
-          list below.
+          list below. Hosting or Hugging Face credits a hassle? I am happy to host your fork myself and cover the credits: just
+          ask on Signal.
         </p>
         <p>
           <b>Gave the talk?</b> Tell me on Signal, <b>{SIGNAL}</b>: which version, how it went, and roughly how many people

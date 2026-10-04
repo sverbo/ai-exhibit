@@ -84,10 +84,27 @@
 .controls {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-3);
-  padding-top: var(--space-2);
+  align-items: center;
+  gap: 10px 20px;
+  padding-top: 10px;
   border-top: 1px dashed var(--color-line);
+}
+/* Same compact sizes as the shared control bar (primitives/Controls.module.css). */
+.controls .button {
+  font-size: 18px;
+  padding: 5px 14px;
+  border-width: 1.5px;
+}
+.controls .segmented {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.controls .segLabel {
+  font-size: 16px;
+}
+.controls .segRow {
+  gap: 6px;
 }
 
 .disclosure {

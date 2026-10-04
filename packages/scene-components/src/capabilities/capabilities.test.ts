@@ -197,19 +197,27 @@ describe("video sync", () => {
     expect(needsSeek(10.5, 10, false)).toBe(true);
   });
 
-  it("routes sound to one screen only, muted by default", () => {
-    expect(isMuted("off", "display")).toBe(true);
-    expect(isMuted("off", "controller")).toBe(true);
-    expect(isMuted("projector", "display")).toBe(false);
-    expect(isMuted("projector", "controller")).toBe(true);
-    expect(isMuted("controller", "controller")).toBe(false);
-    expect(isMuted("controller", "display")).toBe(true);
-    expect(isMuted("projector", "preview")).toBe(true);
+  it("plays sound on the audience screen only, so never twice", () => {
+    // Projector linked to a presenter (display) or alone (controller): sound, unless turned off.
+    expect(isMuted("projector", "display", true)).toBe(false);
+    expect(isMuted("projector", "controller", true)).toBe(false);
+    expect(isMuted("off", "display", true)).toBe(true);
+    expect(isMuted("off", "controller", true)).toBe(true);
+    // Presenter view and its projector mirror: always muted, whatever the setting.
+    expect(isMuted("projector", "controller", false)).toBe(true);
+    expect(isMuted("projector", "display", false)).toBe(true);
+    expect(isMuted("projector", "display", undefined)).toBe(true);
+    // An older session's "controller" setting no longer brings sound to the presenter.
+    expect(isMuted("controller", "controller", false)).toBe(true);
+    expect(isMuted("controller", "display", true)).toBe(false);
+    // Previews never make sound.
+    expect(isMuted("projector", "preview", true)).toBe(true);
+    expect(initialVideoState().sound).toBe("projector");
   });
 
   it("builds play, pause and seek states", () => {
     const s = setPlaying(initialVideoState(), true, 4, 42);
-    expect(s).toMatchObject({ playing: true, position: 4, at: 42, sound: "off" });
+    expect(s).toMatchObject({ playing: true, position: 4, at: 42, sound: "projector" });
     expect(seekTo(s, -1, 50)).toMatchObject({ position: 0, at: 50, playing: true });
     expect(formatTime(65.9)).toBe("1:05");
     expect(formatTime(Number.NaN)).toBe("0:00");

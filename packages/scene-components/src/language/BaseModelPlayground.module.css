@@ -5,28 +5,10 @@
   margin-bottom: var(--space-4);
 }
 
-/* The one choice the audience sees: one token, or several at once. */
-.modes {
-  display: inline-flex;
-  align-self: flex-start;
-  border: 2px solid var(--color-line);
-  border-radius: 999px;
-  padding: 4px;
-  gap: 4px;
-}
-.modeTab {
-  font-size: var(--text-sm);
-  padding: 8px 28px;
-  border-radius: 999px;
+/* Control bar: "How many tokens" before the +1 +10 +30 buttons. */
+.addLabel {
+  font-size: 16px;
   color: var(--color-text-muted);
-  transition:
-    background var(--dur) var(--ease),
-    color var(--dur) var(--ease);
-}
-.modeOn {
-  background: var(--color-surface-2);
-  color: var(--color-text);
-  box-shadow: inset 0 -4px 0 var(--color-accent);
 }
 
 .modelLine {

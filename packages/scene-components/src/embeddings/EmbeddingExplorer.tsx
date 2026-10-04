@@ -3,6 +3,8 @@ import { cloudEmbed } from "@ai-exhibit/ml-runtime/lm";
 import type { Locale } from "@ai-exhibit/presentation-core";
 import { type FormEvent, type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
+import { MAX_FIELD_CHARS } from "../primitives/Controls.tsx";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
 import { decideSource, requestedSource, resetCloudStatus, useCloudStatus } from "../language/source.ts";
 import { SourceBadge } from "../language/ui.tsx";
@@ -47,7 +49,7 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const step = Math.max(0, Math.min(ctx.revealStep, TRAINING.captions.length - 1));
   const preview = role === "preview";
   const still = ctx.reducedMotion || preview;
-  const patch = usePatch(ctx);
+  const { patch, interactive } = useExplorer(ctx);
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`}>
       <header className={styles.header}>
@@ -67,7 +69,7 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
             preview
               ? undefined
               : {
-                  interactive: role === "controller",
+                  interactive,
                   camera: state.camera,
                   onCamera: (c) => patch({ camera: c }),
                   selected: state.selected ?? null,
@@ -88,7 +90,7 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
             <Rich text={tr(TRAINING.illustrative, locale)} />
           </p>
         </div>
-        {role === "controller" && step >= 1 && (
+        {interactive && step >= 1 && (
           <div className={styles.controllerBar} onKeyDown={stopKeys}>
             <button type="button" className={styles.button} onClick={() => patch({ replay: (state.replay ?? 0) + 1 })}>
               {tr(TRAINING.replay, locale)}
@@ -102,22 +104,33 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
 
 type Ctx = SceneComponentProps<EmbeddingExplorerProps, ExplorerState>["ctx"];
 
+type ExplorerAction = { type: "patch"; patch: Partial<ExplorerState> } | { type: "search"; text: string } | { type: "clear" };
+
 /**
- * Merges a partial update into the latest scene state. Camera updates arrive
- * many times a second, so merging into the state of the last render could
- * drop a change made in between.
+ * The explorer's actions, from any window (docs/specs/2026-10-04-interaction-anywhere.md).
+ * `patch` merges a partial update into the latest scene state: camera updates
+ * arrive many times a second, so merging into the state of the last render
+ * could drop a change made in between. On a window that does not run the
+ * stage, patches, searches and clears go to the stage owner as requests.
  */
-function usePatch(ctx: Ctx) {
+function useExplorer(ctx: Ctx, onSearch?: (text: string) => void, onClear?: () => void) {
   const ref = useRef<ExplorerState>(ctx.state ?? {});
   ref.current = ctx.state ?? {};
-  const setState = ctx.setState;
-  return useCallback(
-    (next: Partial<ExplorerState>) => {
-      ref.current = { ...ref.current, ...next };
-      setState(ref.current);
-    },
-    [setState],
-  );
+  const setStateRef = useRef(ctx.setState);
+  setStateRef.current = ctx.setState;
+  const searchRef = useRef(onSearch);
+  searchRef.current = onSearch;
+  const clearRef = useRef(onClear);
+  clearRef.current = onClear;
+  const act = useSceneActions<ExplorerAction, ExplorerState>(ctx, (a) => {
+    if (a.type === "patch") {
+      ref.current = { ...ref.current, ...a.patch };
+      setStateRef.current(ref.current);
+    } else if (a.type === "search") searchRef.current?.(a.text);
+    else clearRef.current?.();
+  });
+  const patch = useCallback((next: Partial<ExplorerState>) => act({ type: "patch", patch: next }), [act]);
+  return { act, patch, interactive: canInteract(ctx) };
 }
 
 function Legend({ locale, pairs }: { locale: Locale; pairs: boolean }) {
@@ -153,9 +166,8 @@ function Legend({ locale, pairs }: { locale: Locale; pairs: boolean }) {
   );
 }
 
-function ViewToggle({ ctx, state }: { ctx: Ctx; state: ExplorerState }) {
+function ViewToggle({ ctx, state, patch: set }: { ctx: Ctx; state: ExplorerState; patch: (next: Partial<ExplorerState>) => void }) {
   const view = state.view ?? "2d";
-  const set = (next: Partial<ExplorerState>) => ctx.setState({ ...state, ...next });
   return (
     <div className={styles.controls} onKeyDown={stopKeys}>
       <button type="button" className={styles.button} aria-pressed={view === "2d"} onClick={() => set({ view: "2d" })}>
@@ -190,13 +202,12 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const colored = step >= 1;
   const pairs = step >= 2;
   const focus = state.focus ?? null;
-  const controller = role === "controller";
   const preview = role === "preview";
   const view = preview ? "2d" : (state.view ?? "2d");
-  const set = usePatch(ctx);
+  const { patch: set, interactive } = useExplorer(ctx);
   const selected = preview ? null : (state.selected ?? null);
   const marks = selectionMarks(space, selected);
-  const onCluster = controller && colored ? (c: number) => set({ focus: focus === c ? null : c }) : undefined;
+  const onCluster = interactive && colored ? (c: number) => set({ focus: focus === c ? null : c }) : undefined;
 
   return (
     <div className={`${styles.root} ${ctx.reducedMotion || preview ? styles.still : ""}`}>
@@ -216,7 +227,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
             focus={focus}
             spinning={!ctx.reducedMotion}
             reducedMotion={ctx.reducedMotion}
-            interactive={controller}
+            interactive={interactive}
             camera={state.camera3d ?? null}
             onCamera={(c) => set({ camera3d: c })}
           />
@@ -239,7 +250,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               zoomTarget={marks.query?.position ?? null}
               showAll={!preview && Boolean(state.showAll)}
               onShowAll={(on) => set({ showAll: on })}
-              interactive={controller}
+              interactive={interactive}
               camera={preview ? null : state.camera}
               onCamera={(c) => set({ camera: c })}
               onSelect={(i) => set({ selected: i })}
@@ -253,7 +264,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
         <p className={styles.caption} key={step}>
           <Rich text={tr(EXPLORER.cloudCaptions[step]!, locale)} />
         </p>
-        {controller && (
+        {interactive && (
           <div className={styles.controllerBar}>
             {colored && focus !== null && (
               <button type="button" className={styles.button} onClick={() => set({ focus: null })} onKeyDown={stopKeys}>
@@ -261,7 +272,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               </button>
             )}
             {colored && focus === null && view === "2d" && <span className={styles.hint}>{tr(EXPLORER.clusterHint, locale)}</span>}
-            <ViewToggle ctx={ctx} state={state} />
+            <ViewToggle ctx={ctx} state={state} patch={set} />
           </div>
         )}
       </footer>
@@ -278,7 +289,6 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const [draft, setDraft] = useState("");
   const [cloudFailed, setCloudFailed] = useState(false);
   const requestRef = useRef(0);
-  const patch = usePatch(ctx);
 
   // Model source chosen by the presenter: Hugging Face (/api/embed) or
   // prepared words only; hf falls back to prepared words and the controller's
@@ -288,9 +298,9 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const decision = decideSource({ requested, sceneFallback: fallback, cloud, cloudFailed });
   const useModel = decision.active === "hf";
 
-  const submit = async (e?: FormEvent) => {
-    e?.preventDefault();
-    const text = draft.trim();
+  // Runs on the stage owner: the search typed in any window arrives here.
+  const runSearch = async (typed: string) => {
+    const text = typed.trim();
     if (!text || !controller) return;
     const id = ++requestRef.current;
     if (!useModel) {
@@ -315,10 +325,19 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
     }
   };
 
-  const clear = () => {
+  const clearQuery = () => {
     requestRef.current++;
-    setDraft("");
     patch({ query: null, busy: false });
+  };
+  const { act, patch, interactive } = useExplorer(ctx, (text) => void runSearch(text), clearQuery);
+  const submit = (e?: FormEvent) => {
+    e?.preventDefault();
+    const text = draft.trim().slice(0, MAX_FIELD_CHARS);
+    if (text) act({ type: "search", text });
+  };
+  const clear = () => {
+    setDraft("");
+    act({ type: "clear" });
   };
 
   const query = preview ? null : (state.query ?? null);
@@ -348,7 +367,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               query={query?.position3d ? { text: query.text, position: query.position3d } : null}
               spinning={!ctx.reducedMotion}
               reducedMotion={ctx.reducedMotion}
-              interactive={controller}
+              interactive={interactive}
               camera={state.camera3d ?? null}
               onCamera={(c) => patch({ camera3d: c })}
             />
@@ -366,7 +385,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               labelBudget={query ? 120 : preview ? 0 : 200}
               zoomTarget={query?.position ?? null}
               showAll={!preview && Boolean(state.showAll)}
-              interactive={controller}
+              interactive={interactive}
               camera={preview ? null : state.camera}
               onCamera={(c) => patch({ camera: c })}
               onSelect={(i) => {
@@ -381,7 +400,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
         <aside className={styles.panel}>
           <h2 className={styles.heading}>{tr(EXPLORER.searchHeading, locale)}</h2>
           {controller && !fallback ? <SourceBadge decision={decision} model="MiniLM-L12 multilingual" locale={locale} /> : null}
-          {controller ? (
+          {interactive ? (
             <form className={styles.form} onSubmit={submit} onKeyDown={stopKeys}>
               <input
                 className={styles.input}
@@ -389,7 +408,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder={tr(EXPLORER.placeholder, locale)}
                 aria-label={tr(EXPLORER.placeholder, locale)}
-                maxLength={80}
+                maxLength={MAX_FIELD_CHARS}
                 spellCheck={false}
                 autoComplete="off"
               />
@@ -402,7 +421,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
                     {tr(EXPLORER.clear, locale)}
                   </button>
                 )}
-                <ViewToggle ctx={ctx} state={state} />
+                <ViewToggle ctx={ctx} state={state} patch={patch} />
                 <ShowAllToggle state={state} locale={locale} patch={patch} />
               </div>
               {!query && <p className={styles.hint}>{tr(useModel ? EXPLORER.tryThese : EXPLORER.tryVocabulary, locale)}</p>}

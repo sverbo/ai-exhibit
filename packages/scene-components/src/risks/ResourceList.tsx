@@ -1,10 +1,8 @@
-import { useMemo } from "react";
 import { tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { resources, type ResourceEntry } from "@ai-exhibit/content/glossary";
 import type { SceneComponentProps } from "../contract.ts";
 import { Rich } from "../primitives/Rich.tsx";
-import { resolveGlossaryUrl, qrPath } from "../capabilities/agenda/glossaryUrl.ts";
-import qrStyles from "../capabilities/agenda/Agenda.module.css";
+import { GlossaryQr } from "../capabilities/agenda/GlossaryQr.tsx";
 import styles from "./ResourceList.module.css";
 
 export interface ResourceListProps {
@@ -36,10 +34,6 @@ const COPY = {
  */
 export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListProps>) {
   const { locale } = ctx;
-  const origin = typeof window === "undefined" ? null : window.location.origin;
-  const url = resolveGlossaryUrl(ctx.glossaryUrl, origin);
-  const qr = useMemo(() => (url ? qrPath(url) : null), [url]);
-
   return (
     <div className={styles.root}>
       <div className={styles.main}>
@@ -69,21 +63,7 @@ export function ResourceList({ props, ctx }: SceneComponentProps<ResourceListPro
           ))}
         </ul>
       </div>
-      {qr && url ? (
-        <figure className={styles.qr}>
-          <div className={qrStyles.code}>
-            <svg viewBox={`-2 -2 ${qr.size + 4} ${qr.size + 4}`} role="img" aria-label={tr(COPY.qrLabel, locale)} shapeRendering="crispEdges">
-              <rect x={-2} y={-2} width={qr.size + 4} height={qr.size + 4} className={qrStyles.light} />
-              <path d={qr.d} className={qrStyles.dark} />
-            </svg>
-          </div>
-          <figcaption className={qrStyles.caption}>
-            <span className={qrStyles.label}>{tr(COPY.qrLabel, locale)}</span>
-            <span className={qrStyles.hint}>{tr(COPY.qrHint, locale)}</span>
-            <span className={qrStyles.url}>{url.replace(/^https?:\/\//, "")}</span>
-          </figcaption>
-        </figure>
-      ) : null}
+      <GlossaryQr glossaryUrl={ctx.glossaryUrl} locale={locale} label={COPY.qrLabel} hint={COPY.qrHint} width={400} />
     </div>
   );
 }

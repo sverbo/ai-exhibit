@@ -81,6 +81,10 @@ function reduce(state: SessionState, command: SessionCommand): Patch | null {
       else delete fallback[command.sceneId];
       return { fallback };
     }
+    case "sceneRequest": {
+      if (state.requests?.[command.sceneId]?.id === command.request.id) return null;
+      return { requests: { ...state.requests, [command.sceneId]: command.request } };
+    }
     case "resetScene": {
       const hasState = command.sceneId in state.sceneStates;
       const hasFallback = command.sceneId in state.fallback;

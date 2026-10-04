@@ -104,15 +104,16 @@
   line-height: 1.35;
   color: var(--color-text-muted);
 }
+/* Compact controls, the same sizes as the shared control bar (primitives/Controls.module.css). */
 .controllerBar {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 10px 20px;
   flex-shrink: 0;
 }
 .controls {
   display: flex;
-  gap: var(--space-1);
+  gap: 6px;
 }
 .hint {
   margin: 0;
@@ -122,12 +123,12 @@
 
 .button {
   font-family: var(--font-body);
-  font-size: var(--text-xs);
+  font-size: 18px;
   color: var(--color-text);
   background: var(--color-surface-2);
-  border: 2px solid var(--color-line);
+  border: 1.5px solid var(--color-line);
   border-radius: 999px;
-  padding: 8px 22px;
+  padding: 5px 14px;
   cursor: pointer;
   transition:
     border-color var(--dur) var(--ease),
@@ -179,17 +180,17 @@
 .formRow {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: 10px;
   align-items: center;
 }
 .input {
   font-family: var(--font-display);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   color: var(--color-text);
   background: var(--color-surface);
-  border: 2px solid var(--color-line);
+  border: 1.5px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 12px 20px;
+  padding: 8px 14px;
   width: 100%;
   box-sizing: border-box;
 }

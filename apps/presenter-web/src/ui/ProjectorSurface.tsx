@@ -15,12 +15,15 @@ export function ProjectorSurface({
   role,
   glossaryUrl,
   overlay,
+  audienceScreen = false,
 }: {
   talk: Talk;
   role: Exclude<SceneRole, "preview">;
   glossaryUrl: string | null;
   /** Drawn over the live scene, in stage pixels; not on black or on a slate. */
   overlay?: ReactNode;
+  /** True on the projector window itself, false for the presenter's mirror of it. */
+  audienceScreen?: boolean;
 }) {
   const { t } = useUi();
   const { state, scenes } = talk;
@@ -32,7 +35,7 @@ export function ProjectorSurface({
   if (!scene) return <Slate text={scenes.length ? t("waitingSession") : t("emptyEdition")} />;
   return (
     <div className={styles.surface} data-projector={view.kind}>
-      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} glossaryUrl={glossaryUrl} overlay={overlay} />
+      <SceneStage talk={talk} scene={scene} role={role} revealStep={view.revealStep} glossaryUrl={glossaryUrl} overlay={overlay} audienceScreen={audienceScreen} />
     </div>
   );
 }

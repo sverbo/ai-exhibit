@@ -11,3 +11,5 @@ export { GenericLayout } from "./layouts/GenericLayout.tsx";
 export { visibleItemCount } from "./layouts/reveal.ts";
 export { DEFAULT_THEME, isThemeName, themeOf, useThemeName, type ThemeName } from "./theme/theme.ts";
 export { resetCloudStatus } from "./language/source.ts";
+export { canInteract, useSceneActions } from "./primitives/interaction.ts";
+export { ControlBar, ControlButton, ControlChoice, ControlField } from "./primitives/Controls.tsx";

@@ -2,6 +2,7 @@ import { type CSSProperties, useEffect, useMemo, useRef } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "./copy.ts";
 import { DEFAULT_TOKENIZER_EXAMPLES } from "./data.ts";
@@ -11,6 +12,11 @@ import { useSourceDecision } from "./source.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
 import styles from "./TokenizerPlayground.module.css";
 import { Button, cx, Frame, Notice, Pending, RecordedTag, Segmented, SourceBadge, TextField } from "./ui.tsx";
+
+type Action =
+  | { type: "text"; text: string }
+  | { type: "tokenizer"; id: CloudTokenizerId }
+  | { type: "ids"; shown: boolean };
 
 export interface TokenizerPlaygroundProps {
   showIds?: boolean;
@@ -86,6 +92,13 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, state.text, state.tokenizerId, live, recording]);
 
+  // Every window's controls come here; only the stage owner changes the state.
+  const act = useSceneActions<Action, TokenizerState>(ctx, (a) => {
+    if (a.type === "text") setState((s) => ({ ...s, text: a.text }));
+    else if (a.type === "tokenizer") setState((s) => ({ ...s, tokenizerId: a.id }));
+    else setState((s) => ({ ...s, idsShown: a.shown }));
+  });
+
   // A reveal step hands control of the IDs back to the step.
   useOnStepChange(ctx.revealStep, () => setState((s) => ({ ...s, idsShown: null })));
 
@@ -95,41 +108,38 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
   const sceneSteps = ctx.scene.steps ?? 0;
   const idsVisible = Boolean(props.showIds) && (view.idsShown ?? (sceneSteps > 0 ? ctx.revealStep >= 1 : true));
 
-  const controls =
-    role === "controller" ? (
-      <>
-        <TextField
-          wide
-          label={tr(COPY.typeHere, locale)}
-          value={state.text}
-          disabled={!live}
-          onChange={(text) => setState((s) => ({ ...s, text }))}
-        />
-        <div className={styles.examples} role="group" aria-label={tr(COPY.examples, locale)}>
-          <span className={styles.examplesLabel}>{tr(COPY.examples, locale)}</span>
-          <div className={styles.exampleRow}>
-            {examples.map((ex, i) => (
-              <Button key={i} active={ex === state.text} onClick={() => setState((s) => ({ ...s, text: ex }))} title={ex}>
-                {ex.length > 16 ? `${ex.slice(0, 15)}…` : ex}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <Segmented
-          label={tr(COPY.tokenizer, locale)}
-          value={state.tokenizerId}
-          options={(Object.keys(TOKENIZER_LABELS) as CloudTokenizerId[]).map((id) => ({ value: id, label: TOKENIZER_LABELS[id] }))}
-          onChange={(tokenizerId) => setState((s) => ({ ...s, tokenizerId }))}
-        />
-        {props.showIds ? (
-          <Button active={idsVisible} onClick={() => setState((s) => ({ ...s, idsShown: !idsVisible }))}>
-            {idsVisible ? tr(COPY.hideIds, locale) : tr(COPY.showIds, locale)}
-          </Button>
-        ) : null}
-        {live && state.source !== "live" ? <Pending>{tr(COPY.loadingTokenizer, locale)}</Pending> : null}
-        <SourceBadge decision={decision} model={tokenizerLabel(state.tokenizerId)} locale={locale} />
-      </>
-    ) : null;
+  const controls = canInteract(ctx) ? (
+    <>
+      <TextField
+        wide
+        label={tr(COPY.typeHere, locale)}
+        value={view.text}
+        disabled={!live}
+        // Typing in a window that does not run the stage sends the text in small batches.
+        debounceMs={role === "controller" ? 0 : 150}
+        onChange={(text) => act({ type: "text", text })}
+      />
+      <Segmented
+        label={tr(COPY.examples, locale)}
+        value={examples.includes(view.text) ? view.text : null}
+        options={examples.map((ex) => ({ value: ex, label: ex.length > 14 ? `${ex.slice(0, 13)}…` : ex }))}
+        onChange={(text) => act({ type: "text", text })}
+      />
+      <Segmented
+        label={tr(COPY.tokenizer, locale)}
+        value={view.tokenizerId}
+        options={(Object.keys(TOKENIZER_LABELS) as CloudTokenizerId[]).map((id) => ({ value: id, label: TOKENIZER_LABELS[id] }))}
+        onChange={(id) => act({ type: "tokenizer", id })}
+      />
+      {props.showIds ? (
+        <Button active={idsVisible} onClick={() => act({ type: "ids", shown: !idsVisible })}>
+          {idsVisible ? tr(COPY.hideIds, locale) : tr(COPY.showIds, locale)}
+        </Button>
+      ) : null}
+      {role === "controller" && live && state.source !== "live" ? <Pending>{tr(COPY.loadingTokenizer, locale)}</Pending> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={tokenizerLabel(state.tokenizerId)} locale={locale} /> : null}
+    </>
+  ) : null;
 
   return (
     <Frame controls={controls} label={tr(ctx.scene.title, locale)}>

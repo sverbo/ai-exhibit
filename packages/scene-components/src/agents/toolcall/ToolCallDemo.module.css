@@ -171,11 +171,12 @@
   color: var(--color-text);
 }
 
+/* The shared control bar, along the bottom edge of the slide. */
 .ctl {
   position: absolute;
-  left: 80px;
-  bottom: var(--space-4);
-  width: 700px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .toolbox {
@@ -210,6 +211,4 @@
   width: 100%;
   height: 100%;
 }
-.frame .ctl {
-  width: 500px;
-}
+

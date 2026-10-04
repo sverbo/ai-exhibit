@@ -48,4 +48,18 @@ describe("buildSceneContext", () => {
     expect(ctx.mode).toBe("live");
     expect(ctx.state).toBeUndefined();
   });
+
+  it("lets a controller window that does not run the stage send requests", () => {
+    const sent: SessionCommand[] = [];
+    const ctx = buildSceneContext(input({ role: "display", requestDispatch: (c) => sent.push(c), requesterId: "w1" }));
+    expect(ctx.interactive).toBe(true);
+    ctx.setState({ n: 9 });
+    ctx.sendRequest?.({ type: "generate", n: 10 });
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toMatchObject({ type: "sceneRequest", sceneId: "s1", request: { payload: { type: "generate", n: 10 } } });
+    const id = (sent[0] as { request: { id: string } }).request.id;
+    expect(id.startsWith("w1:")).toBe(true);
+    // A plain display (the presenter's projector mirror) shows no controls.
+    expect(buildSceneContext(input({ role: "display" })).interactive).toBe(false);
+  });
 });

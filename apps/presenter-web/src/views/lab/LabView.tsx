@@ -244,7 +244,7 @@ export default function LabView() {
               </Pane>
               <div className={styles.side}>
                 <Pane title={t("labDisplay")}>
-                  <LabStage scene={scene} role="display" state={state} locale={locale} dispatch={null} glossaryUrl={glossaryUrl} reducedMotion={reducedMotion} />
+                  <LabStage scene={scene} role="display" state={state} locale={locale} dispatch={null} glossaryUrl={glossaryUrl} reducedMotion={reducedMotion} audienceScreen />
                 </Pane>
                 <Pane title={t("labPreview")}>
                   <LabStage scene={scene} role="preview" state={state} locale={locale} dispatch={null} glossaryUrl={glossaryUrl} reducedMotion revealStep={0} />
@@ -302,7 +302,7 @@ export default function LabView() {
 }
 
 function LabStage({
-  scene, role, state, locale, dispatch, glossaryUrl, reducedMotion, revealStep,
+  scene, role, state, locale, dispatch, glossaryUrl, reducedMotion, revealStep, audienceScreen = false,
 }: {
   scene: SceneDefinition;
   role: SceneRole;
@@ -312,6 +312,8 @@ function LabStage({
   glossaryUrl: string;
   reducedMotion: boolean;
   revealStep?: number;
+  /** The lab's projector pane stands for the audience screen: media sound plays there only. */
+  audienceScreen?: boolean;
 }) {
   const defaultSource = useDefaultModelSource();
   const ctx = useSceneContext({
@@ -325,6 +327,7 @@ function LabStage({
     glossaryUrl,
     reducedMotion,
     modelSource: LAB_MODEL_SOURCE ?? defaultSource,
+    audienceScreen,
   });
   return (
     <Stage>

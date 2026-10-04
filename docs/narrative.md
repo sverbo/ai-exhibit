@@ -6,61 +6,66 @@ slide must serve. Scene numbers refer to the current edition; parked scenes are
 not part of it. Status: written 2026-10-02 against storyboard v1 as revised in the
 same session.
 
-The talk opens with a short introduction (0.1 the agenda, 0.2 what this talk is
-not), and each of the five parts starts with a part slide (1.0 to 5.0) that shows
+The talk opens with a short introduction (0.1 a holding slide while the room
+fills up, 0.2 a one-minute video, "This is not science fiction", 0.3 the agenda,
+0.4 what this talk is not), and each of the five parts starts with a part slide (1.0 to 5.0) that shows
 the plan with that part lit. Scene numbers below may lag behind the edition: the
 presenter view always shows the current ones.
 
 ## Chapter 1. What AI can do today
 
-**1.1 Opening.** Most people in this room formed their picture of AI a few years
+**1.0 Opening.** Most people in this room formed their picture of AI a few years
 ago: a chatbot that is clever, sometimes absurd, and easy to trick. Today I want
 to replace that picture, and I will start with what these systems do, before
 explaining how they work.
 
-**1.2 The riddle.** "When ten plus four is two, what is nine plus six?" You get it
+**1.1 The riddle.** "When ten plus four is two, what is nine plus six?" You get it
 after a second: a clock, so three. In 2019, GPT-2 answered "The answer is nine plus
 six." GPT-3 said 15. ChatGPT's model in 2022 still said 15. In 2023 GPT-4 saw the
 clock. Each step up cost more to build: a few thousand dollars, then hundreds of
 thousands, then tens of millions. Today's reasoning models answer it without
 blinking. The jokes we tell about AI are mostly about models that no longer exist.
 
-**1.3 Everything goes up.** It is not one riddle. Three curves on one time axis.
-Memory: the amount of text a model can keep in mind at once went from about a
-page and a half to roughly 1,500 pages on some models. Reliability: the length of
-a task an agent finishes half the time went from seconds to many hours, doubling
-about every seven months. Skill: exams, PhD-level science questions, real software
-bugs, all climbed to expert level. Far fewer errors; not none.
+**1.2 Already here.** The riddle is a toy; outside the lab, AI is already at work.
+Most new code at Google is AI-generated. Driverless taxis give hundreds of
+thousands of paid rides a week. A humanoid robot held a factory job for months.
+And a swarm of 10,000 agents is claimed to have solved a Millennium Prize problem
+in 88 hours, still under review. My own conviction, said as mine: even if AI
+stopped improving today, it could already do most expert work; the rest is
+adaptation.
 
-**1.4 What it cost.** Each of these jumps was bought with power. The circles are the
-electricity drawn while one model trains: a few kilowatts for the 2017 Transformer,
-megawatts for GPT-3, tens of megawatts for GPT-4, more than a hundred since. The
-largest AI data centres are approaching a gigawatt, a city's worth. Training
-concentrates that power in one place for months. Across all uses, running the
-models now consumes even more than training them.
+**1.3 Everything went up.** How did we get here so fast? One slide, one series per
+click. Training cost, from about $4,300 for GPT-2 to hundreds of millions (Epoch AI
+estimates). Power while training, from 5 megawatts for GPT-3 to more than 200 for
+GPT-6 Astra, the average draw of about 190,000 US homes. Memory, from a page and
+a half to 1,500 pages. Reliability, from tasks of seconds to tasks of many hours. Then the hardest
+tests: PhD-level science above the experts, real software bugs, an exam written to
+stump AI, research mathematics, puzzles easy for people, and a gold medal at the
+Maths Olympiad. Last click: where the trends point in a year, labelled as a
+projection. Far fewer errors; not none.
 
-**1.5 Connected to your life.** With that memory and reliability, models no longer
+**1.4 Connected to your life.** With that memory and reliability, models no longer
 just answer: they act. Today's assistants plug into your email, calendar, files,
 browser, shopping and payments, code, messages.
 
-**1.6 Permissions.** The same model can be harmless or powerful depending on the
+**1.5 Permissions.** The same model can be harmless or powerful depending on the
 switches we turn on: read files, write files, a terminal, a browser, money. Each
 switch turns advice into action.
 
-**1.7 My own demo.** (Presenter's recording.) An ordinary request, an ordinary
+**1.6 My own demo.** (Presenter's recording.) An ordinary request, an ordinary
 person, and the moment it acts on its own, and the moment it asks before acting.
 
-**1.8 Chat or agent: calling a tool.** How does that actually work? Ask "who won
+**1.7 Chat or agent: calling a tool.** How does that actually work? Ask "who won
 last night's match?" A chatbot alone cannot know. Give the same model a search
 tool and watch: it does not answer, it writes a small JSON request. The model
 only writes text; the software reads it, runs the search, and hands back the
 results; then the model answers and cites them. That is the whole trick.
 
-**1.9 One request, every step.** Now chain dozens of those. "Plan a weekend in
+**1.8 One request, every step.** Now chain dozens of those. "Plan a weekend in
 Bruges for four": the assistant splits the job, calls tools, launches helpers in
 parallel, hits a fully booked hotel, re-plans, and stops to ask before paying.
 
-**1.10 The agent loop.** Goal, plan, act, observe, re-plan. In the middle, a
+**1.9 The agent loop.** Goal, plan, act, observe, re-plan. In the middle, a
 language model; around it, ordinary software, tools and memory. So what is that
 thing in the middle? Let us open the box.
 
@@ -181,15 +186,12 @@ structure, not in anyone's character.
 
 ## Chapter 4. The risks
 
-**4.1 Already here.** Even if AI stopped improving today, it could already do most
-expert work; the rest is adaptation. Most new code at Google is AI-generated.
-Driverless taxis give hundreds of thousands of paid rides a week. A humanoid robot
-held a factory job for months. And a swarm of 10,000 agents is claimed to have
-solved a Millennium Prize problem in 88 hours, still under review. (Presenter's
-conviction, labelled as such.)
+**4.1 Three families of risk.** Remember "Already here" from part 1: if even half
+of it is true, risk is the next question. Powerful, opaque, built in a race. Three
+families: misuse, systemic effects, loss of control.
 
-**4.2 Three families of risk.** Powerful, opaque, built in a race. Three families:
-misuse, systemic effects, loss of control.
+**4.2 Who worries more?** Published surveys: the public is more worried than AI
+experts, yet many of the researchers building AI give a real chance to catastrophe.
 
 **4.3 Misuse.** The same capability helps defenders and attackers; evaluations show
 where it already gives an edge.
@@ -198,7 +200,7 @@ where it already gives an edge.
 concentration of power.
 
 **4.5 AGI: are we there?** "Systems that outperform humans at most economically
-valuable work." Look back at "already here", and decide for yourself.
+valuable work." Look back at "Already here" in part 1, and decide for yourself.
 
 **4.6 Superintelligence.** Far beyond us in nearly everything. Maybe not reachable
 with today's architecture; but if AI automates AI research, the next breakthrough

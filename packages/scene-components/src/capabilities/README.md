@@ -108,8 +108,10 @@ element (the controller's included) follows that state: followers
 extrapolate the position from `at`, seek only when off by more than 0.75 s
 while playing (0.25 s when paused), and the controller republishes its real
 position every 5 s to correct drift. Timestamps from another machine's clock
-are only trusted within 30 s. Sound is off by default; the controller routes it
-to the projector or to its own screen, never both. If the projector's browser
+are only trusted within 30 s. Sound comes only out of the audience screen
+(`ctx.audienceScreen`: the projector window, alone or linked), never out of the
+presenter view or its mirror, so it cannot play twice; the presenter can turn it
+off. If the projector's browser
 blocks sound before any click, it plays muted and asks for one click.
 
 | Step | Shows |
@@ -119,45 +121,97 @@ blocks sound before any click, it plays muted and asks for one click.
 
 `scene.steps`: 0, or 1 to let the clicker start the video.
 
-## ModelComparison
+## YouTubeScene
 
-Props: `{}`. One comparison table, revealed one row per step. Columns: training
-cost, training electricity, reliability (METR: length of task finished half
-the time), PhD-level science (GPQA Diamond) and memory (context window, with
-pages in small). Each cell has a big value with units in plain words and a
-small line saying how we know (estimate, measured, published) or giving a
-familiar comparison (US homes for a year, pages). Empty cells say "not
-published" or "not tested". Data and the choice of rows: `compare/comparison.ts`.
+Props: `{ videoId, durationSec, kicker?, heading?, caption? }`. Scene
+`00-welcome-video` (0.2). A large 16:9 YouTube player (IFrame Player API,
+privacy-enhanced host `youtube-nocookie.com`, no YouTube controls), with a
+kicker, a heading and a caption. `scene.steps`: 0; nothing plays until the
+presenter presses Play. Helpers and the loader: `video/youtube.ts`.
+
+Sound plays once. Only the audience screen holds a player:
+`ctx.audienceScreen` is true on the projector window (alone or linked), on a
+single present window and in the lab's projector pane; it is false in the
+presenter view, its projector mirror and previews, which show a still card
+with the clock ("Plays with sound on the projector only") and never load
+YouTube. Playback follows the `VideoState` of `video/sync.ts`: the
+controller's Play, Pause, Back to start and position slider only publish
+state; the player seeks when it drifts more than 2 s while playing. A
+controller without a player (the presenter) ends playback on its own clock
+after `durationSec`; a controller with one (projector alone) republishes the
+real position every 5 s. If the browser blocks sound (no gesture on the
+projector yet), the player goes muted and asks for one click, like VideoScene.
+
+What YouTube allows, plainly:
+
+- Captions: on (`cc_load_policy=1`), in the slide's language when YouTube has
+  that track (`cc_lang_pref`, `hl`). The opening video has English captions
+  only (2026-10-04): a French talk shows English subtitles. The embed does not
+  trigger auto-translation.
+- Audio: no documented parameter or public API method selects the audio
+  track (`getAvailableAudioTracks` and `setAudioTrack` are internal to
+  YouTube's player). The video has auto-dubbed tracks; in tests (English and
+  French talk, 2026-10-04) the English original played, but YouTube may choose
+  a dub from the viewer's settings: check on the projector machine.
+- Offline: the script never loads (10 s timeout) and the slide shows a card
+  with the video's address instead; a player that is merely slow (20 s) shows
+  the card until it becomes ready. No crash.
+
+The scene declares `online.hosts`: the one deliberate exception to "nothing
+from the internet during a talk". `pnpm rehearse` blocks those hosts too (so
+it rehearses the offline card) without reporting them.
+
+## HoldingSlide
+
+Props: `{ title: L10n; line?: L10n }`. Scene `00-holding` (0.1), the first
+scene of a fresh session: shown while the room fills up, it never advances by
+itself. The talk's title (`talkTitle` in `presentations/canonical/src/chapters.ts`,
+also the presentation title), "The talk starts in a moment", the glossary QR
+code (`agenda/GlossaryQr.tsx`, shared with the agenda) and a small status dot:
+"Getting ready", then "Ready" when both checks pass (`intro/readiness.ts`,
+asked again every 15 s): the language demos (Simulation counts as ready, with
+a discreet "simulation" note; Hugging Face needs `GET /api/llm/status`
+configured and reachable, and the access code when one is required) and the
+YouTube player script loaded. The presenter's own screen also says which check
+is still waiting. `scene.steps`: 0.
+
+## FrontierProgress
+
+Props: `{}`. Scene `01-progress` ("Everything went up"): one slide, two rows,
+one series per click. Data, sources and the design note: `progress/progress.ts`.
+
+Top row, four small LINEAR charts on a shared 2019 to 2028 axis, each with a
+title, a plain-words subtitle, a tag saying how we know and a big growth
+factor: training cost (estimate, Epoch AI), training power (estimate, Epoch
+AI), memory as pages (published by the developers) and task length, the METR
+time horizon (measured). Only the first and last
+points are labelled on screen; the notes give every point. Bottom row, one
+chart of the hardest tests as "best score so far" (Epoch AI data), each line
+named at its end in a right-hand column (labels never overlap:
+`placeEndLabels`); while a new series is introduced the older ones fade.
 
 | Step | Shows |
 | --- | --- |
-| 0 | GPT-2 (2019): $4,300 (estimate), electricity not published, 3 seconds, not tested, 1,024 tokens (about 1.5 pages) |
-| 1 | + GPT-3 (2020): $2.1 million (estimate), 1.3 GWh (estimate, about 120 US homes for a year), 9 seconds (measured on a later GPT-3 version), not tested, 2,048 tokens (about 3 pages) |
-| 2 | + Grok 3 (2025): $218 million (estimate), 240 GWh (estimate, about 22,000 US homes for a year), not tested by METR, 75% (published by xAI; PhD experts 65%), 1,000,000 tokens (about 1,500 pages) |
-| 3 | + "In about a year", labelled PROJECTION (badge, dashed and hatched row, italic values): over $1 billion, about 1,000 GWh (about 100,000 US homes for a year), about 2 weeks of full-time work, near the ceiling (new, harder tests), 1M+ (not projected) |
-| 4 | The table compacts (values only) and three small LINEAR charts appear below it: training cost ($4,300, $2.1M, $218M, projection > $1 billion), training electricity (GPT-2 not published, 1.3 GWh, 240 GWh, projection about 1,000 GWh) and GPQA (GPT-2 and GPT-3 not tested, 75%, PhD experts 65%, projection "near the ceiling" band). Early points sit near zero on purpose; every point is labelled; the projection is a dashed segment to a hollow point in the projection color |
+| 0 | Heading and empty frames (titles, axes) |
+| 1 | Training cost: $4,300 (GPT-2, 2019) to $366M (GPT-4.5, 2025), × 84,000 |
+| 2 | Training power: 5 MW (GPT-3) to 233 MW (GPT-6 Astra, 2026), × 46; "≈ 190,000 US homes" |
+| 3 | Memory: 1.5 pages (GPT-2) to 1,500 pages (Grok 3, 2025), × 1,000; "not projected" |
+| 4 | Task finished half the time (METR): 3 seconds (GPT-2) to 17 hours (Claude Mythos Preview, 2026), × 19,000 |
+| 5 | GPQA Diamond 36% to 96%, with the PhD experts line at 65% |
+| 6 | + SWE-bench Verified 31% to 84% |
+| 7 | + Humanity's Last Exam 5% to 55% and FrontierMath 1% to 94% |
+| 8 | + ARC-AGI-2 0% to 95%, and a medal marker: Maths Olympiad gold, July 2025 |
+| 9 | Projection for October 2027 on cost, power and time horizon: a dashed line in the projection color leaving the chart as an arrow ("over $1 billion", "about 500 MW", "3 to 8 weeks of work") and a Projection badge; the controller sees the arithmetic instead of the footer |
 
-`scene.steps`: 4. The former "Grew by" ratio row is replaced by the charts.
+`scene.steps`: 9.
 
-Projection arithmetic (shown on the controller screen only at step 3, in place
-of the footnote): cost $218M (Grok 3, 2025) x 2.4 x 2.4 = about $1.3 billion in 2027,
-matching Epoch AI's own "more than a billion dollars by 2027"
-(`tk-epoch-2024-training-cost-trend`); electricity 240 GWh x 2.1 x 2.1 = about
-1,060 GWh in 2027 at the same training time (`tk-epoch-2024-power-trend`);
-METR 12 h (Claude Opus 4.6, Feb 2026) x 2^(365/131) = about 83 h, about two
-40-hour weeks (`tk-metr-2026-time-horizon-1-1`, 131-day post-2023 doubling).
-
-Why Grok 3: among 2025-2026 frontier models it is the only one with Epoch AI
-estimates for both training cost and training electricity, and its developer
-published its context window and a GPQA score. Newer frontier models have no
-cost or electricity estimate. GPQA was chosen over MMLU because the frontier
-row has a GPQA score and no MMLU score; GPT-2 and GPT-3 predate the test.
-
-Sources: `tk-epoch-notable-models` (costs, Grok 3 power and duration),
-`llm-patterson-2021` (GPT-3 electricity), `llm-eia-household-electricity`
-(homes), `tk-epoch-benchmarking-hub` (METR values), `tk-xai-2025-grok3` (Grok 3
-context and GPQA), `tk-rein-2023-gpqa` (experts 65%), `tk-gpt2-context-1024`,
-`tk-gpt3-context-2048`.
+Projection arithmetic: $366M (GPT-4.5, Feb 2025) × 2.4 a year for 2.6 years
+≈ $3.6 billion, shown as Epoch AI's own "over $1 billion by 2027"
+(`tk-epoch-2024-training-cost-trend`); 233 MW × 2.1 a year for 1.1 years ≈ 520
+MW (`tk-epoch-2024-power-trend`); 17 h × 2^(days / doubling) with METR's two
+doubling times, 7 months (`tk-metr-2025-time-horizon-paper`) and 131 days
+(`tk-metr-2026-time-horizon-1-1`), gives about 100 h to 310 h, 3 to 8 weeks of
+40 hours. Memory and test scores are not projected.
 
 ## `Agenda`
 

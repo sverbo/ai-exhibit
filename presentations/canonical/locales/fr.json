@@ -55,6 +55,66 @@
     "source": "Full talk (about 90 min)",
     "text": "Présentation complète (environ 90 min)"
   },
+  "00-holding/title": {
+    "source": "Before the talk",
+    "text": "Avant la présentation"
+  },
+  "00-holding/objective": {
+    "source": "Hold the screen while the room fills up: the talk's title, a calm line, the glossary QR code and a quiet readiness dot.",
+    "text": "Occuper l'écran pendant que la salle se remplit : le titre de la présentation, une phrase calme, le QR code du lexique et un discret point de préparation."
+  },
+  "00-holding/takeaway": {
+    "source": "The talk starts in a moment.",
+    "text": "La présentation commence dans un instant."
+  },
+  "00-holding/speakerNotes": {
+    "source": "- Check the Ready dot: language demos (Hugging Face status, or Simulation) and the YouTube player script; your screen says which one is still waiting\n- Nothing moves by itself: press Next when you begin\n- Start the timer with T when you begin",
+    "text": "- Vérifier le point Prêt : les démos de langage (état de Hugging Face, ou Simulation) et le script du lecteur YouTube ; votre écran indique ce qui attend encore\n- Rien ne bouge tout seul : appuyer sur Suivant pour commencer\n- Lancer le minuteur avec T au début"
+  },
+  "00-holding/transitionIn": {
+    "source": "The room fills up.",
+    "text": "La salle se remplit."
+  },
+  "00-holding/transitionOut": {
+    "source": "Let's begin with a short video.",
+    "text": "Commençons par une courte vidéo."
+  },
+  "00-welcome-video/title": {
+    "source": "This is not science fiction",
+    "text": "Ce n'est pas de la science-fiction"
+  },
+  "00-welcome-video/objective": {
+    "source": "Open the talk with a one-minute video from AI In Context that sets the stakes before the presenter speaks.",
+    "text": "Ouvrir la présentation sur une vidéo d'une minute d'AI In Context, qui pose les enjeux avant que le présentateur ne prenne la parole."
+  },
+  "00-welcome-video/takeaway": {
+    "source": "AI may soon change everything; this talk is about understanding how, and what we can do.",
+    "text": "L'IA pourrait bientôt tout changer ; cette présentation cherche à comprendre comment, et ce que nous pouvons y faire."
+  },
+  "00-welcome-video/visual.props.kicker": {
+    "source": "Before we start",
+    "text": "Avant de commencer"
+  },
+  "00-welcome-video/visual.props.heading": {
+    "source": "This is not science fiction",
+    "text": "Ce n'est pas de la science-fiction"
+  },
+  "00-welcome-video/visual.props.caption": {
+    "source": "\"Welcome to AI In Context\", AI In Context on YouTube, 57 s",
+    "text": "« Welcome to AI In Context », AI In Context sur YouTube, 57 s"
+  },
+  "00-welcome-video/speakerNotes": {
+    "source": "- **Do:** press Play on the presenter screen; sound comes from the projector only\n- \"Welcome to AI In Context\" (YouTube channel AI In Context, by 80,000 Hours), 57 seconds\n- Subtitles ask for the talk's language, but this video has English captions only: a French talk shows English subtitles (checked 2026-10-04). The voice was the English original in tests; YouTube may still pick an automatic dub, no embed setting prevents it: check on the projector before the talk\n- Offline, the slide shows the address instead: say it in one sentence and move on",
+    "text": "- **Faire :** appuyer sur Lecture sur l'écran du présentateur ; le son sort uniquement du projecteur\n- « Welcome to AI In Context » (chaîne YouTube AI In Context, par 80,000 Hours), 57 secondes\n- Les sous-titres sont demandés dans la langue de la présentation, mais cette vidéo n'a que des sous-titres anglais : une présentation en français affiche des sous-titres anglais (vérifié le 2026-10-04). Lors des tests, la voix était l'original anglais ; YouTube peut quand même choisir un doublage automatique, et aucun réglage d'intégration ne l'empêche : vérifier sur le projecteur avant la présentation\n- Hors ligne, la diapo affiche l'adresse à la place : la dire en une phrase et passer à la suite"
+  },
+  "00-welcome-video/transitionIn": {
+    "source": "From the waiting room to a short video.",
+    "text": "De la salle d'attente à une courte vidéo."
+  },
+  "00-welcome-video/transitionOut": {
+    "source": "That is the question. Here is the plan.",
+    "text": "Voilà la question. Voici le plan."
+  },
   "00-agenda/title": {
     "source": "Today",
     "text": "Aujourd'hui"
@@ -76,8 +136,8 @@
     "text": "- Bienvenue, qui je suis, pourquoi cette présentation\n- **Faire :** cinq parties, une par clic\n- D'abord ce qu'elle fait, puis comment, puis qui la construit\n- Ensuite les risques, et ce qu'on peut y faire\n- Les questions à la fin"
   },
   "00-agenda/transitionIn": {
-    "source": "The talk opens on its plan.",
-    "text": "La présentation s'ouvre sur son plan."
+    "source": "After the video, the plan.",
+    "text": "Après la vidéo, le plan."
   },
   "00-agenda/transitionOut": {
     "source": "And two things this talk is not.",
@@ -172,30 +232,90 @@
     "text": "De la question à un petit test."
   },
   "01-then-and-now/transitionOut": {
-    "source": "Not just this riddle: everything is going up.",
-    "text": "Pas seulement cette énigme : tout progresse."
+    "source": "The riddle is a toy. What about the real world?",
+    "text": "L'énigme est un jouet. Et dans le monde réel ?"
   },
-  "01-model-comparison/title": {
-    "source": "Then and now, side by side",
-    "text": "Avant et maintenant, côte à côte"
+  "01-already-here/title": {
+    "source": "Already here",
+    "text": "Déjà là"
   },
-  "01-model-comparison/objective": {
-    "source": "Compare a 2019 model, a 2020 model and a current frontier model on cost, electricity, reliability, skill and memory.",
-    "text": "Comparer un modèle de 2019, un de 2020 et un frontier model actuel sur le coût, l'électricité, la fiabilité, les compétences et la mémoire."
+  "01-already-here/objective": {
+    "source": "Right after the riddle, show that today's AI is already at work outside the lab: code, driving, robots, mathematics.",
+    "text": "Juste après l'énigme, montrer que l'IA d'aujourd'hui est déjà au travail hors du laboratoire : code, conduite, robots, mathématiques."
   },
-  "01-model-comparison/takeaway": {
-    "source": "In six years, everything grew by orders of magnitude: the cost, the power, and what the models can do.",
-    "text": "En six ans, tout a grandi de plusieurs ordres de grandeur : le coût, l'énergie, et ce que les modèles savent faire."
+  "01-already-here/takeaway": {
+    "source": "This is not a lab demo: AI already writes most new code at Google and drives paying passengers.",
+    "text": "Ce n'est pas une démo de laboratoire : l'IA écrit déjà l'essentiel du nouveau code chez Google et conduit des passagers payants."
   },
-  "01-model-comparison/speakerNotes": {
-    "source": "- One row per click: GPT-2 (2019), GPT-3 (2020), then Grok 3 (2025), the recent frontier model with the most published estimates\n- Cost to train: from a few thousand dollars to about $200 million (estimates)\n- Electricity: GPT-3 about 1.3 GWh; Grok 3 about 240 GWh, the yearly use of tens of thousands of homes (estimates)\n- Reliability: the length of task an agent finishes half the time, from seconds to hours on today's models; skill: PhD-level science questions now above the experts' score\n- Memory: from about a page and a half to about 1,500 pages\n- How we know, GPT-2 electricity (1.7 MWh, labelled \"calculated\"): nobody published it, so we computed it: 168 hours × 32 TPU v3 chips (Strubell et al., second-hand from the authors) × 283 W per chip × 1.10 for the datacenter (Patterson et al.) ≈ 1.7 MWh, about two months of one US home. An order of magnitude only: the real figure may be a few times higher\n- How we know, GPT-2 science (25%): not a GPT-2 score. GPT-2 was never tested on GPQA; with four answer choices, guessing scores 25%\n- How we know, GPT-3 science (30%): measured by the test's authors on GPT-3.5, the 2023 successor (Rein et al.: 29.6%), barely above guessing; the original GPT-3 was never tested\n- How we know, Grok 3 reliability (1 hour): METR never measured Grok 3; the best model METR measured from the same months is Claude 3.7 Sonnet (February 2025), about 60 minutes\n- **Do:** last click, \"grew by\": tens of thousands of times more expensive. Training concentrates enormous power in one place; across all use, running the models now uses even more\n- **Do:** last row, a projection for about a year from now, from published trends: over $1 billion to train, about 1,000 GWh, tasks of about two weeks of human work; trends, not promises",
-    "text": "- Une ligne par clic : GPT-2 (2019), GPT-3 (2020), puis Grok 3 (2025), le frontier model (*modèle de pointe*) récent avec le plus d'estimations publiées\n- Coût d'entraînement : de quelques milliers de dollars à environ 200 millions (estimations)\n- Électricité : GPT-3 environ 1,3 GWh ; Grok 3 environ 240 GWh, la consommation annuelle de dizaines de milliers de foyers (estimations)\n- Fiabilité : la durée des tâches qu'un agent réussit une fois sur deux, de quelques secondes à des heures pour les modèles actuels ; compétences : questions de science niveau doctorat, désormais au-dessus du score des experts\n- Mémoire : d'environ une page et demie à environ 1 500 pages\n- D'où ça vient, électricité de GPT-2 (1,7 MWh, marqué « calculé ») : personne ne l'a publiée, on l'a calculée : 168 heures × 32 puces TPU v3 (Strubell et al., de seconde main, d'après les auteurs) × 283 W par puce × 1,10 pour le centre de données (Patterson et al.) ≈ 1,7 MWh, environ deux mois d'un foyer américain. Un ordre de grandeur seulement : le vrai chiffre peut être quelques fois plus élevé\n- D'où ça vient, sciences de GPT-2 (25 %) : ce n'est pas un score de GPT-2. GPT-2 n'a jamais passé GPQA ; avec quatre réponses possibles, répondre au hasard donne 25 %\n- D'où ça vient, sciences de GPT-3 (30 %) : mesuré par les auteurs du test sur GPT-3.5, son successeur de 2023 (Rein et al. : 29,6 %), à peine mieux que le hasard ; le GPT-3 d'origine n'a jamais été testé\n- D'où ça vient, fiabilité de Grok 3 (1 heure) : METR n'a jamais mesuré Grok 3 ; le meilleur modèle mesuré par METR sur les mêmes mois est Claude 3.7 Sonnet (février 2025), environ 60 minutes\n- **Faire :** dernier clic, « a grandi de » : des dizaines de milliers de fois plus cher. L'entraînement concentre une puissance électrique énorme en un seul lieu ; sur l'ensemble des usages, faire tourner les modèles consomme encore plus\n- **Faire :** dernière ligne, une projection à environ un an, d'après les tendances publiées : plus d'un milliard de dollars d'entraînement, environ 1 000 GWh, des tâches d'environ deux semaines de travail humain ; des tendances, pas des promesses"
+  "01-already-here/visual.props.heading": {
+    "source": "Already here, outside the lab",
+    "text": "Déjà là, hors du laboratoire"
   },
-  "01-model-comparison/transitionIn": {
-    "source": "Not just one riddle: everything grew.",
-    "text": "Pas seulement une énigme : tout a grandi."
+  "01-already-here/visual.props.cards.0.title": {
+    "source": "Code",
+    "text": "Le code"
   },
-  "01-model-comparison/transitionOut": {
+  "01-already-here/visual.props.cards.0.line": {
+    "source": "Most new code at Google is written by AI, then checked by engineers.",
+    "text": "Chez Google, l'essentiel du nouveau code est écrit par l'IA, puis vérifié par des ingénieurs."
+  },
+  "01-already-here/visual.props.cards.1.title": {
+    "source": "Driving",
+    "text": "La conduite"
+  },
+  "01-already-here/visual.props.cards.1.line": {
+    "source": "Taxis with nobody at the wheel carry paying riders every week.",
+    "text": "Des taxis sans personne au volant transportent des clients chaque semaine."
+  },
+  "01-already-here/visual.props.cards.2.title": {
+    "source": "Robots",
+    "text": "Les robots"
+  },
+  "01-already-here/visual.props.cards.2.line": {
+    "source": "Humanoid robots ran a half-marathon in Beijing. Next: anything made for two hands.",
+    "text": "Des robots humanoïdes ont couru un semi-marathon à Pékin. Ensuite : tout ce qui est fait pour deux mains."
+  },
+  "01-already-here/visual.props.cards.3.title": {
+    "source": "Mathematics",
+    "text": "Les mathématiques"
+  },
+  "01-already-here/visual.props.cards.3.line": {
+    "source": "AI agents claim to have solved a famous open problem. Still under review.",
+    "text": "Des agents d'IA disent avoir résolu un célèbre problème ouvert. Encore en cours d'examen."
+  },
+  "01-already-here/speakerNotes": {
+    "source": "- The riddle was a toy; this is what is already happening outside the lab\n- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours\n- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas\n- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); \"next\" is my projection\n- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed\n- My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly\n- **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)",
+    "text": "- L'énigme était un jouet ; voici ce qui se passe déjà hors du laboratoire\n- **Faire :** le code : Google, avril 2026 : 75 % du nouveau code généré par l'IA, validé par des ingénieurs (chiffre de l'entreprise) ; METR : les agents terminent désormais des tâches de plusieurs heures\n- **Faire :** la conduite : Waymo, février 2026 : plus de 400 000 courses payantes par semaine dans six métropoles américaines\n- **Faire :** les robots : 19 avril 2025, Pékin, premier semi-marathon de robots humanoïdes, 20 équipes ; le vainqueur a mis environ 2 h 41 (gouvernement de Pékin) ; un robot Figure a tenu une tâche chez BMW pendant 11 mois (selon l'entreprise) ; « ensuite » est ma projection\n- **Faire :** les maths : septembre 2026, environ 10 000 agents, 88 heures, Navier-Stokes ; l'Institut Clay ne s'est pas prononcé, antériorité contestée\n- Ma conviction, présentée comme la mienne : même si l'IA cessait de progresser aujourd'hui, elle pourrait déjà faire l'essentiel du travail d'expert ; le reste, c'est de l'adaptation. Les experts ne s'accordent pas sur les délais, certains vivement : pesez mon avis en conséquence\n- **Demander :** il y a cinq ans, avant ChatGPT, la plupart des gens auraient-ils qualifié tout cela de science-fiction ? (Laisser la question ouverte ; elle fait écho au titre de la vidéo d'ouverture)"
+  },
+  "01-already-here/transitionIn": {
+    "source": "The riddle was a toy. Outside the lab, AI is already at work.",
+    "text": "L'énigme était un jouet. Hors du laboratoire, l'IA est déjà au travail."
+  },
+  "01-already-here/transitionOut": {
+    "source": "How did we get here so fast? Seven years, in numbers.",
+    "text": "Comment en est-on arrivé là si vite ? Sept ans, en chiffres."
+  },
+  "01-progress/title": {
+    "source": "Everything went up",
+    "text": "Tout a grimpé"
+  },
+  "01-progress/objective": {
+    "source": "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, power, memory, reliability, and the hardest tests, with a labelled one-year projection.",
+    "text": "Montrer sur une seule diapo à quelle vitesse les frontier models ont grandi, de GPT-2 (2019) à aujourd'hui : coût, puissance, mémoire, fiabilité et tests les plus durs, avec une projection à un an clairement signalée."
+  },
+  "01-progress/takeaway": {
+    "source": "In seven years, cost, power, memory and reliability grew a thousand to tens of thousands of times, and the hardest tests went from near zero to near the top.",
+    "text": "En sept ans, le coût, la puissance, la mémoire et la fiabilité ont été multipliés par mille à plusieurs dizaines de milliers, et les tests les plus durs sont passés de presque zéro à presque le maximum."
+  },
+  "01-progress/speakerNotes": {
+    "source": "- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection\n- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)\n- Click 2, power while training (estimate, Epoch AI): GPT-3 about 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra about 233 MW (2026), the average draw of about 190,000 US homes (EIA); no estimate for GPT-2\n- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages\n- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)\n- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)\n- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)\n- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)\n- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)\n- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); power about 500 MW (×2.1 a year); tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written",
+    "text": "- Début : en haut, ce qu'on a investi et ce que les modèles retiennent ; en bas, les tests les plus durs. Chaque étiquette dit comment on le sait : estimation, publié, mesuré, projection\n- Clic 1, coût (estimation, Epoch AI) : GPT-2 environ 4 300 $ (2019), GPT-3 2,1 millions $ (2020), GPT-4 37 millions $ (2023), GPT-4.5 environ 366 millions $ (2025) : environ 84 000 fois plus. La puissance de calcul derrière a été multipliée par environ 500 000, d'environ 2e21 opérations (GPT-2) à environ 1e27 (GPT-6 Astra)\n- Clic 2, puissance pendant l'entraînement (estimation, Epoch AI) : GPT-3 environ 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra environ 233 MW (2026), la consommation moyenne d'environ 190 000 foyers américains (EIA) ; pas d'estimation pour GPT-2\n- Clic 3, mémoire (publiée par les développeurs) : 1 024 tokens (GPT-2), 2 048 (GPT-3), 32 768 (la grande version de GPT-4, 2023), 1 million (Grok 3, 2025) : d'une page et demie à environ 1 500 pages\n- Clic 4, fiabilité (mesurée par METR, surtout sur des tâches logicielles) : la durée d'une tâche, en temps d'expert, réussie une fois sur deux. GPT-2 environ 3 secondes, GPT-4 environ 3,5 minutes (2023), Claude 3.7 Sonnet environ 1 heure (fév. 2025), GPT-5 environ 3,4 heures, Claude Opus 4.6 environ 12 heures (fév. 2026), Claude Mythos Preview environ 17 heures (avr. 2026 ; intervalle de 8 à 55 heures)\n- Clic 5, GPQA Diamond (meilleur score à ce jour, mesures d'Epoch AI) : des questions de science niveau doctorat ; les docteurs du domaine obtiennent 65 % (Rein et al.). GPT-4 36 % (2023), o1 77 % (déc. 2024), Gemini 3 Pro 93 % (nov. 2025), GPT-6 Astra 96 % (sept. 2026)\n- Clic 6, SWE-bench Verified : 500 vrais bugs tirés de projets open source, chacun vérifié par des personnes. De 31 % (GPT-4o, nov. 2024) à 84 % (Claude Opus 4.7, avr. 2026)\n- Clic 7, des tests conçus pour être trop durs. Humanity's Last Exam (2 500 questions d'experts, janv. 2025) : de 5 % (sept. 2024) à 55 % (GPT-6 Astra). FrontierMath (des problèmes de recherche inédits, des heures ou des jours de travail pour un mathématicien ; moins de 2 % au lancement, nov. 2024) : d'environ 1 % à 94 % (GPT-6 Astra, sur la version corrigée de 2026)\n- Clic 8, ARC-AGI-2 (des énigmes visuelles, chacune résolue par au moins deux personnes ordinaires dans une étude sur 400 personnes ; mars 2025) : de 0 % à 95 % (GPT-6 Astra, dans son réglage le plus coûteux). La médaille : juillet 2025, Gemini Deep Think obtient 35 points sur 42 aux Olympiades internationales de mathématiques, l'or, corrigé par l'IMO (environ 8 % des élèves obtiennent l'or)\n- Clic 9, projection pour octobre 2027, des tendances, pas des promesses : coût d'entraînement de plus d'un milliard de dollars (selon les mots d'Epoch AI ; × 2,4 par an donne environ 3,6 milliards) ; puissance d'environ 500 MW (× 2,1 par an) ; des tâches de 3 à 8 semaines de travail (METR : doublement tous les 7 mois, ou tous les 131 jours depuis 2023). Mémoire et scores aux tests : pas de projection, les tests approchent de leur plafond et on en écrit de plus durs"
+  },
+  "01-progress/transitionIn": {
+    "source": "How did we get here so fast? Seven years, in numbers.",
+    "text": "Comment en est-on arrivé là si vite ? Sept ans, en chiffres."
+  },
+  "01-progress/transitionOut": {
     "source": "So what is all this for? Not just answering: acting.",
     "text": "Tout ça pour quoi faire ? Pas seulement répondre : agir."
   },
@@ -940,8 +1060,8 @@
     "text": "Des acteurs à la logique qui les relie."
   },
   "03-race/transitionOut": {
-    "source": "And while they race, look at what is already possible.",
-    "text": "Et pendant qu'ils courent, regardez ce qui est déjà possible."
+    "source": "Racing towards what? The risks.",
+    "text": "Une course vers quoi ? Les risques."
   },
   "04-part/objective": {
     "source": "Open part 4 of 5 and show where it sits in the talk.",
@@ -954,66 +1074,6 @@
   "04-part/transitionIn": {
     "source": "Part 4.",
     "text": "Partie 4."
-  },
-  "04-already-here/title": {
-    "source": "Already here",
-    "text": "Déjà là"
-  },
-  "04-already-here/objective": {
-    "source": "Land the presenter's conviction: the technology can already more or less replace human expertise, and the rest is adaptation.",
-    "text": "Faire passer la conviction du présentateur : la technologie peut déjà plus ou moins remplacer l'expertise humaine, et le reste est une question d'adaptation."
-  },
-  "04-already-here/takeaway": {
-    "source": "Even without further progress, what exists today is enough to change most expert work.",
-    "text": "Même sans nouveau progrès, ce qui existe aujourd'hui suffit à transformer l'essentiel du travail d'expert."
-  },
-  "04-already-here/visual.props.heading": {
-    "source": "Even if AI stopped improving today, it could already do most expert work.",
-    "text": "Même si l'IA cessait de progresser aujourd'hui, elle pourrait déjà faire l'essentiel du travail d'expert."
-  },
-  "04-already-here/visual.props.cards.0.title": {
-    "source": "Code",
-    "text": "Le code"
-  },
-  "04-already-here/visual.props.cards.0.line": {
-    "source": "Most new code at Google is written by AI, then checked by engineers.",
-    "text": "Chez Google, l'essentiel du nouveau code est écrit par l'IA, puis vérifié par des ingénieurs."
-  },
-  "04-already-here/visual.props.cards.1.title": {
-    "source": "Driving",
-    "text": "La conduite"
-  },
-  "04-already-here/visual.props.cards.1.line": {
-    "source": "Taxis with nobody at the wheel carry paying riders every week.",
-    "text": "Des taxis sans personne au volant transportent des clients chaque semaine."
-  },
-  "04-already-here/visual.props.cards.2.title": {
-    "source": "Robots",
-    "text": "Les robots"
-  },
-  "04-already-here/visual.props.cards.2.line": {
-    "source": "Humanoid robots ran a half-marathon in Beijing. Next: anything made for two hands.",
-    "text": "Des robots humanoïdes ont couru un semi-marathon à Pékin. Ensuite : tout ce qui est fait pour deux mains."
-  },
-  "04-already-here/visual.props.cards.3.title": {
-    "source": "Mathematics",
-    "text": "Les mathématiques"
-  },
-  "04-already-here/visual.props.cards.3.line": {
-    "source": "AI agents claim to have solved a famous open problem. Still under review.",
-    "text": "Des agents d'IA disent avoir résolu un célèbre problème ouvert. Encore en cours d'examen."
-  },
-  "04-already-here/speakerNotes": {
-    "source": "- My conviction, said plainly: what exists today already changes most expert work; the rest is adaptation\n- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours\n- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas\n- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); \"next\" is my projection\n- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed\n- Experts disagree on timelines, some strongly: weigh my view accordingly",
-    "text": "- Ma conviction, dite franchement : ce qui existe aujourd'hui transforme déjà l'essentiel du travail d'expert ; le reste, c'est de l'adaptation\n- **Faire :** le code : Google, avril 2026 : 75 % du nouveau code généré par l'IA, validé par des ingénieurs (chiffre de l'entreprise) ; METR : les agents terminent désormais des tâches de plusieurs heures\n- **Faire :** la conduite : Waymo, février 2026 : plus de 400 000 courses payantes par semaine dans six métropoles américaines\n- **Faire :** les robots : 19 avril 2025, Pékin, premier semi-marathon de robots humanoïdes, 20 équipes ; le vainqueur a mis environ 2 h 41 (gouvernement de Pékin) ; un robot Figure a tenu une tâche chez BMW pendant 11 mois (selon l'entreprise) ; « ensuite » est ma projection\n- **Faire :** les maths : septembre 2026, environ 10 000 agents, 88 heures, Navier-Stokes ; l'Institut Clay ne s'est pas prononcé, antériorité contestée\n- Les experts ne s'accordent pas sur les délais, certains vivement : pesez mon avis en conséquence"
-  },
-  "04-already-here/transitionIn": {
-    "source": "And while they race, look at what is already possible.",
-    "text": "Et pendant qu'ils courent, regardez ce qui est déjà possible."
-  },
-  "04-already-here/transitionOut": {
-    "source": "If that is even half true, the next question is risk.",
-    "text": "Si c'est vrai ne serait-ce qu'à moitié, la question suivante, ce sont les risques."
   },
   "04-to-risks/title": {
     "source": "Three families of risk",
@@ -1056,12 +1116,12 @@
     "text": "Le système poursuit le mauvais objectif."
   },
   "04-to-risks/speakerNotes": {
-    "source": "- Powerful, opaque, built in a race: three reasons to talk about risk\n- **Do:** misuse: a person uses it to do harm\n- **Do:** systemic effects: nobody means harm, yet society shifts\n- **Do:** loss of control: the system itself pursues the wrong goal",
-    "text": "- Puissante, opaque, construite dans une course : trois raisons de parler des risques\n- **Faire :** usages malveillants : une personne s'en sert pour nuire\n- **Faire :** effets systémiques : personne ne veut nuire, et pourtant la société bouge\n- **Faire :** perte de contrôle : le système lui-même poursuit le mauvais objectif"
+    "source": "- Callback to part 1, \"Already here\": if even half of that is true, risk is the next question\n- Echo of the open question: what sounded like science fiction five years ago is on our phones today; what sounds like science fiction now may follow the same path\n- Powerful, opaque, built in a race: three reasons to talk about risk\n- **Do:** misuse: a person uses it to do harm\n- **Do:** systemic effects: nobody means harm, yet society shifts\n- **Do:** loss of control: the system itself pursues the wrong goal",
+    "text": "- Rappel de la partie 1, « Déjà là » : si c'est vrai ne serait-ce qu'à moitié, la question suivante, ce sont les risques\n- Écho à la question ouverte : ce qui ressemblait à de la science-fiction il y a cinq ans est aujourd'hui dans nos téléphones ; ce qui ressemble à de la science-fiction aujourd'hui pourrait suivre le même chemin\n- Puissante, opaque, construite dans une course : trois raisons de parler des risques\n- **Faire :** usages malveillants : une personne s'en sert pour nuire\n- **Faire :** effets systémiques : personne ne veut nuire, et pourtant la société bouge\n- **Faire :** perte de contrôle : le système lui-même poursuit le mauvais objectif"
   },
   "04-to-risks/transitionIn": {
-    "source": "From what is already possible to what could go wrong.",
-    "text": "De ce qui est déjà possible à ce qui pourrait mal tourner."
+    "source": "From what AI can already do to what could go wrong.",
+    "text": "De ce que l'IA sait déjà faire à ce qui pourrait mal tourner."
   },
   "04-to-risks/transitionOut": {
     "source": "First, who is worried, and how much?",
@@ -1264,8 +1324,8 @@
     "text": "Une IA qui fait mieux que nous la plupart des travaux rémunérés."
   },
   "04-agi/speakerNotes": {
-    "source": "- AGI, artificial general intelligence: a goal several labs state openly\n- OpenAI's charter: \"highly autonomous systems that outperform humans at most economically valuable work\"\n- Google DeepMind researchers (2023): levels against skilled adults; competent beats half of them, expert beats 90%\n- Their paper rated ChatGPT and Gemini \"emerging\"; \"competent\" not yet reached at the time\n- **Ask:** after \"Already here\", do today's systems qualify? Hands up. Experts disagree, partly because definitions differ",
-    "text": "- L'AGI (*intelligence artificielle générale*) : un objectif que plusieurs laboratoires affichent ouvertement\n- La charte d'OpenAI : « des systèmes très autonomes qui surpassent les humains dans la plupart des travaux à valeur économique »\n- Des chercheurs de Google DeepMind (2023) : des niveaux mesurés face aux adultes qualifiés ; compétent bat la moitié d'entre eux, expert en bat 90 %\n- Leur article classait ChatGPT et Gemini « émergents » ; « compétent » pas encore atteint à l'époque\n- **Demander :** après « Déjà là », les systèmes actuels en relèvent-ils ? Levez la main. Les experts divergent, en partie parce que les définitions diffèrent"
+    "source": "- AGI, artificial general intelligence: a goal several labs state openly\n- OpenAI's charter: \"highly autonomous systems that outperform humans at most economically valuable work\"\n- Google DeepMind researchers (2023): levels against skilled adults; competent beats half of them, expert beats 90%\n- Their paper rated ChatGPT and Gemini \"emerging\"; \"competent\" not yet reached at the time\n- **Ask:** remember \"Already here\" in part 1: do today's systems qualify? Hands up. Experts disagree, partly because definitions differ",
+    "text": "- L'AGI (*intelligence artificielle générale*) : un objectif que plusieurs laboratoires affichent ouvertement\n- La charte d'OpenAI : « des systèmes très autonomes qui surpassent les humains dans la plupart des travaux à valeur économique »\n- Des chercheurs de Google DeepMind (2023) : des niveaux mesurés face aux adultes qualifiés ; compétent bat la moitié d'entre eux, expert en bat 90 %\n- Leur article classait ChatGPT et Gemini « émergents » ; « compétent » pas encore atteint à l'époque\n- **Demander :** souvenez-vous de « Déjà là », dans la partie 1 : les systèmes actuels en relèvent-ils ? Levez la main. Les experts divergent, en partie parce que les définitions diffèrent"
   },
   "04-agi/transitionIn": {
     "source": "Before the third family, two words you will hear everywhere.",
@@ -2167,262 +2227,6 @@
     "source": "Part",
     "text": "Partie"
   },
-  "copy:Then and now, in numbers": {
-    "source": "Then and now, in numbers",
-    "text": "Hier et aujourd'hui, en chiffres"
-  },
-  "copy:projection": {
-    "source": "projection",
-    "text": "projection"
-  },
-  "copy:not published or not tested": {
-    "source": "not published or not tested",
-    "text": "non publié ou non testé"
-  },
-  "copy:Training cost": {
-    "source": "Training cost",
-    "text": "Coût d'entraînement"
-  },
-  "copy:in US dollars": {
-    "source": "in US dollars",
-    "text": "en dollars US"
-  },
-  "copy:Electricity": {
-    "source": "Electricity",
-    "text": "Électricité"
-  },
-  "copy:used for training": {
-    "source": "used for training",
-    "text": "pour l'entraînement"
-  },
-  "copy:Reliability": {
-    "source": "Reliability",
-    "text": "Fiabilité"
-  },
-  "copy:task it finishes half the time (METR)": {
-    "source": "task it finishes half the time (METR)",
-    "text": "tâche réussie une fois sur deux (METR)"
-  },
-  "copy:PhD-level science": {
-    "source": "PhD-level science",
-    "text": "Sciences niveau doctorat"
-  },
-  "copy:GPQA Diamond questions": {
-    "source": "GPQA Diamond questions",
-    "text": "questions GPQA Diamond"
-  },
-  "copy:Memory": {
-    "source": "Memory",
-    "text": "Mémoire"
-  },
-  "copy:tokens it reads at once": {
-    "source": "tokens it reads at once",
-    "text": "tokens (*jetons*) lus d'un coup"
-  },
-  "copy:estimate": {
-    "source": "estimate",
-    "text": "estimation"
-  },
-  "copy:$4,300": {
-    "source": "$4,300",
-    "text": "4 300 $"
-  },
-  "copy:1.7 MWh": {
-    "source": "1.7 MWh",
-    "text": "1,7 MWh"
-  },
-  "copy:calculated (megawatt-hours), ≈ 2 months of one US home": {
-    "source": "calculated (megawatt-hours), ≈ 2 months of one US home",
-    "text": "calculé (mégawattheures), ≈ 2 mois d'un foyer américain"
-  },
-  "copy:3 seconds": {
-    "source": "3 seconds",
-    "text": "3 secondes"
-  },
-  "copy:measured by METR": {
-    "source": "measured by METR",
-    "text": "mesuré par METR"
-  },
-  "copy:25%": {
-    "source": "25%",
-    "text": "25 %"
-  },
-  "copy:guessing level (4 choices); never tested": {
-    "source": "guessing level (4 choices); never tested",
-    "text": "niveau du hasard (4 choix) ; jamais testé"
-  },
-  "copy:1,024": {
-    "source": "1,024",
-    "text": "1 024"
-  },
-  "copy:about 1.5 pages": {
-    "source": "about 1.5 pages",
-    "text": "environ 1,5 page"
-  },
-  "copy:$2.1 million": {
-    "source": "$2.1 million",
-    "text": "2,1 millions $"
-  },
-  "copy:1.3 GWh": {
-    "source": "1.3 GWh",
-    "text": "1,3 GWh"
-  },
-  "copy:estimate (gigawatt-hours), ≈ 120 US homes for a year": {
-    "source": "estimate (gigawatt-hours), ≈ 120 US homes for a year",
-    "text": "estimation (gigawattheures), ≈ 120 foyers américains pendant un an"
-  },
-  "copy:9 seconds": {
-    "source": "9 seconds",
-    "text": "9 secondes"
-  },
-  "copy:measured on a later GPT-3 version": {
-    "source": "measured on a later GPT-3 version",
-    "text": "mesuré sur une version plus récente de GPT-3"
-  },
-  "copy:30%": {
-    "source": "30%",
-    "text": "30 %"
-  },
-  "copy:measured on GPT-3.5 (2023); guessing: 25%": {
-    "source": "measured on GPT-3.5 (2023); guessing: 25%",
-    "text": "mesuré sur GPT-3.5 (2023) ; hasard : 25 %"
-  },
-  "copy:2,048": {
-    "source": "2,048",
-    "text": "2 048"
-  },
-  "copy:about 3 pages": {
-    "source": "about 3 pages",
-    "text": "environ 3 pages"
-  },
-  "copy:$218 million": {
-    "source": "$218 million",
-    "text": "218 millions $"
-  },
-  "copy:240 GWh": {
-    "source": "240 GWh",
-    "text": "240 GWh"
-  },
-  "copy:estimate, ≈ 22,000 US homes for a year": {
-    "source": "estimate, ≈ 22,000 US homes for a year",
-    "text": "estimation, ≈ 22 000 foyers américains pendant un an"
-  },
-  "copy:1 hour": {
-    "source": "1 hour",
-    "text": "1 heure"
-  },
-  "copy:best measured model, early 2025: Claude 3.7 Sonnet": {
-    "source": "best measured model, early 2025: Claude 3.7 Sonnet",
-    "text": "meilleur modèle mesuré début 2025 : Claude 3.7 Sonnet"
-  },
-  "copy:75%": {
-    "source": "75%",
-    "text": "75 %"
-  },
-  "copy:published by xAI; PhD experts: 65%": {
-    "source": "published by xAI; PhD experts: 65%",
-    "text": "publié par xAI ; docteurs du domaine : 65 %"
-  },
-  "copy:1,000,000": {
-    "source": "1,000,000",
-    "text": "1 000 000"
-  },
-  "copy:about 1,500 pages": {
-    "source": "about 1,500 pages",
-    "text": "environ 1 500 pages"
-  },
-  "copy:In about a year": {
-    "source": "In about a year",
-    "text": "Dans un an environ"
-  },
-  "copy:over $1 billion": {
-    "source": "over $1 billion",
-    "text": "plus d'un milliard $"
-  },
-  "copy:Epoch AI trend: × 2.4 a year": {
-    "source": "Epoch AI trend: × 2.4 a year",
-    "text": "tendance Epoch AI : × 2,4 par an"
-  },
-  "copy:about 1,000 GWh": {
-    "source": "about 1,000 GWh",
-    "text": "environ 1 000 GWh"
-  },
-  "copy:≈ 100,000 US homes for a year": {
-    "source": "≈ 100,000 US homes for a year",
-    "text": "≈ 100 000 foyers américains pendant un an"
-  },
-  "copy:about 2 weeks": {
-    "source": "about 2 weeks",
-    "text": "environ 2 semaines"
-  },
-  "copy:of full-time work (doubling every ~4 months)": {
-    "source": "of full-time work (doubling every ~4 months)",
-    "text": "de travail à plein temps (doublement tous les ~4 mois)"
-  },
-  "copy:near the ceiling": {
-    "source": "near the ceiling",
-    "text": "près du maximum"
-  },
-  "copy:new, harder tests are being invented": {
-    "source": "new, harder tests are being invented",
-    "text": "on invente des tests plus durs"
-  },
-  "copy:1M+": {
-    "source": "1M+",
-    "text": "1 million +"
-  },
-  "copy:not projected": {
-    "source": "not projected",
-    "text": "non projeté"
-  },
-  "copy:No published trend for context windows: not projected.": {
-    "source": "No published trend for context windows: not projected.",
-    "text": "Pas de tendance publiée pour la context window (*fenêtre de contexte*) : pas de projection."
-  },
-  "copy:$1 billion": {
-    "source": "$1 billion",
-    "text": "1 milliard $"
-  },
-  "copy:$2.1M": {
-    "source": "$2.1M",
-    "text": "2,1 M$"
-  },
-  "copy:$218M": {
-    "source": "$218M",
-    "text": "218 M$"
-  },
-  "copy:> $1 billion": {
-    "source": "> $1 billion",
-    "text": "> 1 milliard $"
-  },
-  "copy:Training electricity": {
-    "source": "Training electricity",
-    "text": "Électricité d'entraînement"
-  },
-  "copy:1,000 GWh": {
-    "source": "1,000 GWh",
-    "text": "1 000 GWh"
-  },
-  "copy:≈ 1,000 GWh": {
-    "source": "≈ 1,000 GWh",
-    "text": "≈ 1 000 GWh"
-  },
-  "copy:PhD-level science (GPQA)": {
-    "source": "PhD-level science (GPQA)",
-    "text": "Sciences niveau doctorat (GPQA)"
-  },
-  "copy:100%": {
-    "source": "100%",
-    "text": "100 %"
-  },
-  "copy:guessing 25%": {
-    "source": "guessing 25%",
-    "text": "hasard 25 %"
-  },
-  "copy:PhD experts 65%": {
-    "source": "PhD experts 65%",
-    "text": "docteurs du domaine 65 %"
-  },
   "copy:Today's assistants plug into your life": {
     "source": "Today's assistants plug into your life",
     "text": "Les assistants d'aujourd'hui se branchent sur votre vie"
@@ -2454,6 +2258,234 @@
   "copy:Phone and messages": {
     "source": "Phone and messages",
     "text": "Téléphone et messages"
+  },
+  "copy:The talk starts in a moment": {
+    "source": "The talk starts in a moment",
+    "text": "La présentation commence dans un instant"
+  },
+  "copy:Ready": {
+    "source": "Ready",
+    "text": "Prêt"
+  },
+  "copy:Getting ready": {
+    "source": "Getting ready",
+    "text": "En préparation"
+  },
+  "copy:simulation": {
+    "source": "simulation",
+    "text": "simulation"
+  },
+  "copy:Language demos": {
+    "source": "Language demos",
+    "text": "Démos de langage"
+  },
+  "copy:Opening video": {
+    "source": "Opening video",
+    "text": "Vidéo d'ouverture"
+  },
+  "copy:ok": {
+    "source": "ok",
+    "text": "ok"
+  },
+  "copy:checking": {
+    "source": "checking",
+    "text": "vérification"
+  },
+  "copy:not yet, retrying": {
+    "source": "not yet, retrying",
+    "text": "pas encore, nouvel essai"
+  },
+  "copy:Glossary and resources": {
+    "source": "Glossary and resources",
+    "text": "Lexique et ressources"
+  },
+  "copy:Scan it while we wait.": {
+    "source": "Scan it while we wait.",
+    "text": "Scannez-le en attendant."
+  },
+  "copy:From GPT-2 (2019) to today, everything went up": {
+    "source": "From GPT-2 (2019) to today, everything went up",
+    "text": "De GPT-2 (2019) à aujourd'hui, tout a grimpé"
+  },
+  "copy:The hardest tests, best score so far": {
+    "source": "The hardest tests, best score so far",
+    "text": "Les tests les plus durs, meilleur score à ce jour"
+  },
+  "copy:How the projection is computed (presenter screen only)": {
+    "source": "How the projection is computed (presenter screen only)",
+    "text": "Comment la projection est calculée (écran du présentateur uniquement)"
+  },
+  "copy:Estimates: Epoch AI. Measured: METR, Epoch AI, ARC Prize. Pages: 1 token ≈ 0.75 words, 500 words a page.": {
+    "source": "Estimates: Epoch AI. Measured: METR, Epoch AI, ARC Prize. Pages: 1 token ≈ 0.75 words, 500 words a page.",
+    "text": "Estimations : Epoch AI. Mesures : METR, Epoch AI, ARC Prize. Pages : 1 token (*jeton*) ≈ 0,75 mot, 500 mots par page."
+  },
+  "copy:estimate": {
+    "source": "estimate",
+    "text": "estimation"
+  },
+  "copy:published": {
+    "source": "published",
+    "text": "publié"
+  },
+  "copy:measured": {
+    "source": "measured",
+    "text": "mesuré"
+  },
+  "copy:$4,300": {
+    "source": "$4,300",
+    "text": "4 300 $"
+  },
+  "copy:$366M": {
+    "source": "$366M",
+    "text": "366 M$"
+  },
+  "copy:5 MW": {
+    "source": "5 MW",
+    "text": "5 MW"
+  },
+  "copy:233 MW": {
+    "source": "233 MW",
+    "text": "233 MW"
+  },
+  "copy:1.5 pages": {
+    "source": "1.5 pages",
+    "text": "1,5 page"
+  },
+  "copy:1,500 pages": {
+    "source": "1,500 pages",
+    "text": "1 500 pages"
+  },
+  "copy:3 seconds": {
+    "source": "3 seconds",
+    "text": "3 secondes"
+  },
+  "copy:17 hours": {
+    "source": "17 hours",
+    "text": "17 heures"
+  },
+  "copy:Training cost": {
+    "source": "Training cost",
+    "text": "Coût d'entraînement"
+  },
+  "copy:final training run, US dollars": {
+    "source": "final training run, US dollars",
+    "text": "entraînement final, en dollars US"
+  },
+  "copy:$400M": {
+    "source": "$400M",
+    "text": "400 M$"
+  },
+  "copy:× 84,000": {
+    "source": "× 84,000",
+    "text": "× 84 000"
+  },
+  "copy:over $1 billion": {
+    "source": "over $1 billion",
+    "text": "plus d'un milliard $"
+  },
+  "copy:$366M (GPT-4.5, Feb 2025) × 2.4 a year for 2.6 years ≈ $3.6 billion by October 2027; Epoch AI itself says \"more than a billion dollars by 2027\".": {
+    "source": "$366M (GPT-4.5, Feb 2025) × 2.4 a year for 2.6 years ≈ $3.6 billion by October 2027; Epoch AI itself says \"more than a billion dollars by 2027\".",
+    "text": "366 M$ (GPT-4.5, fév. 2025) × 2,4 par an pendant 2,6 ans ≈ 3,6 milliards $ d'ici octobre 2027 ; Epoch AI écrit lui-même « plus d'un milliard de dollars d'ici 2027 »."
+  },
+  "copy:Training power": {
+    "source": "Training power",
+    "text": "Puissance d'entraînement"
+  },
+  "copy:drawn while training, megawatts": {
+    "source": "drawn while training, megawatts",
+    "text": "consommée pendant l'entraînement, en mégawatts"
+  },
+  "copy:200 MW": {
+    "source": "200 MW",
+    "text": "200 MW"
+  },
+  "copy:× 46": {
+    "source": "× 46",
+    "text": "× 46"
+  },
+  "copy:about 500 MW": {
+    "source": "about 500 MW",
+    "text": "environ 500 MW"
+  },
+  "copy:233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend).": {
+    "source": "233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend).",
+    "text": "233 MW (GPT-6 Astra, sept. 2026) × 2,1 par an pendant 1,1 an ≈ 520 MW en octobre 2027 (tendance de puissance d'Epoch AI)."
+  },
+  "copy:≈ 190,000 US homes": {
+    "source": "≈ 190,000 US homes",
+    "text": "≈ 190 000 foyers américains"
+  },
+  "copy:Memory": {
+    "source": "Memory",
+    "text": "Mémoire"
+  },
+  "copy:text read at once, in pages": {
+    "source": "text read at once, in pages",
+    "text": "texte lu d'un coup, en pages"
+  },
+  "copy:× 1,000": {
+    "source": "× 1,000",
+    "text": "× 1 000"
+  },
+  "copy:not projected": {
+    "source": "not projected",
+    "text": "non projeté"
+  },
+  "copy:Task length": {
+    "source": "Task length",
+    "text": "Durée des tâches"
+  },
+  "copy:finished half the time (METR)": {
+    "source": "finished half the time (METR)",
+    "text": "réussies une fois sur deux (METR)"
+  },
+  "copy:20 hours": {
+    "source": "20 hours",
+    "text": "20 heures"
+  },
+  "copy:× 19,000": {
+    "source": "× 19,000",
+    "text": "× 19 000"
+  },
+  "copy:3 to 8 weeks of work": {
+    "source": "3 to 8 weeks of work",
+    "text": "3 à 8 semaines de travail"
+  },
+  "copy:17 h (Claude Mythos Preview, Apr 2026) carried to October 2027: doubling every 7 months (METR, since 2019) gives about 100 h, every 131 days (METR, since 2023) about 310 h, so 3 to 8 weeks of 40 hours.": {
+    "source": "17 h (Claude Mythos Preview, Apr 2026) carried to October 2027: doubling every 7 months (METR, since 2019) gives about 100 h, every 131 days (METR, since 2023) about 310 h, so 3 to 8 weeks of 40 hours.",
+    "text": "17 h (Claude Mythos Preview, avr. 2026) prolongées jusqu'en octobre 2027 : un doublement tous les 7 mois (METR, depuis 2019) donne environ 100 h, tous les 131 jours (METR, depuis 2023) environ 310 h, soit 3 à 8 semaines de 40 heures."
+  },
+  "copy:PhD-level science questions": {
+    "source": "PhD-level science questions",
+    "text": "questions de science niveau doctorat"
+  },
+  "copy:real software bugs to fix": {
+    "source": "real software bugs to fix",
+    "text": "vrais bugs logiciels à corriger"
+  },
+  "copy:expert questions written to stump AI": {
+    "source": "expert questions written to stump AI",
+    "text": "questions d'experts écrites pour piéger l'IA"
+  },
+  "copy:research maths, hours for an expert": {
+    "source": "research maths, hours for an expert",
+    "text": "maths de recherche, des heures pour un expert"
+  },
+  "copy:puzzles easy for people": {
+    "source": "puzzles easy for people",
+    "text": "énigmes faciles pour les humains"
+  },
+  "copy:PhD experts on GPQA: 65%": {
+    "source": "PhD experts on GPQA: 65%",
+    "text": "docteurs du domaine sur GPQA : 65 %"
+  },
+  "copy:Maths Olympiad: gold medal": {
+    "source": "Maths Olympiad: gold medal",
+    "text": "Olympiades de maths : médaille d'or"
+  },
+  "copy:July 2025, graded by the IMO": {
+    "source": "July 2025, graded by the IMO",
+    "text": "Juillet 2025, corrigé par l'IMO"
   },
   "copy:Your request": {
     "source": "Your request",
@@ -2619,13 +2651,25 @@
     "source": "Projector",
     "text": "Projecteur"
   },
-  "copy:This screen": {
-    "source": "This screen",
-    "text": "Cet écran"
-  },
   "copy:Position": {
     "source": "Position",
     "text": "Position"
+  },
+  "copy:Plays with sound on the projector only": {
+    "source": "Plays with sound on the projector only",
+    "text": "Le son passe uniquement par le projecteur"
+  },
+  "copy:This video needs the internet, which is not available here.": {
+    "source": "This video needs the internet, which is not available here.",
+    "text": "Cette vidéo a besoin d'Internet, qui n'est pas disponible ici."
+  },
+  "copy:Watch it later at this address:": {
+    "source": "Watch it later at this address:",
+    "text": "À regarder plus tard à cette adresse :"
+  },
+  "copy:The browser blocks sound: click once in this window.": {
+    "source": "The browser blocks sound: click once in this window.",
+    "text": "Le navigateur bloque le son : cliquez une fois dans cette fenêtre."
   },
   "copy:cat": {
     "source": "cat",
@@ -3038,10 +3082,6 @@
   "copy:The model is computing": {
     "source": "The model is computing",
     "text": "Le modèle calcule"
-  },
-  "copy:Ready": {
-    "source": "Ready",
-    "text": "Prêt"
   },
   "copy:The model is not responding: recorded example.": {
     "source": "The model is not responding: recorded example.",

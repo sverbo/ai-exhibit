@@ -14,6 +14,7 @@ import { Fragment, useRef } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudChat, findCloudRecording, renderChatTemplate } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
 import styles from "./ChatPlayground.module.css";
 import { type RawSegment, segmentChat } from "./chatRaw.ts";
@@ -24,7 +25,7 @@ import { type NoticeKey, useCloudRecording, useLlamaTemplate } from "./runtime.t
 import { useSourceDecision } from "./source.ts";
 import { isL10n } from "./shared.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
-import { Button, cx, Frame, Notice, Pending, SourceBadge, TextField } from "./ui.tsx";
+import { Button, cx, Frame, Notice, Pending, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
 export interface ChatPlaygroundProps {
   prompt?: L10n;
@@ -143,6 +144,12 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
     }
   };
 
+  // Every window's controls come here; only the stage owner asks the model.
+  const act = useSceneActions<{ type: "ask"; question: string; kind?: Turn["kind"] } | { type: "stop" }, ChatState>(ctx, (a) => {
+    if (a.type === "stop") abort.current?.abort();
+    else void ask(a.question, a.kind);
+  });
+
   useOnStepChange(ctx.revealStep, () => setState((s) => ({ ...s, showRaw: null })));
 
   const view: ChatState = role === "preview" || (role === "display" && ctx.state === undefined) ? { turns: [], notice: null } : state;
@@ -150,33 +157,33 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
   const showRaw = role !== "preview" && (view.showRaw ?? (sceneSteps > 0 && ctx.revealStep >= 1));
   const running = state.turns.at(-1)?.state === "running";
 
-  const controls =
-    role === "controller" ? (
-      <>
-        <div className={styles.presets} role="group" aria-label={tr(COPY.presetQuestions, locale)}>
-          <span className={styles.presetsLabel}>{tr(COPY.presetQuestions, locale)}</span>
-          <div className={styles.presetRow}>
-            {presets.map((p) => (
-              <Button key={p.en} disabled={running} onClick={() => void ask(pick(p, locale))} title={tr(p, locale)}>
-                {tr(p, locale).length > 28 ? `${tr(p, locale).slice(0, 27)}…` : tr(p, locale)}
-              </Button>
-            ))}
-            <Button disabled={running} onClick={() => void ask(pick(GUARDRAIL_PROMPT, locale), "guardrail")}>
-              {tr(COPY.guardrail, locale)}
-            </Button>
-          </div>
-        </div>
-        <TextField label={tr(COPY.askQuestion, locale)} clearOnSubmit submitLabel={tr(COPY.send, locale)} disabled={simulation || running} onSubmit={(q) => void ask(q)} />
-        {running ? <Button onClick={() => abort.current?.abort()}>{tr(COPY.stop, locale)}</Button> : null}
-        <Button disabled={!state.turns.length} onClick={() => setState((s) => ({ ...s, turns: [] }))}>
-          {tr(COPY.clearChat, locale)}
-        </Button>
-        <Button primary={!showRaw} active={showRaw} onClick={() => setState((s) => ({ ...s, showRaw: !showRaw }))}>
-          {showRaw ? tr(COPY.hideRaw, locale) : tr(COPY.showRaw, locale)}
-        </Button>
-        <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} />
-      </>
-    ) : null;
+  // The hidden text follows the reveal step; R clears the chat.
+  const controls = canInteract(ctx) ? (
+    <>
+      <Segmented
+        label={tr(COPY.presetQuestions, locale)}
+        value={null}
+        disabled={running}
+        options={presets.map((p) => {
+          const q = tr(p, locale);
+          return { value: pick(p, locale), label: q.length > 24 ? `${q.slice(0, 23)}…` : q };
+        })}
+        onChange={(question) => act({ type: "ask", question })}
+      />
+      <Button disabled={running} onClick={() => act({ type: "ask", question: pick(GUARDRAIL_PROMPT, locale), kind: "guardrail" })}>
+        {tr(COPY.guardrail, locale)}
+      </Button>
+      <TextField
+        label={tr(COPY.askQuestion, locale)}
+        clearOnSubmit
+        submitLabel={tr(COPY.send, locale)}
+        disabled={simulation || running}
+        onSubmit={(question) => question.trim() && act({ type: "ask", question })}
+      />
+      {running ? <Button onClick={() => act({ type: "stop" })}>{tr(COPY.stop, locale)}</Button> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} /> : null}
+    </>
+  ) : null;
 
   // With the hidden text shown, it takes the whole stage: it already holds the
   // question and the answer (as the continuation), so the chat steps aside and

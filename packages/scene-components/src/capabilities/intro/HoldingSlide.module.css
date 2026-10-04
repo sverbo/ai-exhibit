@@ -1,0 +1,63 @@
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-6) 120px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 92px;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 144;
+}
+.line {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+/* Small and quiet: the audience sees it too. */
+.status {
+  margin: var(--space-4) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-muted);
+  box-sizing: border-box;
+}
+.dotReady {
+  border-color: var(--color-ok);
+  background: var(--color-ok);
+}
+.note {
+  font-size: 18px;
+  font-style: italic;
+}
+.detail {
+  margin: 0;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+

@@ -38,8 +38,21 @@ export interface SessionState {
   blackout: boolean;
   /** Projector holds its current frame while the presenter navigates privately. */
   frozen: boolean;
+  /**
+   * Latest request per scene, sent by a window that is not the stage owner
+   * (see docs/specs/2026-10-04-interaction-anywhere.md). Absent until used.
+   */
+  requests?: Record<string, SceneRequest>;
   /** Monotonic version, incremented by every applied command. */
   version: number;
+}
+
+/** What a user did in a scene, sent to the window that runs the stage. */
+export interface SceneRequest {
+  /** Unique: sender window id plus a counter. */
+  id: string;
+  /** Small JSON payload describing the action (never its result). */
+  payload: unknown;
 }
 
 export type SessionCommand =
@@ -47,6 +60,7 @@ export type SessionCommand =
   | { type: "setSceneState"; sceneId: string; state: unknown }
   | { type: "setFallback"; sceneId: string; on: boolean }
   | { type: "resetScene"; sceneId: string }
+  | { type: "sceneRequest"; sceneId: string; request: SceneRequest }
   | { type: "timer"; action: "start" | "pause" | "reset"; now: number }
   | { type: "setBlackout"; on: boolean }
   | { type: "setFrozen"; on: boolean }

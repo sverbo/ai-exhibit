@@ -67,8 +67,21 @@ export function Cloud3D(props: Cloud3DProps) {
   const interactive = Boolean(props.interactive);
   // Where the camera is heading: the controller's own moves, or the published camera.
   const [local, setLocal] = useState<Camera3D | null>(null);
+  // Cameras this window published, so their echoes from the session are ignored.
+  const published = useRef<Camera3D[]>([]);
   useEffect(() => {
-    if (!props.camera) setLocal(null);
+    if (!props.camera) {
+      setLocal(null);
+      return;
+    }
+    // Several windows may turn the cloud (interaction from any window): an
+    // interactive window follows a camera published by another one, unless it
+    // is being dragged here or the camera is its own echo.
+    if (!interactive || drag.current) return;
+    const c = props.camera;
+    if (published.current.some((p) => p.angle === c.angle && p.tilt === c.tilt && p.zoom === c.zoom)) return;
+    setLocal(c);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.camera]);
   const target = interactive ? local : (props.camera ?? null);
   const targetRef = useRef(target);
@@ -81,13 +94,17 @@ export function Cloud3D(props: Cloud3DProps) {
   const move = (next: Camera3D) => {
     setLocal(next);
     targetRef.current = next;
+    const publish = () => {
+      published.current = [...published.current.slice(-31), next];
+      props.onCamera?.(next);
+    };
     const now = Date.now();
     if (now - lastPublish.current > 80) {
       lastPublish.current = now;
-      props.onCamera?.(next);
+      publish();
     } else {
       setTimeout(() => {
-        if (targetRef.current === next) props.onCamera?.(next);
+        if (targetRef.current === next) publish();
       }, 90);
     }
   };

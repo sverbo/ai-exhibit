@@ -1,10 +1,9 @@
 /**
  * BaseModelPlayground (scene 3.10): a model straight out of pretraining only
- * continues text, often badly. One clear choice, shown on screen:
- * - "one token": probability bars at the end of the text, then append one token
- *   (the most likely, or drawn with the temperature);
- * - "several tokens": append N tokens in one go.
- * Both modes extend the same text, so the presenter can mix them.
+ * continues text, often badly. One control: add 1, 10 or 30 tokens. After
+ * each addition, probability bars at the end of the text show what could come
+ * next; one token is drawn from them (temperature 0.8), several are written by
+ * the base model in one go. `R` starts over.
  *
  * With Hugging Face, Llama 3.1 8B (base) writes the continuations. No provider
  * gives a base model's probabilities, so the bars come from Llama 3.3 70B
@@ -12,9 +11,10 @@
  * In Simulation, both are recorded real runs on the prepared prompt.
  */
 import { useEffect, useRef } from "react";
-import { intlLocale, tr, type L10n } from "@ai-exhibit/presentation-core";
+import { tr, type L10n } from "@ai-exhibit/presentation-core";
 import { cloudComplete, cloudNextToken, findCloudNext, findCloudRecording } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
 import styles from "./BaseModelPlayground.module.css";
 import { COPY } from "./copy.ts";
@@ -23,16 +23,13 @@ import { type NoticeKey, useCloudRecording } from "./runtime.ts";
 import { useSourceDecision } from "./source.ts";
 import { type Cand, isL10n, promptIn } from "./shared.ts";
 import { useSceneState } from "./state.ts";
-import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, Segmented, Slider, SourceBadge, TextField } from "./ui.tsx";
+import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, SourceBadge } from "./ui.tsx";
 
 export interface BaseModelPlaygroundProps {
   prompt?: L10n;
 }
 
-type Mode = "one" | "many";
-
 export interface BaseModelState {
-  mode: Mode;
   prompt: string;
   /** Appended pieces; `cloud`: written by the base model in one go. */
   appended: { id: number; text: string; cloud?: boolean }[];
@@ -42,15 +39,16 @@ export interface BaseModelState {
   bars?: { model: string; recorded: boolean } | null;
   candidates: Cand[];
   picked: number | null;
-  temperature: number;
-  greedy: boolean;
-  many: number;
   busy: boolean;
   source: "live" | "recorded";
   notice: NoticeKey | null;
 }
 
-const MANY_OPTIONS = [10, 30, 60];
+/** The only control: how many tokens to add. */
+const ADD_OPTIONS = [1, 10, 30] as const;
+const TEMPERATURE = 0.8;
+
+type Action = { type: "add"; n: number } | { type: "stop" };
 const PICK_MS = 550;
 const MAX_APPENDED = 200;
 const BASE_LABEL = "Llama 3.1 8B";
@@ -71,14 +69,10 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
   const { locale, role } = ctx;
   const planned: L10n = isL10n(props.prompt) ? props.prompt : DEFAULT_BASE_PROMPT;
   const initial = (): BaseModelState => ({
-    mode: "one",
     prompt: promptIn(planned, locale),
     appended: [],
     candidates: [],
     picked: null,
-    temperature: 0.8,
-    greedy: false,
-    many: 30,
     busy: false,
     source: "recorded",
     notice: null,
@@ -149,7 +143,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
     setState((x) => ({ ...x, busy: true }));
     try {
       // Simulation replays the recorded run: always the most likely token.
-      const pick = s.greedy || simulation ? s.candidates[0] : draw(s.candidates, s.temperature);
+      const pick = simulation ? s.candidates[0] : draw(s.candidates, TEMPERATURE);
       if (!pick) return;
       setState((x) => ({ ...x, picked: pick.id }));
       await new Promise((r) => setTimeout(r, ctx.reducedMotion ? 0 : PICK_MS));
@@ -162,7 +156,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
     }
   };
 
-  const severalTokens = async () => {
+  const severalTokens = async (many: number) => {
     const s = stateRef.current;
     if (s.busy) return;
     const gen = generation.current;
@@ -187,7 +181,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
       if (decisionRef.current.active === "hf") {
         try {
           const r = await cloudComplete(
-            { prompt: fullText(s), maxTokens: s.many, temperature: s.greedy ? 0 : s.temperature },
+            { prompt: fullText(s), maxTokens: many, temperature: TEMPERATURE },
             { signal: ac.signal },
           );
           if (gen !== generation.current) return;
@@ -215,101 +209,31 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
     }
   };
 
-  const restart = (prompt?: string) => {
-    generation.current++;
-    abort.current?.abort();
-    setState((x) => ({
-      ...x,
-      prompt: prompt ?? x.prompt,
-      appended: [],
-      candidates: [],
-      picked: null,
-      busy: false,
-      textModel: undefined,
-      notice: null,
-    }));
-    // A new prompt refreshes through the effect; the same prompt needs it here.
-    if (prompt === undefined || prompt === stateRef.current.prompt) void refresh({ ...stateRef.current, appended: [] });
-  };
+  // Every window's buttons come here; only the stage owner runs them.
+  const act = useSceneActions<Action, BaseModelState>(ctx, (action) => {
+    if (action.type === "stop") abort.current?.abort();
+    else if (action.n <= 1) void oneToken();
+    else void severalTokens(action.n);
+  });
 
   const view = role === "preview" || (role === "display" && ctx.state === undefined) ? initial() : state;
-  const modeLabel = (m: Mode) => <Rich text={m === "one" ? tr(COPY.modeOne, locale) : tr(COPY.modeMany, locale)} />;
 
-  const controls =
-    role === "controller" ? (
-      <>
-        <Segmented
-          label={tr(COPY.mode, locale)}
-          value={state.mode}
-          options={(["one", "many"] as Mode[]).map((m) => ({ value: m, label: modeLabel(m) }))}
-          onChange={(mode) => setState((x) => ({ ...x, mode }))}
-        />
-        {state.mode === "one" ? (
-          <Button primary disabled={state.busy || !state.candidates.length} onClick={() => void oneToken()}>
-            {tr(COPY.addOneToken, locale)}
-          </Button>
-        ) : (
-          <>
-            <Segmented
-              label={tr(COPY.howMany, locale)}
-              value={state.many}
-              options={MANY_OPTIONS.map((n) => ({ value: n, label: String(n) }))}
-              onChange={(many) => setState((x) => ({ ...x, many }))}
-            />
-            {state.busy ? (
-              <Button onClick={() => abort.current?.abort()}>{tr(COPY.stop, locale)}</Button>
-            ) : (
-              <Button primary onClick={() => void severalTokens()}>
-                {tr(COPY.addManyTokens, locale).replace("{n}", String(state.many))}
-              </Button>
-            )}
-          </>
-        )}
-        <Segmented
-          label={tr(COPY.nextToken, locale)}
-          value={state.greedy ? "greedy" : "sample"}
-          options={[
-            { value: "greedy", label: tr(COPY.greedy, locale) },
-            { value: "sample", label: tr(COPY.sample, locale) },
-          ]}
-          onChange={(m) => setState((x) => ({ ...x, greedy: m === "greedy" }))}
-        />
-        {!state.greedy ? (
-          <Slider
-            label={tr(COPY.temperature, locale)}
-            value={state.temperature}
-            min={0.1}
-            max={2}
-            step={0.1}
-            disabled={simulation}
-            format={(v) => v.toLocaleString(intlLocale(locale), { minimumFractionDigits: 1 })}
-            onChange={(temperature) => setState((x) => ({ ...x, temperature }))}
-          />
-        ) : null}
-        <TextField
-          label={tr(COPY.edit, locale)}
-          value={state.prompt}
-          submitLabel={tr(COPY.apply, locale)}
-          disabled={simulation}
-          onSubmit={(v) => v.trim() && restart(v.trim())}
-        />
-        <Button disabled={!state.appended.length && state.prompt === promptIn(planned, locale)} onClick={() => restart(promptIn(planned, locale))}>
-          {tr(COPY.restart, locale)}
+  const controls = canInteract(ctx) ? (
+    <>
+      <span className={styles.addLabel}>{tr(COPY.howMany, locale)}</span>
+      {ADD_OPTIONS.map((n) => (
+        <Button key={n} primary disabled={view.busy} onClick={() => act({ type: "add", n })}>
+          +{n}
         </Button>
-        <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} />
-      </>
-    ) : null;
+      ))}
+      {view.busy ? <Button onClick={() => act({ type: "stop" })}>{tr(COPY.stop, locale)}</Button> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} /> : null}
+    </>
+  ) : null;
 
   return (
     <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
       <header className={styles.head}>
-        <div className={styles.modes} role="group" aria-label={tr(COPY.mode, locale)}>
-          {(["one", "many"] as Mode[]).map((m) => (
-            <span key={m} className={cx(styles.modeTab, view.mode === m && styles.modeOn)}>
-              {modeLabel(m)}
-            </span>
-          ))}
-        </div>
         <p className={styles.modelLine}>
           <Rich text={tr(COPY.baseTitle, locale)} /> <b>{BASE_LABEL}</b>
           {locale === "fr" ? "\u00a0: " : ": "}
@@ -325,7 +249,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
         ))}
         <span className={styles.slot}>
           <span className={styles.caret} aria-hidden="true" />
-          {view.mode === "one" && view.candidates.length ? (
+          {!view.busy && view.candidates.length ? (
             <span className={styles.fanAnchor}>
               <Fan
                 locale={locale}
@@ -339,7 +263,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
                 }))}
               />
             </span>
-          ) : view.busy && view.mode === "many" ? null : view.busy ? (
+          ) : view.busy ? (
             <span className={styles.waiting}>
               <Pending>{tr(COPY.thinking, locale)}</Pending>
             </span>
@@ -347,7 +271,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
         </span>
       </div>
       <footer className={styles.footer}>
-        {view.mode === "one" && view.bars ? (
+        {view.bars && view.candidates.length ? (
           <p className={styles.barsNote}>
             <Rich text={tr(view.bars.recorded ? COPY.barsRecorded : COPY.barsFromCloud, locale).replace("{model}", view.bars.model)} />
           </p>

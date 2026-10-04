@@ -123,6 +123,13 @@ export interface SceneDefinition {
   durationSec: number;
   /** Short editions may skip optional scenes. */
   optional: boolean;
+  /**
+   * The rare scene that knowingly reaches the internet (an embedded video):
+   * the hosts it calls and why. It must still work offline, with a text
+   * fallback; `pnpm rehearse` blocks these hosts like any other but does not
+   * report them while this scene is on screen.
+   */
+  online?: { hosts: string[]; why: string };
   /** English notes for translators/adapters. */
   localizationNotes?: string;
   /** Unverified claims or missing work, in English. Surfaced in Presenter View. */

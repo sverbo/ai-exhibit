@@ -1,7 +1,12 @@
 import type { SceneRole } from "../../contract.ts";
 
-/** Where the sound comes out: nowhere (default), the projector, or the controller's own screen. */
-export type SoundOutput = "off" | "projector" | "controller";
+/**
+ * Sound on the projector (default) or off. It only ever comes out of the
+ * audience screen (SceneContext.audienceScreen), never out of the presenter
+ * view or its mirror, so it cannot play twice. "controller" is a value older
+ * sessions may still hold: read as "projector".
+ */
+export type SoundOutput = "off" | "projector";
 
 /**
  * Shared playback state, owned by the controller. `position` is the playhead in
@@ -14,7 +19,7 @@ export interface VideoState {
   sound: SoundOutput;
 }
 
-export const initialVideoState = (): VideoState => ({ playing: false, position: 0, at: 0, sound: "off" });
+export const initialVideoState = (): VideoState => ({ playing: false, position: 0, at: 0, sound: "projector" });
 
 /** How often the controller republishes its position while playing, so followers correct drift. */
 export const HEARTBEAT_MS = 5000;
@@ -42,11 +47,13 @@ export function needsSeek(current: number, expected: number, playing: boolean): 
   return Math.abs(current - expected) > (playing ? 0.75 : 0.25);
 }
 
-/** Muted unless the sound is routed to this screen. Previews never make sound. */
-export function isMuted(sound: SoundOutput, role: SceneRole): boolean {
-  if (role === "display") return sound !== "projector";
-  if (role === "controller") return sound !== "controller";
-  return true;
+/**
+ * Muted everywhere but the audience screen (the projector, alone or linked),
+ * and there only when the presenter turned the sound off. Previews never make sound.
+ */
+export function isMuted(sound: SoundOutput | string, role: SceneRole, audienceScreen: boolean | undefined): boolean {
+  if (role === "preview" || !audienceScreen) return true;
+  return sound === "off";
 }
 
 /** "1:05" style clock. */

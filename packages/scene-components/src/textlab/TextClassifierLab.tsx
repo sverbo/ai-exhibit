@@ -3,6 +3,7 @@ import { intlLocale, pick, tr } from "@ai-exhibit/presentation-core";
 import type { SceneComponentProps, SceneRole } from "../contract.ts";
 import { Rich } from "../primitives/Rich.tsx";
 import { useSceneState } from "../learning/shared/sceneState.ts";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { ControlBar, SceneButton, SceneHeading, cx, l, type L10n, type Locale } from "../learning/shared/ui.tsx";
 import { roundSimple, simpleActivity, simpleSelect, simpleView, type SimpleActivity, type SimpleView } from "./data/simple.ts";
 import { accuracyCurve, learningBeat } from "./data/learning.ts";
@@ -171,13 +172,45 @@ const fmtPct = (v: number, locale: Locale) => {
 const sportName = (t: Tr, s: Sport) => t(s === "football" ? T.football : T.basketball);
 const toneClass = (s: Sport) => (s === "football" ? styles.toneFootball : styles.toneBasketball);
 
+type LabAction =
+  | { type: "example"; delta: number }
+  | { type: "toggle"; index: number }
+  | { type: "restore" }
+  | { type: "restart" }
+  | { type: "skip" };
+
 export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassifierLabProps, TextClassifierLabState>) {
   const { locale, role } = ctx;
   const stage: TextStage = props.stage in TEXT_STEPS ? props.stage : "task";
   const step = Math.max(0, Math.min(TEXT_STEPS[stage], ctx.revealStep));
-  const isController = role === "controller";
   const [state, setState] = useSceneState<TextClassifierLabState>(ctx, () => ({}), { throttleMs: 100 });
   const t = useCallback((x: L10n) => tr(x, locale), [locale]);
+  // Controls show in every interactive window; the stage owner applies them.
+  const interactive = canInteract(ctx);
+  const act = useSceneActions<LabAction, TextClassifierLabState>(ctx, (a) => {
+    switch (a.type) {
+      case "example":
+        setState((s) => ({ ...s, example: (s.example ?? TREE_EXAMPLE) + a.delta }));
+        return;
+      case "toggle":
+        setState((s) => {
+          const next = new Set(s.removed ?? []);
+          if (next.has(a.index)) next.delete(a.index);
+          else next.add(a.index);
+          return { ...s, removed: [...next].sort((x, y) => x - y) };
+        });
+        return;
+      case "restore":
+        setState((s) => ({ ...s, removed: undefined }));
+        return;
+      case "restart":
+        setState((s) => ({ ...s, train: undefined, trainRun: (s.trainRun ?? 0) + 1 }));
+        return;
+      case "skip":
+        setState((s) => ({ ...s, trainSkip: (s.trainSkip ?? 0) + 1 }));
+        return;
+    }
+  });
 
   const sub: L10n = (() => {
     switch (stage) {
@@ -220,11 +253,11 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
       const n = pick(SMALL_SET, locale).length;
       const example = (((state.example ?? TREE_EXAMPLE) % n) + n) % n;
       body = <TreeStage step={step} t={t} locale={locale} example={example} />;
-      if (isController && step >= 2) {
+      if (interactive && step >= 2) {
         controls = (
           <>
-            <SceneButton onClick={() => setState({ ...state, example: example - 1 })}>{t(T.tree.prev)}</SceneButton>
-            <SceneButton onClick={() => setState({ ...state, example: example + 1 })}>{t(T.tree.next)}</SceneButton>
+            <SceneButton onClick={() => act({ type: "example", delta: -1 })}>{t(T.tree.prev)}</SceneButton>
+            <SceneButton onClick={() => act({ type: "example", delta: 1 })}>{t(T.tree.next)}</SceneButton>
           </>
         );
       }
@@ -235,15 +268,8 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
       const picked = stage === "tree-unseen" ? pick(TREE_TRAP, locale) : pick(NET_FAIL, locale);
       const nTokens = tokenize(picked.text, locale).length;
       const removed = new Set((state.removed ?? []).filter((i) => Number.isInteger(i) && i >= 0 && i < nTokens));
-      const editable = isController && (stage === "tree-unseen" ? step >= 1 : step === 0);
-      const toggle = editable
-        ? (i: number) => {
-            const next = new Set(removed);
-            if (next.has(i)) next.delete(i);
-            else next.add(i);
-            setState({ ...state, removed: [...next].sort((a, b) => a - b) });
-          }
-        : undefined;
+      const editable = interactive && (stage === "tree-unseen" ? step >= 1 : step === 0);
+      const toggle = editable ? (i: number) => act({ type: "toggle", index: i }) : undefined;
       if (stage === "network-fail") {
         return (
           <NetFailStage
@@ -257,7 +283,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
             controls={
               editable ? (
                 <ControlBar>
-                  <SceneButton disabled={removed.size === 0} onClick={() => setState({ ...state, removed: undefined })}>
+                  <SceneButton disabled={removed.size === 0} onClick={() => act({ type: "restore" })}>
                     {t(T.edit.restore)}
                   </SceneButton>
                   <p className={styles.hint}>{t(T.edit.hint)}</p>
@@ -271,7 +297,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
       if (editable) {
         controls = (
           <>
-            <SceneButton disabled={removed.size === 0} onClick={() => setState({ ...state, removed: undefined })}>
+            <SceneButton disabled={removed.size === 0} onClick={() => act({ type: "restore" })}>
               {t(T.edit.restore)}
             </SceneButton>
             <p className={styles.hint}>{t(T.edit.hint)}</p>
@@ -291,6 +317,8 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
           reducedMotion={ctx.reducedMotion}
           state={state}
           setState={setState}
+          interactive={interactive}
+          act={act}
         />
       );
     case "network":
@@ -927,6 +955,8 @@ function LearningStage({
   reducedMotion,
   state,
   setState,
+  interactive,
+  act: onAction,
 }: {
   step: number;
   t: Tr;
@@ -935,6 +965,8 @@ function LearningStage({
   reducedMotion: boolean;
   state: TextClassifierLabState;
   setState: (next: TextClassifierLabState | ((prev: TextClassifierLabState) => TextClassifierLabState)) => void;
+  interactive: boolean;
+  act: (a: LabAction) => void;
 }) {
   const beat = learningBeat(locale);
   const isController = role === "controller";
@@ -1012,10 +1044,10 @@ function LearningStage({
       still={still}
       footnote={simplifiedNote(t, locale)}
       controls={
-        isController && streaming ? (
+        interactive && streaming ? (
           <ControlBar>
-            <SceneButton onClick={() => setState({ ...state, train: undefined, trainRun: (state.trainRun ?? 0) + 1 })}>{t(T.network.restart)}</SceneButton>
-            <SceneButton disabled={state.train?.done} onClick={() => setState({ ...state, trainSkip: (state.trainSkip ?? 0) + 1 })}>
+            <SceneButton onClick={() => onAction({ type: "restart" })}>{t(T.network.restart)}</SceneButton>
+            <SceneButton disabled={state.train?.done} onClick={() => onAction({ type: "skip" })}>
               {t(T.network.skip)}
             </SceneButton>
           </ControlBar>

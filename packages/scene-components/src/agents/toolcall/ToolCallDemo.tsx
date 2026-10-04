@@ -3,7 +3,9 @@ import type { ReactNode } from "react";
 import { Rich } from "../../primitives/Rich.tsx";
 import type { SceneComponentProps } from "../../contract.ts";
 import { useSceneState } from "../../learning/shared/sceneState.ts";
-import { ControlBar, Disclosure, SceneHeading, Segmented, cx, l, type L10n } from "../../learning/shared/ui.tsx";
+import { Disclosure, SceneHeading, cx, l, type L10n } from "../../learning/shared/ui.tsx";
+import { ControlBar, ControlChoice } from "../../primitives/Controls.tsx";
+import { canInteract, useSceneActions } from "../../primitives/interaction.ts";
 import { Icon, type IconName } from "../shared/icons.tsx";
 import { SearchCompare } from "./SearchCompare.tsx";
 import { WeatherWalkthrough } from "./WeatherWalkthrough.tsx";
@@ -101,7 +103,7 @@ const TEXT = {
 };
 
 export function ToolCallDemo({ props, ctx }: SceneComponentProps<ToolCallDemoProps, ToolCallState>) {
-  const { locale, revealStep, role } = ctx;
+  const { locale, revealStep } = ctx;
   const t = (x: L10n) => tr(x, locale);
   const [state, setState] = useSceneState<ToolCallState>(ctx, () => ({
     scenario: ALL_SCENARIOS.includes(props.scenario as ToolScenario) ? (props.scenario as ToolScenario) : "weather",
@@ -109,26 +111,27 @@ export function ToolCallDemo({ props, ctx }: SceneComponentProps<ToolCallDemoPro
   const step = Math.max(0, Math.min(state.scenario === "search" ? 5 : 4, revealStep));
   const vis = (n: number) => cx(styles.reveal, step >= n && styles.on);
 
-  const controls = role === "controller" && (
-    <div className={styles.ctl}>
-      <ControlBar>
-        <Segmented
-          label={t(TEXT.example)}
-          value={state.scenario}
-          onChange={(scenario) => {
-            // A new example tells its story from the start: back to the scene's first step.
-            setState({ scenario });
-            ctx.sendCommand({ type: "goto", sceneId: ctx.scene.id, revealStep: 0 });
-          }}
-          options={[
-            { value: "weather", label: t(TEXT.weather) },
-            { value: "search", label: t(TEXT.search) },
-            { value: "calculator", label: t(TEXT.calculator) },
-            { value: "code", label: t(TEXT.code) },
-          ]}
-        />
-      </ControlBar>
-    </div>
+  // Every window's control comes here; only the stage owner changes the state.
+  const act = useSceneActions<ToolScenario, ToolCallState>(ctx, (scenario) => {
+    // A new example tells its story from the start: back to the scene's first step.
+    setState({ scenario });
+    ctx.sendCommand({ type: "goto", sceneId: ctx.scene.id, revealStep: 0 });
+  });
+
+  const controls = canInteract(ctx) && (
+    <ControlBar className={styles.ctl}>
+      <ControlChoice
+        label={t(TEXT.example)}
+        value={state.scenario}
+        onChange={act}
+        options={[
+          { value: "weather", label: t(TEXT.weather) },
+          { value: "search", label: t(TEXT.search) },
+          { value: "calculator", label: t(TEXT.calculator) },
+          { value: "code", label: t(TEXT.code) },
+        ]}
+      />
+    </ControlBar>
   );
 
   if (state.scenario === "weather" || !(state.scenario in SCRIPTS)) {

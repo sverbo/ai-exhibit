@@ -3,6 +3,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { sources } from "../../../../content/sources/index.ts";
+import { chapter01 } from "../../../../presentations/canonical/src/scenes/01-capabilities.ts";
 import { chapter04 } from "../../../../presentations/canonical/src/scenes/04-to-risks.ts";
 import type { SceneComponent, SceneContext, SceneRole } from "../contract.ts";
 import { INCIDENT_BEATS, INCIDENT_SHORT_BEATS, INCIDENT_STEPS, incidentBeats, incidentSteps, type IncidentVariant } from "./incident.ts";
@@ -53,7 +54,8 @@ function render(component: SceneComponent, props: object, c: SceneContext): stri
   return renderToStaticMarkup(createElement(component, { props, ctx: c }));
 }
 
-const pictureScenes = chapter04.filter(
+// PictureCards is used by chapter 04 and by "Already here" in chapter 01.
+const pictureScenes = [...chapter01, ...chapter04].filter(
   (s): s is SceneDefinition & { visual: { layout: "component"; component: string; props: PictureCardsProps } } =>
     s.visual.layout === "component" && s.visual.component === "PictureCards",
 );
@@ -119,7 +121,7 @@ describe("PictureCards", () => {
     expect(pictureCardsLayout({ cards: [card, card] })).toBe("row");
   });
 
-  it("chapter 04 scenes use known pictures, both locales, short lines and no figures on screen", () => {
+  it("PictureCards scenes use known pictures, both locales, short lines and no figures on screen", () => {
     expect(pictureScenes.length).toBeGreaterThanOrEqual(5);
     for (const scene of pictureScenes) {
       const p = scene.visual.props;
@@ -142,7 +144,7 @@ describe("PictureCards", () => {
     }
   });
 
-  it("renders every chapter 04 use in every role, locale and step", () => {
+  it("renders every PictureCards use in every role, locale and step", () => {
     for (const scene of pictureScenes)
       for (const role of roles)
         for (const locale of locales)

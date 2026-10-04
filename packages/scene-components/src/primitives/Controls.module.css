@@ -1,0 +1,109 @@
+/*
+ * The one control bar of every interactive scene: a single compact row under
+ * the slide, the same in every window. Anything placed inside it (buttons,
+ * choices, fields, older scene buttons) takes these compact sizes.
+ */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  padding: 10px 80px;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+/* Compact sizes for every control inside the bar. */
+.bar button {
+  font-size: 18px;
+  padding: 5px 14px;
+  border-width: 1.5px;
+  min-height: 0;
+}
+.bar input:not([type="range"]) {
+  font-size: 18px;
+  padding: 5px 12px;
+  border-width: 1.5px;
+}
+
+.button {
+  font: 500 18px / 1.2 var(--font-body);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 1.5px solid var(--color-line);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+.button:focus-visible,
+.input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.active {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* A label and its options on one line. */
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.label {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 360px;
+}
+.wide {
+  flex: 1;
+  min-width: 480px;
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  font: 400 18px / 1.2 var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-line);
+  border-radius: 8px;
+  padding: 5px 12px;
+}
+.input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}

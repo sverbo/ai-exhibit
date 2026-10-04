@@ -5,7 +5,9 @@ import type { ScenarioToolIcon, ToolCall } from "@ai-exhibit/content/assets/scen
 import { countUpTo } from "@ai-exhibit/content/assets/scenarios/index.ts";
 import type { SceneComponentProps } from "../../contract.ts";
 import { useSceneState } from "../../learning/shared/sceneState.ts";
-import { ControlBar, Disclosure, SceneButton, Segmented, cx, l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
+import { Disclosure, SceneButton, cx, l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
+import { ControlBar, ControlButton } from "../../primitives/Controls.tsx";
+import { canInteract, useSceneActions } from "../../primitives/interaction.ts";
 import { CapIcon, CapIconG, type CapIconName } from "../shared/icons.tsx";
 import {
   SPEEDS,
@@ -123,6 +125,16 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isController, state.playing, state.speed, step, last]);
 
+  // Every window's controls come here; only the stage owner runs the clock.
+  // The arrows step through the run; the bar only plays and pauses it.
+  const act = useSceneActions<"play" | "approve", RunState>(ctx, (a) => {
+    if (a === "approve") goto(step + 1);
+    else if (step >= last) {
+      goto(0);
+      setState((s) => ({ ...s, playing: true }));
+    } else setState((s) => ({ ...s, playing: !s.playing }));
+  });
+
   if (!scenario || !score || !current) {
     return (
       <div className={styles.root}>
@@ -178,43 +190,21 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
             scenario={scenario}
             step={current}
             locale={locale}
-            onApprove={isController ? () => goto(step + 1) : undefined}
+            onApprove={canInteract(ctx) ? () => act("approve") : undefined}
           />
         </div>
       </section>
 
-      {isController && (
-        <div className={styles.controls}>
-          <ControlBar>
-            <SceneButton onClick={() => goto(step - 1)} disabled={step <= 0} title={t(TEXT.prev)}>
-              <CapIcon name="back" size={22} />
-            </SceneButton>
-            <SceneButton
-              variant="primary"
-              onClick={() => {
-                if (step >= last) {
-                  goto(0);
-                  setState((s) => ({ ...s, playing: true }));
-                } else setState((s) => ({ ...s, playing: !s.playing }));
-              }}
-            >
-              <span className={styles.btnInner}>
-                <CapIcon name={state.playing ? "pause" : "play"} size={22} />
-                <Rich text={t(state.playing ? TEXT.pause : step >= last ? TEXT.restart : TEXT.play)} />
-              </span>
-            </SceneButton>
-            <SceneButton onClick={() => goto(step + 1)} disabled={step >= last} title={t(TEXT.next)}>
-              <CapIcon name="step" size={22} />
-            </SceneButton>
-            <Segmented<RunSpeed>
-              label={t(TEXT.speed)}
-              value={state.speed}
-              options={SPEEDS.map((s) => ({ value: s, label: t(SPEED_LABEL[s]) }))}
-              onChange={(speed) => setState((s) => ({ ...s, speed }))}
-            />
-            <span className={styles.stepOf}><Rich text={t(TEXT.stepOf(step + 1, last + 1))} /></span>
-          </ControlBar>
-        </div>
+      {canInteract(ctx) && (
+        <ControlBar className={styles.controls}>
+          <ControlButton primary onClick={() => act("play")}>
+            <span className={styles.btnInner}>
+              <CapIcon name={state.playing ? "pause" : "play"} size={18} />
+              <Rich text={t(state.playing ? TEXT.pause : step >= last ? TEXT.restart : TEXT.play)} />
+            </span>
+          </ControlButton>
+          <span className={styles.stepOf}><Rich text={t(TEXT.stepOf(step + 1, last + 1))} /></span>
+        </ControlBar>
       )}
     </div>
   );

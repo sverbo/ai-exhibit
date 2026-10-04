@@ -2,7 +2,7 @@ import { installCatalogs, registerPresentationTexts, type PresentationDefinition
 import { sources } from "@ai-exhibit/content/sources";
 import { catalogs } from "../locales/index.ts";
 import { artifacts } from "./artifacts.ts";
-import { chapters } from "./chapters.ts";
+import { chapters, talkTitle } from "./chapters.ts";
 import { editions } from "./editions.ts";
 import { chapter01 } from "./scenes/01-capabilities.ts";
 import { chapter02 } from "./scenes/02-how-it-works.ts";
@@ -12,9 +12,7 @@ import { chapter05 } from "./scenes/05-closing.ts";
 
 export const canonical: PresentationDefinition = {
   id: "canonical",
-  title: {
-    en: "What AI can do today, how it works, and its risks",
-  },
+  title: talkTitle,
   chapters,
   scenes: [...chapter01, ...chapter02, ...chapter03, ...chapter04, ...chapter05],
   editions,
@@ -23,7 +21,7 @@ export const canonical: PresentationDefinition = {
   artifacts,
   sources,
   // Codes of removed scenes: never reuse them (personal configs may still name them).
-  retiredSceneCodes: ["open"],
+  retiredSceneCodes: ["open", "side"],
 };
 
 // Texts are written in English; each language's catalog (locales/<lang>.json)

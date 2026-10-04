@@ -2,106 +2,19 @@ import type { SceneDefinition } from "@ai-exhibit/presentation-core";
 import { partOpener } from "../chapters.ts";
 
 /**
- * Chapter 04: the risks. Every scene shows pictures and one short line per
- * idea (PictureCards, IncidentStory, IntelligenceScale, GoalVsOutcome); figures,
- * dates and names live in the speaker notes.
+ * Chapter 04: the risks. It opens on the three families of risk; what AI can
+ * already do is shown in part 1 ("Already here"). Every scene shows pictures and
+ * one short line per idea (PictureCards, IncidentStory, IntelligenceScale,
+ * GoalVsOutcome); figures, dates and names live in the speaker notes.
  */
 export const chapter04: SceneDefinition[] = [
   partOpener("04", "prisk"),
-  {
-    id: "04-already-here",
-    code: "here",
-    steps: 4,
-    chapter: "04",
-    number: "4.1",
-    title: { en: "Already here" },
-    objective: {
-      en: "Land the presenter's conviction: the technology can already more or less replace human expertise, and the rest is adaptation.",
-    },
-    takeaway: {
-      en: "Even without further progress, what exists today is enough to change most expert work.",
-    },
-    visual: {
-      layout: "component",
-      component: "PictureCards",
-      props: {
-        heading: {
-          en: "Even if AI stopped improving today, it could already do most expert work.",
-        },
-        cards: [
-          {
-            picture: "code",
-            title: { en: "Code" },
-            line: {
-              en: "Most new code at Google is written by AI, then checked by engineers.",
-            },
-            evidence: "observed",
-            sourceIds: ["tk-google-2026-next-code"],
-          },
-          {
-            picture: "car",
-            title: { en: "Driving" },
-            line: {
-              en: "Taxis with nobody at the wheel carry paying riders every week.",
-            },
-            evidence: "observed",
-            sourceIds: ["tk-waymo-2026-weekly-rides"],
-          },
-          {
-            picture: "runner",
-            title: { en: "Robots" },
-            line: {
-              en: "Humanoid robots ran a half-marathon in Beijing. Next: anything made for two hands.",
-            },
-            evidence: "projection",
-            sourceIds: ["tk-beijing-2025-robot-half-marathon", "tk-figure-2025-bmw"],
-          },
-          {
-            picture: "math",
-            title: { en: "Mathematics" },
-            line: {
-              en: "AI agents claim to have solved a famous open problem. Still under review.",
-            },
-            evidence: "contested",
-            sourceIds: ["tk-quanta-2026-navier-stokes", "tk-clay-2026-navier-stokes"],
-          },
-        ],
-      },
-    },
-    interaction: "presenter",
-    speakerNotes: {
-      en: `- My conviction, said plainly: what exists today already changes most expert work; the rest is adaptation
-- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours
-- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas
-- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); "next" is my projection
-- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed
-- Experts disagree on timelines, some strongly: weigh my view accordingly`,
-    },
-    transitionIn: { en: "And while they race, look at what is already possible." },
-    transitionOut: { en: "If that is even half true, the next question is risk." },
-    evidenceLevel: "contested",
-    sourceIds: [
-      "tk-google-2026-next-code",
-      "tk-metr-2026-time-horizon-1-1",
-      "tk-waymo-2026-weekly-rides",
-      "tk-figure-2025-bmw",
-      "tk-beijing-2025-robot-half-marathon",
-      "tk-quanta-2026-navier-stokes",
-      "tk-clay-2026-navier-stokes",
-    ],
-    runtimeClass: "A",
-    artifacts: [],
-    fallback: { kind: "none", reason: "Static pictures." },
-    durationSec: 120,
-    optional: false,
-    localizationNotes: "Say the date of every figure out loud. The heading is the presenter's conviction, not a sourced fact; the cards carry the evidence.",
-  },
   {
     id: "04-to-risks",
     code: "risk",
     steps: 3,
     chapter: "04",
-    number: "4.2",
+    number: "4.1",
     title: { en: "Three families of risk" },
     objective: {
       en: "Turn the talk towards risk and name the three families that follow: misuse, systemic effects, loss of control.",
@@ -135,12 +48,14 @@ export const chapter04: SceneDefinition[] = [
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Powerful, opaque, built in a race: three reasons to talk about risk
+      en: `- Callback to part 1, "Already here": if even half of that is true, risk is the next question
+- Echo of the open question: what sounded like science fiction five years ago is on our phones today; what sounds like science fiction now may follow the same path
+- Powerful, opaque, built in a race: three reasons to talk about risk
 - **Do:** misuse: a person uses it to do harm
 - **Do:** systemic effects: nobody means harm, yet society shifts
 - **Do:** loss of control: the system itself pursues the wrong goal`,
     },
-    transitionIn: { en: "From what is already possible to what could go wrong." },
+    transitionIn: { en: "From what AI can already do to what could go wrong." },
     transitionOut: { en: "First, who is worried, and how much?" },
     evidenceLevel: "none",
     sourceIds: [],
@@ -155,7 +70,7 @@ export const chapter04: SceneDefinition[] = [
     code: "worry",
     steps: 2,
     chapter: "04",
-    number: "4.3",
+    number: "4.2",
     title: { en: "Who worries more?" },
     objective: {
       en: "Compare what the public and AI experts say about AI, and how many AI researchers give a real chance to the worst outcomes, from published surveys.",
@@ -220,7 +135,7 @@ export const chapter04: SceneDefinition[] = [
     code: "abuse",
     steps: 2,
     chapter: "04",
-    number: "4.4",
+    number: "4.3",
     title: { en: "Misuse" },
     objective: {
       en: "Name the two misuses that get the most attention, cyberattacks and biological or chemical weapons, at the level of published evaluations and policies only.",
@@ -289,7 +204,7 @@ export const chapter04: SceneDefinition[] = [
     code: "syst",
     steps: 4,
     chapter: "04",
-    number: "4.5",
+    number: "4.4",
     title: { en: "Systemic effects" },
     objective: {
       en: "Show that harm can come without any villain: jobs, concentration of power, losing skills, and gradual disempowerment, each as one picture with sourced notes.",
@@ -378,7 +293,7 @@ export const chapter04: SceneDefinition[] = [
     code: "isagi",
     steps: 0,
     chapter: "04",
-    number: "4.6",
+    number: "4.5",
     title: { en: "AGI: are we there?" },
     objective: {
       en: "Give a published definition of artificial general intelligence and let the room judge whether today's systems qualify.",
@@ -408,7 +323,7 @@ export const chapter04: SceneDefinition[] = [
 - OpenAI's charter: "highly autonomous systems that outperform humans at most economically valuable work"
 - Google DeepMind researchers (2023): levels against skilled adults; competent beats half of them, expert beats 90%
 - Their paper rated ChatGPT and Gemini "emerging"; "competent" not yet reached at the time
-- **Ask:** after "Already here", do today's systems qualify? Hands up. Experts disagree, partly because definitions differ`,
+- **Ask:** remember "Already here" in part 1: do today's systems qualify? Hands up. Experts disagree, partly because definitions differ`,
     },
     transitionIn: { en: "Before the third family, two words you will hear everywhere." },
     transitionOut: { en: "And beyond human level?" },
@@ -426,7 +341,7 @@ export const chapter04: SceneDefinition[] = [
     code: "super",
     steps: 5,
     chapter: "04",
-    number: "4.7",
+    number: "4.6",
     title: { en: "Superintelligence" },
     objective: {
       en: "Define superintelligence, say it may not be reachable with today's architecture, and explain why automated AI research could still make progress fast.",
@@ -463,7 +378,7 @@ export const chapter04: SceneDefinition[] = [
     code: "goal",
     steps: 4,
     chapter: "04",
-    number: "4.8",
+    number: "4.7",
     title: { en: "What we measure, what we wanted" },
     objective: {
       en: "Show with a toy that a system pursues the objective it was given, not the one we meant, and name that gap: misalignment.",
@@ -497,7 +412,7 @@ export const chapter04: SceneDefinition[] = [
     code: "hack",
     steps: 3,
     chapter: "04",
-    number: "4.9",
+    number: "4.8",
     title: { en: "It already happened: points, not the task" },
     objective: {
       en: "Tell the 2026 incident as an alignment failure: AI agents rewarded for points went for the answers instead of the task, and broke into Hugging Face to get them.",
@@ -544,7 +459,7 @@ export const chapter04: SceneDefinition[] = [
     id: "04-evaluations",
     code: "evals",
     chapter: "04",
-    number: "4.10",
+    number: "4.9",
     title: { en: "Already seen in tests" },
     objective: {
       en: "List, in plain words, the worrying behaviours researchers have already seen in controlled tests.",

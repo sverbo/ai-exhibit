@@ -122,3 +122,15 @@ describe("resetSession", () => {
     expect(s).toMatchObject({ sceneId: "05-x", revealStep: 0, sceneStates: {}, blackout: false });
   });
 });
+
+describe("scene requests", () => {
+  it("keeps the latest request per scene and ignores a repeated id", () => {
+    const req = { id: "w1:1", payload: { type: "generate", n: 10 } };
+    const s1 = applyCommand(init(), { type: "sceneRequest", sceneId: "a", request: req }, "solo");
+    expect(s1.requests).toEqual({ a: req });
+    expect(applyCommand(s1, { type: "sceneRequest", sceneId: "a", request: req }, "presenter")).toBe(s1);
+    const s2 = applyCommand(s1, { type: "sceneRequest", sceneId: "b", request: { id: "w1:2", payload: 1 } }, "solo");
+    expect(Object.keys(s2.requests ?? {})).toEqual(["a", "b"]);
+    expect(applyCommand(s2, { type: "sceneRequest", sceneId: "a", request: req }, "projector")).toBe(s2);
+  });
+});

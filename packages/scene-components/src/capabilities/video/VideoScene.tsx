@@ -41,7 +41,6 @@ const TEXT = {
   sound: { en: "Sound" },
   soundOff: { en: "Off" },
   soundProjector: { en: "Projector" },
-  soundHere: { en: "This screen" },
   seek: { en: "Position" },
   blocked: l(
     "Le navigateur bloque le son : cliquez une fois dans cette fenêtre.",
@@ -63,7 +62,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
   const [blocked, setBlocked] = useState(false);
   const [time, setTime] = useState({ current: 0, duration: 0 });
 
-  const muted = isMuted(state.sound, role);
+  const muted = isMuted(state.sound, role, ctx.audienceScreen);
 
   // Every role with a video element follows the shared state, the controller included:
   // its buttons only publish state, and this effect applies it.
@@ -230,7 +229,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
           </label>
           <Segmented<SoundOutput>
             label={t(TEXT.sound)}
-            value={state.sound}
+            value={state.sound === "off" ? "off" : "projector"}
             options={[
               {
                 value: "off",
@@ -242,7 +241,6 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
                 ),
               },
               { value: "projector", label: t(TEXT.soundProjector) },
-              { value: "controller", label: t(TEXT.soundHere) },
             ]}
             onChange={(sound) => setState((s) => ({ ...s, sound }))}
           />

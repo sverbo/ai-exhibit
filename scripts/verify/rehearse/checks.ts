@@ -34,18 +34,27 @@ export interface CheckOptions {
 /** Collects problems for one edition, tagged with the current cursor of each page. */
 export class Recorder {
   readonly problems: Problem[] = [];
+  /** Hosts scenes declare in `online.hosts`: blocked but expected. */
+  private declaredHosts: string[] = [];
   constructor(readonly edition: string) {}
 
   add(cursor: Cursor, kind: ProblemKind, detail: string): void {
     this.problems.push({ edition: this.edition, ...cursor, kind, detail: clip(normalizeDetail(detail)) });
   }
 
-  /** Blocks and reports every request that would leave this machine. */
-  async guardContext(context: BrowserContext, cursor: () => Cursor): Promise<void> {
+  /**
+   * Blocks every request that would leave this machine, and reports it unless
+   * its host is one a scene of the edition declares in `online.hosts` (an
+   * embedded video): those are blocked too, so the scene's offline fallback is
+   * what gets rehearsed, but they are expected.
+   */
+  async guardContext(context: BrowserContext, cursor: () => Cursor, declaredHosts: string[] = []): Promise<void> {
+    this.declaredHosts = declaredHosts;
     await context.route(
       (url) => !isLocalUrl(url.href),
       async (route) => {
-        this.add(cursor(), "external-request", `${route.request().method()} ${route.request().url()}`);
+        const url = route.request().url();
+        if (!isDeclaredHost(url, declaredHosts)) this.add(cursor(), "external-request", `${route.request().method()} ${url}`);
         await route.abort("internetdisconnected");
       },
     );
@@ -56,6 +65,8 @@ export class Recorder {
     page.on("console", (msg) => {
       if (msg.type() !== "error") return;
       const loc = msg.location();
+      // The browser's own line for a blocked request to a declared host (see guardContext).
+      if (loc.url && isDeclaredHost(loc.url, this.declaredHosts) && /ERR_INTERNET_DISCONNECTED/.test(msg.text())) return;
       const where = loc.url ? ` (${loc.url}:${loc.lineNumber})` : "";
       this.add(cursor(), "console-error", `${msg.text()}${where}`);
     });
@@ -268,6 +279,22 @@ class Walker {
   }
 }
 
+/** Hosts the edition's scenes declare they may call (`SceneDefinition.online`). */
+export function declaredOnlineHosts(scenes: SceneDefinition[]): string[] {
+  return [...new Set(scenes.flatMap((s) => s.online?.hosts ?? []))];
+}
+
+/** The URL's host is a declared host or one of its subdomains. */
+export function isDeclaredHost(raw: string, hosts: string[]): boolean {
+  let host: string;
+  try {
+    host = new URL(raw).hostname.toLowerCase();
+  } catch {
+    return false;
+  }
+  return hosts.some((h) => host === h || host.endsWith(`.${h}`));
+}
+
 async function newPage(browser: Browser, rec: Recorder, opts: CheckOptions, viewport = opts.viewport, shared?: BrowserContext) {
   let cursor: () => Cursor = () => ({ view: "setup", scene: "-", step: null, mode: "-" });
   // A shared context is a second window of the same browser profile.
@@ -277,7 +304,7 @@ async function newPage(browser: Browser, rec: Recorder, opts: CheckOptions, view
     await context.addInitScript("globalThis.__name = (fn) => fn;");
     // The talk starts in the language this browser last chose (no URL parameter for it).
     await context.addInitScript(`try { localStorage.setItem("ai-exhibit:talk-locale", ${JSON.stringify(opts.locale)}); } catch {}`);
-    await rec.guardContext(context, () => cursor());
+    await rec.guardContext(context, () => cursor(), declaredOnlineHosts(opts.scenes));
   }
   const page = await context.newPage();
   if (shared) await page.setViewportSize(viewport);

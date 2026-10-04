@@ -107,7 +107,7 @@ export const chapter03: SceneDefinition[] = [
 - Some dispute there is a race at all: attribute intentions to no one`,
     },
     transitionIn: { en: "From the players to the logic that links them." },
-    transitionOut: { en: "And while they race, look at what is already possible." },
+    transitionOut: { en: "Racing towards what? The risks." },
     evidenceLevel: "thought-experiment",
     sourceIds: ["cg-armstrong-2013-racing"],
     runtimeClass: "A",

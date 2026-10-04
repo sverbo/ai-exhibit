@@ -73,14 +73,16 @@ fallback.
 
 | Component | Scenes (`en`) | Reference |
 | --- | --- | --- |
-| `ThenAndNow` | 1.4 | [language](../../packages/scene-components/src/language/README.md) |
-| `ModelComparison` | 1.5 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `ConnectedAssistant` | 1.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `PermissionsBoard` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `VideoScene` | 1.8 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `ToolCallDemo` | 1.9 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `AgentRunExplainer` | 1.10 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `AgentLoop` | 1.11 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `HoldingSlide` | 0.1 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `YouTubeScene` | 0.2 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `ThenAndNow` | 1.1 | [language](../../packages/scene-components/src/language/README.md) |
+| `FrontierProgress` | 1.3 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `ConnectedAssistant` | 1.4 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `PermissionsBoard` | 1.5 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `VideoScene` | 1.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `ToolCallDemo` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `AgentRunExplainer` | 1.8 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `AgentLoop` | 1.9 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `AITimeline` | 2.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `AIEnvelopes` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
 | `TextClassifierLab` | 2.3 to 2.9 | [textlab](../../packages/scene-components/src/textlab/README.md) |
@@ -93,7 +95,7 @@ fallback.
 | `ChatPlayground` | 2.18 | [language](../../packages/scene-components/src/language/README.md) |
 | `IndustryStack` | 3.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `RaceDilemma` | 3.2 | [evidence](../../packages/scene-components/src/evidence/README.md) |
-| `PictureCards` | 4.1 to 4.5, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `PictureCards` | 1.2, 4.1, 4.3 to 4.5, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
 | `IntelligenceScale` | 4.6 | [story](../../packages/scene-components/src/story/README.md) |
 | `GoalVsOutcome` | 4.7 | [learning](../../packages/scene-components/src/learning/README.md) |
 | `IncidentStory` | 4.8 | [risks](../../packages/scene-components/src/risks/README.md) |
@@ -294,17 +296,27 @@ Then `pnpm verify:content` (duration and IDs) and a pass through
 
 Contract: `packages/scene-components/src/contract.ts`. A component receives
 `{ props, ctx }`; `ctx` carries `scene`, `locale`, `revealStep`, `role`, `mode`,
-`state`, `setState`, `interaction`, `sendCommand`, `getSource`, `joinUrl`,
-`reducedMotion`, `modelSource`.
+`state`, `setState`, `sendCommand`, `getSource`, `glossaryUrl`,
+`reducedMotion`, `modelSource`, and for interaction from any window
+`interactive`, `request`, `sendRequest`.
 
 | `ctx.role` | Where | Must |
 | --- | --- | --- |
-| `controller` | `/presenter`, `/present` | Accept input, call models (`/api`) and run heavy compute (training), publish small results with `ctx.setState` (keep it under about 50 KB) |
-| `display` | `/projector`, the presenter's projector mirror | Render only from `ctx.state` and `ctx.revealStep`. Never call models, never write state |
+| `controller` | The window that runs the stage: the presenter view, or the projector alone | Accept input, call models (`/api`) and run heavy compute (training), publish small results with `ctx.setState` (keep it under about 50 KB) |
+| `display` | The projector while the presenter view is open, the presenter's projector mirror | Render only from `ctx.state` and `ctx.revealStep`. Never call models, never write state; when `ctx.interactive`, show the controls and send actions as requests |
 | `preview` | Next-scene thumbnail, `/overview` | Static and cheap: no compute, no animation |
 
 Rules:
 
+0. **Interaction from any window**
+   ([spec](../specs/2026-10-04-interaction-anywhere.md)). Show controls when
+   `canInteract(ctx)` and send every user action through
+   `const act = useSceneActions(ctx, handle)` (`primitives/interaction.ts`):
+   the window that runs the stage handles it at once, any other controller
+   window sends it as a request that the stage owner handles once. Put the
+   controls in the shared compact bar (`ControlBar`, `ControlButton`,
+   `ControlChoice`, `ControlField` in `primitives/Controls.tsx`) and keep
+   only what the presenter needs live; reset (`R`) and fallback (`F`) are keys.
 1. **Fallback.** When `ctx.mode === "fallback"`, use recorded or deterministic
    data and touch no model or network. Switch to it on your own when Hugging
    Face is not available or a call fails, and say so calmly on screen

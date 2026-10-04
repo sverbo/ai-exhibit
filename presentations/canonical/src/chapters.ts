@@ -1,5 +1,8 @@
 import type { ChapterDefinition, ChapterId, L10n, SceneDefinition } from "@ai-exhibit/presentation-core";
 
+/** The talk's title: the presentation title, also shown on the holding slide. */
+export const talkTitle: L10n = { en: "What AI can do today, how it works, and its risks" };
+
 /** Chapters of the storyboard v1 talk (docs/specs/2026-10-02-storyboard-v1.md). */
 export const chapters: ChapterDefinition[] = [
   {

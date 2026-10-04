@@ -53,7 +53,7 @@ four).
 | `0` | Everything at once (used for single-card scenes). |
 | `pictureCardsSteps(props)` | With `orgs` or `takeaway`: one card per step, then the organisations, then the takeaway. |
 
-Used by `04-already-here` (4), `04-to-risks` (3), `04-misuse` (2: cyberattacks,
+Used by `01-already-here` (4), `04-to-risks` (3), `04-misuse` (2: cyberattacks,
 biological and chemical weapons), `04-systemic` (4: jobs, power, skills, our
 say), `04-agi` (0),
 `05-governance` (7: five cards, then civil-society

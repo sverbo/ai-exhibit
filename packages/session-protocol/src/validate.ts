@@ -43,6 +43,7 @@ export function isSessionState(v: unknown): v is SessionState {
     isFiniteNum(t.accumulatedMs) &&
     isBool(v.blackout) &&
     isBool(v.frozen) &&
-    isFiniteNum(v.version)
+    isFiniteNum(v.version) &&
+    (v.requests === undefined || isObj(v.requests))
   );
 }

@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import type { Locale, SceneDefinition, SourceRecord } from "@ai-exhibit/presentation-core";
-import type { SessionCommand } from "@ai-exhibit/session-protocol";
+import type { SceneRequest, SessionCommand } from "@ai-exhibit/session-protocol";
 
 /**
  * How a scene component is rendered:
@@ -9,6 +9,12 @@ import type { SessionCommand } from "@ai-exhibit/session-protocol";
  * - "display": projector follower. Renders only from `state`; never runs
  *   models and never edits state.
  * - "preview": next-scene thumbnail. Static, cheap, no compute, no animation.
+ *
+ * Interaction from any window (docs/specs/2026-10-04-interaction-anywhere.md):
+ * only the stage owner computes, but any controller window may act. Scenes
+ * show their controls when `ctx.interactive`, and route every action through
+ * `useSceneActions` (primitives/interaction.ts): on the owner it runs at once,
+ * elsewhere it becomes a request the owner runs.
  */
 export type SceneRole = "controller" | "display" | "preview";
 
@@ -45,6 +51,22 @@ export interface SceneContext<S = unknown> {
   glossaryUrl: string | null;
   /** The presenter's model source for language demos; undefined means "simulation". */
   modelSource?: ModelSource;
+  /**
+   * This stage is the one the audience sees and hears: the projector (alone or
+   * linked) or a single present window; in the lab, the projector pane. False
+   * in the presenter view (its stage and its projector mirror) and in previews.
+   * Media that make sound play it only here, so it never plays twice.
+   */
+  audienceScreen?: boolean;
+  /**
+   * This window may act on the scene: the stage owner (role "controller") or
+   * another controller window that mirrors it (role "display"). Absent: false.
+   */
+  interactive?: boolean;
+  /** Latest request from another window; only the stage owner acts on it. */
+  request?: SceneRequest | null;
+  /** Interactive display windows: asks the stage owner to act. No-op elsewhere. */
+  sendRequest?: (payload: unknown) => void;
 }
 
 export interface SceneComponentProps<P = Record<string, unknown>, S = unknown> {

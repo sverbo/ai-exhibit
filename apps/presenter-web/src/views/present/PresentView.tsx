@@ -99,6 +99,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
         <ProjectorSurface
           talk={talk}
           role="controller"
+          audienceScreen
           glossaryUrl={glossaryUrlFor(network)}
           overlay={<ProgressRail progress={talkProgress(talk.talk.presentation.chapters, talk.personal.timed, scene)} />}
         />

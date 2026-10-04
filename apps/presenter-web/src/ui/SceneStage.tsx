@@ -17,6 +17,7 @@ export function SceneStage({
   bars,
   className,
   overlay,
+  audienceScreen = false,
 }: {
   talk: Talk;
   scene: SceneDefinition;
@@ -29,6 +30,8 @@ export function SceneStage({
   className?: string;
   /** Drawn on top of the scene, in stage pixels (e.g. the projector's progress rail). */
   overlay?: ReactNode;
+  /** The stage the audience sees and hears: the only one where media play sound. */
+  audienceScreen?: boolean;
 }) {
   const defaultSource = useDefaultModelSource();
   // One window runs the stage (talk.ownsStage); any other controller view mirrors it.
@@ -40,10 +43,14 @@ export function SceneStage({
     revealStep: revealStep ?? talk.state?.revealStep ?? 0,
     ...sceneSlice(talk.state, scene.id),
     dispatch: effective === "controller" && talk.controller ? talk.session.dispatch : null,
+    // Not the stage owner, but a controller window: act through requests.
+    requestDispatch: role === "controller" && effective === "display" && talk.controller ? talk.session.dispatch : null,
+    requesterId: talk.session.clientId,
     getSource: talk.getSource,
     glossaryUrl,
     reducedMotion: talk.reducedMotion || effective === "preview",
     modelSource: modelSourceOf(talk.shell, defaultSource),
+    audienceScreen,
   });
   return (
     <Stage className={className} bars={bars}>
