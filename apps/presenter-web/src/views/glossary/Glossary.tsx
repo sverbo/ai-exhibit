@@ -3,7 +3,6 @@ import { LOCALES, LOCALE_INFO, parseLocale, tr, type Locale } from "@ai-exhibit/
 import { glossary, resources, type GlossaryEntry } from "@ai-exhibit/content/glossary";
 import { cloudStatus } from "@ai-exhibit/ml-runtime/lm";
 import { currentStampedTheme } from "../../theme.ts";
-import { guessLocale } from "./locale.ts";
 import { deviceId } from "./play/play.ts";
 import { letterOf, searchGlossary, termId } from "./search.ts";
 import styles from "./Glossary.module.css";
@@ -40,7 +39,7 @@ const COPY = {
 
 const LOCALE_KEY = "ai-exhibit:glossary-locale";
 
-/** This phone's last choice, else its browser languages. */
+/** This phone's last choice, else English. */
 function readLocale(fallback?: Locale): Locale {
   try {
     const v = parseLocale(localStorage.getItem(LOCALE_KEY));
@@ -48,7 +47,8 @@ function readLocale(fallback?: Locale): Locale {
   } catch {
     // storage unavailable
   }
-  return fallback ?? guessLocale(typeof navigator === "undefined" ? [] : navigator.languages);
+  // English by default, whatever the phone's language: the talk's terms are English.
+  return fallback ?? "en";
 }
 
 /**
