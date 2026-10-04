@@ -224,6 +224,17 @@ export default function PresenterView() {
         </div>
 
         <div className={styles.lower}>
+          <figure className={`${styles.thumb} ${styles.mirror} ${styles[`mirror_${air}`]}`}>
+            <figcaption className={styles.thumbCaption}>
+              <span className={chrome.label}>{t("viewProjector")}</span>
+              <span className={styles.thumbTitle}>
+                {air === "live" ? t("projectorLive") : air === "frozen" ? `${t("projectorFrozen")} ${frozenScene?.number ?? ""}` : t("projectorBlack")}
+              </span>
+            </figcaption>
+            <div className={styles.thumbStage}>
+              <ProjectorSurface talk={talk} role="display" glossaryUrl={glossaryUrl} />
+            </div>
+          </figure>
           <figure className={styles.thumb}>
             <figcaption className={styles.thumbCaption}>
               <span className={chrome.label}>{t("upNext")}</span>
@@ -239,17 +250,6 @@ export default function PresenterView() {
             </figcaption>
             <div className={styles.thumbStage}>
               {next ? <SceneStage talk={talk} scene={next} role="preview" revealStep={0} glossaryUrl={glossaryUrl} ghost bars="transparent" /> : <div className={styles.thumbEmpty} />}
-            </div>
-          </figure>
-          <figure className={`${styles.thumb} ${styles.mirror} ${styles[`mirror_${air}`]}`}>
-            <figcaption className={styles.thumbCaption}>
-              <span className={chrome.label}>{t("viewProjector")}</span>
-              <span className={styles.thumbTitle}>
-                {air === "live" ? t("projectorLive") : air === "frozen" ? `${t("projectorFrozen")} ${frozenScene?.number ?? ""}` : t("projectorBlack")}
-              </span>
-            </figcaption>
-            <div className={styles.thumbStage}>
-              <ProjectorSurface talk={talk} role="display" glossaryUrl={glossaryUrl} />
             </div>
           </figure>
         </div>
