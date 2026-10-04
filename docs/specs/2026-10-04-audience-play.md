@@ -63,9 +63,10 @@ laptop included. Audience calls therefore get their own budgets:
   it, so a ladder question is one ask. A device makes at most 3 asks a minute,
   all demos together. Tokenizing is free (30 per minute, no hourly count), and
   so is a word already on the map (no call).
-- **Room cap per address**, all audience devices together, in model requests:
-  200 per hour, 30 per minute; a ladder question counts 3 here. On the local
-  runtime every LAN phone shares one room budget.
+- **No cap per address by default** (presenter's decision, 2026-10-04): phones
+  on one venue Wi-Fi share an address, and the budget is per phone only. An
+  optional room cap (`roomPerHour`, `roomPerMinute` in `AudienceLimits`, in
+  model requests, a ladder question counting 3) remains available.
 - **Smaller answers**: at most 60 output tokens (the base model asks for 10),
   2 chat messages, 1 text to embed; the 300-character input cap stays.
 - The presenter's budgets (per-minute, 100 per hour per address) never see
@@ -75,7 +76,7 @@ laptop included. Audience calls therefore get their own budgets:
   clients reach these endpoints only with the header; everything else stays
   for the presenter's machine.
 - A demo's answers carry `x-ai-exhibit-remaining`: that demo's asks left this
-  hour (the room cap included). The audience status returns
+  hour (an optional room cap included). The audience status returns
   `audience: { perHour, games: { words, base, assistant, ladder } }` and, of
   the key, only whether it is valid. Each demo shows its own asks left,
   discreetly.
@@ -86,9 +87,8 @@ laptop included. Audience calls therefore get their own budgets:
   every demo spent) switches the whole tab to recordings. The wire names
   (`game`, `games`) predate the wording and stay for compatibility.
 
-Limits: a determined user can reset the device id (clear storage), so the
-per-address room cap and the Hugging Face spending limit are the real
-safeguards. Counters live in memory per server instance (several Vercel
+Limits: a determined user can reset the device id (clear storage); with no
+room cap, the Hugging Face spending limit is the real safeguard. Counters live in memory per server instance (several Vercel
 instances each count on their own): best effort, as for the presenter.
 
 ## Recorded fallback

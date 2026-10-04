@@ -262,10 +262,14 @@ export interface AudienceLimits {
    * device, all demos together. Timeouts come from the server's own limits.
    */
   limits: Omit<Limits, "timeoutMs" | "ladderTimeoutMs">;
-  /** Model requests per rolling minute from one address, all audience devices together. */
-  roomPerMinute: number;
-  /** Model requests per rolling hour from one address, all audience devices together. */
-  roomPerHour: number;
+  /**
+   * Optional caps per address for all audience devices together, in model
+   * requests per rolling minute and hour. Unset by default: phones on one
+   * venue Wi-Fi share an address, and the presenter wants a budget per phone
+   * only (the Hugging Face spending limit stays the overall safeguard).
+   */
+  roomPerMinute?: number;
+  roomPerHour?: number;
   /** Free requests (tokenizing, status) per rolling minute and device. */
   freePerMinute: number;
 }
@@ -283,8 +287,6 @@ export const AUDIENCE_LIMITS: AudienceLimits = {
     perHour: 5,
     bodyBytes: 4_000,
   },
-  roomPerMinute: 30,
-  roomPerHour: 200,
   freePerMinute: 30,
 };
 
@@ -682,7 +684,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const gameRemaining = (device: string, game: AudienceDemo, ip: string, t = now()) => {
     if (!aud) return 0;
     const own = aud.limits.perHour - hours.used(gameKey(device, game), t);
-    const room = Math.floor((aud.roomPerHour - hours.used(roomKey(ip), t)) / modelRequests(game));
+    const room = Math.floor(((aud.roomPerHour ?? Infinity) - hours.used(roomKey(ip), t)) / modelRequests(game));
     return Math.max(0, Math.min(own, room));
   };
 
@@ -705,13 +707,13 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     const t = now();
     const calls = modelRequests(game);
     const left = gameRemaining(device, game, ip, t);
-    if (minutes.used(deviceKey(device), t) >= a.limits.perMinute || minutes.used(roomKey(ip), t) + calls > a.roomPerMinute) {
+    if (minutes.used(deviceKey(device), t) >= a.limits.perMinute || minutes.used(roomKey(ip), t) + calls > (a.roomPerMinute ?? Infinity)) {
       throw new CloudError("rate-limited", "Too many live requests this minute: try again in a few seconds", { window: "minute", remaining: left, game });
     }
     if (hours.used(gameKey(device, game), t) >= a.limits.perHour) {
       throw new CloudError("rate-limited", "This device has used its asks for this demo this hour", { window: "hour", remaining: 0, game, scope: "device" });
     }
-    if (hours.used(roomKey(ip), t) + calls > a.roomPerHour) {
+    if (hours.used(roomKey(ip), t) + calls > (a.roomPerHour ?? Infinity)) {
       throw new CloudError("rate-limited", "The audience has used its live requests for this hour", { window: "hour", remaining: 0, game, scope: "room" });
     }
     minutes.take(deviceKey(device), t);

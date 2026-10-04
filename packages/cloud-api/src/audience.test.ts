@@ -38,7 +38,7 @@ function sse(text: string) {
   );
 }
 
-function setup() {
+function setup(audience?: typeof AUDIENCE_LIMITS) {
   const f = vi.fn(async (u: string | URL | Request, i?: RequestInit) => {
     const body = JSON.parse(String(i?.body ?? "{}")) as { stream?: boolean; inputs?: unknown };
     if (body.stream) return sse("x");
@@ -46,7 +46,7 @@ function setup() {
     return new Response(JSON.stringify({ choices: [{ text: "x", message: { content: "x" } }] }), { status: 200, headers: { "content-type": "application/json" } });
   });
   let t = 0;
-  const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS, rateLimit: "per-client", now: () => t });
+  const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS, rateLimit: "per-client", now: () => t, audience });
   return { api, f, at: (ms: number) => (t = ms) };
 }
 
@@ -98,13 +98,23 @@ describe("audience budgets", () => {
     expect((await call(api, ladder(PHONE_A), ROOM)).json).toMatchObject({ window: "hour", game: "ladder", scope: "device" });
     // The room saw 3 model requests per question.
     const status = await call(api, req("GET", "/api/llm/status", undefined, aud(PHONE_B)), ROOM);
-    const roomLeft = AUDIENCE_LIMITS.roomPerHour - PER_GAME * LADDER.length;
-    expect((status.json.audience as { games: Record<string, number> }).games.ladder).toBe(Math.min(PER_GAME, Math.floor(roomLeft / LADDER.length)));
+    // No room cap by default: another phone at the same address keeps its full asks.
+    expect((status.json.audience as { games: Record<string, number> }).games.ladder).toBe(PER_GAME);
   });
 
-  it("caps all audience devices of one address together in model requests, without touching the presenter's budget", async () => {
-    const { api, f, at } = setup();
-    const room = AUDIENCE_LIMITS.roomPerHour;
+  it("has no per-address cap by default: every phone keeps its own asks", async () => {
+    const { api, at } = setup();
+    let t = 0;
+    for (let i = 0; i < 300; i++) {
+      t += 1_000;
+      at(t);
+      expect((await call(api, base(`phone-${i}-xxxxxx`), ROOM)).status).toBe(200);
+    }
+  });
+
+  it("can cap all audience devices of one address together, without touching the presenter's budget", async () => {
+    const room = 200;
+    const { api, f, at } = setup({ ...AUDIENCE_LIMITS, roomPerHour: room, roomPerMinute: 30 });
     let t = 0;
     for (let i = 0; i < room; i++) {
       // Many device ids (as someone resetting theirs would), each within its asks, over the hour.
