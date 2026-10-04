@@ -68,12 +68,12 @@ export const chapter04: SceneDefinition[] = [
   {
     id: "04-opinions",
     code: "worry",
-    steps: 2,
+    steps: 3,
     chapter: "04",
     number: "4.2",
     title: { en: "Who worries more?" },
     objective: {
-      en: "Compare what the public and AI experts say about AI, and how many AI researchers give a real chance to the worst outcomes, from published surveys.",
+      en: "Compare what the public and AI experts say about AI, and how many AI researchers give a real chance to the worst outcomes, from published surveys; then look back at an expert forecast that once sounded like science fiction.",
     },
     takeaway: {
       en: "Experts are more optimistic than the public, yet many of the researchers building AI give a real chance to catastrophe.",
@@ -108,25 +108,45 @@ export const chapter04: SceneDefinition[] = [
             bars: [{ who: { en: "AI researchers" }, group: "experts", value: 38, upTo: 51 }],
           },
         ],
+        aside: {
+          label: { en: "A look back" },
+          year: "2014",
+          main: {
+            en: "In Superintelligence, Nick Bostrom reports AI experts' median forecast: even odds of human-level AI by 2040. It sounded like science fiction.",
+          },
+          evidence: "projection",
+          analogyYear: "1949",
+          analogy: { en: "Orwell's 1984 imagined mass surveillance. That sounded like fiction too." },
+        },
       },
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): "more concerned than excited about the increased use of AI in daily life", 51% vs 15%; AI will "negatively affect the country over the next two decades" (very or somewhat negative impact), 35% vs 15%
-- Same question, the other way: very or somewhat positive impact, 17% of the public vs 56% of experts
-- Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits
-- Grace et al. (2,778 researchers, fall 2023): "What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?" 41% said at least 10%; framed as "human inability to control" AI, 51%; asked about "extremely bad outcomes", 38%
-- Caveat: surveys depend on the wording and on who answers; the 38 to 51% spread on one topic shows it
-- **Ask:** the people most excited about AI also give it a real chance of catastrophe. What do you make of that?`,
+      en: `- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): "more concerned than excited about the increased use of AI in daily life", 51% vs 15%; AI will "negatively affect the country over the next two decades" (very or somewhat negative impact), 35% vs 15%; the other way round, a positive impact, 17% vs 56%. Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits
+- Grace et al. (2,778 researchers, fall 2023): "What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?" 41% said at least 10%; framed as "human inability to control" AI, 51%; asked about "extremely bad outcomes", 38%. Surveys depend on the wording and on who answers: the 38 to 51% spread on one topic shows it
+- **Ask:** the people most excited about AI also give it a real chance of catastrophe. What do you make of that?
+- **Do:** last click, a look back: Müller and Bostrom asked AI experts in 2012/2013 (170 answers) when they saw a 50% chance of "high-level machine intelligence", one that can do most human professions at least as well as a typical human: median 2040 (90% by 2075); Bostrom reports it in Superintelligence (2014). Their own paper notes that some "considered science fiction" these questions
+- Caveat: a forecast is not evidence. For a comparison only (a different question, machines better than humans at every task), Grace et al. now put 50% at 2047, 13 years earlier than in their survey one year before
+- Orwell's 1984 (published June 1949) is an analogy, not evidence: what sounds like fiction can still become real, and it can also stay fiction
+- The spectrum is wide: Yudkowsky and Soares, "If Anyone Builds It, Everyone Dies" (2025), argue superhuman AI would kill us all; Yann LeCun (Meta) calls worries about an existential threat "complete B.S." (Wall Street Journal, October 2024)`,
     },
     transitionIn: { en: "Before the details: who is worried, and how much?" },
     transitionOut: { en: "First family: misuse." },
     evidenceLevel: "observed",
-    sourceIds: ["tk-pew-2025-public-experts", "tk-grace-2024-ai-authors"],
+    sourceIds: [
+      "tk-pew-2025-public-experts",
+      "tk-grace-2024-ai-authors",
+      "tk-muller-bostrom-2016-survey",
+      "tk-bostrom-2014-superintelligence-book",
+      "tk-orwell-1949-1984",
+      "tk-grace-2024-hlmi-timeline",
+      "tk-yudkowsky-soares-2025-book",
+      "tk-techcrunch-2024-lecun-existential-bs",
+    ],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "deterministic" },
-    durationSec: 90,
+    durationSec: 105,
     optional: true,
     localizationNotes: "Say the question wording and the year for each pair. French uses a space before '%'.",
   },

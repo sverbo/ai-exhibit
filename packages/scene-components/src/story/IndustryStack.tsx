@@ -66,6 +66,7 @@ export function layoutActors(): Map<string, Placed> {
 }
 
 const ACTORS = layoutActors();
+const LIT_AT = new Map(LAYERS.flatMap((l) => l.actors.map((a) => [a.id, a.lightAt ?? Infinity] as const)));
 
 /** Portrait centre x for a move. */
 export function personX(move: PersonMove): number {
@@ -188,7 +189,9 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
           const d = m.inline
             ? `M ${x - INLINE_PORTRAIT / 2 - 6} ${target.y - 10} L ${target.x + target.w / 2 + 10} ${target.y - 10}`
             : `M ${x} ${LINK_FROM_Y} L ${target.x} ${target.y - target.h / 2 - 10}`;
-          const shown = placements.get(m.person) === m;
+          // A line only points at a lit organisation: Musk and Altman stand alone until OpenAI lights.
+          const orgLit = (LIT_AT.get(m.org!) ?? Infinity) <= step;
+          const shown = placements.get(m.person) === m && orgLit;
           return (
             <path
               key={`${m.person}@${m.step}`}

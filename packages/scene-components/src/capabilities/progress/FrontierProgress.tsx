@@ -207,8 +207,10 @@ function PanelView({
 function PointLabel({ x, y, point, locale }: { x: number; y: number; point: Point; locale: Locale }) {
   const t = (v: L10n) => tr(v, locale);
   const below = point.place === "below-left";
-  const lx = below ? x - 26 : x + 10;
-  const ly = below ? y + 28 : y - 34;
+  const extra = point.detail ? 18 : 0;
+  const [dx, dy] = point.offset ?? (below ? [-26, 28] : [10, -34 - extra]);
+  const lx = x + dx;
+  const ly = y + dy;
   const anchor = below ? "end" : "start";
   return (
     <g>
@@ -218,6 +220,12 @@ function PointLabel({ x, y, point, locale }: { x: number; y: number; point: Poin
       <text x={lx} y={ly + 20} textAnchor={anchor} className={styles.model}>
         {point.model}
       </text>
+      {/* How the value was obtained, when it says (e.g. "110 MW for 90 days"). */}
+      {point.detail && (
+        <text x={lx} y={ly + 20 + extra} textAnchor={anchor} className={styles.model}>
+          <RichTspans text={t(point.detail)} />
+        </text>
+      )}
     </g>
   );
 }

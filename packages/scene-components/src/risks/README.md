@@ -98,14 +98,20 @@ Used by `02-google-photos` (the 2015 automatic label; never show the photos).
 ## `OpinionGap`
 
 Props: `{ heading?: L10n; rows: { question: L10n; source: L10n; bars: { who: L10n;
-group: "public" | "experts"; value: number; upTo?: number }[] }[] }`. `steps:
-rows.length - 1` (`opinionGapSteps`): step 0 shows the first row, each step adds
-one.
+group: "public" | "experts"; value: number; upTo?: number }[] }[]; aside?: { label:
+L10n; year: string; main: L10n; evidence; analogyYear?: string; analogy?: L10n } }`.
+`steps: rows.length - 1`, plus 1 with an aside (`opinionGapSteps`): step 0 shows
+the first row, each step adds one, and the last step shows the aside.
+
+The aside is a short historical note under the rows: a dated forecast with its
+evidence badge, then an optional analogy drawn smaller and muted with an
+"Analogy" tag. Its space is reserved from step 0, so the rows never move.
 
 Survey answers as horizontal bars on one 0 to 100% track: the public in
 accent-2, experts in accent; `upTo` draws a range (a lighter extension) when a
 survey's answer depends on the question variant. The survey name and year sit
-under each row. Used by `04-opinions` (Pew 2025, Grace et al. 2024).
+under each row. Used by `04-opinions` (Pew 2025, Grace et al. 2024; aside:
+Müller and Bostrom's survey as reported in Superintelligence, 2014, and Orwell's 1984).
 
 ## `ResourceList`
 

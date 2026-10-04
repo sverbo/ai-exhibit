@@ -182,8 +182,9 @@ one series per click. Data, sources and the design note: `progress/progress.ts`.
 
 Top row, four small LINEAR charts on a shared 2019 to 2028 axis, each with a
 title, a plain-words subtitle, a tag saying how we know and a big growth
-factor: training cost (estimate, Epoch AI), training power (estimate, Epoch
-AI), memory as pages (published by the developers) and task length, the METR
+factor: training cost (estimate, Epoch AI), training electricity (power
+times training time, both Epoch AI estimates; models without a training time
+are left off), memory as pages (published by the developers) and task length, the METR
 time horizon (measured). Only the first and last
 points are labelled on screen; the notes give every point. Bottom row, one
 chart of the hardest tests as "best score so far" (Epoch AI data), each line
@@ -194,21 +195,23 @@ named at its end in a right-hand column (labels never overlap:
 | --- | --- |
 | 0 | Heading and empty frames (titles, axes) |
 | 1 | Training cost: $4,300 (GPT-2, 2019) to $366M (GPT-4.5, 2025), × 84,000 |
-| 2 | Training power: 5 MW (GPT-3) to 233 MW (GPT-6 Astra, 2026), × 46; "≈ 190,000 US homes" |
+| 2 | Training electricity: 1.8 GWh (GPT-3, "5 MW for 15 days") to 237 GWh (Grok 3, "110 MW for 90 days"), × 130; "Grok 3 ≈ 22,000 US homes for a year". GPT-6 Astra (233 MW) has no training time, so it is not plotted |
 | 3 | Memory: 1.5 pages (GPT-2) to 1,500 pages (Grok 3, 2025), × 1,000; "not projected" |
 | 4 | Task finished half the time (METR): 3 seconds (GPT-2) to 17 hours (Claude Mythos Preview, 2026), × 19,000 |
 | 5 | GPQA Diamond 36% to 96%, with the PhD experts line at 65% |
 | 6 | + SWE-bench Verified 31% to 84% |
 | 7 | + Humanity's Last Exam 5% to 55% and FrontierMath 1% to 94% |
 | 8 | + ARC-AGI-2 0% to 95%, and a medal marker: Maths Olympiad gold, July 2025 |
-| 9 | Projection for October 2027 on cost, power and time horizon: a dashed line in the projection color leaving the chart as an arrow ("over $1 billion", "about 500 MW", "3 to 8 weeks of work") and a Projection badge; the controller sees the arithmetic instead of the footer |
+| 9 | Projection for October 2027 on cost, electricity and time horizon: a dashed line in the projection color leaving the chart as an arrow ("over $1 billion", "about 1,100 GWh", "3 to 8 weeks of work") and a Projection badge; the controller sees the arithmetic instead of the footer |
 
 `scene.steps`: 9.
 
 Projection arithmetic: $366M (GPT-4.5, Feb 2025) × 2.4 a year for 2.6 years
 ≈ $3.6 billion, shown as Epoch AI's own "over $1 billion by 2027"
 (`tk-epoch-2024-training-cost-trend`); 233 MW × 2.1 a year for 1.1 years ≈ 520
-MW (`tk-epoch-2024-power-trend`); 17 h × 2^(days / doubling) with METR's two
+MW (`tk-epoch-2024-power-trend`), for the same training time as the latest model
+with a known one (Grok 3, 2,160 h), ≈ 1,100 GWh, an assumption stated in the
+basis; 17 h × 2^(days / doubling) with METR's two
 doubling times, 7 months (`tk-metr-2025-time-horizon-paper`) and 131 days
 (`tk-metr-2026-time-horizon-1-1`), gives about 100 h to 310 h, 3 to 8 weeks of
 40 hours. Memory and test scores are not projected.

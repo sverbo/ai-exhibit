@@ -14,6 +14,8 @@ export interface CloudStatus {
   codeRequired?: boolean;
   /** Only when a code was sent and one is required. */
   codeAccepted?: boolean;
+  /** The server's Hugging Face key: valid, plan, inference permission, credits refused lately. Absent from older servers. */
+  key?: { valid: boolean | null; plan: "free" | "pro" | null; inference: boolean | null; creditsExhausted: boolean };
 }
 
 /** Header the server reads the access code from (packages/cloud-api ACCESS_CODE_HEADER). */
@@ -216,4 +218,101 @@ export function cloudNextToken(req: { prompt: string; temperature?: number }, op
     { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...req, prompt: keepEnd(req.prompt) }) },
     opts,
   );
+}
+
+/* ---------------------------------------------------------------------------- */
+/* Live ladder: one question, open models of increasing size, streamed.          */
+
+/**
+ * The rungs of /api/llm/ladder as the audience sees them, in order. The ids
+ * match LADDER in packages/cloud-api (a test checks it); the server decides
+ * the providers. Sizes are the Hub's safetensors totals, years the public
+ * releases (model cards on huggingface.co, checked 2026-10-04).
+ */
+export interface LadderModel {
+  id: string;
+  /** Shown on screen. */
+  name: string;
+  maker: string;
+  /** Parameters, in billions. */
+  paramsB: number;
+  year: number;
+  /** "base": pretrained only, asked as a raw `Q: ...\nA:` text. */
+  kind: "base" | "chat" | "reasoning";
+}
+
+export const LADDER_MODELS: readonly LadderModel[] = [
+  { id: "qwen2.5-0.5b-base", name: "Qwen2.5 0.5B", maker: "Alibaba", paramsB: 0.5, year: 2024, kind: "base" },
+  { id: "llama-3.1-8b", name: "Llama 3.1 8B Instruct", maker: "Meta", paramsB: 8, year: 2024, kind: "chat" },
+  { id: "gpt-oss-120b", name: "gpt-oss-120b", maker: "OpenAI (open weights)", paramsB: 117, year: 2025, kind: "reasoning" },
+];
+
+/** One line of the ladder stream (packages/cloud-api LadderEvent). */
+export type CloudLadderEvent =
+  | { type: "start"; rung: string; model: string; provider: string }
+  | { type: "reasoning"; rung: string }
+  | { type: "text"; rung: string; text: string }
+  | { type: "done"; rung: string; finishReason: string | null; ms: number }
+  | { type: "error"; rung: string; error: CloudErrorCode; message: string }
+  | { type: "end" };
+
+/**
+ * Asks every rung the same question; `onEvent` gets each word as the server
+ * receives it. Resolves when the stream ends; throws a CloudLlmError when the
+ * server refuses the request as a whole (budget, access code, no token).
+ */
+export async function cloudLadder(question: string, onEvent: (e: CloudLadderEvent) => void, opts: CloudOptions = {}): Promise<void> {
+  const doFetch = opts.fetch ?? fetch;
+  const ac = new AbortController();
+  // The whole ladder: the server stops each rung on its own well before this.
+  const timer = setTimeout(() => ac.abort(), opts.timeoutMs ?? 70_000);
+  const onAbort = () => ac.abort();
+  opts.signal?.addEventListener("abort", onAbort, { once: true });
+  try {
+    const code = opts.accessCode !== undefined ? opts.accessCode : getAccessCode();
+    const headers = new Headers({ "content-type": "application/json" });
+    if (code) headers.set(ACCESS_CODE_HEADER, code);
+    const res = await doFetch(`${opts.baseUrl ?? ""}/api/llm/ladder`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ question: keepStart(question) }),
+      signal: ac.signal,
+    });
+    if (!res.ok || !res.body) {
+      const body = (await res.json().catch(() => null)) as Record<string, unknown> | null;
+      const error = (typeof body?.error === "string" ? body.error : "upstream") as CloudErrorCode;
+      if (error === "access-code" && opts.accessCode === undefined && code) setAccessCode(null);
+      throw new CloudLlmError(error, typeof body?.message === "string" ? body.message : `HTTP ${res.status}`);
+    }
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    const line = (l: string) => {
+      if (!l.trim()) return;
+      try {
+        onEvent(JSON.parse(l) as CloudLadderEvent);
+      } catch {
+        /* a malformed line: skip it */
+      }
+    };
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let i: number;
+      while ((i = buf.indexOf("\n")) >= 0) {
+        line(buf.slice(0, i));
+        buf = buf.slice(i + 1);
+      }
+    }
+    line(buf + dec.decode());
+  } catch (err) {
+    if (err instanceof CloudLlmError) throw err;
+    if (opts.signal?.aborted) throw new CloudLlmError("timeout", "Cancelled");
+    if (ac.signal.aborted) throw new CloudLlmError("timeout", "The cloud models took too long");
+    throw new CloudLlmError("offline", "The server or the network is unreachable");
+  } finally {
+    clearTimeout(timer);
+    opts.signal?.removeEventListener("abort", onAbort);
+  }
 }

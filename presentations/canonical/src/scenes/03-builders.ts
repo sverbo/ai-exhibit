@@ -26,8 +26,8 @@ export const chapter03: SceneDefinition[] = [
     speakerNotes: {
       en: `- The whole industry on one picture: machines, chip factories, chip designers, data centres, labs; only the ones we discuss light up
 - Click 1, Google DeepMind (maker of Gemini): Alphabet's AI lab, based in London
-- Click 2, Musk and Altman: in 2015 Altman writes to Musk that it would be good for "someone other than Google" to do it first
-- Click 3, OpenAI (maker of ChatGPT): December 2015, a non-profit with a $1 billion pledge. 2019: a capped-profit company under the non-profit, then $1 billion from Microsoft
+- Click 2, Musk and Altman, portraits only: in 2015 Altman writes to Musk that it would be good for "someone other than Google" to do it first
+- Click 3, OpenAI (maker of ChatGPT) lights, linked to both: December 2015, a non-profit with a $1 billion pledge. 2019: a capped-profit company under the non-profit, then $1 billion from Microsoft
 - Click 4, Musk leaves: he quits OpenAI's board in February 2018
 - Click 5, Dario Amodei appears at OpenAI: vice president of research there
 - Click 6, Anthropic (maker of Claude): Amodei leaves OpenAI and co-founds it in 2021 with other former OpenAI staff, a lab centred on safety

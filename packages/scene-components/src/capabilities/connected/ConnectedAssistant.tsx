@@ -11,6 +11,7 @@ export type ConnectedAssistantProps = Record<string, never>;
 
 const TEXT = {
   heading: { en: "Today's assistants plug into your life" },
+  chatbotVsAgent: { en: "Chatbot vs agent: a chatbot can only talk; connected to tools, an agent acts." },
   hub: { en: "Assistant" },
   alone: { en: "On its own, it can only talk." },
   aloneSub: { en: "Each connection opens one more door." },
@@ -36,6 +37,9 @@ export function ConnectedAssistant({ ctx }: SceneComponentProps<ConnectedAssista
     <div className={cx(styles.root, animate && styles.animate)}>
       <div className={styles.heading}>
         <SceneHeading><Rich text={t(TEXT.heading)} /></SceneHeading>
+        <p className={styles.sub}>
+          <Rich text={t(TEXT.chatbotVsAgent)} />
+        </p>
       </div>
 
       <svg className={styles.wires} viewBox="0 0 1920 1080" aria-hidden="true">

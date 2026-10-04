@@ -104,5 +104,10 @@ export function cloudHealthText(s: CloudStatus | null | "unreachable"): { state:
   if (s === "unreachable") return { state: "bad", text: "Hugging Face: no server answers /api (Simulation only)" };
   if (!s.configured) return { state: "warn", text: "Hugging Face: no token on the server (Simulation only)" };
   if (s.reachable === false) return { state: "bad", text: "Hugging Face: unreachable (Simulation only)" };
-  return { state: "ok", text: s.codeRequired ? "Hugging Face ready (access code required)" : "Hugging Face ready" };
+  if (s.key?.valid === false) return { state: "bad", text: "Hugging Face: the key is refused (Simulation only)" };
+  if (s.key?.inference === false) return { state: "bad", text: "Hugging Face: the key may not call models (Simulation only)" };
+  if (s.key?.creditsExhausted) return { state: "bad", text: "Hugging Face: credits used up, payment refused (Simulation only)" };
+  // The remaining balance cannot be read through the API: a refused payment (above) is the signal.
+  const details = [s.key?.valid ? "key OK" : null, s.codeRequired ? "access code required" : null].filter(Boolean);
+  return { state: "ok", text: details.length ? `Hugging Face ready (${details.join(", ")})` : "Hugging Face ready" };
 }

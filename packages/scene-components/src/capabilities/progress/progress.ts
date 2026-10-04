@@ -6,8 +6,8 @@ import type { L10n } from "../../learning/shared/ui.tsx";
  * Design note. One slide, two rows on one stage, so the room sees the whole
  * story at once and each click adds one series:
  * - Top row, four small LINEAR charts on the same 2019 to 2028 time axis, for
- *   what went into the models and what they can hold: training cost, power
- *   drawn while training, memory (context window, in pages) and reliability
+ *   what went into the models and what they can hold: training cost, training
+ *   electricity (power x training time), memory (context window, in pages) and reliability
  *   (METR: length of task finished half the time). Linear on purpose: early
  *   points sit on the floor and the curve turns into a wall, which is the
  *   point; every plotted value still has a label (first and last points on
@@ -27,8 +27,11 @@ import type { L10n } from "../../learning/shared/ui.tsx";
  *
  * Why these models: each series uses the models with a published value or a
  * labelled Epoch AI estimate, so the frontier point differs by series (GPT-4.5
- * is the newest model with a cost estimate; GPT-6 Astra the newest with a power
- * estimate). The model is named next to the first and last points.
+ * is the newest model with a cost estimate; Grok 3 the newest with both a power
+ * and a training-time estimate, so an energy: GPT-6 Astra has a power estimate,
+ * 233 MW, but no training time, so it is left off the electricity chart rather
+ * than given an invented duration). The model is named next to the first and
+ * last points.
  */
 
 export type Kind = "estimate" | "published" | "measured";
@@ -42,6 +45,10 @@ export interface Point {
   label?: L10n;
   /** Where the label goes relative to the point. */
   place?: "above-right" | "below-left";
+  /** How the value was obtained, a third line under the model ("110 MW for 90 days"). */
+  detail?: L10n;
+  /** Label anchor relative to the point (chart units of the 424-wide panel), when `place` collides with the line. */
+  offset?: [number, number];
 }
 
 /** Decimal year of a "YYYY-MM-DD" date. */
@@ -72,7 +79,7 @@ export interface Projection {
 }
 
 export interface Panel {
-  id: "cost" | "power" | "memory" | "reliability";
+  id: "cost" | "electricity" | "memory" | "reliability";
   step: number;
   title: L10n;
   /** What is measured, in plain words, under the title. */
@@ -91,10 +98,13 @@ export interface Panel {
   sourceIds: string[];
 }
 
-/** One average US home's yearly electricity, kWh (EIA, 2022), and its average draw in watts. */
+/** One average US home's yearly electricity, kWh (EIA, 2022). */
 export const HOME_KWH_PER_YEAR = 10_791;
-export const HOME_AVERAGE_W = (HOME_KWH_PER_YEAR * 1000) / 8760;
-export const homesFor = (megawatts: number) => (megawatts * 1e6) / HOME_AVERAGE_W;
+/** US homes a year of whose electricity equals this energy. */
+export const homesFor = (gigawattHours: number) => (gigawattHours * 1e6) / HOME_KWH_PER_YEAR;
+
+/** Energy = power x training time (Epoch AI estimates of both), GWh. */
+export const energyGWh = (megawatts: number, hours: number) => (megawatts * hours) / 1000;
 
 /** Pages: 1 token ≈ 0.75 words, 1 page ≈ 500 words (rough rule). */
 export const pagesFor = (tokens: number) => (tokens * 0.75) / 500;
@@ -115,12 +125,42 @@ const COST_POINTS: Point[] = [
   { date: "2023-03-15", value: 37_334_304.98, model: "GPT-4" },
   { date: "2025-02-27", value: 366_010_627.63, model: "GPT-4.5", label: { en: "$366M" }, place: "below-left" },
 ];
-const POWER_POINTS: Point[] = [
-  { date: "2020-05-28", value: 5.1, model: "GPT-3", label: { en: "5 MW" }, place: "above-right" },
-  { date: "2023-03-15", value: 19.94, model: "GPT-4" },
-  { date: "2025-02-17", value: 109.95, model: "Grok 3" },
-  { date: "2026-09-03", value: 232.67, model: "GPT-6 Astra", label: { en: "233 MW" }, place: "below-left" },
+/**
+ * Training electricity: Epoch AI's power draw (MW) x training time (hours),
+ * for the models that have both. GPT-2 has neither; GPT-6 Astra has a power
+ * (233 MW) but no training time: both are left off.
+ */
+export const TRAINING_RUNS = [
+  { date: "2020-05-28", model: "GPT-3", megawatts: 5.1008, hours: 355.2 },
+  { date: "2023-03-15", model: "GPT-4", megawatts: 19.944, hours: 2280 },
+  { date: "2025-02-17", model: "Grok 3", megawatts: 109.949, hours: 2160 },
+] as const;
+const run = (i: number) => TRAINING_RUNS[i]!;
+const ENERGY_POINTS: Point[] = [
+  {
+    date: run(0).date,
+    value: energyGWh(run(0).megawatts, run(0).hours),
+    model: "GPT-3",
+    label: { en: "1.8 GWh" },
+    detail: { en: "5 MW for 15 days" },
+    place: "above-right",
+    // Left of the steep segment to Grok 3, above the flat one to GPT-4.
+    offset: [-34, -62],
+  },
+  { date: run(1).date, value: energyGWh(run(1).megawatts, run(1).hours), model: "GPT-4" },
+  {
+    date: run(2).date,
+    value: energyGWh(run(2).megawatts, run(2).hours),
+    model: "Grok 3",
+    label: { en: "237 GWh" },
+    detail: { en: "110 MW for 90 days" },
+    place: "below-left",
+    // Left of the steep segment from GPT-4, clear of the line.
+    offset: [-44, 6],
+  },
 ];
+/** Latest power estimate (GPT-6 Astra, Sep 2026), MW: the projection starts from it. */
+export const LATEST_POWER = { date: "2026-09-03", model: "GPT-6 Astra", megawatts: 232.67 };
 const MEMORY_POINTS: Point[] = [
   { date: "2019-02-14", value: 1024, model: "GPT-2", label: { en: "1.5 pages" }, place: "above-right" },
   { date: "2020-05-28", value: 2048, model: "GPT-3" },
@@ -145,7 +185,12 @@ export const projectedCostUSD = () =>
   last(COST_POINTS).value * COST_GROWTH_PER_YEAR ** yearsBetween(last(COST_POINTS).date, PROJECTION_DATE);
 /** 233 MW (GPT-6 Astra, Sep 2026) carried to October 2027 at Epoch AI's 2.1x a year. */
 export const projectedPowerMW = () =>
-  last(POWER_POINTS).value * POWER_GROWTH_PER_YEAR ** yearsBetween(last(POWER_POINTS).date, PROJECTION_DATE);
+  LATEST_POWER.megawatts * POWER_GROWTH_PER_YEAR ** yearsBetween(LATEST_POWER.date, PROJECTION_DATE);
+/**
+ * That power for the same training time as the latest model with a known one
+ * (Grok 3, 2,160 hours, about 90 days): an assumption, stated in the basis.
+ */
+export const projectedEnergyGWh = () => energyGWh(projectedPowerMW(), run(2).hours);
 /** 17 hours (Apr 2026) carried to October 2027 with METR's two doubling times: [slow, fast], minutes. */
 export function projectedHorizonMin(): [number, number] {
   const days = yearsBetween(last(HORIZON_POINTS).date, PROJECTION_DATE) * DAYS_PER_YEAR;
@@ -156,7 +201,7 @@ export function projectedHorizonMin(): [number, number] {
 export const workWeeks = (minutes: number) => minutes / 60 / 40;
 
 export const STEP_COST = 1;
-export const STEP_POWER = 2;
+export const STEP_ELECTRICITY = 2;
 export const STEP_MEMORY = 3;
 export const STEP_RELIABILITY = 4;
 
@@ -182,24 +227,24 @@ export const PANELS: Panel[] = [
     sourceIds: ["tk-epoch-notable-models"],
   },
   {
-    id: "power",
-    step: STEP_POWER,
-    title: { en: "Training power" },
-    sub: { en: "drawn while training, megawatts" },
+    id: "electricity",
+    step: STEP_ELECTRICITY,
+    title: { en: "Training electricity" },
+    sub: { en: "power × training time, GWh" },
     kind: "estimate",
     max: 290,
-    tick: { value: 200, label: { en: "200 MW" } },
-    points: POWER_POINTS,
-    growth: { factor: growthOf(POWER_POINTS), label: { en: "× 46" } },
+    tick: { value: 200, label: { en: "200 GWh" } },
+    points: ENERGY_POINTS,
+    growth: { factor: growthOf(ENERGY_POINTS), label: { en: "× 130" } },
     projection: {
-      value: projectedPowerMW(),
-      label: { en: "about 500 MW" },
+      value: projectedEnergyGWh(),
+      label: { en: "about 1,100 GWh" },
       basis: {
-        en: "233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend).",
+        en: "233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend), for the same training time as the latest model with a known one (Grok 3, about 90 days): ≈ 1,100 GWh, a year of about 100,000 US homes.",
       },
-      sourceIds: ["tk-epoch-2024-power-trend", "tk-epoch-notable-models"],
+      sourceIds: ["tk-epoch-2024-power-trend", "tk-epoch-notable-models", "llm-eia-household-electricity"],
     },
-    note: { en: "≈ 190,000 US homes" },
+    note: { en: "Grok 3 ≈ 22,000 US homes for a year" },
     sourceIds: ["tk-epoch-notable-models", "llm-eia-household-electricity"],
   },
   {

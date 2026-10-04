@@ -8,8 +8,8 @@ import type { EditionDefinition } from "@ai-exhibit/presentation-core";
 export const editions: EditionDefinition[] = [
   {
     id: "full",
-    title: { en: "Full talk (about 90 min)" },
-    targetMinutes: [75, 95],
+    title: { en: "Full talk (about 2 hours)" },
+    targetMinutes: [90, 125],
     cut: "full",
   },
 ];

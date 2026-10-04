@@ -17,6 +17,9 @@ import {
   projectedCostUSD,
   projectedHorizonMin,
   projectedPowerMW,
+  projectedEnergyGWh,
+  TRAINING_RUNS,
+  energyGWh,
   roundSig,
   workWeeks,
   yearOf,
@@ -37,7 +40,7 @@ describe("progress data", () => {
       for (const p of s.points) expect(bench, `${s.id} ${p.model}`).toContain(`${Math.round(p.value)}% (${p.model}`);
     }
     const models = byId.get("tk-epoch-notable-models")!.claim;
-    for (const m of ["$4,300", "$2.1 million", "$37 million", "$366 million", "5.1 MW", "20 MW", "110 MW", "233 MW"]) {
+    for (const m of ["$4,300", "$2.1 million", "$37 million", "$366 million", "5.1 MW", "20 MW", "110 MW", "233 MW", "355.2 hours", "2,280 hours", "2,160 hours"]) {
       expect(models).toContain(m);
     }
   });
@@ -65,10 +68,11 @@ describe("progress data", () => {
   it("growth factors on screen match the arithmetic", () => {
     expect(roundSig(panel("cost").growth.factor)).toBe(84_000);
     expect(panel("cost").growth.label.en).toBe("× 84,000");
-    expect(Math.round(panel("power").growth.factor)).toBe(46);
+    expect(Math.round(panel("electricity").growth.factor)).toBe(131);
+    expect(panel("electricity").growth.label.en).toBe("× 130");
     expect(Math.round(panel("memory").growth.factor / 100) * 100).toBe(1000);
     expect(roundSig(panel("reliability").growth.factor)).toBe(19_000);
-    expect(roundSig(homesFor(232.67))).toBe(190_000);
+    expect(roundSig(homesFor(237.49))).toBe(22_000);
     expect(pagesFor(1_000_000)).toBe(1500);
     expect(roundSig(pagesFor(32_768), 1)).toBe(50);
   });
@@ -77,6 +81,10 @@ describe("progress data", () => {
     expect(projectedCostUSD()).toBeGreaterThan(1e9);
     expect(roundSig(projectedCostUSD() / 1e9)).toBeCloseTo(3.6, 9);
     expect(roundSig(projectedPowerMW())).toBe(520);
+    // Same training time as Grok 3 (2,160 h): about 1,100 GWh, a year of about 100,000 US homes.
+    expect(roundSig(projectedEnergyGWh())).toBe(1100);
+    expect(roundSig(homesFor(projectedEnergyGWh()), 1)).toBe(100_000);
+    expect(panel("electricity").projection!.basis.en).toContain("same training time");
     const [slow, fast] = projectedHorizonMin();
     expect(Math.round(workWeeks(slow))).toBe(3);
     expect(Math.round(workWeeks(fast))).toBe(8);
@@ -91,6 +99,23 @@ describe("progress data", () => {
 
   it("contains no long dashes", () => {
     expect(JSON.stringify({ PANELS, SERIES })).not.toMatch(DASH);
+  });
+});
+
+describe("training electricity", () => {
+  it("is power times a published or estimated training time, with no invented duration", () => {
+    const e = panel("electricity");
+    expect(e.points.map((p) => p.model)).toEqual(TRAINING_RUNS.map((r) => r.model));
+    expect(e.points.map((p) => p.model)).not.toContain("GPT-6 Astra");
+    for (const [i, r] of TRAINING_RUNS.entries()) expect(e.points[i]!.value).toBeCloseTo(energyGWh(r.megawatts, r.hours), 9);
+    expect(e.points[0]!.value).toBeCloseTo(1.81, 2);
+    expect(e.points[1]!.value).toBeCloseTo(45.47, 2);
+    expect(e.points[2]!.value).toBeCloseTo(237.49, 2);
+    // Durations on screen match the hours: 355.2 h ≈ 15 days, 2,160 h = 90 days.
+    expect(Math.round(TRAINING_RUNS[0].hours / 24)).toBe(15);
+    expect(TRAINING_RUNS[2].hours / 24).toBe(90);
+    expect(e.points[0]!.detail?.en).toBe("5 MW for 15 days");
+    expect(e.points[2]!.detail?.en).toBe("110 MW for 90 days");
   });
 });
 
@@ -138,7 +163,8 @@ describe("FrontierProgress renders", () => {
   it("adds one series per click", () => {
     expect(render("display", 0)).not.toContain("$4,300");
     expect(render("display", 1)).toContain("× 84,000");
-    expect(render("display", 1)).not.toContain("233 MW");
+    expect(render("display", 1)).not.toContain("237 GWh");
+    expect(render("display", 2)).toContain("110 MW for 90 days");
     expect(render("display", 4)).toContain("17 hours");
     expect(render("display", 4)).not.toContain("GPQA Diamond");
     expect(render("display", 5)).toContain("PhD experts on GPQA: 65%");

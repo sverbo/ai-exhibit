@@ -57,6 +57,24 @@ export async function sendWebResponse(res: ServerResponse, response: Response): 
     headers[k] = v;
   });
   res.writeHead(response.status, headers);
+  // A streamed answer (the ladder's NDJSON) goes out line by line as it arrives.
+  if (response.body && (headers["content-type"] ?? "").startsWith("application/x-ndjson")) {
+    const reader = response.body.getReader();
+    // The browser left: cancel the stream, which stops the upstream calls.
+    const onClose = () => void reader.cancel().catch(() => {});
+    res.on("close", onClose);
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        res.write(value);
+      }
+    } finally {
+      res.off("close", onClose);
+      res.end();
+    }
+    return;
+  }
   res.end(await response.text());
 }
 

@@ -52,8 +52,8 @@
     "text": "Une question pour la salle."
   },
   "edition:full/title": {
-    "source": "Full talk (about 90 min)",
-    "text": "Présentation complète (environ 90 min)"
+    "source": "Full talk (about 2 hours)",
+    "text": "Présentation complète (environ 2 heures)"
   },
   "00-holding/title": {
     "source": "Before the talk",
@@ -224,8 +224,8 @@
     "text": "La plupart des pièges qui trompaient l'IA ne marchent plus."
   },
   "01-then-and-now/speakerNotes": {
-    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click through the published answers: GPT-2 (2019), GPT-3 (2020), GPT-3.5 (2022): all wrong\n- **Do:** GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** last click, today's reasoning model, recorded answer with name and date\n- Other questions (letters in a word, 9.11 vs 9.9, Sally's sisters): same pattern",
-    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** afficher une à une les réponses publiées : GPT-2 (2019), GPT-3 (2020), GPT-3.5 (2022) : toutes fausses\n- **Faire :** GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** dernier clic, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- Les autres questions (lettres d'un mot, 9,11 contre 9,9, les sœurs de Sally) : même schéma"
+    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told \"Answer briefly.\"\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size. In Simulation the field stays disabled\n- Other questions (letters in a word, 9.11 vs 9.9, Sally's sisters): same pattern",
+    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots : Qwen2.5 0.5B, un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct ; gpt-oss-120b, qui réfléchit d'abord. Les modèles de conversation reçoivent la consigne « Answer briefly. »\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec sa taille. En Simulation, le champ reste désactivé\n- Les autres questions (lettres d'un mot, 9,11 contre 9,9, les sœurs de Sally) : même schéma"
   },
   "01-then-and-now/transitionIn": {
     "source": "From the question to a quick test.",
@@ -248,8 +248,8 @@
     "text": "Ce n'est pas une démo de laboratoire : l'IA écrit déjà l'essentiel du nouveau code chez Google et conduit des passagers payants."
   },
   "01-already-here/visual.props.heading": {
-    "source": "Already here, outside the lab",
-    "text": "Déjà là, hors du laboratoire"
+    "source": "Even if AI stopped improving today, it could already do most expert work.",
+    "text": "Même si l'IA cessait de progresser aujourd'hui, elle pourrait déjà faire l'essentiel du travail d'expert."
   },
   "01-already-here/visual.props.cards.0.title": {
     "source": "Code",
@@ -300,16 +300,16 @@
     "text": "Tout a grimpé"
   },
   "01-progress/objective": {
-    "source": "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, power, memory, reliability, and the hardest tests, with a labelled one-year projection.",
-    "text": "Montrer sur une seule diapo à quelle vitesse les frontier models ont grandi, de GPT-2 (2019) à aujourd'hui : coût, puissance, mémoire, fiabilité et tests les plus durs, avec une projection à un an clairement signalée."
+    "source": "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, electricity, memory, reliability, and the hardest tests, with a labelled one-year projection.",
+    "text": "Montrer sur une seule diapo à quelle vitesse les frontier models ont grandi, de GPT-2 (2019) à aujourd'hui : coût, électricité, mémoire, fiabilité et tests les plus durs, avec une projection à un an clairement signalée."
   },
   "01-progress/takeaway": {
-    "source": "In seven years, cost, power, memory and reliability grew a thousand to tens of thousands of times, and the hardest tests went from near zero to near the top.",
-    "text": "En sept ans, le coût, la puissance, la mémoire et la fiabilité ont été multipliés par mille à plusieurs dizaines de milliers, et les tests les plus durs sont passés de presque zéro à presque le maximum."
+    "source": "In seven years, cost, memory and reliability grew a thousand to tens of thousands of times, training electricity over a hundred times, and the hardest tests went from near zero to near the top.",
+    "text": "En sept ans, le coût, la mémoire et la fiabilité ont été multipliés par mille à plusieurs dizaines de milliers, l'électricité d'entraînement par plus de cent, et les tests les plus durs sont passés de presque zéro à presque le maximum."
   },
   "01-progress/speakerNotes": {
-    "source": "- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection\n- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)\n- Click 2, power while training (estimate, Epoch AI): GPT-3 about 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra about 233 MW (2026), the average draw of about 190,000 US homes (EIA); no estimate for GPT-2\n- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages\n- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)\n- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)\n- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)\n- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)\n- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)\n- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); power about 500 MW (×2.1 a year); tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written",
-    "text": "- Début : en haut, ce qu'on a investi et ce que les modèles retiennent ; en bas, les tests les plus durs. Chaque étiquette dit comment on le sait : estimation, publié, mesuré, projection\n- Clic 1, coût (estimation, Epoch AI) : GPT-2 environ 4 300 $ (2019), GPT-3 2,1 millions $ (2020), GPT-4 37 millions $ (2023), GPT-4.5 environ 366 millions $ (2025) : environ 84 000 fois plus. La puissance de calcul derrière a été multipliée par environ 500 000, d'environ 2e21 opérations (GPT-2) à environ 1e27 (GPT-6 Astra)\n- Clic 2, puissance pendant l'entraînement (estimation, Epoch AI) : GPT-3 environ 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra environ 233 MW (2026), la consommation moyenne d'environ 190 000 foyers américains (EIA) ; pas d'estimation pour GPT-2\n- Clic 3, mémoire (publiée par les développeurs) : 1 024 tokens (GPT-2), 2 048 (GPT-3), 32 768 (la grande version de GPT-4, 2023), 1 million (Grok 3, 2025) : d'une page et demie à environ 1 500 pages\n- Clic 4, fiabilité (mesurée par METR, surtout sur des tâches logicielles) : la durée d'une tâche, en temps d'expert, réussie une fois sur deux. GPT-2 environ 3 secondes, GPT-4 environ 3,5 minutes (2023), Claude 3.7 Sonnet environ 1 heure (fév. 2025), GPT-5 environ 3,4 heures, Claude Opus 4.6 environ 12 heures (fév. 2026), Claude Mythos Preview environ 17 heures (avr. 2026 ; intervalle de 8 à 55 heures)\n- Clic 5, GPQA Diamond (meilleur score à ce jour, mesures d'Epoch AI) : des questions de science niveau doctorat ; les docteurs du domaine obtiennent 65 % (Rein et al.). GPT-4 36 % (2023), o1 77 % (déc. 2024), Gemini 3 Pro 93 % (nov. 2025), GPT-6 Astra 96 % (sept. 2026)\n- Clic 6, SWE-bench Verified : 500 vrais bugs tirés de projets open source, chacun vérifié par des personnes. De 31 % (GPT-4o, nov. 2024) à 84 % (Claude Opus 4.7, avr. 2026)\n- Clic 7, des tests conçus pour être trop durs. Humanity's Last Exam (2 500 questions d'experts, janv. 2025) : de 5 % (sept. 2024) à 55 % (GPT-6 Astra). FrontierMath (des problèmes de recherche inédits, des heures ou des jours de travail pour un mathématicien ; moins de 2 % au lancement, nov. 2024) : d'environ 1 % à 94 % (GPT-6 Astra, sur la version corrigée de 2026)\n- Clic 8, ARC-AGI-2 (des énigmes visuelles, chacune résolue par au moins deux personnes ordinaires dans une étude sur 400 personnes ; mars 2025) : de 0 % à 95 % (GPT-6 Astra, dans son réglage le plus coûteux). La médaille : juillet 2025, Gemini Deep Think obtient 35 points sur 42 aux Olympiades internationales de mathématiques, l'or, corrigé par l'IMO (environ 8 % des élèves obtiennent l'or)\n- Clic 9, projection pour octobre 2027, des tendances, pas des promesses : coût d'entraînement de plus d'un milliard de dollars (selon les mots d'Epoch AI ; × 2,4 par an donne environ 3,6 milliards) ; puissance d'environ 500 MW (× 2,1 par an) ; des tâches de 3 à 8 semaines de travail (METR : doublement tous les 7 mois, ou tous les 131 jours depuis 2023). Mémoire et scores aux tests : pas de projection, les tests approchent de leur plafond et on en écrit de plus durs"
+    "source": "- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection\n- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)\n- Click 2, training electricity = power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known, so it is not plotted. Patterson et al. estimated GPT-3 lower, 1.3 GWh\n- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages\n- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)\n- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)\n- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)\n- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)\n- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)\n- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year ≈ 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written",
+    "text": "- Début : en haut, ce qu'on a investi et ce que les modèles retiennent ; en bas, les tests les plus durs. Chaque étiquette dit comment on le sait : estimation, publié, mesuré, projection\n- Clic 1, coût (estimation, Epoch AI) : GPT-2 environ 4 300 $ (2019), GPT-3 2,1 millions $ (2020), GPT-4 37 millions $ (2023), GPT-4.5 environ 366 millions $ (2025) : environ 84 000 fois plus. La puissance de calcul derrière a été multipliée par environ 500 000, d'environ 2e21 opérations (GPT-2) à environ 1e27 (GPT-6 Astra)\n- Clic 2, électricité d'entraînement = puissance × durée d'entraînement (deux estimations d'Epoch AI) : GPT-3 environ 1,8 GWh (5 MW pendant 14,8 jours), GPT-4 environ 45 GWh (20 MW pendant environ 95 jours, une durée spéculative), Grok 3 environ 237 GWh (110 MW pendant environ 90 jours), un an d'électricité pour environ 22 000 foyers américains (EIA). Pas d'estimation pour GPT-2 ; GPT-6 Astra consomme environ 233 MW, mais sa durée d'entraînement n'est pas connue, donc il n'est pas sur le graphique. Patterson et al. estimaient GPT-3 plus bas, 1,3 GWh\n- Clic 3, mémoire (publiée par les développeurs) : 1 024 tokens (GPT-2), 2 048 (GPT-3), 32 768 (la grande version de GPT-4, 2023), 1 million (Grok 3, 2025) : d'une page et demie à environ 1 500 pages\n- Clic 4, fiabilité (mesurée par METR, surtout sur des tâches logicielles) : la durée d'une tâche, en temps d'expert, réussie une fois sur deux. GPT-2 environ 3 secondes, GPT-4 environ 3,5 minutes (2023), Claude 3.7 Sonnet environ 1 heure (fév. 2025), GPT-5 environ 3,4 heures, Claude Opus 4.6 environ 12 heures (fév. 2026), Claude Mythos Preview environ 17 heures (avr. 2026 ; intervalle de 8 à 55 heures)\n- Clic 5, GPQA Diamond (meilleur score à ce jour, mesures d'Epoch AI) : des questions de science niveau doctorat ; les docteurs du domaine obtiennent 65 % (Rein et al.). GPT-4 36 % (2023), o1 77 % (déc. 2024), Gemini 3 Pro 93 % (nov. 2025), GPT-6 Astra 96 % (sept. 2026)\n- Clic 6, SWE-bench Verified : 500 vrais bugs tirés de projets open source, chacun vérifié par des personnes. De 31 % (GPT-4o, nov. 2024) à 84 % (Claude Opus 4.7, avr. 2026)\n- Clic 7, des tests conçus pour être trop durs. Humanity's Last Exam (2 500 questions d'experts, janv. 2025) : de 5 % (sept. 2024) à 55 % (GPT-6 Astra). FrontierMath (des problèmes de recherche inédits, des heures ou des jours de travail pour un mathématicien ; moins de 2 % au lancement, nov. 2024) : d'environ 1 % à 94 % (GPT-6 Astra, sur la version corrigée de 2026)\n- Clic 8, ARC-AGI-2 (des énigmes visuelles, chacune résolue par au moins deux personnes ordinaires dans une étude sur 400 personnes ; mars 2025) : de 0 % à 95 % (GPT-6 Astra, dans son réglage le plus coûteux). La médaille : juillet 2025, Gemini Deep Think obtient 35 points sur 42 aux Olympiades internationales de mathématiques, l'or, corrigé par l'IMO (environ 8 % des élèves obtiennent l'or)\n- Clic 9, projection pour octobre 2027, des tendances, pas des promesses : coût d'entraînement de plus d'un milliard de dollars (selon les mots d'Epoch AI ; × 2,4 par an donne environ 3,6 milliards) ; électricité d'environ 1 100 GWh (233 MW × 2,1 par an ≈ 520 MW, pour la même durée d'entraînement que Grok 3, environ 90 jours : une hypothèse), un an d'électricité pour environ 100 000 foyers américains ; des tâches de 3 à 8 semaines de travail (METR : doublement tous les 7 mois, ou tous les 131 jours depuis 2023). Mémoire et scores aux tests : pas de projection, les tests approchent de leur plafond et on en écrit de plus durs"
   },
   "01-progress/transitionIn": {
     "source": "How did we get here so fast? Seven years, in numbers.",
@@ -1028,8 +1028,8 @@
     "text": "Une poignée de laboratoires, et quelques personnes, façonnent les modèles les plus capables."
   },
   "03-industry/speakerNotes": {
-    "source": "- The whole industry on one picture: machines, chip factories, chip designers, data centres, labs; only the ones we discuss light up\n- Click 1, Google DeepMind (maker of Gemini): Alphabet's AI lab, based in London\n- Click 2, Musk and Altman: in 2015 Altman writes to Musk that it would be good for \"someone other than Google\" to do it first\n- Click 3, OpenAI (maker of ChatGPT): December 2015, a non-profit with a $1 billion pledge. 2019: a capped-profit company under the non-profit, then $1 billion from Microsoft\n- Click 4, Musk leaves: he quits OpenAI's board in February 2018\n- Click 5, Dario Amodei appears at OpenAI: vice president of research there\n- Click 6, Anthropic (maker of Claude): Amodei leaves OpenAI and co-founds it in 2021 with other former OpenAI staff, a lab centred on safety\n- Click 7, xAI (maker of Grok): Musk launches it in July 2023. Meanwhile: ChatGPT (Nov 2022); the board fires Altman in Nov 2023, he is back five days later; OpenAI becomes a public benefit corporation (Oct 2025); Musk's lawsuit dismissed as time-barred (May 2026), appeal announced\n- Click 8, Meta\n- Click 9, Mistral AI, with Arthur Mensch: he worked at DeepMind in Paris, then co-founded it in 2023 with two former Meta researchers\n- Click 10, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) and Z.ai (Zhipu): many publish their model weights openly\n- Click 11, NVIDIA designs the chips; its founder Jensen Huang has run it since 1993\n- Clicks 12 and 13, TSMC (Taiwan) makes most of them, about 72% of the top ten foundries' revenue (Q2 2026); ASML (Netherlands) is the only maker of EUV machines\n- **Ask:** where is the power in this chain?",
-    "text": "- Toute l'industrie sur une image : machines, usines de puces, concepteurs de puces, centres de données, laboratoires ; seuls ceux dont on parle s'allument\n- Clic 1, Google DeepMind (qui fait Gemini) : le laboratoire d'IA d'Alphabet, basé à Londres\n- Clic 2, Musk et Altman : en 2015, Altman écrit à Musk qu'il serait bon que « quelqu'un d'autre que Google » y arrive en premier\n- Clic 3, OpenAI (qui fait ChatGPT) : décembre 2015, une organisation à but non lucratif avec 1 milliard de dollars promis. 2019 : une société à profit plafonné sous l'entité à but non lucratif, puis 1 milliard de dollars de Microsoft\n- Clic 4, Musk s'en va : il quitte le conseil d'OpenAI en février 2018\n- Clic 5, Dario Amodei apparaît chez OpenAI : il y est vice-président de la recherche\n- Clic 6, Anthropic (qui fait Claude) : Amodei quitte OpenAI et la cofonde en 2021 avec d'autres anciens d'OpenAI, un laboratoire centré sur la sécurité\n- Clic 7, xAI (qui fait Grok) : Musk le lance en juillet 2023. Entre-temps : ChatGPT (nov. 2022) ; le conseil renvoie Altman en nov. 2023, il revient cinq jours plus tard ; OpenAI devient une société à mission (oct. 2025) ; la plainte de Musk est rejetée pour prescription (mai 2026), appel annoncé\n- Clic 8, Meta\n- Clic 9, Mistral AI, avec Arthur Mensch : il travaillait chez DeepMind à Paris, puis la cofonde en 2023 avec deux anciens chercheurs de Meta\n- Clic 10, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) et Z.ai (Zhipu) : beaucoup publient ouvertement les poids de leurs modèles\n- Clic 11, NVIDIA conçoit les puces ; son fondateur Jensen Huang la dirige depuis 1993\n- Clics 12 et 13, TSMC (Taïwan) en fabrique l'essentiel, environ 72 % du chiffre d'affaires des dix plus grands fondeurs (2e trimestre 2026) ; ASML (Pays-Bas) est le seul fabricant de machines EUV\n- **Demander :** où est le pouvoir dans cette chaîne ?"
+    "source": "- The whole industry on one picture: machines, chip factories, chip designers, data centres, labs; only the ones we discuss light up\n- Click 1, Google DeepMind (maker of Gemini): Alphabet's AI lab, based in London\n- Click 2, Musk and Altman, portraits only: in 2015 Altman writes to Musk that it would be good for \"someone other than Google\" to do it first\n- Click 3, OpenAI (maker of ChatGPT) lights, linked to both: December 2015, a non-profit with a $1 billion pledge. 2019: a capped-profit company under the non-profit, then $1 billion from Microsoft\n- Click 4, Musk leaves: he quits OpenAI's board in February 2018\n- Click 5, Dario Amodei appears at OpenAI: vice president of research there\n- Click 6, Anthropic (maker of Claude): Amodei leaves OpenAI and co-founds it in 2021 with other former OpenAI staff, a lab centred on safety\n- Click 7, xAI (maker of Grok): Musk launches it in July 2023. Meanwhile: ChatGPT (Nov 2022); the board fires Altman in Nov 2023, he is back five days later; OpenAI becomes a public benefit corporation (Oct 2025); Musk's lawsuit dismissed as time-barred (May 2026), appeal announced\n- Click 8, Meta\n- Click 9, Mistral AI, with Arthur Mensch: he worked at DeepMind in Paris, then co-founded it in 2023 with two former Meta researchers\n- Click 10, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) and Z.ai (Zhipu): many publish their model weights openly\n- Click 11, NVIDIA designs the chips; its founder Jensen Huang has run it since 1993\n- Clicks 12 and 13, TSMC (Taiwan) makes most of them, about 72% of the top ten foundries' revenue (Q2 2026); ASML (Netherlands) is the only maker of EUV machines\n- **Ask:** where is the power in this chain?",
+    "text": "- Toute l'industrie sur une image : machines, usines de puces, concepteurs de puces, centres de données, laboratoires ; seuls ceux dont on parle s'allument\n- Clic 1, Google DeepMind (qui fait Gemini) : le laboratoire d'IA d'Alphabet, basé à Londres\n- Clic 2, Musk et Altman, seulement leurs portraits : en 2015, Altman écrit à Musk qu'il serait bon que « quelqu'un d'autre que Google » y arrive en premier\n- Clic 3, OpenAI (qui fait ChatGPT) s'allume, reliée aux deux : décembre 2015, une organisation à but non lucratif avec 1 milliard de dollars promis. 2019 : une société à profit plafonné sous l'entité à but non lucratif, puis 1 milliard de dollars de Microsoft\n- Clic 4, Musk s'en va : il quitte le conseil d'OpenAI en février 2018\n- Clic 5, Dario Amodei apparaît chez OpenAI : il y est vice-président de la recherche\n- Clic 6, Anthropic (qui fait Claude) : Amodei quitte OpenAI et la cofonde en 2021 avec d'autres anciens d'OpenAI, un laboratoire centré sur la sécurité\n- Clic 7, xAI (qui fait Grok) : Musk le lance en juillet 2023. Entre-temps : ChatGPT (nov. 2022) ; le conseil renvoie Altman en nov. 2023, il revient cinq jours plus tard ; OpenAI devient une société à mission (oct. 2025) ; la plainte de Musk est rejetée pour prescription (mai 2026), appel annoncé\n- Clic 8, Meta\n- Clic 9, Mistral AI, avec Arthur Mensch : il travaillait chez DeepMind à Paris, puis la cofonde en 2023 avec deux anciens chercheurs de Meta\n- Clic 10, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) et Z.ai (Zhipu) : beaucoup publient ouvertement les poids de leurs modèles\n- Clic 11, NVIDIA conçoit les puces ; son fondateur Jensen Huang la dirige depuis 1993\n- Clics 12 et 13, TSMC (Taïwan) en fabrique l'essentiel, environ 72 % du chiffre d'affaires des dix plus grands fondeurs (2e trimestre 2026) ; ASML (Pays-Bas) est le seul fabricant de machines EUV\n- **Demander :** où est le pouvoir dans cette chaîne ?"
   },
   "03-industry/transitionIn": {
     "source": "From how it works to who builds it.",
@@ -1132,8 +1132,8 @@
     "text": "Qui s'inquiète le plus ?"
   },
   "04-opinions/objective": {
-    "source": "Compare what the public and AI experts say about AI, and how many AI researchers give a real chance to the worst outcomes, from published surveys.",
-    "text": "Comparer ce que disent le public et les experts de l'IA, et combien de chercheurs en IA donnent une vraie probabilité aux pires issues, d'après des enquêtes publiées."
+    "source": "Compare what the public and AI experts say about AI, and how many AI researchers give a real chance to the worst outcomes, from published surveys; then look back at an expert forecast that once sounded like science fiction.",
+    "text": "Comparer ce que disent le public et les experts de l'IA, et combien de chercheurs en IA donnent une vraie probabilité aux pires issues, d'après des enquêtes publiées ; puis revenir sur une prévision d'experts qui paraissait autrefois relever de la science-fiction."
   },
   "04-opinions/takeaway": {
     "source": "Experts are more optimistic than the public, yet many of the researchers building AI give a real chance to catastrophe.",
@@ -1187,9 +1187,21 @@
     "source": "AI researchers",
     "text": "Chercheurs en IA"
   },
+  "04-opinions/visual.props.aside.label": {
+    "source": "A look back",
+    "text": "Un regard en arrière"
+  },
+  "04-opinions/visual.props.aside.main": {
+    "source": "In Superintelligence, Nick Bostrom reports AI experts' median forecast: even odds of human-level AI by 2040. It sounded like science fiction.",
+    "text": "Dans Superintelligence, Nick Bostrom rapporte la prévision médiane d'experts de l'IA : une chance sur deux d'avoir une IA de niveau humain d'ici 2040. Ça paraissait de la science-fiction."
+  },
+  "04-opinions/visual.props.aside.analogy": {
+    "source": "Orwell's 1984 imagined mass surveillance. That sounded like fiction too.",
+    "text": "1984 d'Orwell imaginait la surveillance de masse. Ça paraissait de la fiction, aussi."
+  },
   "04-opinions/speakerNotes": {
-    "source": "- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): \"more concerned than excited about the increased use of AI in daily life\", 51% vs 15%; AI will \"negatively affect the country over the next two decades\" (very or somewhat negative impact), 35% vs 15%\n- Same question, the other way: very or somewhat positive impact, 17% of the public vs 56% of experts\n- Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits\n- Grace et al. (2,778 researchers, fall 2023): \"What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?\" 41% said at least 10%; framed as \"human inability to control\" AI, 51%; asked about \"extremely bad outcomes\", 38%\n- Caveat: surveys depend on the wording and on who answers; the 38 to 51% spread on one topic shows it\n- **Ask:** the people most excited about AI also give it a real chance of catastrophe. What do you make of that?",
-    "text": "- Pew (avril 2025 ; 5 410 adultes américains et 1 013 experts de l'IA aux États-Unis, août à octobre 2024) : « plus inquiets qu'enthousiastes face à l'usage croissant de l'IA au quotidien », 51 % contre 15 % ; l'IA aura « un effet négatif sur le pays au cours des deux prochaines décennies » (impact très ou plutôt négatif), 35 % contre 15 %\n- La même question, dans l'autre sens : impact très ou plutôt positif, 17 % du public contre 56 % des experts\n- Les experts sont ici des auteurs et intervenants de conférences d'IA : plus proches de la technologie, et de ses bénéfices\n- Grace et al. (2 778 chercheurs, automne 2023) : « Quelle probabilité donnez-vous à ce que les progrès futurs de l'IA causent l'extinction humaine ou une perte de pouvoir tout aussi permanente et grave de l'espèce humaine ? » 41 % répondent au moins 10 % ; formulé comme « l'incapacité humaine à contrôler » l'IA, 51 % ; pour des « issues extrêmement mauvaises », 38 %\n- Prudence : une enquête dépend de la formulation et de qui répond ; l'écart de 38 à 51 % sur un même sujet le montre\n- **Demander :** ceux qui sont les plus enthousiastes face à l'IA lui accordent aussi une réelle probabilité de catastrophe. Qu'en pensez-vous ?"
+    "source": "- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): \"more concerned than excited about the increased use of AI in daily life\", 51% vs 15%; AI will \"negatively affect the country over the next two decades\" (very or somewhat negative impact), 35% vs 15%; the other way round, a positive impact, 17% vs 56%. Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits\n- Grace et al. (2,778 researchers, fall 2023): \"What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?\" 41% said at least 10%; framed as \"human inability to control\" AI, 51%; asked about \"extremely bad outcomes\", 38%. Surveys depend on the wording and on who answers: the 38 to 51% spread on one topic shows it\n- **Ask:** the people most excited about AI also give it a real chance of catastrophe. What do you make of that?\n- **Do:** last click, a look back: Müller and Bostrom asked AI experts in 2012/2013 (170 answers) when they saw a 50% chance of \"high-level machine intelligence\", one that can do most human professions at least as well as a typical human: median 2040 (90% by 2075); Bostrom reports it in Superintelligence (2014). Their own paper notes that some \"considered science fiction\" these questions\n- Caveat: a forecast is not evidence. For a comparison only (a different question, machines better than humans at every task), Grace et al. now put 50% at 2047, 13 years earlier than in their survey one year before\n- Orwell's 1984 (published June 1949) is an analogy, not evidence: what sounds like fiction can still become real, and it can also stay fiction\n- The spectrum is wide: Yudkowsky and Soares, \"If Anyone Builds It, Everyone Dies\" (2025), argue superhuman AI would kill us all; Yann LeCun (Meta) calls worries about an existential threat \"complete B.S.\" (Wall Street Journal, October 2024)",
+    "text": "- Pew (avril 2025 ; 5 410 adultes américains et 1 013 experts de l'IA aux États-Unis, août à octobre 2024) : « plus inquiets qu'enthousiastes face à l'usage croissant de l'IA au quotidien », 51 % contre 15 % ; l'IA aura « un effet négatif sur le pays au cours des deux prochaines décennies » (impact très ou plutôt négatif), 35 % contre 15 % ; dans l'autre sens, un impact positif, 17 % contre 56 %. Les experts sont ici des auteurs et intervenants de conférences d'IA : plus proches de la technologie, et de ses bénéfices\n- Grace et al. (2 778 chercheurs, automne 2023) : « Quelle probabilité donnez-vous à ce que les progrès futurs de l'IA causent l'extinction humaine ou une perte de pouvoir tout aussi permanente et grave de l'espèce humaine ? » 41 % répondent au moins 10 % ; formulé comme « l'incapacité humaine à contrôler » l'IA, 51 % ; pour des « issues extrêmement mauvaises », 38 %. Une enquête dépend de la formulation et de qui répond : l'écart de 38 à 51 % sur un même sujet le montre\n- **Demander :** ceux qui sont les plus enthousiastes face à l'IA lui accordent aussi une réelle probabilité de catastrophe. Qu'en pensez-vous ?\n- **Faire :** dernier clic, un regard en arrière : Müller et Bostrom ont demandé à des experts de l'IA en 2012-2013 (170 réponses) quand ils voyaient une chance sur deux d'une « intelligence artificielle de haut niveau », capable d'exercer la plupart des métiers humains au moins aussi bien qu'un humain typique : médiane 2040 (90 % d'ici 2075) ; Bostrom le rapporte dans Superintelligence (2014). Leur article note que certains « considéraient comme de la science-fiction » ces questions\n- Prudence : une prévision n'est pas une preuve. Pour comparaison seulement (une autre question, des machines meilleures que les humains pour toutes les tâches), Grace et al. placent maintenant la chance sur deux en 2047, 13 ans plus tôt que dans leur enquête de l'année précédente\n- 1984 d'Orwell (publié en juin 1949) est une analogie, pas une preuve : ce qui sonne comme de la fiction peut devenir réel, et peut aussi rester de la fiction\n- Le spectre est large : Yudkowsky et Soares, « If Anyone Builds It, Everyone Dies » (2025), soutiennent qu'une IA surhumaine nous tuerait tous ; Yann LeCun (Meta) qualifie les inquiétudes sur une menace existentielle de « complete B.S. » (Wall Street Journal, octobre 2024)"
   },
   "04-opinions/transitionIn": {
     "source": "Before the details: who is worried, and how much?",
@@ -2231,6 +2243,10 @@
     "source": "Today's assistants plug into your life",
     "text": "Les assistants d'aujourd'hui se branchent sur votre vie"
   },
+  "copy:Chatbot vs agent: a chatbot can only talk; connected to tools, an agent acts.": {
+    "source": "Chatbot vs agent: a chatbot can only talk; connected to tools, an agent acts.",
+    "text": "Chatbot (*agent conversationnel*) ou agent : un chatbot ne peut que parler ; relié à des outils, un agent agit."
+  },
   "copy:Assistant": {
     "source": "Assistant",
     "text": "Assistant"
@@ -2339,13 +2355,21 @@
     "source": "$366M",
     "text": "366 M$"
   },
-  "copy:5 MW": {
-    "source": "5 MW",
-    "text": "5 MW"
+  "copy:1.8 GWh": {
+    "source": "1.8 GWh",
+    "text": "1,8 GWh"
   },
-  "copy:233 MW": {
-    "source": "233 MW",
-    "text": "233 MW"
+  "copy:5 MW for 15 days": {
+    "source": "5 MW for 15 days",
+    "text": "5 MW pendant 15 jours"
+  },
+  "copy:237 GWh": {
+    "source": "237 GWh",
+    "text": "237 GWh"
+  },
+  "copy:110 MW for 90 days": {
+    "source": "110 MW for 90 days",
+    "text": "110 MW pendant 90 jours"
   },
   "copy:1.5 pages": {
     "source": "1.5 pages",
@@ -2387,33 +2411,33 @@
     "source": "$366M (GPT-4.5, Feb 2025) × 2.4 a year for 2.6 years ≈ $3.6 billion by October 2027; Epoch AI itself says \"more than a billion dollars by 2027\".",
     "text": "366 M$ (GPT-4.5, fév. 2025) × 2,4 par an pendant 2,6 ans ≈ 3,6 milliards $ d'ici octobre 2027 ; Epoch AI écrit lui-même « plus d'un milliard de dollars d'ici 2027 »."
   },
-  "copy:Training power": {
-    "source": "Training power",
-    "text": "Puissance d'entraînement"
+  "copy:Training electricity": {
+    "source": "Training electricity",
+    "text": "Électricité d'entraînement"
   },
-  "copy:drawn while training, megawatts": {
-    "source": "drawn while training, megawatts",
-    "text": "consommée pendant l'entraînement, en mégawatts"
+  "copy:power × training time, GWh": {
+    "source": "power × training time, GWh",
+    "text": "puissance × durée d'entraînement, en GWh"
   },
-  "copy:200 MW": {
-    "source": "200 MW",
-    "text": "200 MW"
+  "copy:200 GWh": {
+    "source": "200 GWh",
+    "text": "200 GWh"
   },
-  "copy:× 46": {
-    "source": "× 46",
-    "text": "× 46"
+  "copy:× 130": {
+    "source": "× 130",
+    "text": "× 130"
   },
-  "copy:about 500 MW": {
-    "source": "about 500 MW",
-    "text": "environ 500 MW"
+  "copy:about 1,100 GWh": {
+    "source": "about 1,100 GWh",
+    "text": "environ 1 100 GWh"
   },
-  "copy:233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend).": {
-    "source": "233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend).",
-    "text": "233 MW (GPT-6 Astra, sept. 2026) × 2,1 par an pendant 1,1 an ≈ 520 MW en octobre 2027 (tendance de puissance d'Epoch AI)."
+  "copy:233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend), for the same training time as the latest model with a known one (Grok 3, about 90 days): ≈ 1,100 GWh, a year of about 100,000 US homes.": {
+    "source": "233 MW (GPT-6 Astra, Sep 2026) × 2.1 a year for 1.1 years ≈ 520 MW in October 2027 (Epoch AI power trend), for the same training time as the latest model with a known one (Grok 3, about 90 days): ≈ 1,100 GWh, a year of about 100,000 US homes.",
+    "text": "233 MW (GPT-6 Astra, sept. 2026) × 2,1 par an pendant 1,1 an ≈ 520 MW en octobre 2027 (tendance de puissance d'Epoch AI), pour la même durée d'entraînement que le dernier modèle dont on la connaît (Grok 3, environ 90 jours) : ≈ 1 100 GWh, un an d'électricité pour environ 100 000 foyers américains."
   },
-  "copy:≈ 190,000 US homes": {
-    "source": "≈ 190,000 US homes",
-    "text": "≈ 190 000 foyers américains"
+  "copy:Grok 3 ≈ 22,000 US homes for a year": {
+    "source": "Grok 3 ≈ 22,000 US homes for a year",
+    "text": "Grok 3 ≈ 22 000 foyers américains pendant un an"
   },
   "copy:Memory": {
     "source": "Memory",
@@ -3603,6 +3627,46 @@
     "source": "If your picture of AI stopped at GPT-3-era tricks, update it.",
     "text": "Si votre image de l'IA s'est arrêtée aux pièges de l'époque GPT-3, mettez-la à jour."
   },
+  "copy:Ask live": {
+    "source": "Ask live",
+    "text": "Demander en direct"
+  },
+  "copy:Question for the live models": {
+    "source": "Question for the live models",
+    "text": "Question pour les modèles en direct"
+  },
+  "copy:Ask": {
+    "source": "Ask",
+    "text": "Demander"
+  },
+  "copy:Live answers need Hugging Face. In Simulation, only the recorded answers are shown.": {
+    "source": "Live answers need Hugging Face. In Simulation, only the recorded answers are shown.",
+    "text": "Les réponses en direct passent par Hugging Face. En Simulation, seules les réponses enregistrées s'affichent."
+  },
+  "copy:Thinking": {
+    "source": "Thinking",
+    "text": "Réflexion"
+  },
+  "copy:cut at the length limit": {
+    "source": "cut at the length limit",
+    "text": "coupée à la longueur maximale"
+  },
+  "copy:the connection ended before this answer did": {
+    "source": "the connection ended before this answer did",
+    "text": "la connexion s'est coupée avant la fin de cette réponse"
+  },
+  "copy:No answer:": {
+    "source": "No answer:",
+    "text": "Pas de réponse :"
+  },
+  "copy:(empty answer)": {
+    "source": "(empty answer)",
+    "text": "(réponse vide)"
+  },
+  "copy:billion parameters": {
+    "source": "billion parameters",
+    "text": "milliards de paramètres"
+  },
   "copy:You are a helpful assistant. Answer clearly and briefly. Refuse requests that could cause harm.": {
     "source": "You are a helpful assistant. Answer clearly and briefly. Refuse requests that could cause harm.",
     "text": "Tu es un assistant utile. Réponds clairement et brièvement, en français. Refuse les demandes qui pourraient causer du tort."
@@ -4082,6 +4146,10 @@
   "copy:The story so far": {
     "source": "The story so far",
     "text": "L'histoire jusqu'ici"
+  },
+  "copy:Analogy": {
+    "source": "Analogy",
+    "text": "Analogie"
   },
   "copy:Video": {
     "source": "Video",

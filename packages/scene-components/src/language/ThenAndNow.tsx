@@ -4,23 +4,45 @@
  * - game (scene 1.2): one question at a time; the room guesses, then GPT-2
  *   answers (a recorded real run, replayed word by word), then today's
  *   recorded answer. Ladder questions show the published answers of each
- *   generation. Nothing runs in the browser.
+ *   generation, then a live step: the presenter types a question and open
+ *   models of increasing size answer it side by side, streamed from the
+ *   server (/api/llm/ladder). Nothing runs in the browser.
  * - recap (scene 3.12): every question in one grid, GPT-2 vs today, with the
  *   callback line. Recorded data only.
  *
  * Every model answer on screen is real: see content/assets/then-and-now/questions.ts.
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { own, intlLocale, tr, typeset, type Locale } from "@ai-exhibit/presentation-core";
-import { GPT2_SETTINGS, type ThenAndNowQuestion } from "@ai-exhibit/content/assets/then-and-now/questions.ts";
+import { type ThenAndNowQuestion } from "@ai-exhibit/content/assets/then-and-now/questions.ts";
+import { cloudLadder, CloudLlmError, LADDER_MODELS, type LadderModel } from "@ai-exhibit/ml-runtime/lm";
 import { GPT2_ANSWER_TRANSLATIONS } from "@ai-exhibit/content/assets/then-and-now/translations.ts";
 import type { SceneComponentProps } from "../contract.ts";
 import { COPY } from "./copy.ts";
 import { useGpt2Answers } from "./runtime.ts";
+import { keepKeys } from "../primitives/Controls.tsx";
+import { canInteract, useSceneActions } from "../primitives/interaction.ts";
+import { stripEmphasis } from "./format.ts";
+import { useSourceDecision } from "./source.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
-import { filledSlots, lastStage, pickQuestions, questionRuns, truncate } from "./thenAndNow.ts";
+import {
+  applyLadderEvent,
+  failLive,
+  filledSlots,
+  LIVE_MAX_CHARS,
+  type LiveAnswer,
+  type LiveLadder,
+  lastStage,
+  liveQuestion,
+  liveStage,
+  maxStage as maxStageOf,
+  pickQuestions,
+  questionRuns,
+  startLive,
+  truncate,
+} from "./thenAndNow.ts";
 import styles from "./ThenAndNow.module.css";
-import { Button, cx, Frame, Pending, Segmented, TextField } from "./ui.tsx";
+import { Button, cx, Frame, Pending, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
 export interface ThenAndNowProps {
   variant?: "game" | "recap";
@@ -45,7 +67,14 @@ export interface ThenAndNowState {
    */
   stage: number | null;
   gpt2: Gpt2Answer | null;
+  /** The live step's last question and its streamed answers (ladder questions). */
+  live?: LiveLadder | null;
+  /** Published by the stage owner: live answers are off (Simulation), so every window disables the field. */
+  liveOff?: boolean;
 }
+
+/** What any window's live field asks the stage owner to do. */
+type LiveAction = { type: "ask"; question: string };
 
 export function ThenAndNow(props: SceneComponentProps<ThenAndNowProps, ThenAndNowState>) {
   return props.props.variant === "recap" ? <Recap {...props} /> : <Game {...props} />;
@@ -55,14 +84,18 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
   const { locale, role } = ctx;
   const questions = pickQuestions(props.questionIds, "game");
   const recorded = useGpt2Answers();
-  const [state, setState] = useSceneState<ThenAndNowState>(ctx, () => ({ index: 0, guesses: [], stage: null, gpt2: null }), {
+  const [state, setState] = useSceneState<ThenAndNowState>(ctx, () => ({ index: 0, guesses: [], stage: null, gpt2: null, live: null }), {
     throttleMs: 60,
   });
   const abort = useRef<AbortController | null>(null);
+  const liveAbort = useRef<AbortController | null>(null);
+  const { decision } = useSourceDecision(ctx);
 
   const q = questions[Math.min(state.index, questions.length - 1)];
   const sceneSteps = ctx.scene.steps ?? 0;
-  const maxStage = q ? lastStage(q) : 2;
+  const maxStage = q ? maxStageOf(q) : 2;
+  const live = q ? liveStage(q) : null;
+  const canAskLive = decision.active === "hf";
   const stage = state.stage ?? (sceneSteps > 0 ? Math.min(maxStage, ctx.revealStep) : 0);
 
   const ask = async (attempt: number) => {
@@ -99,11 +132,58 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
     void ask(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, q?.id, stage, recorded]);
-  useEffect(() => () => abort.current?.abort(), []);
+  useEffect(
+    () => () => {
+      abort.current?.abort();
+      liveAbort.current?.abort();
+    },
+    [],
+  );
+
+  /** Every rung at once; each answer grows as its words arrive from the server. */
+  const askLive = async (input: string) => {
+    const question = liveQuestion(input);
+    if (!question || !canAskLive) return;
+    liveAbort.current?.abort();
+    const ac = new AbortController();
+    liveAbort.current = ac;
+    let run = startLive(question, LADDER_MODELS.map((m) => m.id));
+    const show = () => setState((s) => ({ ...s, live: run }));
+    show();
+    try {
+      await cloudLadder(
+        question,
+        (e) => {
+          if (ac.signal.aborted) return;
+          run = applyLadderEvent(run, e);
+          show();
+        },
+        { signal: ac.signal },
+      );
+      if (ac.signal.aborted) return;
+      // The stream ended without its closing line: say so on the unfinished rungs.
+      if (run.running) run = failLive(run, tr(COPY.liveStreamCut, locale));
+      show();
+    } catch (err) {
+      if (ac.signal.aborted) return;
+      run = failLive(run, err instanceof CloudLlmError ? err.message : String(err));
+      show();
+    }
+  };
   useOnStepChange(ctx.revealStep, () => setState((s) => ({ ...s, stage: null })));
 
+  // The field works in every interactive window (presenter or projector); only the stage owner calls the models.
+  const act = useSceneActions<LiveAction, ThenAndNowState>(ctx, (a) => {
+    if (a.type === "ask") void askLive(a.question);
+  });
+  // Other windows cannot ask the server whether Hugging Face is on: the owner publishes it.
+  useEffect(() => {
+    if (role === "controller" && Boolean(state.liveOff) !== !canAskLive) setState((s) => ({ ...s, liveOff: !canAskLive }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role, canAskLive, state.liveOff]);
+
   const view: ThenAndNowState =
-    role === "preview" || (role === "display" && ctx.state === undefined) ? { index: 0, guesses: [], stage: 0, gpt2: null } : state;
+    role === "preview" || (role === "display" && ctx.state === undefined) ? { index: 0, guesses: [], stage: 0, gpt2: null, live: null } : state;
   const viewQ = questions[Math.min(view.index, questions.length - 1)];
   if (!viewQ) return <Frame />;
   const viewStage = role === "preview" ? 0 : stage;
@@ -112,8 +192,11 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
 
   const go = (index: number) => {
     abort.current?.abort();
-    setState({ index, guesses: [], stage: 0, gpt2: null });
+    liveAbort.current?.abort();
+    setState({ index, guesses: [], stage: 0, gpt2: null, live: null });
   };
+  const viewLive = Boolean(viewQ.ladder) && viewStage >= (liveStage(viewQ) ?? Infinity);
+  const shownLive = viewLive ? (view.live ?? null) : null;
 
   const controls =
     role === "controller" ? (
@@ -124,24 +207,31 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
           options={questions.map((_, i) => ({ value: i, label: String(i + 1) }))}
           onChange={go}
         />
-        <TextField
-          label={tr(COPY.addGuess, locale)}
-          placeholder={tr(COPY.guessPlaceholder, locale)}
-          clearOnSubmit
-          submitLabel="+"
-          onSubmit={(g) => {
-            const v = g.trim().slice(0, 40);
-            if (v) setState((s) => (s.guesses.includes(v) ? s : { ...s, guesses: [...s.guesses, v].slice(-6) }));
-          }}
-        />
+        {live !== null && stage >= live ? null : (
+          <TextField
+            label={tr(COPY.addGuess, locale)}
+            placeholder={tr(COPY.guessPlaceholder, locale)}
+            clearOnSubmit
+            submitLabel="+"
+            onSubmit={(g) => {
+              const v = g.trim().slice(0, 40);
+              if (v) setState((s) => (s.guesses.includes(v) ? s : { ...s, guesses: [...s.guesses, v].slice(-6) }));
+            }}
+          />
+        )}
         {q?.ladder ? (
           <>
             <Button disabled={stage <= 0} onClick={() => setState((s) => ({ ...s, stage: Math.max(0, stage - 1) }))}>
               {tr(COPY.previousGeneration, locale)}
             </Button>
             <Button primary disabled={stage >= maxStage} onClick={() => setState((s) => ({ ...s, stage: Math.min(maxStage, stage + 1) }))}>
-              {stage >= maxStage - 1 ? tr(COPY.showToday, locale) : tr(COPY.nextGeneration, locale)}
+              {stage >= lastStage(q)
+                ? tr(COPY.goLive, locale)
+                : stage === lastStage(q) - 1
+                  ? tr(COPY.showToday, locale)
+                  : tr(COPY.nextGeneration, locale)}
             </Button>
+            {live !== null && stage >= live ? <SourceBadge decision={decision} locale={locale} /> : null}
           </>
         ) : (
           <>
@@ -158,6 +248,25 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
         )}
       </>
     ) : null;
+
+  if (viewLive) {
+    const off = role === "controller" ? !canAskLive : Boolean(view.liveOff);
+    return (
+      <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
+        <LiveView
+          live={shownLive}
+          question={shownLive?.question ?? tr(viewQ.question, locale)}
+          interactive={role !== "preview" && canInteract(ctx)}
+          off={off}
+          onAsk={(question) => {
+            const qn = liveQuestion(question);
+            if (qn) act({ type: "ask", question: qn });
+          }}
+          locale={locale}
+        />
+      </Frame>
+    );
+  }
 
   return (
     <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
@@ -292,6 +401,128 @@ function Recap({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSt
         GPT-2: {tr(COPY.gpt2Recorded, locale)}. {today?.model}: {tr(COPY.recordedAnswer, locale)}, {today ? formatDate(today.date, locale) : ""}.
       </p>
     </Frame>
+  );
+}
+
+/**
+ * The live step: one big question field and Ask, then one column per model,
+ * smallest first, each answer growing as its words arrive. Windows that cannot
+ * act (previews, the presenter's projector mirror) show the question as text.
+ */
+function LiveView({
+  live,
+  question,
+  interactive,
+  off,
+  onAsk,
+  locale,
+}: {
+  live: LiveLadder | null;
+  question: string;
+  interactive: boolean;
+  off: boolean;
+  onAsk: (question: string) => void;
+  locale: Locale;
+}) {
+  return (
+    <div className={styles.liveWrap}>
+      {interactive ? (
+        <LiveField value={question} disabled={off || live?.running === true} onAsk={onAsk} locale={locale} />
+      ) : (
+        <p className={styles.liveQuestion}>{question}</p>
+      )}
+      {interactive && off ? <p className={styles.liveNote}>{tr(COPY.liveNeedsHf, locale)}</p> : null}
+      <ol className={styles.live}>
+        {LADDER_MODELS.map((m) => (
+          <li key={m.id} className={styles.liveCol}>
+            <LiveHead model={m} locale={locale} />
+            <LiveBody answer={live?.answers[m.id] ?? null} locale={locale} />
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/**
+ * The question field: keeps its own draft while focused, otherwise shows the
+ * last question asked (from whichever window asked it).
+ */
+function LiveField({ value, disabled, onAsk, locale }: { value: string; disabled: boolean; onAsk: (q: string) => void; locale: Locale }) {
+  const [draft, setDraft] = useState(value);
+  const focused = useRef(false);
+  useEffect(() => {
+    if (!focused.current) setDraft(value);
+  }, [value]);
+  return (
+    <form
+      className={styles.liveForm}
+      data-keys-local=""
+      onSubmit={(e) => {
+        e.preventDefault();
+        onAsk(draft);
+      }}
+    >
+      <input
+        className={styles.liveInput}
+        value={draft}
+        aria-label={tr(COPY.liveQuestion, locale)}
+        maxLength={LIVE_MAX_CHARS}
+        spellCheck={false}
+        onKeyDown={keepKeys}
+        onFocus={() => {
+          focused.current = true;
+        }}
+        onBlur={() => {
+          focused.current = false;
+        }}
+        onChange={(e) => setDraft(e.currentTarget.value)}
+      />
+      <button type="submit" className={styles.liveAskButton} disabled={disabled || !liveQuestion(draft)}>
+        {tr(COPY.liveAsk, locale)}
+      </button>
+    </form>
+  );
+}
+
+function LiveHead({ model, locale }: { model: LadderModel; locale: Locale }) {
+  const size = new Intl.NumberFormat(intlLocale(locale), { maximumFractionDigits: 1 }).format(model.paramsB);
+  return (
+    <header className={styles.liveHead}>
+      <span className={styles.colTitle}>{model.name}</span>
+      <span className={styles.liveSize}>
+        {size} {tr(COPY.billionParams, locale)}
+      </span>
+    </header>
+  );
+}
+
+function LiveBody({ answer, locale }: { answer: LiveAnswer | null; locale: Locale }) {
+  if (!answer) return null;
+  if (answer.state === "waiting" || answer.state === "thinking") {
+    return (
+      <p className={styles.liveAnswer}>
+        <Pending>{tr(answer.state === "thinking" ? COPY.liveThinking : COPY.liveWaiting, locale)}</Pending>
+      </p>
+    );
+  }
+  const text = stripEmphasis(answer.text).trim();
+  const cut = answer.finishReason === "length";
+  return (
+    <>
+      {text || answer.state === "done" ? (
+        <p className={styles.liveAnswer}>
+          {text || tr(COPY.liveEmpty, locale)}
+          {cut ? "…" : null}
+        </p>
+      ) : null}
+      {cut ? <p className={styles.liveNote}>{tr(COPY.liveCut, locale)}</p> : null}
+      {answer.state === "error" ? (
+        <p className={styles.liveError}>
+          {tr(COPY.liveNoAnswer, locale)} {answer.error}
+        </p>
+      ) : null}
+    </>
   );
 }
 

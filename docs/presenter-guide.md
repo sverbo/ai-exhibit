@@ -182,7 +182,7 @@ reloads itself. In development, content changes reload every window.
 ## 10. Edition
 
 There is one edition, `en`: English, 45 scenes, planned 92 min against a target
-of 75 to 95 min. Once the timer runs (`T`), the presenter view says "ahead" or
+of 90 to 125 min. Once the timer runs (`T`), the presenter view says "ahead" or
 "behind" against the planned scene durations and estimates the finish time
 against that target. Scenes marked `optional` are the first candidates to skip
 when running late (`Shift+→`).

@@ -1,7 +1,20 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { thenAndNowQuestions, type Gpt2AnswersFile } from "@ai-exhibit/content/assets/then-and-now/questions.ts";
-import { filledSlots, lastStage, pickQuestions, questionRuns, truncate } from "./thenAndNow.ts";
+import { LADDER_MODELS } from "@ai-exhibit/ml-runtime/lm";
+import {
+  applyLadderEvent,
+  failLive,
+  filledSlots,
+  lastStage,
+  liveQuestion,
+  liveStage,
+  maxStage,
+  pickQuestions,
+  questionRuns,
+  startLive,
+  truncate,
+} from "./thenAndNow.ts";
 
 describe("then-and-now data", () => {
   it("has unique ids, both locales and a real recorded today answer", () => {
@@ -81,5 +94,60 @@ describe("ladder", () => {
     const { sources } = await import("@ai-exhibit/content/sources");
     const src = sources.find((x) => x.id === "tk-aidigest-2023-progress");
     expect(src?.verification).toBe("verified");
+  });
+});
+
+describe("live step", () => {
+  const riddle = thenAndNowQuestions.find((q) => q.id === "clock-riddle")!;
+  const plain = thenAndNowQuestions.find((q) => !q.ladder)!;
+  const ids = LADDER_MODELS.map((m) => m.id);
+
+  it("comes right after today's answer, on ladder questions only", () => {
+    expect(lastStage(riddle)).toBe(5);
+    expect(liveStage(riddle)).toBe(6);
+    expect(maxStage(riddle)).toBe(6);
+    expect(liveStage(plain)).toBeNull();
+    expect(maxStage(plain)).toBe(lastStage(plain));
+  });
+
+  it("is the scene's last reveal step", async () => {
+    const { chapter01 } = await import("../../../../presentations/canonical/src/scenes/01-capabilities.ts");
+    expect(chapter01.find((s) => s.id === "01-then-and-now")?.steps).toBe(maxStage(riddle));
+  });
+
+  it("asks only a non-empty question of 300 characters at most", () => {
+    expect(liveQuestion("   ")).toBeNull();
+    expect(liveQuestion("  Why is the sky blue? ")).toBe("Why is the sky blue?");
+    expect(liveQuestion("y".repeat(400))).toHaveLength(300);
+  });
+
+  it("fills each column as its events arrive", () => {
+    let live = startLive("Q", ids);
+    expect(Object.values(live.answers).every((a) => a.state === "waiting")).toBe(true);
+    live = applyLadderEvent(live, { type: "start", rung: "gpt-oss-120b", model: "openai/gpt-oss-120b", provider: "groq" });
+    live = applyLadderEvent(live, { type: "reasoning", rung: "gpt-oss-120b" });
+    expect(live.answers["gpt-oss-120b"]).toMatchObject({ state: "thinking", provider: "groq" });
+    live = applyLadderEvent(live, { type: "text", rung: "gpt-oss-120b", text: "On a clock" });
+    live = applyLadderEvent(live, { type: "text", rung: "gpt-oss-120b", text: ", 3." });
+    live = applyLadderEvent(live, { type: "done", rung: "gpt-oss-120b", finishReason: "stop", ms: 900 });
+    expect(live.answers["gpt-oss-120b"]).toMatchObject({ state: "done", text: "On a clock, 3." });
+    live = applyLadderEvent(live, { type: "error", rung: "qwen2.5-0.5b-base", error: "timeout", message: "No full answer within 27 s" });
+    expect(live.answers["qwen2.5-0.5b-base"]).toMatchObject({ state: "error", error: "No full answer within 27 s" });
+    // A rung the scene does not know is ignored.
+    expect(applyLadderEvent(live, { type: "text", rung: "nope", text: "x" })).toBe(live);
+    expect(live.running).toBe(true);
+    expect(applyLadderEvent(live, { type: "end" }).running).toBe(false);
+  });
+
+  it("marks only unfinished columns when the whole request fails", () => {
+    let live = startLive("Q", ids);
+    live = applyLadderEvent(live, { type: "text", rung: "llama-3.1-8b", text: "Fif" });
+    live = applyLadderEvent(live, { type: "done", rung: "gpt-oss-120b", finishReason: "stop", ms: 1 });
+    const failed = failLive(live, "offline");
+    expect(failed.running).toBe(false);
+    expect(failed.failure).toBe("offline");
+    expect(failed.answers["llama-3.1-8b"]).toMatchObject({ state: "error", text: "Fif", error: "offline" });
+    expect(failed.answers["gpt-oss-120b"]?.state).toBe("done");
+    expect(failed.answers["qwen2.5-0.5b-base"]?.state).toBe("error");
   });
 });

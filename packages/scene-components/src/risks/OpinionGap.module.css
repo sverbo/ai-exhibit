@@ -119,6 +119,75 @@
   color: var(--color-text-muted);
 }
 
+/* With an aside, rows sit closer and the aside's space is reserved from step 0, so nothing jumps. */
+.withAside {
+  padding-top: 64px;
+  padding-bottom: 48px;
+}
+.withAside .rows {
+  gap: var(--space-3);
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--space-2) var(--space-3);
+  border-left: 6px solid var(--color-line);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--color-surface-2);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.asideLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.asideMain,
+.asideAnalogy {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.asideMain {
+  font-size: var(--text-sm);
+  line-height: 1.25;
+}
+.asideYear {
+  flex: none;
+  width: 110px;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+.asideMain .asideYear {
+  font-size: var(--text-md);
+}
+.asideAnalogy {
+  font-size: var(--text-xs);
+  line-height: 1.25;
+  color: var(--color-text-muted);
+}
+.asideAnalogy .asideYear {
+  font-size: var(--text-sm);
+}
+.asideText {
+  flex: 1;
+  min-width: 0;
+}
+.analogyTag {
+  flex: none;
+  padding: 2px 10px;
+  border: 2px dashed var(--color-line);
+  border-radius: 999px;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+
 .shown {
   opacity: 1;
   transform: none;

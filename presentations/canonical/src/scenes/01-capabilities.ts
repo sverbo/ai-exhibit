@@ -213,7 +213,7 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-then-and-now",
     code: "then",
-    steps: 5,
+    steps: 6,
     chapter: "01",
     number: "1.1",
     title: { en: "Then and now" },
@@ -228,9 +228,13 @@ export const chapter01: SceneDefinition[] = [
     speakerNotes: {
       en: `- A famous riddle: "When ten plus four is two, what is nine plus six?"
 - **Ask:** the room answers first (answer: 3, on a clock)
-- **Do:** click through the published answers: GPT-2 (2019), GPT-3 (2020), GPT-3.5 (2022): all wrong
-- **Do:** GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m
-- **Do:** last click, today's reasoning model, recorded answer with name and date
+- **Do:** click 1, GPT-2 (2019): wrong
+- **Do:** click 2, GPT-3 (2020): wrong
+- **Do:** click 3, GPT-3.5 (2022): still wrong
+- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m
+- **Do:** click 5, today's reasoning model, recorded answer with name and date
+- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told "Answer briefly."
+- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size. In Simulation the field stays disabled
 - Other questions (letters in a word, 9.11 vs 9.9, Sally's sisters): same pattern`,
     },
     transitionIn: {
@@ -239,7 +243,8 @@ export const chapter01: SceneDefinition[] = [
     transitionOut: { en: "The riddle is a toy. What about the real world?" },
     evidenceLevel: "observed",
     sourceIds: ["tk-aidigest-2023-progress", "tk-hagendorff-2022-crt", "tk-berglund-2023-reversal-curse", "llm-gpt2-paper"],
-    runtimeClass: "A",
+    // C: the last step asks open models live (/api/llm/ladder); the recorded steps need nothing.
+    runtimeClass: "C",
     artifacts: [],
     fallback: { kind: "recording", asset: "then-and-now/gpt2-answers.json" },
     durationSec: 240,
@@ -268,7 +273,7 @@ export const chapter01: SceneDefinition[] = [
       component: "PictureCards",
       props: {
         heading: {
-          en: "Already here, outside the lab",
+          en: "Even if AI stopped improving today, it could already do most expert work.",
         },
         cards: [
           {
@@ -348,24 +353,24 @@ export const chapter01: SceneDefinition[] = [
     number: "1.3",
     title: { en: "Everything went up" },
     objective: {
-      en: "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, power, memory, reliability, and the hardest tests, with a labelled one-year projection.",
+      en: "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, electricity, memory, reliability, and the hardest tests, with a labelled one-year projection.",
     },
     takeaway: {
-      en: "In seven years, cost, power, memory and reliability grew a thousand to tens of thousands of times, and the hardest tests went from near zero to near the top.",
+      en: "In seven years, cost, memory and reliability grew a thousand to tens of thousands of times, training electricity over a hundred times, and the hardest tests went from near zero to near the top.",
     },
     visual: { layout: "component", component: "FrontierProgress", props: {} },
     interaction: "presenter",
     speakerNotes: {
       en: `- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection
 - Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)
-- Click 2, power while training (estimate, Epoch AI): GPT-3 about 5 MW, GPT-4 20 MW, Grok 3 110 MW, GPT-6 Astra about 233 MW (2026), the average draw of about 190,000 US homes (EIA); no estimate for GPT-2
+- Click 2, training electricity = power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known, so it is not plotted. Patterson et al. estimated GPT-3 lower, 1.3 GWh
 - Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages
 - Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)
 - Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)
 - Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)
 - Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)
 - Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)
-- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); power about 500 MW (×2.1 a year); tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written`,
+- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year ≈ 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written`,
     },
     transitionIn: { en: "How did we get here so fast? Seven years, in numbers." },
     transitionOut: { en: "So what is all this for? Not just answering: acting." },

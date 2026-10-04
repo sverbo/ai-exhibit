@@ -36,9 +36,9 @@ adaptation.
 
 **1.3 Everything went up.** How did we get here so fast? One slide, one series per
 click. Training cost, from about $4,300 for GPT-2 to hundreds of millions (Epoch AI
-estimates). Power while training, from 5 megawatts for GPT-3 to more than 200 for
-GPT-6 Astra, the average draw of about 190,000 US homes. Memory, from a page and
-a half to 1,500 pages. Reliability, from tasks of seconds to tasks of many hours. Then the hardest
+estimates). Training electricity, power times training time, from about 2 GWh for
+GPT-3 to about 237 GWh for Grok 3 (110 MW for about 90 days), a year of
+electricity for about 22,000 US homes. Memory, from a page and a half to 1,500 pages. Reliability, from tasks of seconds to tasks of many hours. Then the hardest
 tests: PhD-level science above the experts, real software bugs, an exam written to
 stump AI, research mathematics, puzzles easy for people, and a gold medal at the
 Maths Olympiad. Last click: where the trends point in a year, labelled as a

@@ -3,7 +3,9 @@
  * continues text, often badly. One control: add 1, 10 or 30 tokens. After
  * each addition, probability bars at the end of the text show what could come
  * next; one token is drawn from them (temperature 0.8), several are written by
- * the base model in one go. `R` starts over.
+ * the base model in one go. A text field replaces the prompt (and starts
+ * over); in Simulation only the prepared prompt has recordings, so it is off.
+ * `R` starts over.
  *
  * With Hugging Face, Llama 3.1 8B (base) writes the continuations. No provider
  * gives a base model's probabilities, so the bars come from Llama 3.3 70B
@@ -12,7 +14,7 @@
  */
 import { useEffect, useRef } from "react";
 import { tr, type L10n } from "@ai-exhibit/presentation-core";
-import { cloudComplete, cloudNextToken, findCloudNext, findCloudRecording } from "@ai-exhibit/ml-runtime/lm";
+import { cloudComplete, cloudNextToken, findCloudNext, findCloudRecording, MAX_INPUT_CHARS } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
@@ -23,7 +25,7 @@ import { type NoticeKey, useCloudRecording } from "./runtime.ts";
 import { useSourceDecision } from "./source.ts";
 import { type Cand, isL10n, promptIn } from "./shared.ts";
 import { useSceneState } from "./state.ts";
-import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, SourceBadge } from "./ui.tsx";
+import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, SourceBadge, TextField } from "./ui.tsx";
 
 export interface BaseModelPlaygroundProps {
   prompt?: L10n;
@@ -48,7 +50,7 @@ export interface BaseModelState {
 const ADD_OPTIONS = [1, 10, 30] as const;
 const TEMPERATURE = 0.8;
 
-type Action = { type: "add"; n: number } | { type: "stop" };
+type Action = { type: "add"; n: number } | { type: "stop" } | { type: "prompt"; text: string };
 const PICK_MS = 550;
 const MAX_APPENDED = 200;
 const BASE_LABEL = "Llama 3.1 8B";
@@ -212,7 +214,16 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
   // Every window's buttons come here; only the stage owner runs them.
   const act = useSceneActions<Action, BaseModelState>(ctx, (action) => {
     if (action.type === "stop") abort.current?.abort();
-    else if (action.n <= 1) void oneToken();
+    else if (action.type === "prompt") {
+      const prompt = action.text.trim().slice(0, MAX_INPUT_CHARS);
+      if (!prompt) return;
+      // A new text starts over: no generated tokens, fresh bars (the effect on `prompt` asks for them).
+      generation.current++;
+      abort.current?.abort();
+      setState((x) => ({ ...x, prompt, appended: [], candidates: [], picked: null, busy: false, textModel: undefined, notice: null }));
+      // The same text again: the effect will not fire, so ask for the bars here.
+      if (prompt === stateRef.current.prompt) void refresh({ ...stateRef.current, appended: [] });
+    } else if (action.n <= 1) void oneToken();
     else void severalTokens(action.n);
   });
 
@@ -220,6 +231,16 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
 
   const controls = canInteract(ctx) ? (
     <>
+      <TextField
+        wide
+        label={tr(COPY.edit, locale)}
+        value={view.prompt}
+        submitLabel={tr(COPY.apply, locale)}
+        // Only the prepared text has recordings.
+        disabled={simulation || view.busy}
+        onSubmit={(text) => act({ type: "prompt", text })}
+      />
+      {simulation ? <span className={styles.addLabel}>{tr(COPY.simulationPresetsOnly, locale)}</span> : null}
       <span className={styles.addLabel}>{tr(COPY.howMany, locale)}</span>
       {ADD_OPTIONS.map((n) => (
         <Button key={n} primary disabled={view.busy} onClick={() => act({ type: "add", n })}>

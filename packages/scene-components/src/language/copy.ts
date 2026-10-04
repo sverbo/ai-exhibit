@@ -210,4 +210,18 @@ export const COPY = {
   recapTitle: {
     en: "If your picture of AI stopped at GPT-3-era tricks, update it.",
   },
+  // Then and now, live step
+  goLive: { en: "Ask live" },
+  liveQuestion: { en: "Question for the live models" },
+  liveAsk: { en: "Ask" },
+  liveNeedsHf: {
+    en: "Live answers need Hugging Face. In Simulation, only the recorded answers are shown.",
+  },
+  liveWaiting: { en: "Waiting" },
+  liveThinking: { en: "Thinking" },
+  liveCut: { en: "cut at the length limit" },
+  liveStreamCut: { en: "the connection ended before this answer did" },
+  liveNoAnswer: { en: "No answer:" },
+  liveEmpty: { en: "(empty answer)" },
+  billionParams: { en: "billion parameters" },
 } satisfies Record<string, L10n>;

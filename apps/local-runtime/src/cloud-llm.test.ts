@@ -120,6 +120,41 @@ describe("cloud LLM module", () => {
     expect(firstBody).toMatchObject({ logprobs: true, top_logprobs: 5, model: "meta-llama/Llama-3.1-8B-Instruct:nscale" });
   });
 
+  it("streams the ladder line by line instead of buffering it", async () => {
+    const enc = new TextEncoder();
+    const f = vi.fn(
+      async () =>
+        new Response(
+          new ReadableStream({
+            start(c) {
+              c.enqueue(enc.encode(`data: ${JSON.stringify({ choices: [{ delta: { content: "Hi" }, finish_reason: "stop" }] })}\n\n`));
+              c.close();
+            },
+          }),
+          { status: 200 },
+        ),
+    );
+    const h = createCloudLlmModule(ctx, { token: () => FAKE, fetch: f as unknown as typeof fetch });
+    const writes: string[] = [];
+    let ended = false;
+    const res = {
+      writeHead: () => res,
+      write: (chunk: Uint8Array) => writes.push(Buffer.from(chunk).toString("utf8")),
+      end: () => {
+        ended = true;
+      },
+      on: () => res,
+      off: () => res,
+    } as unknown as ServerResponse;
+    const req = request("POST", "/api/llm/ladder", { question: "Hi" });
+    expect(await h(req, res, new URL(req.url!, "http://localhost"))).toBe(true);
+    expect(ended).toBe(true);
+    expect(writes.length).toBeGreaterThan(1);
+    const events = writes.join("").split("\n").filter(Boolean).map((l) => JSON.parse(l) as { type: string });
+    expect(events.at(-1)).toEqual({ type: "end" });
+    expect(events.filter((e) => e.type === "done")).toHaveLength(3);
+  });
+
   it("validates input and rate-limits", async () => {
     const f = vi.fn(async () => okJson({ choices: [{ text: "x" }] }));
     let t = 0;

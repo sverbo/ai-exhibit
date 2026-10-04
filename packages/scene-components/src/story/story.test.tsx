@@ -283,6 +283,12 @@ describe("IndustryStack", () => {
     expect(placementsAt(11).get("jensen-huang")).toMatchObject({ org: "nvidia", inline: true });
   });
 
+  it("shows Musk and Altman alone first, then their lines with OpenAI", () => {
+    const links = (step: number) => [...render(IndustryStack, {}, ctx("display", step, "en")).matchAll(/data-link="([^"]+)"/g)].map((m) => m[1]);
+    expect(links(2)).toEqual([]);
+    expect(links(3).sort()).toEqual(["elon-musk-openai", "sam-altman-openai"]);
+  });
+
   it("changes one thing per click: a person appears or moves only on its own step or with the lab it joins", () => {
     // A lab never lights on the same click as a move to another organisation.
     for (let step = 1; step <= INDUSTRY_STEPS; step++) {
@@ -302,7 +308,9 @@ describe("IndustryStack", () => {
       const expected = [...placementsAt(step).values()].map((m) => `${m.person}:${m.org ?? "none"}`);
       expect(shown.sort(), `step ${step}`).toEqual(expected.sort());
       const links = [...html.matchAll(/data-link="([^"]+)"/g)].map((m) => m[1]);
-      expect(links.length, `step ${step}`).toBe(expected.filter((e) => !e.endsWith(":none")).length);
+      const litIds = new Set(actors.filter((a) => a.lightAt !== undefined && a.lightAt <= step).map((a) => a.id));
+      const linked = [...placementsAt(step).values()].filter((m) => m.org !== null && litIds.has(m.org));
+      expect(links.sort(), `step ${step}`).toEqual(linked.map((m) => `${m.person}-${m.org}`).sort());
       expect(html).not.toMatch(/<marker|industry-hop/);
     }
     const css = readFileSync(new URL("./IndustryStack.module.css", import.meta.url), "utf8");

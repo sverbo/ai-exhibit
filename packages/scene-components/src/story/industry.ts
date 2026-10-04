@@ -116,7 +116,9 @@ export const PEOPLE: StackPerson[] = [
 /**
  * Where a person stands from `step` on. `org` is a labs actor ID (drawn with a
  * link line) or null (standing apart, no link). `dx` offsets the portrait from
- * the organisation's logo so two people can share it. A new place fades in on
+ * the organisation's logo so two people can share it. The link line shows only
+ * once the organisation is lit (Musk and Altman stand alone on step 2, linked
+ * when OpenAI lights on step 3). A new place fades in on
  * its own click while the previous one fades out: portraits never travel.
  */
 export interface PersonMove {

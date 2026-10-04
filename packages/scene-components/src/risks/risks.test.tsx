@@ -243,12 +243,41 @@ describe("OpinionGap (04-opinions)", () => {
     }
   });
 
-  it("reveals one row per step, all in preview", () => {
-    for (let step = 0; step <= (scene.steps ?? 0); step++) {
+  it("reveals one row per step, then the look-back aside on the last click; all in preview", () => {
+    const rowsShown = (html: string) => html.match(/data-row="\d+"[^>]*data-shown=""/g)?.length ?? 0;
+    const asideShown = (html: string) => /data-aside=""[^>]*data-shown=""/.test(html);
+    expect(scene.steps).toBe(props.rows.length);
+    for (let step = 0; step <= scene.steps!; step++) {
       const html = render(OpinionGap, props, ctx("display", step, "en"));
-      expect(html.match(/data-shown=""/g)?.length ?? 0).toBe(step + 1);
+      expect(rowsShown(html), `step ${step}`).toBe(Math.min(step + 1, props.rows.length));
+      expect(asideShown(html), `step ${step}`).toBe(step === scene.steps);
     }
-    expect(render(OpinionGap, props, ctx("preview", 0, "fr")).match(/data-shown=""/g)?.length).toBe(props.rows.length);
+    const preview = render(OpinionGap, props, ctx("preview", 0, "fr"));
+    expect(rowsShown(preview)).toBe(props.rows.length);
+    expect(asideShown(preview)).toBe(true);
+  });
+
+  it("keeps the look-back aside short, dated, badged and sourced", () => {
+    const aside = props.aside!;
+    expect(aside).toBeDefined();
+    expectL10n(aside.label, "aside label");
+    expectL10n(aside.main, "aside main");
+    expectL10n(aside.analogy, "aside analogy");
+    expect(aside.year).toBe("2014");
+    expect(aside.analogyYear).toBe("1949");
+    expect(aside.evidence).toBe("projection");
+    // The forecast quoted on screen is the combined median of Müller and Bostrom's survey, as reported in the book.
+    expect(aside.main.en).toContain("2040");
+    expect(aside.main.en.length).toBeLessThanOrEqual(160);
+    expect(aside.analogy!.en.length).toBeLessThanOrEqual(90);
+    for (const id of ["tk-muller-bostrom-2016-survey", "tk-bostrom-2014-superintelligence-book", "tk-orwell-1949-1984"]) {
+      expect(scene.sourceIds, id).toContain(id);
+      expect(byId.get(id)?.verification, id).toBe("verified");
+    }
+    expect(byId.get("tk-muller-bostrom-2016-survey")!.claim).toContain("2040");
+    const html = render(OpinionGap, props, ctx("display", scene.steps!, "en"));
+    expect(html).toContain("data-analogy");
+    expect(html).toContain("Analogy");
   });
 
   it("draws every row the same way: public above experts, whatever the data order", () => {

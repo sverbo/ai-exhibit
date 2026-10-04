@@ -100,7 +100,7 @@ Cloud), AI labs (Google DeepMind, OpenAI, Anthropic, xAI, Meta, Mistral AI; then
 DeepSeek, Qwen, Moonshot AI, Z.ai on a second row). Every mark is one ink and
 starts dimmed; only the entries below light up, the rest stay ghosts.
 Portraits stand in a lane above the labs, with an accent line to where each
-person works. Every visible change is its own click and a plain fade: nothing
+person works, shown once that organisation is lit. Every visible change is its own click and a plain fade: nothing
 travels and nothing animates in stages. Each place a person stands in is its
 own portrait and line, so a change of organisation fades the old ones out as
 the new ones fade in. Jensen Huang stands beside the NVIDIA logo inside its
@@ -110,8 +110,8 @@ layer. Reduced motion and preview skip the fades.
 | --- | --- | --- |
 | 0 | nothing | |
 | 1 | Google DeepMind | |
-| 2 | | Elon Musk and Sam Altman appear, linked to OpenAI (founded December 2015) |
-| 3 | OpenAI | both still linked |
+| 2 | | Elon Musk and Sam Altman appear, portraits only, no line yet |
+| 3 | OpenAI | lines from both to OpenAI (founded December 2015) |
 | 4 | | Musk unlinks and stands apart (left the board, February 2018) |
 | 5 | | Dario Amodei appears at OpenAI (vice president of research) |
 | 6 | Anthropic | Amodei now at Anthropic (co-founded 2021) |

@@ -174,7 +174,7 @@ URL; run it before each talk.
 ## Durations and cuts
 
 - Each scene has `durationSec`. An edition's total must fall within its
-  `targetMinutes` (`en`: 75 to 95): `verify:content` errors otherwise.
+  `targetMinutes` (`full`: 90 to 125): `verify:content` errors otherwise.
 - The short cut keeps every scene where `optional` is false. Mark a scene optional
   when the story still holds without it, and write the bridge in the previous
   scene's notes.
