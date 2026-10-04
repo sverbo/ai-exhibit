@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { AUDIENCE_GAMES as CLIENT_GAMES } from "../../ml-runtime/src/lm/cloud.ts";
-import { AUDIENCE_GAMES, AUDIENCE_HEADER, AUDIENCE_LIMITS, createCloudApi, LADDER, PUBLIC_LIMITS, REMAINING_HEADER } from "./core.ts";
+import { AUDIENCE_DEMOS as CLIENT_DEMOS } from "../../ml-runtime/src/lm/cloud.ts";
+import { AUDIENCE_DEMOS, AUDIENCE_HEADER, AUDIENCE_LIMITS, createCloudApi, LADDER, PUBLIC_LIMITS, REMAINING_HEADER } from "./core.ts";
 
 const FAKE = "fake-test-token";
 const PHONE_A = "phone-aaaaaaaa";
@@ -56,7 +56,7 @@ const ladder = (device: string) => req("POST", "/api/llm/ladder", { question: "H
 
 describe("audience budgets", () => {
   it("names the same games as the browser client", () => {
-    expect(Object.values(AUDIENCE_GAMES)).toEqual([...CLIENT_GAMES]);
+    expect(Object.values(AUDIENCE_DEMOS)).toEqual([...CLIENT_DEMOS]);
   });
 
   it("gives each device a few asks per game and reports that game's asks left", async () => {

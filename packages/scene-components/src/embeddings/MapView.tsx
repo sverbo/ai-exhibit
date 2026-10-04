@@ -44,6 +44,8 @@ export interface MapViewProps {
   onClusterClick?: (cluster: number) => void;
   /** Label every word in view (as many as fit without overlapping). */
   showAll?: boolean;
+  /** Most word labels placed at once (default MAX_WORD_LABELS); phones ask for fewer. */
+  maxLabels?: number;
   /** Pan and zoom; omitted means the whole map (zoom 1). */
   camera?: Camera;
   /** Optional extra marks drawn on top, in map pixels. */
@@ -214,8 +216,8 @@ export function MapView(props: MapViewProps) {
       }),
     ];
     const dense = showAll || zoom >= 2.5;
-    return [...placedHead, ...placeLabels(req, { width, height }, { obstacles, diagonals: dense, max: MAX_WORD_LABELS })];
-  }, [space, coords, locale, width, height, showClusterNames, pairs, focusKey, highlight, query, budget, wordSize, showAll, props.avoid, camera.u, camera.v, camera.k]);
+    return [...placedHead, ...placeLabels(req, { width, height }, { obstacles, diagonals: dense, max: props.maxLabels ?? MAX_WORD_LABELS })];
+  }, [space, coords, locale, width, height, showClusterNames, pairs, focusKey, highlight, query, budget, wordSize, showAll, props.maxLabels, props.avoid, camera.u, camera.v, camera.k]);
 
   const color = (i: number) => (colored ? clusterColor(space.items[i]!.cluster, nClusters) : "var(--color-text)");
 

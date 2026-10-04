@@ -28,7 +28,16 @@ export interface Cloud3DProps {
   /** Published rotation and zoom; null until the presenter moves the cloud. */
   camera?: Camera3D | null;
   onCamera?: (camera: Camera3D) => void;
+  /** A tap (no drag) on a word (index) or on empty space (null). */
+  onSelect?: (index: number | null) => void;
+  /** Fill the parent's width, keeping the width:height ratio (phones). */
+  fluid?: boolean;
 }
+
+/** Pointer travel (map units) under which a press is a tap, not a drag. */
+const TAP_SLOP = 6;
+/** How far from a dot (map units) a tap still picks it: a fingertip, not a mouse. */
+const PICK_RADIUS = 34;
 
 export const TILT_RANGE: [number, number] = [-0.4, 1.3];
 export const ZOOM_RANGE: [number, number] = [0.6, 5];
@@ -60,7 +69,9 @@ export function project3d(p: readonly number[], angle: number, tilt = 0.35) {
 
 /**
  * The 3D layout, slowly turning. Positions are written straight to the DOM
- * each frame (no React render per frame), so 400+ points stay smooth.
+ * each frame (no React render per frame), so 400+ points stay smooth; a still
+ * cloud is not redrawn. Drag turns it, a second finger (or the wheel) zooms,
+ * a tap picks the nearest word.
  */
 export function Cloud3D(props: Cloud3DProps) {
   const { space, width, height, colored, clusterNames, focus = null, highlight = [], query = null, locale } = props;
@@ -84,16 +95,34 @@ export function Cloud3D(props: Cloud3DProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.camera]);
   const target = interactive ? local : (props.camera ?? null);
+  // The frame loop reads the camera from this ref. Moves write it at once; React
+  // state follows at most a few times a second, so a render never pulls it back.
   const targetRef = useRef(target);
-  targetRef.current = target;
+  const seenTarget = useRef(target);
+  if (target !== seenTarget.current) {
+    seenTarget.current = target;
+    targetRef.current = target;
+  }
+  const renderTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (renderTimer.current) clearTimeout(renderTimer.current);
+  }, []);
   // Turns on its own until someone moves it.
   const spinning = props.spinning && !target;
   const tiltRef = useRef(HOME.tilt);
   const zoomRef = useRef(HOME.zoom);
   const lastPublish = useRef(0);
   const move = (next: Camera3D) => {
-    setLocal(next);
     targetRef.current = next;
+    if (!renderTimer.current) {
+      renderTimer.current = setTimeout(
+        () => {
+          renderTimer.current = null;
+          if (targetRef.current) setLocal(targetRef.current);
+        },
+        local ? 150 : 0,
+      );
+    }
     const publish = () => {
       published.current = [...published.current.slice(-31), next];
       props.onCamera?.(next);
@@ -110,7 +139,16 @@ export function Cloud3D(props: Cloud3DProps) {
   };
   const current = (): Camera3D => targetRef.current ?? { angle: angleRef.current, tilt: tiltRef.current, zoom: zoomRef.current };
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const drag = useRef<{ x: number; y: number; id: number } | null>(null);
+  const drag = useRef<{ x: number; y: number; id: number; moved: boolean } | null>(null);
+  // Fingers on the cloud: two of them pinch to zoom.
+  const pointers = useRef(new Map<number, [number, number]>());
+  const pinch = useRef<number | null>(null);
+  const spread = () => {
+    const [a, b] = [...pointers.current.values()];
+    return a && b ? Math.max(1, Math.hypot(a[0] - b[0], a[1] - b[1])) : null;
+  };
+  // Where each dot was last drawn (map units), for picking a word with a tap.
+  const screen = useRef<Float32Array>(new Float32Array(0));
   const toLocal = (clientX: number, clientY: number): [number, number] => {
     const r = svgRef.current?.getBoundingClientRect();
     if (!r || r.width === 0) return [0, 0];
@@ -119,16 +157,61 @@ export function Cloud3D(props: Cloud3DProps) {
   const onPointerDown = (e: PointerEvent<SVGSVGElement>) => {
     if (!interactive || e.button !== 0) return;
     const [x, y] = toLocal(e.clientX, e.clientY);
-    drag.current = { x, y, id: e.pointerId };
-    e.currentTarget.setPointerCapture?.(e.pointerId);
+    pointers.current.set(e.pointerId, [x, y]);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {
+      // The pointer is already gone: nothing to capture.
+    }
+    if (pointers.current.size === 2) {
+      // A second finger: pinch from now on, and this gesture picks nothing.
+      pinch.current = spread();
+      drag.current = null;
+      return;
+    }
+    drag.current = { x, y, id: e.pointerId, moved: false };
   };
   const onPointerMove = (e: PointerEvent<SVGSVGElement>) => {
+    if (pointers.current.has(e.pointerId)) pointers.current.set(e.pointerId, toLocal(e.clientX, e.clientY));
+    if (pinch.current) {
+      const now = spread();
+      if (!now) return;
+      move(moveCamera3d(current(), 0, 0, now / pinch.current));
+      pinch.current = now;
+      return;
+    }
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     const [x, y] = toLocal(e.clientX, e.clientY);
+    if (!d.moved && Math.hypot(x - d.x, y - d.y) < TAP_SLOP) return;
+    d.moved = true;
     move(moveCamera3d(current(), x - d.x, y - d.y));
     d.x = x;
     d.y = y;
+  };
+  const onPointerUp = (e: PointerEvent<SVGSVGElement>) => {
+    pointers.current.delete(e.pointerId);
+    if (pinch.current) {
+      if (pointers.current.size < 2) pinch.current = null;
+      drag.current = null;
+      return;
+    }
+    const d = drag.current;
+    drag.current = null;
+    if (!d || d.id !== e.pointerId || d.moved || !props.onSelect) return;
+    // A tap: the nearest dot within a fingertip, else empty space.
+    const [x, y] = toLocal(e.clientX, e.clientY);
+    const pts = screen.current;
+    let best = -1;
+    let bestDist = PICK_RADIUS;
+    for (let i = 0; i * 2 < pts.length; i++) {
+      const dist = Math.hypot(pts[i * 2]! - x, pts[i * 2 + 1]! - y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    }
+    props.onSelect(best >= 0 ? best : null);
   };
   useEffect(() => {
     const el = svgRef.current;
@@ -174,10 +257,15 @@ export function Cloud3D(props: Cloud3DProps) {
   useEffect(() => {
     let raf = 0;
     let last = performance.now();
+    let drawn: [number, number, number] | null = null;
+    if (screen.current.length !== coords.length * 2) screen.current = new Float32Array(coords.length * 2);
     const draw = () => {
       const a = angleRef.current;
       const tilt = tiltRef.current;
       const k = scale * zoomRef.current;
+      // A still cloud is not redrawn: nothing for a phone to do between moves.
+      if (drawn && Math.abs(drawn[0] - a) < 1e-5 && Math.abs(drawn[1] - tilt) < 1e-5 && Math.abs(drawn[2] - k) < 1e-5) return;
+      drawn = [a, tilt, k];
       const place = (p: readonly number[]) => {
         const q = project3d([p[0]! - frame.c[0]!, p[1]! - frame.c[1]!, p[2]! - frame.c[2]!], a, tilt);
         return { x: width / 2 + q.x * k, y: height / 2 - q.y * k, depth: q.depth, persp: q.persp };
@@ -186,6 +274,8 @@ export function Cloud3D(props: Cloud3DProps) {
         const el = pointRefs.current[i];
         if (!el) return;
         const q = place(p);
+        screen.current[i * 2] = q.x;
+        screen.current[i * 2 + 1] = q.y;
         el.setAttribute("cx", q.x.toFixed(1));
         el.setAttribute("cy", q.y.toFixed(1));
         el.setAttribute("r", ((highlightSet.has(i) ? 9 : 6) * q.persp).toFixed(2));
@@ -241,7 +331,10 @@ export function Cloud3D(props: Cloud3DProps) {
     query || highlightSet.size ? !highlightSet.has(i) : focus !== null ? space.items[i]!.cluster !== focus : false;
 
   return (
-    <div className={mapStyles.box} style={{ width, height }}>
+    <div
+      className={`${mapStyles.box} ${props.fluid ? mapStyles.fluid : ""}`}
+      style={props.fluid ? { width: "100%", aspectRatio: `${width} / ${height}` } : { width, height }}
+    >
     <svg
       ref={svgRef}
       className={`${styles.map} ${interactive ? mapStyles.interactive : ""}`}
@@ -252,10 +345,10 @@ export function Cloud3D(props: Cloud3DProps) {
       aria-label={locale === "fr" ? "Nuage de mots en 3D" : "3D cloud of words"}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={() => {
-        drag.current = null;
-      }}
-      onPointerCancel={() => {
+      onPointerUp={onPointerUp}
+      onPointerCancel={(e) => {
+        pointers.current.delete(e.pointerId);
+        pinch.current = null;
         drag.current = null;
       }}
       style={{ touchAction: "none", overflow: "hidden" }}

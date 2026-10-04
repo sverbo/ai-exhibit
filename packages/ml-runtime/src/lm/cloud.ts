@@ -16,34 +16,35 @@ export interface CloudStatus {
   codeAccepted?: boolean;
   /** The server's Hugging Face key: valid, plan, inference permission, credits refused lately. Absent from older servers. */
   key?: { valid: boolean | null; plan: "free" | "pro" | null; inference: boolean | null; creditsExhausted: boolean };
-  /** Audience requests only: this device's asks left this hour per game, of `perHour` each. */
-  audience?: { perHour: number; games: Record<AudienceGame, number> };
+  /** Audience requests only: this device's asks left this hour per demo (field `games`), of `perHour` each. */
+  audience?: { perHour: number; games: Record<AudienceDemo, number> };
 }
 
 /** Header the server reads the access code from (packages/cloud-api ACCESS_CODE_HEADER). */
 export const ACCESS_CODE_HEADER = "x-ai-exhibit-code";
 const ACCESS_CODE_KEY = "ai-exhibit:access-code";
 /**
- * Header that marks an audience request (the Play tab of /glossary) with a
+ * Header that marks an audience request (the "Try it" tab of /glossary) with a
  * random device id: the server counts it in the audience budgets, never in the
  * presenter's (packages/cloud-api AUDIENCE_HEADER).
  */
 export const AUDIENCE_HEADER = "x-ai-exhibit-audience";
-/** On audience answers: the game's asks left this hour (packages/cloud-api REMAINING_HEADER). */
+/** On audience answers: the demo's asks left this hour (packages/cloud-api REMAINING_HEADER). */
 export const REMAINING_HEADER = "x-ai-exhibit-remaining";
 
-/** The Play tab's games that call a model, each with its own asks per device (packages/cloud-api AUDIENCE_GAMES). */
-export const AUDIENCE_GAMES = ["words", "base", "assistant", "ladder"] as const;
-export type AudienceGame = (typeof AUDIENCE_GAMES)[number];
+/** The "Try it" tab's demos that call a model, each with its own asks per device (packages/cloud-api AUDIENCE_DEMOS). */
+export const AUDIENCE_DEMOS = ["words", "base", "assistant", "ladder"] as const;
+export type AudienceDemo = (typeof AUDIENCE_DEMOS)[number];
 
 /** A refusal of the audience budgets. */
 export interface AudienceBudget {
   /** "minute": try again soon; "hour": used up for now. */
   window: "minute" | "hour";
-  /** The game's asks left this hour. */
+  /** The demo's asks left this hour. */
   remaining: number;
-  game?: AudienceGame;
-  /** "device": this game on this phone; "room": every phone at this address. */
+  /** The demo refused (wire name `game`). */
+  game?: AudienceDemo;
+  /** "device": this demo on this phone; "room": every phone at this address. */
   scope?: "device" | "room";
 }
 
@@ -117,7 +118,7 @@ export interface CloudOptions {
   accessCode?: string | null;
   /** Audience device id: the call goes to the audience budgets (AUDIENCE_HEADER). */
   audience?: string;
-  /** Audience calls: told the game's asks left this hour after each answer. */
+  /** Audience calls: told the demo's asks left this hour after each answer. */
   onRemaining?: (remaining: number) => void;
 }
 
@@ -140,7 +141,7 @@ function refusal(res: Response, body: Record<string, unknown> | null, opts: Clou
   // A stored code the server refuses is stale: forget it, so the presenter is asked again.
   if (error === "access-code" && opts.accessCode === undefined && code) setAccessCode(null);
   const window: "minute" | "hour" | null = body?.window === "minute" || body?.window === "hour" ? body.window : null;
-  const game = (AUDIENCE_GAMES as readonly unknown[]).includes(body?.game) ? (body!.game as AudienceGame) : undefined;
+  const game = (AUDIENCE_DEMOS as readonly unknown[]).includes(body?.game) ? (body!.game as AudienceDemo) : undefined;
   const scope = body?.scope === "device" || body?.scope === "room" ? body.scope : undefined;
   const budget: AudienceBudget | undefined =
     window && typeof body?.remaining === "number" ? { window, remaining: body.remaining, ...(game ? { game } : {}), ...(scope ? { scope } : {}) } : undefined;

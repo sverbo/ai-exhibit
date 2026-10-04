@@ -101,6 +101,11 @@
   background: var(--color-accent);
   color: var(--color-on-accent);
 }
+.button[aria-pressed="true"] {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+}
 .button:disabled {
   opacity: 0.45;
   cursor: default;

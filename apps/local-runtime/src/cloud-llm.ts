@@ -70,7 +70,7 @@ export function createCloudLlmModule(
   return async (req, res, url) => {
     if (!isCloudPath(url.pathname)) return false;
     const local = isLocalClient(req);
-    // Phones on the LAN (the audience's Play tab) get the audience endpoints only,
+    // Phones on the LAN (the audience's "Try it" tab) get the audience endpoints only,
     // counted in the audience budgets, never in the presenter's.
     const audience = req.headers[AUDIENCE_HEADER] !== undefined;
     if (!local && !(audience && AUDIENCE_PATHS.has(url.pathname))) {

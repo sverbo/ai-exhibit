@@ -1,16 +1,17 @@
 /**
- * Words as points, solo: the embedding map of the talk on a phone (drag,
- * pinch, tap a dot), and a search. A word already on the map uses its
- * precomputed neighbours (free); any other text is embedded live (one model
- * request), else matched to the closest prepared word. Reuses the explorer's
- * map, search and copy.
+ * Words as points, solo: the embedding map of the talk on a phone, in the
+ * scene's views: the 2D map (drag, pinch, tap a dot, show all words) and the
+ * 3D cloud (drag to turn, pinch to zoom, tap a dot, loaded only when chosen),
+ * and a search. A word already on the map uses its precomputed neighbours
+ * (free); any other text is embedded live (one ask), else matched to the
+ * closest prepared word. Reuses the explorer's map, cloud, search and copy.
  */
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, lazy, Suspense, useMemo, useRef, useState } from "react";
 import { locateQuery, queryText, type EmbeddingSpace } from "@ai-exhibit/ml-runtime/embeddings";
 import { cloudEmbed, MAX_INPUT_CHARS } from "@ai-exhibit/ml-runtime/lm";
 import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { Rich } from "../primitives/Rich.tsx";
-import { EXPLORER, formatSimilarity } from "../embeddings/copy.ts";
+import { EXPLORER, formatSimilarity, MAP_CONTROLS } from "../embeddings/copy.ts";
 import { clusterColor, useEmbeddingSpace } from "../embeddings/data.ts";
 import { InteractiveMap } from "../embeddings/InteractiveMap.tsx";
 import { fromLocated, type QueryResult, searchVocabulary, selectWord } from "../embeddings/search.ts";
@@ -22,6 +23,11 @@ import local from "./WordsSolo.module.css";
 /** Map units: a portrait box, so labels land at a readable size on a phone. */
 const MAP_W = 520;
 const MAP_H = 600;
+/** Word labels at once on a phone, even with "show all words": placement stays quick. */
+const MAX_LABELS = 140;
+
+/** The 3D cloud is its own chunk, loaded the first time someone picks it. */
+const Cloud3D = lazy(() => import("../embeddings/Cloud3D.tsx").then((m) => ({ default: m.Cloud3D })));
 
 /** The map's own word for this text (same spelling, any case), if there is one. */
 export function exactWord(space: EmbeddingSpace, text: string): number {
@@ -50,6 +56,8 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
   const [busy, setBusy] = useState(false);
   const request = useRef(0);
   const live = canAsk(env, "words");
+  const [view, setView] = useState<"2d" | "3d">("2d");
+  const [showAll, setShowAll] = useState(false);
 
   const search = async (typed: string) => {
     const text = typed.trim().slice(0, MAX_INPUT_CHARS);
@@ -81,8 +89,16 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
     void search(draft);
   };
 
-  const neighbours = query?.neighbours ?? [];
-  const mapQuery = query?.position ? { text: query.text, position: query.position, neighbours: neighbours.map((n) => n.index) } : null;
+  // Stable values, so the map and the cloud only recompute when the result changes.
+  const highlight = useMemo(() => (query?.neighbours ?? []).map((n) => n.index), [query]);
+  const mapQuery = useMemo(() => (query?.position ? { text: query.text, position: query.position, neighbours: highlight } : null), [query, highlight]);
+  const cloudQuery = useMemo(() => (query?.position3d ? { text: query.text, position: query.position3d } : null), [query]);
+  const pick = (i: number | null) => {
+    if (i === null) return;
+    request.current++;
+    setPending(false);
+    setQuery(selectWord(space, i));
+  };
 
   return (
     <SoloRoot label={tr(EXPLORER.searchHeading, locale)}>
@@ -108,35 +124,73 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
         </div>
       </form>
       <p className={styles.note}>{tr(live ? SOLO.wordsCost : EXPLORER.fallbackActive, locale)}</p>
-      <AsksLeft env={env} game="words" />
+      <AsksLeft env={env} demo="words" />
       {busy ? <BusyNotice locale={locale} /> : null}
       {pending ? <p className={styles.pending}>{tr(EXPLORER.thinking, locale)}</p> : null}
-      <div className={local.map}>
-        <InteractiveMap
-          space={space}
-          locale={locale}
-          width={MAP_W}
-          height={MAP_H}
-          fluid
-          colored
-          clusterNames={!query}
-          pairs={false}
-          highlight={neighbours.map((n) => n.index)}
-          query={mapQuery}
-          labelBudget={query ? 40 : 70}
-          zoomTarget={query?.position ?? null}
-          interactive
-          camera={null}
-          onSelect={(i) => {
-            if (i === null) return;
-            request.current++;
-            setPending(false);
-            setQuery(selectWord(space, i));
+      <div className={styles.buttons} role="group" aria-label={tr(SOLO.wordsViews, locale)}>
+        <button type="button" className={styles.button} aria-pressed={view === "2d"} onClick={() => setView("2d")}>
+          {tr(EXPLORER.view2d, locale)}
+        </button>
+        <button type="button" className={styles.button} aria-pressed={view === "3d"} onClick={() => setView("3d")}>
+          {tr(EXPLORER.view3d, locale)}
+        </button>
+        <button
+          type="button"
+          className={styles.button}
+          aria-pressed={showAll && view === "2d"}
+          // Labels for every word are a map feature: from the cloud, this goes back to the map.
+          onClick={() => {
+            const on = !(showAll && view === "2d");
+            setShowAll(on);
+            if (on) setView("2d");
           }}
-          reducedMotion={env.reducedMotion}
-        />
+        >
+          {tr(MAP_CONTROLS.showAll, locale)}
+        </button>
       </div>
-      <p className={styles.hint}>{tr(SOLO.wordsHint, locale)}</p>
+      <div className={local.map}>
+        {view === "3d" ? (
+          <Suspense fallback={<p className={styles.pending}>{tr(EXPLORER.loadingData, locale)}</p>}>
+            <Cloud3D
+              space={space}
+              locale={locale}
+              width={MAP_W}
+              height={MAP_H}
+              fluid
+              colored
+              clusterNames={!query}
+              highlight={highlight}
+              query={cloudQuery}
+              spinning={!env.reducedMotion}
+              reducedMotion={env.reducedMotion}
+              interactive
+              onSelect={pick}
+            />
+          </Suspense>
+        ) : (
+          <InteractiveMap
+            space={space}
+            locale={locale}
+            width={MAP_W}
+            height={MAP_H}
+            fluid
+            colored
+            clusterNames={!query}
+            pairs={false}
+            highlight={highlight}
+            query={mapQuery}
+            labelBudget={query ? 40 : 70}
+            showAll={showAll}
+            maxLabels={MAX_LABELS}
+            zoomTarget={query?.position ?? null}
+            interactive
+            camera={null}
+            onSelect={pick}
+            reducedMotion={env.reducedMotion}
+          />
+        )}
+      </div>
+      <p className={styles.hint}>{tr(view === "3d" ? SOLO.cloudHint : SOLO.wordsHint, locale)}</p>
       {query ? <Results space={space} query={query} locale={locale} /> : null}
     </SoloRoot>
   );

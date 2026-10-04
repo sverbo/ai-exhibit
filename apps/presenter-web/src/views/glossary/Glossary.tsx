@@ -8,7 +8,7 @@ import { deviceId } from "./play/play.ts";
 import { letterOf, searchGlossary, termId } from "./search.ts";
 import styles from "./Glossary.module.css";
 
-/** The Play tab and its demos load only when opened, so the glossary stays fast. */
+/** The "Try it" tab and its demos load only when opened, so the glossary stays fast. */
 const Play = lazy(() => import("./play/Play.tsx"));
 
 type Tab = "glossary" | "resources" | "play";
@@ -17,7 +17,7 @@ const TABS: readonly Tab[] = ["glossary", "resources", "play"];
 const COPY = {
   glossary: { en: "Glossary", fr: "Glossaire" },
   resources: { en: "Resources", fr: "Ressources" },
-  play: { en: "Play", fr: "Jouer" },
+  play: { en: "Try it", fr: "Essayer" },
   loading: { en: "Loading…", fr: "Chargement…" },
   intro: {
     en: "The words of today's talk, in plain language. Tap a word to read it.",
@@ -74,7 +74,7 @@ function useSystemTheme(): void {
  * and needs no session. Used by /glossary.
  */
 /**
- * The Play tab exists only where its demos can run live: the server has a
+ * The "Try it" tab exists only where its demos can run live: the server has a
  * Hugging Face key that works and needs no access code (phones have none).
  * Without that, the tab is simply not offered.
  */

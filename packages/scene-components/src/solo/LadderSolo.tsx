@@ -65,7 +65,7 @@ export default function LadderSolo({ env }: { env: SoloEnv }) {
   if (!asking) {
     return (
       <SoloRoot label={tr(SOLO.ladderRecorded, locale)}>
-        <AsksLeft env={env} game="ladder" />
+        <AsksLeft env={env} demo="ladder" />
         <p className={styles.intro}>{tr(SOLO.ladderRecorded, locale)}</p>
         {riddle ? <Published locale={locale} /> : null}
       </SoloRoot>
@@ -94,7 +94,7 @@ export default function LadderSolo({ env }: { env: SoloEnv }) {
         </div>
       </form>
       <p className={styles.note}>{tr(SOLO.ladderCost, locale)}</p>
-      <AsksLeft env={env} game="ladder" />
+      <AsksLeft env={env} demo="ladder" />
       {busy ? <BusyNotice locale={locale} /> : null}
       {live ? (
         <ol className={styles.list}>

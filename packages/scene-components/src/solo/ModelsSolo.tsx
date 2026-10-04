@@ -89,7 +89,7 @@ function BaseModel({ env }: { env: SoloEnv }) {
         </h3>
         <p className={styles.intro}>{tr(SOLO.baseIntro, locale)}</p>
       </header>
-      <AsksLeft env={env} game="base" />
+      <AsksLeft env={env} demo="base" />
       {live ? (
         <label className={styles.form}>
           <span className={styles.label}>{tr(SOLO.baseField, locale)}</span>
@@ -191,7 +191,7 @@ function Assistant({ env }: { env: SoloEnv }) {
         </h3>
         <p className={styles.intro}>{tr(SOLO.assistantIntro, locale)}</p>
       </header>
-      <AsksLeft env={env} game="assistant" />
+      <AsksLeft env={env} demo="assistant" />
       {live ? (
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.label} htmlFor="solo-question">

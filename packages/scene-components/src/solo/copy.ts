@@ -15,6 +15,8 @@ export const SOLO = {
   // Words as points
   wordsField: { en: "A word or a short phrase" },
   wordsHint: { en: "Drag to move, pinch to zoom, tap a dot to see its neighbours." },
+  cloudHint: { en: "Drag to turn the cloud, pinch to zoom, tap a dot to see its neighbours." },
+  wordsViews: { en: "Views" },
   wordsCost: { en: "A word already on the map is free; any other word counts as one ask." },
   // Base model and assistant
   baseIntro: { en: "A model fresh out of pretraining. It only continues your text." },
@@ -31,9 +33,9 @@ export const SOLO = {
   ladderIntro: { en: "One question, three open models of increasing size, answering at the same time." },
   ladderCost: { en: "One question counts as one ask, even with three models answering." },
   ladderRecorded: { en: "The talk's riddle, as four generations of GPT answered it." },
-  // Asks: each game has a few per phone and hour
-  asksLeft: { en: "{n} of {m} asks left for this game this hour." },
-  gameUsedUp: {
-    en: "You have used this game's asks for this hour: recorded examples here. The other games still answer live.",
+  // Asks: each demo has a few per phone and hour
+  asksLeft: { en: "{n} of {m} asks left for this demo this hour." },
+  demoUsedUp: {
+    en: "You have used this demo's asks for this hour: recorded examples here. The other demos still answer live.",
   },
 } satisfies Record<string, L10n>;

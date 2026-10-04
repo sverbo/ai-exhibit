@@ -13,9 +13,9 @@
 // The token never leaves the server: it is not logged, not echoed in errors,
 // and the status only says whether one is configured.
 //
-// Audience calls (the Play tab of /glossary, docs/specs/2026-10-04-audience-play.md)
+// Audience calls (the "Try it" tab of /glossary, docs/specs/2026-10-04-audience-play.md)
 // carry AUDIENCE_HEADER with a random device id. They are counted in their own
-// budgets (asks per device and game, model requests per address), never in the
+// budgets (asks per device and demo, model requests per address), never in the
 // presenter's.
 import { EMBED_MODEL, EMBED_URL, roundVector, toSentenceVectors } from "./embed.js";
 import { CLOUD_TOKENIZERS, isCloudTokenizerId, loadCloudTokenizer, tokenizeWith } from "./tokenize.js";
@@ -200,7 +200,7 @@ export const PUBLIC_LIMITS: Limits = {
  * audience budgets below.
  */
 export const AUDIENCE_HEADER = "x-ai-exhibit-audience";
-/** On audience answers: asks this device has left for that game this hour. */
+/** On audience answers: asks this device has left for that demo this hour. */
 export const REMAINING_HEADER = "x-ai-exhibit-remaining";
 const DEVICE_ID = /^[A-Za-z0-9_-]{8,64}$/;
 
@@ -215,22 +215,24 @@ export const AUDIENCE_PATHS: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * The games of the Play tab that call a model, by endpoint. Each has its own
- * budget of asks per device. Tokenizing is free and belongs to none.
+ * The demos of the audience page's "Try it" tab that call a model, by
+ * endpoint. Each has its own budget of asks per device. Tokenizing is free and
+ * belongs to none. On the wire a demo is named in the `game` field (and the
+ * status's `games`), kept for compatibility.
  */
-export const AUDIENCE_GAMES = {
+export const AUDIENCE_DEMOS = {
   "/api/embed": "words",
   "/api/llm/complete": "base",
   "/api/llm/chat": "assistant",
   "/api/llm/ladder": "ladder",
 } as const;
-export type AudienceGame = (typeof AUDIENCE_GAMES)[keyof typeof AUDIENCE_GAMES];
-const GAMES = Object.values(AUDIENCE_GAMES) as AudienceGame[];
+export type AudienceDemo = (typeof AUDIENCE_DEMOS)[keyof typeof AUDIENCE_DEMOS];
+const DEMOS = Object.values(AUDIENCE_DEMOS) as AudienceDemo[];
 
 /**
  * Budgets of audience requests, separate from the presenter's. Phones on a
  * venue's Wi-Fi share one public address (often the presenter's too), so the
- * fair unit is the device: each gets a few asks per game. One ask counts 1,
+ * fair unit is the device: each gets a few asks per demo. One ask counts 1,
  * whatever the number of models behind it (the ladder asks three). A
  * determined user can reset the device id, so the per-address room cap, which
  * counts model requests, and the Hugging Face spending limit remain the real
@@ -239,8 +241,8 @@ const GAMES = Object.values(AUDIENCE_GAMES) as AudienceGame[];
 export interface AudienceLimits {
   /**
    * Request shapes for audience calls (smaller answers), and the device's
-   * budget: `perHour` is asks per game and device, `perMinute` asks per
-   * device, all games together. Timeouts come from the server's own limits.
+   * budget: `perHour` is asks per demo and device, `perMinute` asks per
+   * device, all demos together. Timeouts come from the server's own limits.
    */
   limits: Omit<Limits, "timeoutMs" | "ladderTimeoutMs">;
   /** Model requests per rolling minute from one address, all audience devices together. */
@@ -295,11 +297,11 @@ export class CloudError extends Error {
     readonly code: CloudErrorCode,
     message: string,
     /**
-     * Audience refusals: which window is full, the game's asks left this hour,
-     * and whose budget refused ("device": this game on this device; "room": every
+     * Audience refusals: which window is full, the demo's asks left this hour,
+     * and whose budget refused ("device": this demo on this device; "room": every
      * phone at this address).
      */
-    readonly budget?: { window: "minute" | "hour"; remaining: number; game?: AudienceGame; scope?: "device" | "room" },
+    readonly budget?: { window: "minute" | "hour"; remaining: number; game?: AudienceDemo; scope?: "device" | "room" },
   ) {
     super(message);
     this.name = "CloudError";
@@ -657,12 +659,12 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const aud = options.audience === false ? null : (options.audience ?? AUDIENCE_LIMITS);
   const audLimits: Limits | null = aud ? { ...aud.limits, timeoutMs: limits.timeoutMs, ladderTimeoutMs: limits.ladderTimeoutMs } : null;
   const deviceKey = (device: string) => `aud:d:${device}`;
-  const gameKey = (device: string, game: AudienceGame) => `aud:g:${device}:${game}`;
+  const gameKey = (device: string, game: AudienceDemo) => `aud:g:${device}:${game}`;
   const roomKey = (ip: string) => `aud:r:${ip || "unknown"}`;
-  const modelRequests = (game: AudienceGame) => (game === "ladder" ? LADDER.length : 1);
+  const modelRequests = (game: AudienceDemo) => (game === "ladder" ? LADDER.length : 1);
 
-  /** Asks this device has left for a game this hour; the room's cap (in model requests) included. */
-  const gameRemaining = (device: string, game: AudienceGame, ip: string, t = now()) => {
+  /** Asks this device has left for a demo this hour; the room's cap (in model requests) included. */
+  const gameRemaining = (device: string, game: AudienceDemo, ip: string, t = now()) => {
     if (!aud) return 0;
     const own = aud.limits.perHour - hours.used(gameKey(device, game), t);
     const room = Math.floor((aud.roomPerHour - hours.used(roomKey(ip), t)) / modelRequests(game));
@@ -680,10 +682,10 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   };
 
   /**
-   * Takes one ask from the device's budget for this game, and the game's model
-   * requests from the room's, or nothing. Returns the game's asks left.
+   * Takes one ask from the device's budget for this demo, and the demo's model
+   * requests from the room's, or nothing. Returns the demo's asks left.
    */
-  const audienceTake = (device: string, ip: string, game: AudienceGame): number => {
+  const audienceTake = (device: string, ip: string, game: AudienceDemo): number => {
     const a = aud!;
     const t = now();
     const calls = modelRequests(game);
@@ -692,7 +694,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
       throw new CloudError("rate-limited", "Too many live requests this minute: try again in a few seconds", { window: "minute", remaining: left, game });
     }
     if (hours.used(gameKey(device, game), t) >= a.limits.perHour) {
-      throw new CloudError("rate-limited", "This device has used its asks for this game this hour", { window: "hour", remaining: 0, game, scope: "device" });
+      throw new CloudError("rate-limited", "This device has used its asks for this demo this hour", { window: "hour", remaining: 0, game, scope: "device" });
     }
     if (hours.used(roomKey(ip), t) + calls > a.roomPerHour) {
       throw new CloudError("rate-limited", "The audience has used its live requests for this hour", { window: "hour", remaining: 0, game, scope: "room" });
@@ -783,7 +785,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     }
   };
 
-  /** The audience's status: whether the key works (no other key details), and this device's asks per game. */
+  /** The audience's status: whether the key works (no other key details), and this device's asks per demo. */
   const audienceStatus = async (device: string, client: ClientInfo) => {
     audienceFree(device);
     const configured = Boolean(options.token());
@@ -795,7 +797,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
       ...(configured ? { key: { valid: (await checkKey()).valid } } : {}),
       audience: {
         perHour: aud!.limits.perHour,
-        games: Object.fromEntries(GAMES.map((g) => [g, gameRemaining(device, g, client.ip, t)])) as Record<AudienceGame, number>,
+        games: Object.fromEntries(DEMOS.map((g) => [g, gameRemaining(device, g, client.ip, t)])) as Record<AudienceDemo, number>,
       },
     };
   };
@@ -1053,7 +1055,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     const body = await readJson(request, audLimits);
     const free = tokenless.has(pathname);
     if (!free && !options.token()) throw new CloudError("not-configured", "HF_TOKEN is not set");
-    const game = (AUDIENCE_GAMES as Record<string, AudienceGame | undefined>)[pathname];
+    const game = (AUDIENCE_DEMOS as Record<string, AudienceDemo | undefined>)[pathname];
     let remaining: number | null = null;
     if (free || !game) audienceFree(device);
     else remaining = audienceTake(device, client.ip, game);

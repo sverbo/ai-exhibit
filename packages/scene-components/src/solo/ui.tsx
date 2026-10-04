@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { COPY } from "../language/copy.ts";
-import type { AudienceGame } from "@ai-exhibit/ml-runtime/lm";
+import type { AudienceDemo } from "@ai-exhibit/ml-runtime/lm";
 import { SOLO } from "./copy.ts";
 import type { SoloEnv } from "./env.ts";
 import styles from "./Solo.module.css";
@@ -36,14 +36,14 @@ export function BusyNotice({ locale }: { locale: Locale }) {
   );
 }
 
-/** A game's own asks left this hour, discreet; or, once spent, why it shows recordings. */
-export function AsksLeft({ env, game }: { env: SoloEnv; game: AudienceGame }) {
+/** A demo's own asks left this hour, discreet; or, once spent, why it shows recordings. */
+export function AsksLeft({ env, demo }: { env: SoloEnv; demo: AudienceDemo }) {
   if (!env.live) return null;
-  const left = env.left(game);
+  const left = env.left(demo);
   if (left === 0) {
     return (
       <p className={styles.notice} role="status">
-        {tr(SOLO.gameUsedUp, env.locale)}
+        {tr(SOLO.demoUsedUp, env.locale)}
       </p>
     );
   }

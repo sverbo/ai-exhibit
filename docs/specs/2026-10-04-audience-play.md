@@ -1,4 +1,4 @@
-# Audience play: the talk's demos on the audience's phones
+# Try it: the talk's demos on the audience's phones
 
 Status: accepted for implementation, 2026-10-04.
 Context: the audience page `/glossary` (opened from the QR code), the cloud
@@ -7,18 +7,27 @@ endpoints in `packages/cloud-api`, and
 
 ## Goal
 
-A third tab on the audience page, "Play" (French "Jouer"), where people try
+A third tab on the audience page, "Try it" (French "Essayer"), where people try
 the talk's interactive demos themselves on their phone, without a session or
 a presenter, and without ever using up the presenter's budget.
 
 ## The tab
 
-- Four demos, one column, opened one at a time: **Tokens** (type a sentence,
-  see its tokens, free), **Words as points** (search a word on the embedding
-  map, drag and pinch to explore, see its nearest neighbours), **Base model
-  and assistant** (the base model continues a text by 10 tokens; the
-  assistant answers a question), **Then and now** (one question, three models
-  of increasing size answer).
+- Four demos, one column, opened one at a time, in the order the talk shows
+  them: **Then and now** (one question, three models of increasing size
+  answer; the clock riddle opens the talk), **Tokens** (type a sentence, see
+  its tokens, free), **Words as points** (search a word, see its nearest
+  neighbours, in the scene's views: the 2D map, with "show all words", and
+  the 3D cloud), **Base model and assistant** (the base model continues a
+  text by 10 tokens; the assistant answers a question).
+- The words demo on touch: on the map, one finger pans, two pinch to zoom; in
+  the 3D cloud, one finger turns it, two pinch to zoom; a tap on a dot shows
+  that word's neighbours in both; + and - buttons zoom. The cloud is its own
+  lazy chunk, loaded the first time it is picked. It writes positions to the
+  DOM in its frame loop (no React render per frame), skips frames while it
+  is still, and the map places at most 140 word labels even with "show all
+  words".
+- Wording: they are "demos" (« démos »), never "games".
 - Phone first: works at 360 px wide, big touch targets, light and dark (the
   phone's preference), no horizontal scroll, the page's own FR/EN switch.
 - Fast glossary: the tab is a lazy chunk, and each demo is its own lazy chunk
@@ -33,8 +42,9 @@ so the solo demos (`packages/scene-components/src/solo/`) are phone layouts
 built from the scenes' own parts: the cloud client (`@ai-exhibit/ml-runtime/lm`),
 presets and copy (`language/data.ts`, `language/copy.ts`, `embeddings/copy.ts`),
 recordings (`language/runtime.ts`), the token tiles (`TokenizedText`), the map
-(`InteractiveMap`, which gains a fluid width and two-finger pinch, also
-useful on touch screens in the talk), the vocabulary search
+(`InteractiveMap` and `Cloud3D`, which gain a fluid width, two-finger pinch
+and, for the cloud, tap to pick a word, also useful on touch screens in the
+talk; `MapView` gains a label cap), the vocabulary search
 (`embeddings/search.ts`) and the ladder logic (`language/thenAndNow.ts`). They
 take a small `SoloEnv` (locale, live or recorded, cloud options), not a
 `SceneContext`: no session, no state publishing, no roles.
@@ -46,12 +56,12 @@ laptop included. Audience calls therefore get their own budgets:
 
 - Each phone makes a random **device id** once (`crypto.randomUUID`, kept in
   localStorage, never personal data) and sends it in `x-ai-exhibit-audience`
-  on every Play call. The header moves the call to the audience budgets.
-- **Per device and game**: 5 asks per hour for each game that calls a model:
+  on every call of the tab. The header moves the call to the audience budgets.
+- **Per device and demo**: 5 asks per hour for each demo that calls a model:
   words (embedding a new word), base model (+10 tokens), assistant, and the
   three-model ladder. One ask counts 1 whatever the number of models behind
   it, so a ladder question is one ask. A device makes at most 3 asks a minute,
-  all games together. Tokenizing is free (30 per minute, no hourly count), and
+  all demos together. Tokenizing is free (30 per minute, no hourly count), and
   so is a word already on the map (no call).
 - **Room cap per address**, all audience devices together, in model requests:
   200 per hour, 30 per minute; a ladder question counts 3 here. On the local
@@ -64,16 +74,17 @@ laptop included. Audience calls therefore get their own budgets:
   anything else are refused for audience calls. On the local runtime, LAN
   clients reach these endpoints only with the header; everything else stays
   for the presenter's machine.
-- A game's answers carry `x-ai-exhibit-remaining`: that game's asks left this
+- A demo's answers carry `x-ai-exhibit-remaining`: that demo's asks left this
   hour (the room cap included). The audience status returns
   `audience: { perHour, games: { words, base, assistant, ladder } }` and, of
-  the key, only whether it is valid. Each game shows its own asks left,
+  the key, only whether it is valid. Each demo shows its own asks left,
   discreetly.
-- Refusals are `429` with `window: "minute" | "hour"`, the `game` and the
+- Refusals are `429` with `window: "minute" | "hour"`, the demo (field `game`) and the
   `scope` (`"device"` or `"room"`). "minute" says "busy, try again in a few
-  seconds". A device's game spent switches that game to its recorded
-  examples and says the other games still answer live; the room spent (or
-  every game spent) switches the whole tab to recordings.
+  seconds". A device's demo spent switches that demo to its recorded
+  examples and says the other demos still answer live; the room spent (or
+  every demo spent) switches the whole tab to recordings. The wire names
+  (`game`, `games`) predate the wording and stay for compatibility.
 
 Limits: a determined user can reset the device id (clear storage), so the
 per-address room cap and the Hugging Face spending limit are the real
@@ -83,7 +94,7 @@ instances each count on their own): best effort, as for the presenter.
 ## Recorded fallback
 
 When live calls are not possible (no token on the server, an access code
-required, the server unreachable, or the game's asks used up), each demo
+required, the server unreachable, or the demo's asks used up), each demo
 shows recorded real examples with a short note: tokenizations of the
 prepared sentences, the vocabulary's precomputed neighbours, the base model's
 and the assistant's recorded answers to the prepared prompts, and the

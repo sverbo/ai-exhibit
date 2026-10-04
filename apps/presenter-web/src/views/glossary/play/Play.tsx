@@ -1,14 +1,14 @@
 /**
- * The Play tab of the audience page: the talk's interactive demos, solo, on
+ * The "Try it" tab of the audience page: the talk's interactive demos, solo, on
  * the phone (docs/specs/2026-10-04-audience-play.md). This module is its own
  * chunk, and each demo is another one, loaded when opened. Live calls carry
  * this phone's device id and count in the audience budget (a few asks per
- * game), never in the presenter's; when they cannot run, the demos show
+ * demo), never in the presenter's; when they cannot run, the demos show
  * recorded examples.
  */
 import { type ComponentType, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { installCatalogs, tr, type Locale } from "@ai-exhibit/presentation-core";
-import { type AudienceGame, cloudStatus, type CloudStatus, CloudLlmError } from "@ai-exhibit/ml-runtime/lm";
+import { type AudienceDemo, cloudStatus, type CloudStatus, CloudLlmError } from "@ai-exhibit/ml-runtime/lm";
 import { type SoloEnv, troubleOf } from "@ai-exhibit/scene-components/solo/env.ts";
 import { decidePlay, deviceId, type RecordedWhy } from "./play.ts";
 import styles from "./Play.module.css";
@@ -20,8 +20,8 @@ const COPY = {
   },
   checking: { en: "Checking the live models…", fr: "Vérification des modèles en direct…" },
   asks: {
-    en: "Each game answers live a few times per phone and hour; tokenizing is free.",
-    fr: "Chaque jeu répond en direct quelques fois par téléphone et par heure ; le découpage en tokens est gratuit.",
+    en: "Each demo answers live a few times per phone and hour; tokenizing is free.",
+    fr: "Chaque démo répond en direct quelques fois par téléphone et par heure ; le découpage en tokens est gratuit.",
   },
   off: {
     en: "Live models are off right now: these are recorded real examples.",
@@ -49,7 +49,17 @@ const WHY: Record<RecordedWhy, keyof typeof COPY> = {
 
 type Demo = ComponentType<{ env: SoloEnv }>;
 
+/** In the order the talk shows them. */
 export const DEMOS: { id: string; title: Record<Locale, string>; blurb: Record<Locale, string>; component: Demo }[] = [
+  {
+    id: "ladder",
+    title: { en: "Then and now", fr: "Hier et aujourd'hui" },
+    blurb: {
+      en: "Ask one question to three models of increasing size.",
+      fr: "Posez une question à trois modèles de plus en plus grands.",
+    },
+    component: lazy(() => import("@ai-exhibit/scene-components/solo/LadderSolo.tsx")),
+  },
   {
     id: "tokens",
     title: { en: "Tokens", fr: "Les tokens" },
@@ -59,7 +69,10 @@ export const DEMOS: { id: string; title: Record<Locale, string>; blurb: Record<L
   {
     id: "words",
     title: { en: "Words as points", fr: "Les mots deviennent des points" },
-    blurb: { en: "Search a word on the map of meanings.", fr: "Cherchez un mot sur la carte des sens." },
+    blurb: {
+      en: "Search a word on the map of meanings, or turn the 3D cloud.",
+      fr: "Cherchez un mot sur la carte des sens, ou faites tourner le nuage en 3D.",
+    },
     component: lazy(() => import("@ai-exhibit/scene-components/solo/WordsSolo.tsx")),
   },
   {
@@ -70,15 +83,6 @@ export const DEMOS: { id: string; title: Record<Locale, string>; blurb: Record<L
       fr: "L'un continue votre texte, l'autre répond à votre question.",
     },
     component: lazy(() => import("@ai-exhibit/scene-components/solo/ModelsSolo.tsx")),
-  },
-  {
-    id: "ladder",
-    title: { en: "Then and now", fr: "Hier et aujourd'hui" },
-    blurb: {
-      en: "Ask one question to three models of increasing size.",
-      fr: "Posez une question à trois modèles de plus en plus grands.",
-    },
-    component: lazy(() => import("@ai-exhibit/scene-components/solo/LadderSolo.tsx")),
   },
 ];
 
@@ -106,7 +110,7 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
   const device = useMemo(() => deviceId(), []);
   const [ready, setReady] = useState(false);
   const [status, setStatus] = useState<CloudStatus | null | "error">(null);
-  const [left, setLeft] = useState<Partial<Record<AudienceGame, number>>>({});
+  const [left, setLeft] = useState<Partial<Record<AudienceDemo, number>>>({});
   const [stopped, setStopped] = useState<"used-up" | "failed" | null>(null);
   const [open, setOpen] = useState<string | null>(initialOpen);
   const reducedMotion = useReducedMotion();
@@ -152,7 +156,7 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
           const game = budget.game;
           setLeft((l) => ({ ...l, [game]: budget.remaining }));
         }
-        // A game's own asks spent: that game shows recordings. The room's: every game does.
+        // A demo's own asks spent: that demo shows recordings. The room's: every demo does.
         if (trouble === "used-up" && budget?.scope === "room") setStopped("used-up");
         if (trouble === "failed") setStopped("failed");
         return trouble;

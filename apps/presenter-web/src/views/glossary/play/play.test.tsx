@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it } from "vitest";
 import type { Locale } from "@ai-exhibit/presentation-core";
-import { type AudienceGame, CloudLlmError, type CloudStatus } from "@ai-exhibit/ml-runtime/lm";
+import { type AudienceDemo, CloudLlmError, type CloudStatus } from "@ai-exhibit/ml-runtime/lm";
 import { type SoloEnv, troubleOf } from "@ai-exhibit/scene-components/solo/env.ts";
 import LadderSolo from "@ai-exhibit/scene-components/solo/LadderSolo.tsx";
 import ModelsSolo from "@ai-exhibit/scene-components/solo/ModelsSolo.tsx";
@@ -20,9 +20,9 @@ function clean(html: string) {
   expect(html).not.toContain("NaN");
 }
 
-describe("Play tab", () => {
+describe("Try it tab", () => {
   it("is the third tab of the audience page, in both languages, and loads lazily", () => {
-    for (const [locale, label] of [["en", "Play"], ["fr", "Jouer"]] as const) {
+    for (const [locale, label] of [["en", "Try it"], ["fr", "Essayer"]] as const) {
       const html = renderToStaticMarkup(createElement(Glossary, { initialLocale: locale, initialTab: "play", playAvailable: true }));
       expect(html).toMatch(new RegExp(`aria-pressed="true"[^>]*>${label}</button>`));
       expect(html).toContain(locale === "fr" ? "Glossaire" : "Glossary");
@@ -32,19 +32,19 @@ describe("Play tab", () => {
     }
     const glossary = renderToStaticMarkup(createElement(Glossary, { initialLocale: "en", playAvailable: true }));
     expect(glossary).toContain('type="search"');
-    expect(glossary).toMatch(/aria-pressed="false"[^>]*>Play</);
+    expect(glossary).toMatch(/aria-pressed="false"[^>]*>Try it</);
   });
 
   it("is not offered when the server cannot run the demos live (no working Hugging Face key)", () => {
     const html = renderToStaticMarkup(createElement(Glossary, { initialLocale: "en", initialTab: "play", playAvailable: false }));
-    expect(html).not.toMatch(/>Play<\/button>/);
+    expect(html).not.toMatch(/>Try it<\/button>/);
     expect(html).toContain('type="search"');
   });
 
   it("lists the four demos, closed until tapped", () => {
     for (const locale of ["en", "fr"] as const) {
       const html = renderToStaticMarkup(createElement(Play, { locale }));
-      expect(DEMOS.map((d) => d.id)).toEqual(["tokens", "words", "models", "ladder"]);
+      expect(DEMOS.map((d) => d.id)).toEqual(["ladder", "tokens", "words", "models"]);
       for (const d of DEMOS) expect(html).toContain(d.title[locale].replaceAll("'", "&#x27;"));
       expect(html.match(/aria-expanded="false"/g)).toHaveLength(4);
       clean(html);
@@ -92,7 +92,7 @@ describe("device id", () => {
 });
 
 describe("solo demos", () => {
-  const env = (locale: Locale, live: boolean, left: Partial<Record<AudienceGame, number>> = {}): SoloEnv => ({
+  const env = (locale: Locale, live: boolean, left: Partial<Record<AudienceDemo, number>> = {}): SoloEnv => ({
     locale,
     live,
     cloud: () => ({}),
@@ -119,10 +119,10 @@ describe("solo demos", () => {
     // Live: the base model offers 10 more tokens; the ladder warns it costs three answers.
     expect(renderToStaticMarkup(createElement(ModelsSolo, { env: env("en", true) }))).toContain("+10 tokens");
     // Each game shows its own asks left, and says so once they are spent.
-    expect(renderToStaticMarkup(createElement(LadderSolo, { env: env("en", true, { ladder: 2 }) }))).toContain("2 of 5 asks left for this game this hour.");
+    expect(renderToStaticMarkup(createElement(LadderSolo, { env: env("en", true, { ladder: 2 }) }))).toContain("2 of 5 asks left for this demo this hour.");
     const spentLadder = renderToStaticMarkup(createElement(LadderSolo, { env: env("fr", true, { ladder: 0 }) }));
     expect(spentLadder).toContain("Exemple enregistré");
-    expect(spentLadder).toContain("Les autres jeux répondent");
+    expect(spentLadder).toContain("Les autres démos répondent");
     const models = renderToStaticMarkup(createElement(ModelsSolo, { env: env("en", true, { base: 0, assistant: 4 }) }));
     expect(models).toContain("Show the recorded continuation");
     expect(models).toContain("4 of 5 asks left");
