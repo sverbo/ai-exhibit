@@ -17,7 +17,11 @@ const COPY = {
   clear: { en: "Clear", fr: "Effacer" },
   noMatch: { en: "No word matches. Try a shorter search.", fr: "Aucun mot ne correspond. Essayez une recherche plus courte." },
   seeAlso: { en: "See also", fr: "Voir aussi" },
-  termsNote: { en: "Terms stay in English, as you hear them on stage.", fr: "Les termes restent en anglais, comme sur scène." },
+  // Shown only when the explanations are not in English.
+  termsNote: {
+    en: "The language you choose applies to the explanations. The terms stay in English: they are the words used on stage and in the news.",
+    fr: "La langue choisie s'applique aux explications. Les termes restent en anglais : ce sont ceux qu'on entend sur scène et dans l'actualité.",
+  },
   resourcesIntro: { en: "To go further after the talk.", fr: "Pour aller plus loin après la présentation." },
   online: { en: "Online:", fr: "En ligne :" },
   language: { en: "Language", fr: "Langue" },
@@ -159,6 +163,7 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
             />
           </div>
           {!searching ? <p className={styles.intro}>{tr(COPY.intro, locale)}</p> : null}
+          {!searching && locale !== "en" ? <p className={styles.note}>{tr(COPY.termsNote, locale)}</p> : null}
           {hits.length === 0 ? <p className={styles.empty}>{tr(COPY.noMatch, locale)}</p> : null}
           {groups.map((g) => (
             <section key={g.letter || "hits"} className={styles.group} aria-label={g.letter || undefined}>
@@ -197,7 +202,6 @@ export function Glossary({ initialLocale }: { initialLocale?: Locale }) {
               </ul>
             </section>
           ))}
-          <p className={styles.note}>{tr(COPY.termsNote, locale)}</p>
         </>
       ) : (
         <section className={styles.resources}>
