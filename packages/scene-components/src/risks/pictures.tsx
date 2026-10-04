@@ -26,6 +26,7 @@ export const PICTURE_IDS = [
   "car",
   "runner",
   "math",
+  "slides",
   // Three families
   "misuse",
   "systemic",
@@ -413,6 +414,19 @@ const DRAW: Record<PictureId, () => ReactNode> = {
         <line x1="54" y1="162" x2="40" y2="212" />
         <line x1="186" y1="162" x2="200" y2="212" />
       </g>
+      <Ground />
+    </>
+  ),
+  slides: () => (
+    <>
+      <rect x="64" y="40" width="150" height="100" rx="8" className={styles.page} />
+      <rect x="44" y="64" width="150" height="100" rx="8" className={styles.page} />
+      <rect x="22" y="88" width="160" height="112" rx="8" className={styles.page} />
+      <line x1="42" y1="112" x2="112" y2="112" className={styles.strokeInk} />
+      <Person x={78} y={186} s={0.48} />
+      <Robot x={130} y={186} s={0.48} />
+      <path d="M200 8 Q204 36 230 40 Q204 44 200 72 Q196 44 170 40 Q196 36 200 8 Z" className={styles.ai} />
+      <path d="M150 6 Q152 18 164 20 Q152 22 150 34 Q148 22 136 20 Q148 18 150 6 Z" className={styles.ai} />
       <Ground />
     </>
   ),

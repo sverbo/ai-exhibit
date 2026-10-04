@@ -145,6 +145,22 @@ export const talkSources: SourceRecord[] = [
       "Quote: '75% of all new code at Google is now AI-generated and approved by engineers, up from 50% last fall.' Company statement, not an independent measurement. Earlier figure: 'more than a quarter' (Q3 2024 earnings remarks, blog.google, 2024-10-29).",
   },
   {
+    id: "tk-ai-exhibit-repository",
+    title: "ai-exhibit: the source code of this presentation",
+    url: "https://github.com/sverbo/ai-exhibit",
+    publisher: "Samuel Verboomen",
+    authors: ["Samuel Verboomen"],
+    date: "2026-10",
+    retrieved: "2026-10-04",
+    kind: "documentation",
+    claim:
+      "The talk's code, slides, animations and live demos were written by Claude Code agents, several working in parallel, under the author's direction; the story, the choices and the checking of every claim are the author's.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The presenter's own account, backed by the repository history: on 2026-10-04, 209 of the 213 commits (2026-10-02 to 2026-10-04) carried a Claude Co-Authored-By trailer. The repository answered 404 to an anonymous request on 2026-10-04 (private), so verify:sources reports it until it is made public.",
+  },
+  {
     id: "tk-waymo-2026-weekly-rides",
     title: "Accelerating our global growth: Waymo raises $16 billion investment round",
     url: "https://waymo.com/blog/2026/02/waymo-raises-usd16-billion-investment-round/",

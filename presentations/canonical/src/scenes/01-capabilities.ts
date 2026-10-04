@@ -258,12 +258,12 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-already-here",
     code: "here",
-    steps: 4,
+    steps: 5,
     chapter: "01",
     number: "1.2",
     title: { en: "Already here" },
     objective: {
-      en: "Right after the riddle, show that today's AI is already at work outside the lab: code, driving, robots, mathematics.",
+      en: "Right after the riddle, show that today's AI is already at work outside the lab: code, driving, robots, mathematics, and this very talk.",
     },
     takeaway: {
       en: "This is not a lab demo: AI already writes most new code at Google and drives paying passengers.",
@@ -312,6 +312,15 @@ export const chapter01: SceneDefinition[] = [
             evidence: "contested",
             sourceIds: ["tk-quanta-2026-navier-stokes", "tk-clay-2026-navier-stokes"],
           },
+          {
+            picture: "slides",
+            title: { en: "This presentation" },
+            line: {
+              en: "The story is mine; the slides, animations and demos were built by AI agents working in parallel.",
+            },
+            evidence: "observed",
+            sourceIds: ["tk-ai-exhibit-repository"],
+          },
         ],
       },
     },
@@ -322,6 +331,7 @@ export const chapter01: SceneDefinition[] = [
 - **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas
 - **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); "next" is my projection
 - **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed
+- **Do:** this presentation: the story and the choices are mine, and I checked every claim and source; Claude Code agents, several in parallel for a few hours, wrote the code, drew the pictograms and animations, built the live demos and looked up sources, over many rounds of my feedback and their revisions
 - My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly
 - **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)`,
     },
@@ -336,11 +346,12 @@ export const chapter01: SceneDefinition[] = [
       "tk-beijing-2025-robot-half-marathon",
       "tk-quanta-2026-navier-stokes",
       "tk-clay-2026-navier-stokes",
+      "tk-ai-exhibit-repository",
     ],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "none", reason: "Static pictures." },
-    durationSec: 120,
+    durationSec: 135,
     optional: false,
     localizationNotes:
       "Say the date of every figure out loud. The cards carry the evidence; the presenter's conviction (\"even if AI stopped improving today\") is in the notes, say it as an opinion.",

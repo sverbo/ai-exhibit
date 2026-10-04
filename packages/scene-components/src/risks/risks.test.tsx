@@ -128,7 +128,8 @@ describe("PictureCards", () => {
       if (p.heading) expectL10n(p.heading, `${scene.id} heading`);
       if (p.center) expect(isPictureId(p.center), `${scene.id} center`).toBe(true);
       expect(p.cards.length).toBeGreaterThan(0);
-      expect(p.cards.length).toBeLessThanOrEqual(4);
+      // Five is the most a row holds on the 1920 x 1080 stage with a readable line under each picture.
+      expect(p.cards.length).toBeLessThanOrEqual(5);
       // One card per step (or a single card shown at once).
       expect(scene.steps, `${scene.id} steps`).toBe(p.cards.length === 1 ? 0 : p.cards.length);
       for (const [i, c] of p.cards.entries()) {
