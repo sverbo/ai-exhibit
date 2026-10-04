@@ -13,6 +13,18 @@
   padding-bottom: 8px;
   background: radial-gradient(ellipse 50% 120% at 15% -40%, var(--stage-light), transparent 70%);
 }
+/* A friendly line under the title: feedback from presenters is welcome. */
+.welcome {
+  max-width: 62ch;
+  margin: 16px 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-md, 17px);
+  line-height: 1.45;
+}
+.welcome b {
+  color: var(--color-accent);
+  font-weight: 600;
+}
 .brand {
   margin: 0 0 12px;
   font-family: var(--font-mono);

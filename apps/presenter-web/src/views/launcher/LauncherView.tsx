@@ -56,6 +56,10 @@ export default function LauncherView() {
       <header className={styles.header}>
         <p className={styles.brand}>ai-exhibit</p>
         <h1 className={styles.title}>{talk.presentation.title.en}</h1>
+        <p className={styles.welcome}>
+          Giving this talk? I would love to hear how it went: which version, how many people, what worked and what did not.
+          Don't hesitate to message me on Signal, <b>{SIGNAL}</b>.
+        </p>
         <div className={styles.theme}>
           <ThemeToggle hint={false} locale="en" />
         </div>
