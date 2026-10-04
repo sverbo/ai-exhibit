@@ -63,9 +63,6 @@ export const COPY = {
   },
 
   // Prediction game
-  roomGuesses: {  en: "The room suggests" },
-  addGuess: {  en: "Add the room's answer" },
-  guessPlaceholder: {  en: "Answer heard, then Enter" },
   reveal: {  en: "Reveal the model" },
   hide: {  en: "Hide the model" },
   modelSays: {  en: "The model suggests" },
@@ -182,21 +179,12 @@ export const COPY = {
 
   // Then and now
   question: {  en: "Question" },
-  askGpt2: {  en: "Ask GPT-2" },
-  askAgain: {  en: "Ask again" },
-  showToday: {  en: "Show today" },
   previousQuestion: {  en: "Previous question" },
   nextQuestion: {  en: "Next question" },
   gpt2Recorded: {  en: "recorded answer from a real GPT-2" },
-  gpt2English: {
-    en: "GPT-2 is asked in English, the only language it learned.",
-  },
   recordedAnswer: {  en: "recorded answer" },
-  correctAnswer: {  en: "Correct answer" },
   thenTitle: {  en: "Then" },
   nowTitle: {  en: "Today" },
-  nextGeneration: {  en: "Next generation" },
-  previousGeneration: {  en: "Previous generation" },
   askedInEnglish: {  en: "Asked in English:" },
   /** Label before the translation of an English model answer (never a model output itself). */
   translation: {  en: "Translation:" },
@@ -211,12 +199,9 @@ export const COPY = {
     en: "If your picture of AI stopped at GPT-3-era tricks, update it.",
   },
   // Then and now, live step
-  goLive: { en: "Ask live" },
   liveQuestion: { en: "Question for the live models" },
   liveAsk: { en: "Ask" },
-  liveNeedsHf: {
-    en: "Live answers need Hugging Face. In Simulation, only the recorded answers are shown.",
-  },
+  livePlaceholder: { en: "How many r's are in strawberry?" },
   liveWaiting: { en: "Waiting" },
   liveThinking: { en: "Thinking" },
   liveCut: { en: "cut at the length limit" },

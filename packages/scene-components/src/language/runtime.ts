@@ -53,6 +53,9 @@ export const useGpt2Answers = lazyJson<import("@ai-exhibit/content/assets/then-a
 export const useCloudRecording = lazyJson<import("@ai-exhibit/ml-runtime/lm").CloudRecordingFile>(
   () => import("@ai-exhibit/content/assets/recordings/cloud.json"),
 );
-export const useLlamaTemplate = lazyJson<import("@ai-exhibit/ml-runtime/lm").ChatTemplateFile>(
+export const useLiveLadderRecording = lazyJson<import("./thenAndNow.ts").LiveLadderRecordingFile>(
+  () => import("@ai-exhibit/content/assets/recordings/live-ladder.json"),
+);
+export const useLlamaTemplate =lazyJson<import("@ai-exhibit/ml-runtime/lm").ChatTemplateFile>(
   () => import("@ai-exhibit/content/assets/recordings/llama-3.1-8b-instruct.chat-template.json"),
 );

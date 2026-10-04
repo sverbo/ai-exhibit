@@ -1,0 +1,65 @@
+{
+  "about": "Real answers of the live ladder (POST /api/llm/ladder, LADDER in packages/cloud-api), recorded once through the local runtime and shown in Simulation, labelled as recorded. Never edit the texts.",
+  "date": "2026-10-04",
+  "settings": {
+    "chat": "system \"Answer briefly.\", the question as the user message, max_tokens 160, temperature 0",
+    "base": "raw text \"Q: <question>\\nA:\", max_tokens 60, temperature 0, stop \"\\nQ:\"",
+    "reasoning": "system \"Answer briefly.\", the question as the user message, max_tokens 800 (reasoning included), reasoning_effort low"
+  },
+  "runs": [
+    {
+      "locale": "en",
+      "question": "How many r's are in the word strawberry?",
+      "answers": [
+        {
+          "rung": "qwen2.5-0.5b-base",
+          "model": "Qwen/Qwen2.5-0.5B",
+          "provider": "featherless-ai",
+          "text": " 1",
+          "finishReason": "stop"
+        },
+        {
+          "rung": "llama-3.1-8b",
+          "model": "meta-llama/Llama-3.1-8B-Instruct",
+          "provider": "nscale",
+          "text": "There are 2 r's in the word strawberry.",
+          "finishReason": "stop"
+        },
+        {
+          "rung": "gpt-oss-120b",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "text": "There are **3** r’s in “strawberry.”",
+          "finishReason": "stop"
+        }
+      ]
+    },
+    {
+      "locale": "fr",
+      "question": "Combien y a-t-il de r dans le mot strawberry ?",
+      "answers": [
+        {
+          "rung": "qwen2.5-0.5b-base",
+          "model": "Qwen/Qwen2.5-0.5B",
+          "provider": "featherless-ai",
+          "text": " 1",
+          "finishReason": "stop"
+        },
+        {
+          "rung": "llama-3.1-8b",
+          "model": "meta-llama/Llama-3.1-8B-Instruct",
+          "provider": "nscale",
+          "text": "Il y a 2 r dans le mot \"strawberry\".",
+          "finishReason": "stop"
+        },
+        {
+          "rung": "gpt-oss-120b",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "text": "Il y a **3** r dans le mot « strawberry ».",
+          "finishReason": "stop"
+        }
+      ]
+    }
+  ]
+}

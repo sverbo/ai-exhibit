@@ -36,6 +36,8 @@ export interface OpinionAside {
   analogyYear?: string;
   /** A rhetorical comparison, tagged "Analogy" and drawn smaller. */
   analogy?: L10n;
+  /** One closing line that draws the lesson, e.g. a call for humility. */
+  lesson?: L10n;
 }
 
 export interface OpinionGapProps {
@@ -149,6 +151,11 @@ export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>)
                   <Rich text={tr(aside.analogy, locale)} />
                 </span>
                 <span className={styles.analogyTag}>{tr(ANALOGY, locale)}</span>
+              </p>
+            ) : null}
+            {aside.lesson ? (
+              <p className={styles.asideLesson} data-lesson="">
+                <Rich text={tr(aside.lesson, locale)} />
               </p>
             ) : null}
           </aside>

@@ -6,15 +6,19 @@ import {
   applyLadderEvent,
   failLive,
   filledSlots,
+  gameQuestion,
   lastStage,
+  type LiveLadderRecordingFile,
   liveQuestion,
   liveStage,
   maxStage,
   pickQuestions,
   questionRuns,
+  recordedLive,
   startLive,
   truncate,
 } from "./thenAndNow.ts";
+import { LADDER } from "../../../cloud-api/src/core.ts";
 
 describe("then-and-now data", () => {
   it("has unique ids, both locales and a real recorded today answer", () => {
@@ -149,5 +153,42 @@ describe("live step", () => {
     expect(failed.answers["llama-3.1-8b"]).toMatchObject({ state: "error", text: "Fif", error: "offline" });
     expect(failed.answers["gpt-oss-120b"]?.state).toBe("done");
     expect(failed.answers["qwen2.5-0.5b-base"]?.state).toBe("error");
+  });
+
+  it("shows only the clock riddle, whose clicks end on the live step", () => {
+    const q = gameQuestion();
+    expect(q?.id).toBe("clock-riddle");
+    expect(liveStage(q!)).toBe(maxStage(q!));
+  });
+});
+
+describe("recorded live ladder (Simulation)", () => {
+  const file = JSON.parse(
+    readFileSync(new URL("../../../../content/assets/recordings/live-ladder.json", import.meta.url), "utf8"),
+  ) as LiveLadderRecordingFile & { runs: { answers: { model: string }[] }[] };
+
+  it("holds a real run of every rung, in both editions, from the ladder's own models", () => {
+    expect(file.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    for (const run of file.runs) {
+      expect(run.question.length).toBeLessThanOrEqual(300);
+      expect(run.answers.map((a) => a.rung)).toEqual(LADDER.map((r) => r.id));
+      expect(run.answers.map((a) => a.model)).toEqual(LADDER.map((r) => r.hubId));
+      for (const a of run.answers) {
+        expect(a.text.trim()).not.toBe("");
+        expect(LADDER.find((r) => r.id === a.rung)!.targets.map((t) => t.provider)).toContain(a.provider);
+      }
+    }
+    expect(file.runs.map((r) => r.locale).sort()).toEqual(["en", "fr"]);
+  });
+
+  it("becomes a finished, labelled ladder for the edition's language, English otherwise", () => {
+    const en = recordedLive(file, "en")!;
+    expect(en.question).toBe("How many r's are in the word strawberry?");
+    expect(en.running).toBe(false);
+    expect(en.recordedOn).toBe(file.date);
+    expect(Object.values(en.answers).every((a) => a.state === "done")).toBe(true);
+    expect(recordedLive(file, "fr")!.question).toMatch(/strawberry/);
+    expect(recordedLive(file, "de" as string)!.question).toBe(en.question);
+    expect(recordedLive(null, "en")).toBeNull();
   });
 });

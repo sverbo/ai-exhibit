@@ -117,6 +117,9 @@ export const chapter04: SceneDefinition[] = [
           evidence: "projection",
           analogyYear: "1949",
           analogy: { en: "Orwell's 1984 imagined mass surveillance. That sounded like fiction too." },
+          lesson: {
+            en: "Stay humble: experts study this every day. \"Impossible\" is not an argument.",
+          },
         },
       },
     },

@@ -89,6 +89,38 @@ export interface LiveLadder {
   answers: Record<string, LiveAnswer>;
   /** The server refused the whole request (budget, network...). */
   failure?: string;
+  /** A recorded run (Simulation): the ISO date it was recorded. */
+  recordedOn?: string;
+}
+
+/** content/assets/recordings/live-ladder.json: real ladder runs, one per locale. */
+export interface LiveLadderRecordingFile {
+  date: string;
+  runs: {
+    locale: string;
+    question: string;
+    answers: { rung: string; model: string; provider: string; text: string; finishReason: string | null }[];
+  }[];
+}
+
+/** The recorded run for this locale (else English) as a finished ladder, or null while it loads. */
+export function recordedLive(file: LiveLadderRecordingFile | null, locale: string): LiveLadder | null {
+  const run = file?.runs.find((r) => r.locale === locale) ?? file?.runs.find((r) => r.locale === "en");
+  if (!file || !run) return null;
+  return {
+    question: run.question,
+    running: false,
+    recordedOn: file.date,
+    answers: Object.fromEntries(
+      run.answers.map((a) => [a.rung, { state: "done", text: a.text, provider: a.provider, finishReason: a.finishReason } satisfies LiveAnswer]),
+    ),
+  };
+}
+
+/** The game's question: the first one with published answers per generation (the clock riddle). */
+export function gameQuestion(ids?: string[]): ThenAndNowQuestion | undefined {
+  const qs = pickQuestions(ids, "game");
+  return qs.find((q) => q.ladder) ?? qs[0];
 }
 
 export function startLive(question: string, rungIds: readonly string[]): LiveLadder {

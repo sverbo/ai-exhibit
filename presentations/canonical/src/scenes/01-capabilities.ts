@@ -234,8 +234,8 @@ export const chapter01: SceneDefinition[] = [
 - **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m
 - **Do:** click 5, today's reasoning model, recorded answer with name and date
 - **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told "Answer briefly."
-- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size. In Simulation the field stays disabled
-- Other questions (letters in a word, 9.11 vs 9.9, Sally's sisters): same pattern`,
+- Simulation (no Hugging Face): the field is locked on "How many r's are in the word strawberry?" and shows the three models' real answers, recorded on 4 October 2026 and labelled "recorded answer": 1, then 2, then 3 (correct)
+- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size`,
     },
     transitionIn: {
       en: "From the question to a quick test.",
@@ -246,11 +246,11 @@ export const chapter01: SceneDefinition[] = [
     // C: the last step asks open models live (/api/llm/ladder); the recorded steps need nothing.
     runtimeClass: "C",
     artifacts: [],
-    fallback: { kind: "recording", asset: "then-and-now/gpt2-answers.json" },
+    fallback: { kind: "recording", asset: "recordings/live-ladder.json" },
     durationSec: 240,
     optional: false,
     localizationNotes:
-      "GPT-2 is always asked in English (it learned from English web text); the French edition shows the question in French and GPT-2's English answer as quoted output.",
+      "The published answers were asked in English: the French edition shows them verbatim with a labelled translation. The live ladder is asked in the edition's language; Simulation shows the recorded run of that language.",
     todo: [
       "Do not say a specific named model failed a given question unless content/assets/then-and-now/questions.ts marks that history note as verified.",
     ],

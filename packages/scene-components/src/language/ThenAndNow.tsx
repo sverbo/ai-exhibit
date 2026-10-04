@@ -1,12 +1,12 @@
 /**
  * ThenAndNow: trick questions that fooled older language models.
  *
- * - game (scene 1.2): one question at a time; the room guesses, then GPT-2
- *   answers (a recorded real run, replayed word by word), then today's
- *   recorded answer. Ladder questions show the published answers of each
- *   generation, then a live step: the presenter types a question and open
- *   models of increasing size answer it side by side, streamed from the
- *   server (/api/llm/ladder). Nothing runs in the browser.
+ * - game (scene 1.1): the clock riddle; each click reveals one generation's
+ *   published answer, then today's recorded answer, then the live ladder: a
+ *   question typed in any interactive window, answered side by side by three
+ *   open models streamed from the server (/api/llm/ladder). In Simulation the
+ *   ladder shows a recorded run of a fixed question, locked and labelled.
+ *   Nothing runs in the browser.
  * - recap (scene 3.12): every question in one grid, GPT-2 vs today, with the
  *   callback line. Recorded data only.
  *
@@ -19,7 +19,7 @@ import { cloudLadder, CloudLlmError, LADDER_MODELS, type LadderModel } from "@ai
 import { GPT2_ANSWER_TRANSLATIONS } from "@ai-exhibit/content/assets/then-and-now/translations.ts";
 import type { SceneComponentProps } from "../contract.ts";
 import { COPY } from "./copy.ts";
-import { useGpt2Answers } from "./runtime.ts";
+import { useGpt2Answers, useLiveLadderRecording } from "./runtime.ts";
 import { keepKeys } from "../primitives/Controls.tsx";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { stripEmphasis } from "./format.ts";
@@ -29,45 +29,31 @@ import {
   applyLadderEvent,
   failLive,
   filledSlots,
+  gameQuestion,
   LIVE_MAX_CHARS,
   type LiveAnswer,
   type LiveLadder,
   lastStage,
   liveQuestion,
   liveStage,
-  maxStage as maxStageOf,
+  maxStage,
   pickQuestions,
   questionRuns,
+  recordedLive,
   startLive,
   truncate,
 } from "./thenAndNow.ts";
 import styles from "./ThenAndNow.module.css";
-import { Button, cx, Frame, Pending, Segmented, SourceBadge, TextField } from "./ui.tsx";
+import { cx, Frame, Pending } from "./ui.tsx";
 
 export interface ThenAndNowProps {
   variant?: "game" | "recap";
   questionIds?: string[];
 }
 
-interface Gpt2Answer {
-  questionId: string;
-  text: string;
-  state: "idle" | "running" | "done";
-  source: "live" | "recorded";
-  /** 0 = greedy, then samples. */
-  attempt: number;
-}
-
+/** The stage follows the reveal step; only the live step keeps state. */
 export interface ThenAndNowState {
-  index: number;
-  guesses: string[];
-  /**
-   * 0 question, 1 GPT-2, 2 today; for a question with published answers
-   * (ladder): 1..n one generation per click, n+1 today. null: follow the reveal step.
-   */
-  stage: number | null;
-  gpt2: Gpt2Answer | null;
-  /** The live step's last question and its streamed answers (ladder questions). */
+  /** The live step's last question and its streamed answers. */
   live?: LiveLadder | null;
   /** Published by the stage owner: live answers are off (Simulation), so every window disables the field. */
   liveOff?: boolean;
@@ -82,63 +68,14 @@ export function ThenAndNow(props: SceneComponentProps<ThenAndNowProps, ThenAndNo
 
 function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowState>) {
   const { locale, role } = ctx;
-  const questions = pickQuestions(props.questionIds, "game");
-  const recorded = useGpt2Answers();
-  const [state, setState] = useSceneState<ThenAndNowState>(ctx, () => ({ index: 0, guesses: [], stage: null, gpt2: null, live: null }), {
-    throttleMs: 60,
-  });
-  const abort = useRef<AbortController | null>(null);
+  const riddle = gameQuestion(props.questionIds);
+  const [state, setState] = useSceneState<ThenAndNowState>(ctx, () => ({ live: null }), { throttleMs: 60 });
   const liveAbort = useRef<AbortController | null>(null);
   const { decision } = useSourceDecision(ctx);
-
-  const q = questions[Math.min(state.index, questions.length - 1)];
-  const sceneSteps = ctx.scene.steps ?? 0;
-  const maxStage = q ? maxStageOf(q) : 2;
-  const live = q ? liveStage(q) : null;
+  const recording = useLiveLadderRecording();
   const canAskLive = decision.active === "hf";
-  const stage = state.stage ?? (sceneSteps > 0 ? Math.min(maxStage, ctx.revealStep) : 0);
 
-  const ask = async (attempt: number) => {
-    if (!q) return;
-    abort.current?.abort();
-    const ac = new AbortController();
-    abort.current = ac;
-    const base: Gpt2Answer = { questionId: q.id, text: "", state: "running", source: "recorded", attempt };
-    setState((s) => ({ ...s, gpt2: base }));
-    try {
-      const rec = recorded?.answers[q.id];
-      const all = rec ? [rec.greedy, ...rec.samples] : [];
-      const full = all[attempt % Math.max(1, all.length)] ?? "";
-      const words = full.split(/(?<=\s)/);
-      let text = "";
-      for (const w of words) {
-        if (ac.signal.aborted) return;
-        text += w;
-        setState((s) => ({ ...s, gpt2: { ...base, text } }));
-        if (!ctx.reducedMotion) await new Promise((r) => setTimeout(r, 90));
-      }
-      setState((s) => ({ ...s, gpt2: { ...base, text: full, state: "done" } }));
-    } catch {
-      if (!ac.signal.aborted) setState((s) => ({ ...s, gpt2: s.gpt2 ? { ...s.gpt2, state: "done" } : null }));
-    }
-  };
-
-  // GPT-2's recorded answer plays when its column is revealed, once per question.
-  // Ladder questions show the published answers of each generation instead.
-  useEffect(() => {
-    if (role !== "controller" || !q || q.ladder || stage < 1) return;
-    if (state.gpt2?.questionId === q.id) return;
-    if (!recorded) return;
-    void ask(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role, q?.id, stage, recorded]);
-  useEffect(
-    () => () => {
-      abort.current?.abort();
-      liveAbort.current?.abort();
-    },
-    [],
-  );
+  useEffect(() => () => liveAbort.current?.abort(), []);
 
   /** Every rung at once; each answer grows as its words arrive from the server. */
   const askLive = async (input: string) => {
@@ -170,7 +107,6 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
       show();
     }
   };
-  useOnStepChange(ctx.revealStep, () => setState((s) => ({ ...s, stage: null })));
 
   // The field works in every interactive window (presenter or projector); only the stage owner calls the models.
   const act = useSceneActions<LiveAction, ThenAndNowState>(ctx, (a) => {
@@ -182,82 +118,21 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, canAskLive, state.liveOff]);
 
-  const view: ThenAndNowState =
-    role === "preview" || (role === "display" && ctx.state === undefined) ? { index: 0, guesses: [], stage: 0, gpt2: null, live: null } : state;
-  const viewQ = questions[Math.min(view.index, questions.length - 1)];
-  if (!viewQ) return <Frame />;
-  const viewStage = role === "preview" ? 0 : stage;
-  const gpt2 = view.gpt2?.questionId === viewQ.id ? view.gpt2 : null;
-  const slots = filledSlots(viewQ);
+  if (!riddle) return <Frame />;
+  const view: ThenAndNowState = role === "preview" || (role === "display" && ctx.state === undefined) ? { live: null } : state;
+  // One stage per click: the riddle, each published answer, today's, then the live ladder.
+  const stage = role === "preview" ? 0 : Math.min(maxStage(riddle), ctx.revealStep);
 
-  const go = (index: number) => {
-    abort.current?.abort();
-    liveAbort.current?.abort();
-    setState({ index, guesses: [], stage: 0, gpt2: null, live: null });
-  };
-  const viewLive = Boolean(viewQ.ladder) && viewStage >= (liveStage(viewQ) ?? Infinity);
-  const shownLive = viewLive ? (view.live ?? null) : null;
-
-  const controls =
-    role === "controller" ? (
-      <>
-        <Segmented
-          label={tr(COPY.question, locale)}
-          value={state.index}
-          options={questions.map((_, i) => ({ value: i, label: String(i + 1) }))}
-          onChange={go}
-        />
-        {live !== null && stage >= live ? null : (
-          <TextField
-            label={tr(COPY.addGuess, locale)}
-            placeholder={tr(COPY.guessPlaceholder, locale)}
-            clearOnSubmit
-            submitLabel="+"
-            onSubmit={(g) => {
-              const v = g.trim().slice(0, 40);
-              if (v) setState((s) => (s.guesses.includes(v) ? s : { ...s, guesses: [...s.guesses, v].slice(-6) }));
-            }}
-          />
-        )}
-        {q?.ladder ? (
-          <>
-            <Button disabled={stage <= 0} onClick={() => setState((s) => ({ ...s, stage: Math.max(0, stage - 1) }))}>
-              {tr(COPY.previousGeneration, locale)}
-            </Button>
-            <Button primary disabled={stage >= maxStage} onClick={() => setState((s) => ({ ...s, stage: Math.min(maxStage, stage + 1) }))}>
-              {stage >= lastStage(q)
-                ? tr(COPY.goLive, locale)
-                : stage === lastStage(q) - 1
-                  ? tr(COPY.showToday, locale)
-                  : tr(COPY.nextGeneration, locale)}
-            </Button>
-            {live !== null && stage >= live ? <SourceBadge decision={decision} locale={locale} /> : null}
-          </>
-        ) : (
-          <>
-            <Button primary={stage < 1} onClick={() => setState((s) => ({ ...s, stage: Math.max(1, stage) }))} disabled={stage >= 1}>
-              {tr(COPY.askGpt2, locale)}
-            </Button>
-            <Button disabled={stage < 1 || state.gpt2?.state === "running"} onClick={() => void ask((state.gpt2?.attempt ?? 0) + 1)}>
-              {tr(COPY.askAgain, locale)}
-            </Button>
-            <Button primary={stage === 1} disabled={stage >= 2} onClick={() => setState((s) => ({ ...s, stage: 2 }))}>
-              {tr(COPY.showToday, locale)}
-            </Button>
-          </>
-        )}
-      </>
-    ) : null;
-
-  if (viewLive) {
+  if (stage >= (liveStage(riddle) ?? Infinity)) {
     const off = role === "controller" ? !canAskLive : Boolean(view.liveOff);
+    // Simulation: the recorded run of a fixed question, locked, labelled as recorded.
+    const shown = off ? recordedLive(recording, locale) : (view.live ?? null);
     return (
-      <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
+      <Frame label={tr(ctx.scene.title, locale)}>
         <LiveView
-          live={shownLive}
-          question={shownLive?.question ?? tr(viewQ.question, locale)}
+          live={shown}
           interactive={role !== "preview" && canInteract(ctx)}
-          off={off}
+          locked={off}
           onAsk={(question) => {
             const qn = liveQuestion(question);
             if (qn) act({ type: "ask", question: qn });
@@ -269,78 +144,16 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
   }
 
   return (
-    <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
-      <p className={cx(styles.question, viewQ.ladder && styles.questionCompact)}>
-        <QuestionText text={tr(viewQ.question, locale)} />
+    <Frame label={tr(ctx.scene.title, locale)}>
+      <p className={cx(styles.question, styles.questionCompact)}>
+        <QuestionText text={tr(riddle.question, locale)} />
       </p>
-      {viewQ.ladder && locale !== "en" ? (
+      {riddle.ladder && locale !== "en" ? (
         <p className={styles.original}>
-          {tr(COPY.askedInEnglish, locale)} <q>{viewQ.ladder.originalPrompt}</q>
+          {tr(COPY.askedInEnglish, locale)} <q>{riddle.ladder.originalPrompt}</q>
         </p>
       ) : null}
-      {viewQ.ladder ? (
-        <LadderView q={viewQ} stage={viewStage} locale={locale} />
-      ) : (
-      <div className={styles.columns}>
-        {view.guesses.length ? (
-          <section className={cx(styles.column, styles.room)}>
-            <header className={styles.colHead}>
-              <span className={styles.colTitle}>{tr(COPY.roomGuesses, locale)}</span>
-            </header>
-            <ul className={styles.guesses}>
-              {view.guesses.map((g) => (
-                <li key={g}>{g}</li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-        <section className={cx(styles.column, styles.then, viewStage < 1 && styles.hidden)} aria-hidden={viewStage < 1}>
-          <header className={styles.colHead}>
-            <span className={styles.colTitle}>GPT-2</span>
-            <span className={styles.colYear}>2019</span>
-            <span className={styles.colSub}>
-              {tr(COPY.gpt2Recorded, locale)}
-            </span>
-          </header>
-          <p className={styles.answer}>
-            {gpt2?.text ? <q lang="en">{gpt2.text}</q> : gpt2?.state === "running" ? <Pending>{tr(COPY.writing, locale)}</Pending> : null}
-          </p>
-          {gpt2?.state === "done" ? <Translation text={gpt2Translation(gpt2.text, locale)} locale={locale} /> : null}
-          {locale !== "en" ? <p className={styles.footnote}>{tr(COPY.gpt2English, locale)}</p> : null}
-        </section>
-        {slots.map((o) => (
-          <section key={o.generation} className={cx(styles.column, viewStage < 2 && styles.hidden)} aria-hidden={viewStage < 2}>
-            <header className={styles.colHead}>
-              <span className={styles.colTitle}>{o.generation}</span>
-              {o.date ? <span className={styles.colYear}>{o.date.slice(0, 4)}</span> : null}
-              <span className={styles.colSub}>{tr(COPY.recordedAnswer, locale)}</span>
-            </header>
-            <p className={styles.answer}>
-              <q>{tr(o.answer, locale)}</q>
-            </p>
-          </section>
-        ))}
-        <section className={cx(styles.column, styles.now, viewStage < 2 && styles.hidden)} aria-hidden={viewStage < 2}>
-          <header className={styles.colHead}>
-            <span className={styles.colTitle}>{viewQ.today.model}</span>
-            <span className={styles.colYear}>{viewQ.today.date.slice(0, 4)}</span>
-            <span className={styles.colSub}>
-              {tr(COPY.recordedAnswer, locale)}, {formatDate(viewQ.today.date, locale)}
-            </span>
-          </header>
-          <p className={styles.answer}>
-            <q>{tr(viewQ.today.answer, locale)}</q>
-          </p>
-        </section>
-      </div>
-      )}
-      <footer className={styles.footer}>
-        {viewStage >= lastStage(viewQ) && !viewQ.ladder ? (
-          <p className={styles.correct}>
-            {tr(COPY.correctAnswer, locale)} <b>{tr(viewQ.correct, locale)}</b>
-          </p>
-        ) : null}
-      </footer>
+      <LadderView q={riddle} stage={stage} locale={locale} />
     </Frame>
   );
 }
@@ -406,36 +219,47 @@ function Recap({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSt
 
 /**
  * The live step: one big question field and Ask, then one column per model,
- * smallest first, each answer growing as its words arrive. Windows that cannot
- * act (previews, the presenter's projector mirror) show the question as text.
+ * smallest first, each answer growing as its words arrive. Locked (Simulation),
+ * the field holds the recorded question and every answer is labelled recorded.
+ * Windows that cannot act (previews, the presenter's projector mirror) show the
+ * question as text.
  */
 function LiveView({
   live,
-  question,
   interactive,
-  off,
+  locked,
   onAsk,
   locale,
 }: {
   live: LiveLadder | null;
-  question: string;
   interactive: boolean;
-  off: boolean;
+  locked: boolean;
   onAsk: (question: string) => void;
   locale: Locale;
 }) {
+  const question = live?.question ?? "";
   return (
     <div className={styles.liveWrap}>
-      {interactive ? (
-        <LiveField value={question} disabled={off || live?.running === true} onAsk={onAsk} locale={locale} />
+      {interactive || !question ? (
+        <LiveField
+          value={question}
+          locked={locked || !interactive}
+          busy={live?.running === true}
+          onAsk={onAsk}
+          locale={locale}
+        />
       ) : (
         <p className={styles.liveQuestion}>{question}</p>
       )}
-      {interactive && off ? <p className={styles.liveNote}>{tr(COPY.liveNeedsHf, locale)}</p> : null}
       <ol className={styles.live}>
         {LADDER_MODELS.map((m) => (
           <li key={m.id} className={styles.liveCol}>
             <LiveHead model={m} locale={locale} />
+            {live?.recordedOn ? (
+              <span className={styles.liveRecorded}>
+                {tr(COPY.recordedAnswer, locale)}, {formatDate(live.recordedOn, locale)}
+              </span>
+            ) : null}
             <LiveBody answer={live?.answers[m.id] ?? null} locale={locale} />
           </li>
         ))}
@@ -446,26 +270,40 @@ function LiveView({
 
 /**
  * The question field: keeps its own draft while focused, otherwise shows the
- * last question asked (from whichever window asked it).
+ * last question asked (from whichever window asked it). Locked: read only.
  */
-function LiveField({ value, disabled, onAsk, locale }: { value: string; disabled: boolean; onAsk: (q: string) => void; locale: Locale }) {
+function LiveField({
+  value,
+  locked,
+  busy,
+  onAsk,
+  locale,
+}: {
+  value: string;
+  locked: boolean;
+  busy: boolean;
+  onAsk: (q: string) => void;
+  locale: Locale;
+}) {
   const [draft, setDraft] = useState(value);
   const focused = useRef(false);
   useEffect(() => {
-    if (!focused.current) setDraft(value);
-  }, [value]);
+    if (!focused.current || locked) setDraft(value);
+  }, [value, locked]);
   return (
     <form
       className={styles.liveForm}
       data-keys-local=""
       onSubmit={(e) => {
         e.preventDefault();
-        onAsk(draft);
+        if (!locked) onAsk(draft);
       }}
     >
       <input
         className={styles.liveInput}
-        value={draft}
+        value={locked ? value : draft}
+        readOnly={locked}
+        placeholder={tr(COPY.livePlaceholder, locale)}
         aria-label={tr(COPY.liveQuestion, locale)}
         maxLength={LIVE_MAX_CHARS}
         spellCheck={false}
@@ -478,7 +316,7 @@ function LiveField({ value, disabled, onAsk, locale }: { value: string; disabled
         }}
         onChange={(e) => setDraft(e.currentTarget.value)}
       />
-      <button type="submit" className={styles.liveAskButton} disabled={disabled || !liveQuestion(draft)}>
+      <button type="submit" className={styles.liveAskButton} disabled={locked || busy || !liveQuestion(draft)}>
         {tr(COPY.liveAsk, locale)}
       </button>
     </form>

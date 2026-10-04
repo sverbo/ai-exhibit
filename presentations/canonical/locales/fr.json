@@ -224,8 +224,8 @@
     "text": "La plupart des pièges qui trompaient l'IA ne marchent plus."
   },
   "01-then-and-now/speakerNotes": {
-    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told \"Answer briefly.\"\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size. In Simulation the field stays disabled\n- Other questions (letters in a word, 9.11 vs 9.9, Sally's sisters): same pattern",
-    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots : Qwen2.5 0.5B, un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct ; gpt-oss-120b, qui réfléchit d'abord. Les modèles de conversation reçoivent la consigne « Answer briefly. »\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec sa taille. En Simulation, le champ reste désactivé\n- Les autres questions (lettres d'un mot, 9,11 contre 9,9, les sœurs de Sally) : même schéma"
+    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive: Qwen2.5 0.5B, a base model never trained to chat; Llama 3.1 8B Instruct; gpt-oss-120b, which thinks first. Chat models are told \"Answer briefly.\"\n- Simulation (no Hugging Face): the field is locked on \"How many r's are in the word strawberry?\" and shows the three models' real answers, recorded on 4 October 2026 and labelled \"recorded answer\": 1, then 2, then 3 (correct)\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its size",
+    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots : Qwen2.5 0.5B, un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct ; gpt-oss-120b, qui réfléchit d'abord. Les modèles de conversation reçoivent la consigne « Answer briefly. »\n- Simulation (sans Hugging Face) : le champ est verrouillé sur « Combien y a-t-il de r dans le mot strawberry ? » et montre les vraies réponses des trois modèles, enregistrées le 4 octobre 2026 et signalées « réponse enregistrée » : 1, puis 2, puis 3 (juste)\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec sa taille"
   },
   "01-then-and-now/transitionIn": {
     "source": "From the question to a quick test.",
@@ -1206,6 +1206,10 @@
   "04-opinions/visual.props.aside.analogy": {
     "source": "Orwell's 1984 imagined mass surveillance. That sounded like fiction too.",
     "text": "1984 d'Orwell imaginait la surveillance de masse. Ça paraissait de la fiction, aussi."
+  },
+  "04-opinions/visual.props.aside.lesson": {
+    "source": "Stay humble: experts study this every day. \"Impossible\" is not an argument.",
+    "text": "Restons humbles : des experts y travaillent au quotidien. « Impossible » n'est pas un argument."
   },
   "04-opinions/speakerNotes": {
     "source": "- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): \"more concerned than excited about the increased use of AI in daily life\", 51% vs 15%; AI will \"negatively affect the country over the next two decades\" (very or somewhat negative impact), 35% vs 15%; the other way round, a positive impact, 17% vs 56%. Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits\n- Grace et al. (2,778 researchers, fall 2023): \"What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?\" 41% said at least 10%; framed as \"human inability to control\" AI, 51%; asked about \"extremely bad outcomes\", 38%. Surveys depend on the wording and on who answers: the 38 to 51% spread on one topic shows it\n- **Ask:** the people most excited about AI also give it a real chance of catastrophe. What do you make of that?\n- **Do:** last click, a look back: Müller and Bostrom asked AI experts in 2012/2013 (170 answers) when they saw a 50% chance of \"high-level machine intelligence\", one that can do most human professions at least as well as a typical human: median 2040 (90% by 2075); Bostrom reports it in Superintelligence (2014). Their own paper notes that some \"considered science fiction\" these questions\n- Caveat: a forecast is not evidence. For a comparison only (a different question, machines better than humans at every task), Grace et al. now put 50% at 2047, 13 years earlier than in their survey one year before\n- Orwell's 1984 (published June 1949) is an analogy, not evidence: what sounds like fiction can still become real, and it can also stay fiction\n- The spectrum is wide: Yudkowsky and Soares, \"If Anyone Builds It, Everyone Dies\" (2025), argue superhuman AI would kill us all; Yann LeCun (Meta) calls worries about an existential threat \"complete B.S.\" (Wall Street Journal, October 2024)",
@@ -3247,18 +3251,6 @@
     "source": "The recorded vectors are missing.",
     "text": "Les vecteurs enregistrés sont introuvables."
   },
-  "copy:The room suggests": {
-    "source": "The room suggests",
-    "text": "La salle propose"
-  },
-  "copy:Add the room's answer": {
-    "source": "Add the room's answer",
-    "text": "Ajouter la réponse de la salle"
-  },
-  "copy:Answer heard, then Enter": {
-    "source": "Answer heard, then Enter",
-    "text": "Réponse entendue, puis Entrée"
-  },
   "copy:Reveal the model": {
     "source": "Reveal the model",
     "text": "Révéler le modèle"
@@ -3551,18 +3543,6 @@
     "source": "Question",
     "text": "Question"
   },
-  "copy:Ask GPT-2": {
-    "source": "Ask GPT-2",
-    "text": "Demander à GPT-2"
-  },
-  "copy:Ask again": {
-    "source": "Ask again",
-    "text": "Redemander"
-  },
-  "copy:Show today": {
-    "source": "Show today",
-    "text": "Montrer aujourd'hui"
-  },
   "copy:Previous question": {
     "source": "Previous question",
     "text": "Question précédente"
@@ -3575,17 +3555,9 @@
     "source": "recorded answer from a real GPT-2",
     "text": "réponse enregistrée d'un vrai GPT-2"
   },
-  "copy:GPT-2 is asked in English, the only language it learned.": {
-    "source": "GPT-2 is asked in English, the only language it learned.",
-    "text": "GPT-2 n'a appris que l'anglais : on lui pose la question en anglais."
-  },
   "copy:recorded answer": {
     "source": "recorded answer",
     "text": "réponse enregistrée"
-  },
-  "copy:Correct answer": {
-    "source": "Correct answer",
-    "text": "Bonne réponse"
   },
   "copy:Then": {
     "source": "Then",
@@ -3594,14 +3566,6 @@
   "copy:Today": {
     "source": "Today",
     "text": "Aujourd'hui"
-  },
-  "copy:Next generation": {
-    "source": "Next generation",
-    "text": "Génération suivante"
-  },
-  "copy:Previous generation": {
-    "source": "Previous generation",
-    "text": "Génération précédente"
   },
   "copy:Asked in English:": {
     "source": "Asked in English:",
@@ -3635,10 +3599,6 @@
     "source": "If your picture of AI stopped at GPT-3-era tricks, update it.",
     "text": "Si votre image de l'IA s'est arrêtée aux pièges de l'époque GPT-3, mettez-la à jour."
   },
-  "copy:Ask live": {
-    "source": "Ask live",
-    "text": "Demander en direct"
-  },
   "copy:Question for the live models": {
     "source": "Question for the live models",
     "text": "Question pour les modèles en direct"
@@ -3647,9 +3607,9 @@
     "source": "Ask",
     "text": "Demander"
   },
-  "copy:Live answers need Hugging Face. In Simulation, only the recorded answers are shown.": {
-    "source": "Live answers need Hugging Face. In Simulation, only the recorded answers are shown.",
-    "text": "Les réponses en direct passent par Hugging Face. En Simulation, seules les réponses enregistrées s'affichent."
+  "copy:How many r's are in strawberry?": {
+    "source": "How many r's are in strawberry?",
+    "text": "Combien de r dans strawberry ?"
   },
   "copy:Thinking": {
     "source": "Thinking",
