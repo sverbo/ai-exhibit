@@ -58,7 +58,8 @@ export default function LauncherView() {
         <h1 className={styles.title}>{talk.presentation.title.en}</h1>
         <p className={styles.welcome}>
           Giving this talk? I would love to hear how it went: which version, how many people, what worked and what did not.
-          Don't hesitate to message me on Signal, <b>{SIGNAL}</b>.
+          Don't hesitate to message me on Signal, <b>{SIGNAL}</b>. Let's spread the word: you don't need to be an expert to help
+          the general public understand what is happening.
         </p>
         <div className={styles.theme}>
           <ThemeToggle hint={false} locale="en" />
