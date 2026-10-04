@@ -23,7 +23,7 @@ import { assistantMessages, CHAT_PRESETS, GUARDRAIL_PROMPT } from "./data.ts";
 import { stripEmphasis } from "./format.ts";
 import { type NoticeKey, useCloudRecording, useLlamaTemplate } from "./runtime.ts";
 import { useSourceDecision } from "./source.ts";
-import { isL10n } from "./shared.ts";
+import { DEFAULT_TEMPERATURE, formatTemperature, isL10n, TEMPERATURES } from "./shared.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
 import { Button, cx, Frame, Notice, Pending, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
@@ -54,6 +54,8 @@ export interface ChatState {
   notice: NoticeKey | null;
   /** null: follow the reveal step. */
   showRaw?: boolean | null;
+  /** For the next question; absent means DEFAULT_TEMPERATURE. */
+  temperature?: number;
 }
 
 const KEEP_TURNS = 1;
@@ -66,6 +68,8 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
     (p, i, all) => all.findIndex((q) => q.en === p.en) === i,
   );
   const [state, setState] = useSceneState<ChatState>(ctx, () => ({ turns: [], notice: null }), { throttleMs: 60 });
+  const stateRef = useRef(state);
+  stateRef.current = state;
   const cloudRec = useCloudRecording();
   const llamaTemplate = useLlamaTemplate();
   const { decision, cloudFailed } = useSourceDecision(ctx);
@@ -125,7 +129,8 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
     push({ question: q, answer: "", state: "running", kind, source: "live", system: messages[0]!.content, model: CLOUD_LABEL });
     setState((s) => ({ ...s, notice: null }));
     try {
-      const r = await cloudChat({ messages, maxTokens: MAX_OUTPUT_TOKENS, temperature: 0 }, { signal: ac.signal });
+      const temperature = stateRef.current.temperature ?? DEFAULT_TEMPERATURE;
+      const r = await cloudChat({ messages, maxTokens: MAX_OUTPUT_TOKENS, temperature }, { signal: ac.signal });
       if (ac.signal.aborted) return;
       updateLast({
         raw: llamaTemplate ? renderChatTemplate(llamaTemplate, messages) : undefined,
@@ -145,8 +150,12 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
   };
 
   // Every window's controls come here; only the stage owner asks the model.
-  const act = useSceneActions<{ type: "ask"; question: string; kind?: Turn["kind"] } | { type: "stop" }, ChatState>(ctx, (a) => {
+  const act = useSceneActions<
+    { type: "ask"; question: string; kind?: Turn["kind"] } | { type: "stop" } | { type: "temperature"; value: number },
+    ChatState
+  >(ctx, (a) => {
     if (a.type === "stop") abort.current?.abort();
+    else if (a.type === "temperature") setState((s) => ({ ...s, temperature: a.value }));
     else void ask(a.question, a.kind);
   });
 
@@ -181,6 +190,16 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
         onSubmit={(question) => question.trim() && act({ type: "ask", question })}
       />
       {running ? <Button onClick={() => act({ type: "stop" })}>{tr(COPY.stop, locale)}</Button> : null}
+      <span title={tr(COPY.temperatureHint, locale)}>
+        <Segmented
+          label={tr(COPY.temperature, locale)}
+          value={simulation ? null : (view.temperature ?? DEFAULT_TEMPERATURE)}
+          disabled={simulation}
+          options={TEMPERATURES.map((t) => ({ value: t, label: formatTemperature(t, locale) }))}
+          onChange={(value) => act({ type: "temperature", value })}
+        />
+      </span>
+      {simulation ? <span className={styles.simNote}>{tr(COPY.simulationPresetsOnly, locale)}</span> : null}
       {role === "controller" ? <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} /> : null}
     </>
   ) : null;

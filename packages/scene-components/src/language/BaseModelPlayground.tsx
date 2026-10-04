@@ -2,7 +2,8 @@
  * BaseModelPlayground (scene 3.10): a model straight out of pretraining only
  * continues text, often badly. One control: add 1, 10 or 30 tokens. After
  * each addition, probability bars at the end of the text show what could come
- * next; one token is drawn from them (temperature 0.8), several are written by
+ * next; one token is drawn from them at the chosen temperature (0: always
+ * the most likely), several are written by
  * the base model in one go. A text field replaces the prompt (and starts
  * over); in Simulation only the prepared prompt has recordings, so it is off.
  * `R` starts over.
@@ -23,9 +24,9 @@ import { COPY } from "./copy.ts";
 import { DEFAULT_BASE_PROMPT } from "./data.ts";
 import { type NoticeKey, useCloudRecording } from "./runtime.ts";
 import { useSourceDecision } from "./source.ts";
-import { type Cand, isL10n, promptIn } from "./shared.ts";
+import { type Cand, DEFAULT_TEMPERATURE, formatTemperature, isL10n, promptIn, TEMPERATURES } from "./shared.ts";
 import { useSceneState } from "./state.ts";
-import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, SourceBadge, TextField } from "./ui.tsx";
+import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
 export interface BaseModelPlaygroundProps {
   prompt?: L10n;
@@ -44,13 +45,18 @@ export interface BaseModelState {
   busy: boolean;
   source: "live" | "recorded";
   notice: NoticeKey | null;
+  /** For the next generation; absent means DEFAULT_TEMPERATURE. */
+  temperature?: number;
 }
 
 /** The only control: how many tokens to add. */
 const ADD_OPTIONS = [1, 10, 30] as const;
-const TEMPERATURE = 0.8;
 
-type Action = { type: "add"; n: number } | { type: "stop" } | { type: "prompt"; text: string };
+type Action =
+  | { type: "add"; n: number }
+  | { type: "stop" }
+  | { type: "prompt"; text: string }
+  | { type: "temperature"; value: number };
 const PICK_MS = 550;
 const MAX_APPENDED = 200;
 const BASE_LABEL = "Llama 3.1 8B";
@@ -58,6 +64,7 @@ const BARS_LABEL = "Llama 3.3 70B Instruct";
 
 /** Draws among the shown candidates with a temperature (the bars stay the raw probabilities). */
 function draw(cands: Cand[], temperature: number): Cand | undefined {
+  if (temperature <= 0) return cands[0];
   const w = cands.map((c) => Math.pow(Math.max(c.p, 1e-12), 1 / Math.max(0.05, temperature)));
   let r = Math.random() * w.reduce((a, b) => a + b, 0);
   for (let i = 0; i < cands.length; i++) {
@@ -145,7 +152,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
     setState((x) => ({ ...x, busy: true }));
     try {
       // Simulation replays the recorded run: always the most likely token.
-      const pick = simulation ? s.candidates[0] : draw(s.candidates, TEMPERATURE);
+      const pick = simulation ? s.candidates[0] : draw(s.candidates, s.temperature ?? DEFAULT_TEMPERATURE);
       if (!pick) return;
       setState((x) => ({ ...x, picked: pick.id }));
       await new Promise((r) => setTimeout(r, ctx.reducedMotion ? 0 : PICK_MS));
@@ -183,7 +190,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
       if (decisionRef.current.active === "hf") {
         try {
           const r = await cloudComplete(
-            { prompt: fullText(s), maxTokens: many, temperature: TEMPERATURE },
+            { prompt: fullText(s), maxTokens: many, temperature: s.temperature ?? DEFAULT_TEMPERATURE },
             { signal: ac.signal },
           );
           if (gen !== generation.current) return;
@@ -214,6 +221,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
   // Every window's buttons come here; only the stage owner runs them.
   const act = useSceneActions<Action, BaseModelState>(ctx, (action) => {
     if (action.type === "stop") abort.current?.abort();
+    else if (action.type === "temperature") setState((x) => ({ ...x, temperature: action.value }));
     else if (action.type === "prompt") {
       const prompt = action.text.trim().slice(0, MAX_INPUT_CHARS);
       if (!prompt) return;
@@ -248,6 +256,15 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
         </Button>
       ))}
       {view.busy ? <Button onClick={() => act({ type: "stop" })}>{tr(COPY.stop, locale)}</Button> : null}
+      <span title={tr(COPY.temperatureHint, locale)}>
+        <Segmented
+          label={tr(COPY.temperature, locale)}
+          value={simulation ? null : (view.temperature ?? DEFAULT_TEMPERATURE)}
+          disabled={simulation}
+          options={TEMPERATURES.map((t) => ({ value: t, label: formatTemperature(t, locale) }))}
+          onChange={(value) => act({ type: "temperature", value })}
+        />
+      </span>
       {role === "controller" ? <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} /> : null}
     </>
   ) : null;

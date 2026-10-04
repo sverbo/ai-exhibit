@@ -254,3 +254,9 @@
   border-radius: 4px;
   background: color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
+
+/* Control bar: Simulation turns typing and temperature off. */
+.simNote {
+  font-size: 16px;
+  color: var(--color-text-muted);
+}

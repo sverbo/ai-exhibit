@@ -12,6 +12,7 @@ import {
 import { Tokenizer } from "@huggingface/tokenizers";
 import {
   ACCESS_CODE_HEADER,
+  AUDIENCE_HEADER,
   AUDIENCE_LIMITS,
   createCloudApi,
   isBusy,
@@ -108,6 +109,25 @@ describe("cloud API", () => {
     const body = ladderPayload(top, top.targets[0]!, "Why?", AUDIENCE_LIMITS.limits as Limits);
     expect(body.max_tokens).toBe(MAX_OUTPUT_TOKENS + LADDER_REASONING_TOKENS);
     expect(JSON.stringify(LADDER.map((r) => ladderPayload(r, r.targets[0]!, "Why?", PUBLIC_LIMITS)))).not.toMatch(/brief|system/i);
+  });
+
+  it("forwards a temperature from 0 to 2, for the presenter and the audience, and clamps the rest", async () => {
+    const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) =>
+      okJson(String(u).includes("chat") ? { choices: [{ message: { content: "x" } }] } : { choices: [{ text: "x" }] }),
+    );
+    const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS });
+    const asked = [0, 0.5, 1, 2, 5, -1];
+    for (const audience of [false, true]) {
+      for (const [i, temperature] of asked.entries()) {
+        // One phone per value, so that the audience's per-device budget never stops a call.
+        const headers: Record<string, string> = audience ? { [AUDIENCE_HEADER]: `phone-temperature-${i}` } : {};
+        await call(api, req("POST", "/api/llm/complete", { prompt: "a", temperature }, headers), "198.51.100.30");
+        await call(api, req("POST", "/api/llm/chat", { messages: [{ role: "user", content: "a" }], temperature }, headers), "198.51.100.31");
+      }
+    }
+    const sent = f.mock.calls.map((c) => JSON.parse(String(c[1]!.body)).temperature);
+    const once = asked.flatMap((t) => [Math.max(0, Math.min(2, t)), Math.max(0, Math.min(2, t))]);
+    expect(sent).toEqual([...once, ...once]);
   });
 
   it("applies the public caps and a budget per client", async () => {

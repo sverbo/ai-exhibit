@@ -74,6 +74,7 @@ export const COPY = {
   nextToken: {  en: "Next token" },
   compute: {  en: "Compute what comes next" },
   temperature: {  en: "Temperature" },
+  temperatureHint: {  en: "0: always the most likely token. Higher: more surprising tokens." },
   topK: {  en: "Keep the top k" },
   topP: {  en: "Keep up to p" },
   off: {  en: "all" },

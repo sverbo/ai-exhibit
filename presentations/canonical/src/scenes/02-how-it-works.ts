@@ -638,6 +638,7 @@ export const chapter02: SceneDefinition[] = [
 - **Do:** ask a question; it continues the page instead of answering
 - **Do:** one token: show the bars, raise the temperature, draw one
 - **Do:** several tokens: let it write on
+- Temperature (default 1, for the next press): 0 always takes the most likely token, higher picks more surprising ones
 - Here: Llama 3.1 8B, Meta's base model; the bars come from a larger sibling, Llama 3.3 70B Instruct, reading the same raw text (the base model's provider gives no probabilities), and the screen says so
 - This model runs on Hugging Face, the public library where AI models are shared: remember that name
 - It is neither helpful nor harmful: it imitates plausible text`,
@@ -671,6 +672,7 @@ export const chapter02: SceneDefinition[] = [
     speakerNotes: {
       en: `- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we just used)
 - **Do:** same question as before: now it answers
+- Temperature (default 1, for the next question): 0 always takes the most likely token, higher picks more surprising ones
 - It also learned which of two answers is preferred
 - Guardrails: it is trained to refuse some requests
 - **Do:** show the guardrail example (a recorded real refusal)
