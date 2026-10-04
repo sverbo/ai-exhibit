@@ -78,7 +78,8 @@ export default function TokensSolo({ env }: { env: SoloEnv }) {
           onChange={(e) => setText(e.currentTarget.value)}
         />
       </label>
-      <Chips label={tr(COPY.examples, locale)} items={examples} value={examples.includes(text) ? text : null} onPick={setText} />
+      {/* Live, visitors type their own sentence; the examples only serve the recorded fallback. */}
+      {!env.live ? <Chips label={tr(COPY.examples, locale)} items={examples} value={examples.includes(text) ? text : null} onPick={setText} /> : null}
       <p className={styles.note}>{tr(env.live ? SOLO.tokensFree : SOLO.tokensRecorded, locale)}</p>
       {busy ? <BusyNotice locale={locale} /> : null}
       <div className={cx(styles.card)}>

@@ -201,7 +201,8 @@ export const COPY = {
   // Then and now, live step
   liveQuestion: { en: "Question for the live models" },
   liveAsk: { en: "Ask" },
-  livePlaceholder: { en: "How many r's are in strawberry?" },
+  /** Prefilled in the live field, in Hugging Face mode too (the presenter can replace it). */
+  livePlaceholder: { en: "How many r's are in the word strawberry?" },
   liveWaiting: { en: "Waiting" },
   liveThinking: { en: "Thinking" },
   liveCut: { en: "cut at the length limit" },

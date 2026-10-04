@@ -53,7 +53,7 @@ type Demo = ComponentType<{ env: SoloEnv }>;
 export const DEMOS: { id: string; title: Record<Locale, string>; blurb: Record<Locale, string>; component: Demo }[] = [
   {
     id: "ladder",
-    title: { en: "Then and now", fr: "Hier et aujourd'hui" },
+    title: { en: "Model progression", fr: "La progression des modèles" },
     blurb: {
       en: "Ask one question to three models of increasing size.",
       fr: "Posez une question à trois modèles de plus en plus grands.",
@@ -68,7 +68,7 @@ export const DEMOS: { id: string; title: Record<Locale, string>; blurb: Record<L
   },
   {
     id: "words",
-    title: { en: "Words as points", fr: "Les mots deviennent des points" },
+    title: { en: "From tokens to embeddings", fr: "Des tokens aux embeddings" },
     blurb: {
       en: "Search a word on the map of meanings, or turn the 3D cloud.",
       fr: "Cherchez un mot sur la carte des sens, ou faites tourner le nuage en 3D.",

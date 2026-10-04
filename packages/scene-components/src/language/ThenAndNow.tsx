@@ -242,7 +242,7 @@ function LiveView({
     <div className={styles.liveWrap}>
       {interactive || !question ? (
         <LiveField
-          value={question}
+          value={question || tr(COPY.livePlaceholder, locale)}
           locked={locked || !interactive}
           busy={live?.running === true}
           onAsk={onAsk}

@@ -25,8 +25,8 @@ import { AsksLeft, BusyNotice, cx, RecordedTag, SoloRoot, soloStyles as styles }
 
 export default function LadderSolo({ env }: { env: SoloEnv }) {
   const { locale } = env;
-  const riddle = pickQuestions(undefined, "game").find((q) => q.ladder);
-  const [draft, setDraft] = useState(riddle ? tr(riddle.question, locale) : "");
+  // Prefilled with the same question as the slide; the visitor can replace it.
+  const [draft, setDraft] = useState(tr(COPY.livePlaceholder, locale));
   const [live, setLive] = useState<LiveLadder | null>(null);
   const [busy, setBusy] = useState(false);
   const abort = useRef<AbortController | null>(null);
@@ -67,7 +67,7 @@ export default function LadderSolo({ env }: { env: SoloEnv }) {
       <SoloRoot label={tr(SOLO.ladderRecorded, locale)}>
         <AsksLeft env={env} demo="ladder" />
         <p className={styles.intro}>{tr(SOLO.ladderRecorded, locale)}</p>
-        {riddle ? <Published locale={locale} /> : null}
+        <Published locale={locale} />
       </SoloRoot>
     );
   }

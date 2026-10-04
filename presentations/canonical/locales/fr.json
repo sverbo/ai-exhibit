@@ -3607,9 +3607,9 @@
     "source": "Ask",
     "text": "Demander"
   },
-  "copy:How many r's are in strawberry?": {
-    "source": "How many r's are in strawberry?",
-    "text": "Combien de r dans strawberry ?"
+  "copy:How many r's are in the word strawberry?": {
+    "source": "How many r's are in the word strawberry?",
+    "text": "Combien y a-t-il de r dans le mot anglais « strawberry » ?"
   },
   "copy:Thinking": {
     "source": "Thinking",

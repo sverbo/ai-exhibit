@@ -215,16 +215,19 @@ function Assistant({ env }: { env: SoloEnv }) {
       ) : (
         <p className={styles.note}>{tr(SOLO.pickQuestion, locale)}</p>
       )}
+      {/* Live, visitors ask their own question; the examples only serve the recorded fallback. */}
+      {!env.live ? (
       <Chips
-        label={tr(COPY.examples, locale)}
-        items={presets}
-        value={answer?.question ?? null}
-        disabled={pending}
-        onPick={(q) => {
-          setDraft(q);
-          void ask(q);
-        }}
-      />
+          label={tr(COPY.examples, locale)}
+          items={presets}
+          value={answer?.question ?? null}
+          disabled={pending}
+          onPick={(q) => {
+            setDraft(q);
+            void ask(q);
+          }}
+        />
+      ) : null}
       {busy ? <BusyNotice locale={locale} /> : null}
       {pending ? <p className={styles.pending}>{tr(COPY.thinking, locale)}</p> : null}
       {answer ? (
