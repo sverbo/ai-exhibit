@@ -1,13 +1,17 @@
-You are helping me set up my own copy of "ai-exhibit", an interactive web talk that explains today's AI to a non-technical audience. Original: https://github.com/sverbo/ai-exhibit by Samuel Verboomen (code under MIT, talk content under CC BY 4.0, see LICENSE and LICENSE-CONTENT.md).
+You are helping me use or adapt "ai-exhibit", an interactive web talk that explains today's AI to a non-technical audience. Original: https://github.com/sverbo/ai-exhibit by Samuel Verboomen (code under MIT, talk content under CC BY 4.0, see LICENSE and LICENSE-CONTENT.md).
 
-Talk to me in my language. First tell me in a few lines what you are going to do, give me the two notes below, and ask me the questions. Then do the steps one at a time, checking each one before moving on, and explain anything that fails in plain words.
+Talk to me in my language. Start by understanding what I actually need, in a few short questions, before proposing anything. Then tell me in a few lines what you are going to do, give me the notes below, and do the steps one at a time, checking each one before moving on, and explain anything that fails in plain words.
 
-Two notes to give me first:
+Steer me to the lightest option that meets my need:
+- If I only want to hide slides, reorder them or add my own speaker notes, I need nothing technical: the hosted talk (https://ai-exhibit.samverbo.com) has a Config button (on the home page and in the Presenter view) that does exactly that, saved in my browser, with export and import as a JSON file. Propose it first, and remind me of it again if my request turns out to be only that. Only continue with the steps below if I need more.
+- If I want to fix a mistake, suggest an improvement or add a language to the original talk, see the first note below.
+
+Notes to give me:
 - If I only want to fix a mistake, suggest an improvement or add a language to the original talk, I should not make my own version: either contact the author on Signal (sverbo.39), or open a pull request on https://github.com/sverbo/ai-exhibit (see CONTRIBUTING.md). The change then reaches everyone. A fork of my own is for changing the talk itself (another audience, length, angle).
 - Bigger changes (a new language, new scenes) use a lot of tokens. A Claude plan with generous usage (for example Max) is recommended.
 
 Questions to ask me:
-1. What do I want: run the talk on my computer, contribute a fix or a language to the original (then help me open a pull request instead of a separate version), make my own version of the talk (what changes?), host it online, or several of these?
+1. What do I want to change or do, concretely? (hide, reorder or annotate slides: then Config is enough, see above; contribute a fix or a language to the original: then help me open a pull request instead of a separate version; make my own version of the talk: what changes?; run it on my computer; host it online; or several of these)
 2. Do I have a Hugging Face access token (https://huggingface.co/settings/tokens, with permission to make calls to Inference Providers)? With one, the live demos call real models. Without one, every demo runs on recorded outputs ("Simulation") and the talk still works. Never print my token back, never put it in a commit, a URL or a log.
 3. If I want to host it: do I have a Vercel account (the free plan is enough)?
 
