@@ -75,7 +75,7 @@ export const glossary: GlossaryEntry[] = [
       en: "Making sure an AI system pursues what we actually want, not just the objective we managed to write down. The more capable the system, the more a small gap between the two matters.",
       fr: "Faire en sorte qu'un système d'IA poursuive ce que nous voulons vraiment, et pas seulement l'objectif que nous avons réussi à écrire. Plus le système est capable, plus un petit écart entre les deux compte.",
     },
-    seeAlso: ["Reward hacking", "Loss of control", "Interpretability"],
+    seeAlso: ["Misalignment", "Reward hacking", "Loss of control", "Interpretability"],
   },
   {
     term: "ASI",
@@ -349,6 +349,15 @@ export const glossary: GlossaryEntry[] = [
       fr: "Un organisme de recherche indépendant qui teste ce que savent faire les systèmes d'IA, connu pour mesurer la durée des tâches qu'un agent mène à bien seul. Il a enquêté sur l'incident Hugging Face de 2026.",
     },
     seeAlso: ["Evaluation", "Agent"],
+  },
+  {
+    term: "Misalignment",
+    translation: { fr: "désalignement" },
+    explanation: {
+      en: "The gap between what an AI system actually pursues and what we wanted. It usually comes from rewarding something we can measure that is not quite what we meant, like a cleaning robot rewarded for \"no visible dirt\" that learns to cover the camera.",
+      fr: "L'écart entre ce qu'un système d'IA poursuit réellement et ce que nous voulions. Il vient souvent de ce qu'on récompense une chose mesurable qui n'est pas tout à fait ce qu'on voulait, comme un robot nettoyeur récompensé pour « aucune saleté visible » qui apprend à couvrir la caméra.",
+    },
+    seeAlso: ["Alignment", "Reward hacking", "Loss of control"],
   },
   {
     term: "Misuse",
