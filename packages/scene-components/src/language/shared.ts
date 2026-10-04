@@ -34,10 +34,10 @@ export function isL10n(v: unknown): v is L10n {
 
 /**
  * Temperature choices offered live (slides and phone): 0 always takes the
- * most likely token, higher values make surprising tokens likelier. The
- * server accepts 0 to 2.
+ * most likely token, higher values make surprising tokens likelier; beyond 2
+ * the text falls apart, which is worth seeing. The server accepts 0 to 5.
  */
-export const TEMPERATURES: readonly number[] = [0, 0.5, 1, 1.5, 2];
+export const TEMPERATURES: readonly number[] = [0, 0.5, 1, 1.5, 2, 3, 5];
 export const DEFAULT_TEMPERATURE = 1;
 
 /** "0", "0.5" / "0,5": the value as the locale writes it. */

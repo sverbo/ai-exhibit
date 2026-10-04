@@ -332,9 +332,16 @@ function clampTokens(v: unknown, limits: Limits): number {
   return Math.max(1, Math.min(limits.maxTokens, n));
 }
 
+/**
+ * Highest temperature forwarded. Tested 2026-10-04: the chat providers
+ * (nscale, novita) accept 10, the base model's (featherless) refuses above 5;
+ * beyond 2 the output is already noise, which is the point of the demo.
+ */
+export const MAX_TEMPERATURE = 5;
+
 function clampTemperature(v: unknown): number | undefined {
   if (typeof v !== "number" || !Number.isFinite(v)) return undefined;
-  return Math.max(0, Math.min(2, v));
+  return Math.max(0, Math.min(MAX_TEMPERATURE, v));
 }
 
 export function parseCompleteBody(

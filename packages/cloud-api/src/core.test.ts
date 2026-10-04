@@ -111,12 +111,12 @@ describe("cloud API", () => {
     expect(JSON.stringify(LADDER.map((r) => ladderPayload(r, r.targets[0]!, "Why?", PUBLIC_LIMITS)))).not.toMatch(/brief|system/i);
   });
 
-  it("forwards a temperature from 0 to 2, for the presenter and the audience, and clamps the rest", async () => {
+  it("forwards a temperature from 0 to 5, for the presenter and the audience, and clamps the rest", async () => {
     const f = vi.fn(async (u: string | URL | Request, _i?: RequestInit) =>
       okJson(String(u).includes("chat") ? { choices: [{ message: { content: "x" } }] } : { choices: [{ text: "x" }] }),
     );
     const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS });
-    const asked = [0, 0.5, 1, 2, 5, -1];
+    const asked = [0, 0.5, 1, 2, 5, 9, -1];
     for (const audience of [false, true]) {
       for (const [i, temperature] of asked.entries()) {
         // One phone per value, so that the audience's per-device budget never stops a call.
@@ -126,7 +126,7 @@ describe("cloud API", () => {
       }
     }
     const sent = f.mock.calls.map((c) => JSON.parse(String(c[1]!.body)).temperature);
-    const once = asked.flatMap((t) => [Math.max(0, Math.min(2, t)), Math.max(0, Math.min(2, t))]);
+    const once = asked.flatMap((t) => [Math.max(0, Math.min(5, t)), Math.max(0, Math.min(5, t))]);
     expect(sent).toEqual([...once, ...once]);
   });
 
