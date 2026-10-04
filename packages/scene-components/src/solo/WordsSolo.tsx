@@ -15,8 +15,8 @@ import { clusterColor, useEmbeddingSpace } from "../embeddings/data.ts";
 import { InteractiveMap } from "../embeddings/InteractiveMap.tsx";
 import { fromLocated, type QueryResult, searchVocabulary, selectWord } from "../embeddings/search.ts";
 import { SOLO } from "./copy.ts";
-import type { SoloEnv } from "./env.ts";
-import { BusyNotice, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
+import { canAsk, type SoloEnv } from "./env.ts";
+import { AsksLeft, BusyNotice, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
 import local from "./WordsSolo.module.css";
 
 /** Map units: a portrait box, so labels land at a readable size on a phone. */
@@ -49,6 +49,7 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
   const [pending, setPending] = useState(false);
   const [busy, setBusy] = useState(false);
   const request = useRef(0);
+  const live = canAsk(env, "words");
 
   const search = async (typed: string) => {
     const text = typed.trim().slice(0, MAX_INPUT_CHARS);
@@ -57,11 +58,11 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
     setBusy(false);
     const known = exactWord(space, text);
     if (known >= 0) return setQuery(selectWord(space, known));
-    if (!env.live) return setQuery(searchVocabulary(space, text));
+    if (!live) return setQuery(searchVocabulary(space, text));
     setPending(true);
     try {
       const t0 = performance.now();
-      const r = await cloudEmbed([queryText(space, text)], env.cloud);
+      const r = await cloudEmbed([queryText(space, text)], env.cloud("words"));
       const raw = r.vectors[0] ? Float32Array.from(r.vectors[0]) : undefined;
       if (id !== request.current || !raw) return;
       setQuery(fromLocated(text, locateQuery(space, raw), "model", { ms: Math.round(performance.now() - t0) }));
@@ -95,7 +96,7 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
             className={styles.input}
             value={draft}
             maxLength={MAX_INPUT_CHARS}
-            placeholder={tr(env.live ? EXPLORER.tryThese : EXPLORER.tryVocabulary, locale)}
+            placeholder={tr(live ? EXPLORER.tryThese : EXPLORER.tryVocabulary, locale)}
             enterKeyHint="search"
             autoComplete="off"
             spellCheck={false}
@@ -106,7 +107,8 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
           </button>
         </div>
       </form>
-      <p className={styles.note}>{tr(env.live ? SOLO.wordsCost : EXPLORER.fallbackActive, locale)}</p>
+      <p className={styles.note}>{tr(live ? SOLO.wordsCost : EXPLORER.fallbackActive, locale)}</p>
+      <AsksLeft env={env} game="words" />
       {busy ? <BusyNotice locale={locale} /> : null}
       {pending ? <p className={styles.pending}>{tr(EXPLORER.thinking, locale)}</p> : null}
       <div className={local.map}>

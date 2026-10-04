@@ -4223,9 +4223,9 @@
     "source": "Your sentence",
     "text": "Votre phrase"
   },
-  "copy:Free: cutting into tokens does not use your live answers.": {
-    "source": "Free: cutting into tokens does not use your live answers.",
-    "text": "Gratuit : découper en tokens n'utilise pas vos réponses en direct."
+  "copy:Free: cutting into tokens counts no ask.": {
+    "source": "Free: cutting into tokens counts no ask.",
+    "text": "Gratuit : le découpage en tokens ne compte aucune demande."
   },
   "copy:Pick an example: typing needs the live tokenizer.": {
     "source": "Pick an example: typing needs the live tokenizer.",
@@ -4239,9 +4239,9 @@
     "source": "Drag to move, pinch to zoom, tap a dot to see its neighbours.",
     "text": "Glissez pour vous déplacer, pincez pour zoomer, touchez un point pour voir ses voisins."
   },
-  "copy:A word already on the map is free; any other word uses one live answer.": {
-    "source": "A word already on the map is free; any other word uses one live answer.",
-    "text": "Un mot déjà sur la carte est gratuit ; tout autre mot utilise une réponse en direct."
+  "copy:A word already on the map is free; any other word counts as one ask.": {
+    "source": "A word already on the map is free; any other word counts as one ask.",
+    "text": "Un mot déjà sur la carte est gratuit ; tout autre mot compte pour une demande."
   },
   "copy:A model fresh out of pretraining. It only continues your text.": {
     "source": "A model fresh out of pretraining. It only continues your text.",
@@ -4279,17 +4279,21 @@
     "source": "One question, three open models of increasing size, answering at the same time.",
     "text": "Une question, trois modèles ouverts de plus en plus grands, qui répondent en même temps."
   },
-  "copy:One question uses three live answers, one per model.": {
-    "source": "One question uses three live answers, one per model.",
-    "text": "Une question utilise trois réponses en direct, une par modèle."
+  "copy:One question counts as one ask, even with three models answering.": {
+    "source": "One question counts as one ask, even with three models answering.",
+    "text": "Une question compte pour une seule demande, même si trois modèles répondent."
   },
   "copy:The talk's riddle, as four generations of GPT answered it.": {
     "source": "The talk's riddle, as four generations of GPT answered it.",
     "text": "La devinette de la présentation, telle que quatre générations de GPT y ont répondu."
   },
-  "copy:Not enough live answers left for three models.": {
-    "source": "Not enough live answers left for three models.",
-    "text": "Il ne reste pas assez de réponses en direct pour trois modèles."
+  "copy:{n} of {m} asks left for this game this hour.": {
+    "source": "{n} of {m} asks left for this game this hour.",
+    "text": "Encore {n} demandes sur {m} pour ce jeu cette heure-ci."
+  },
+  "copy:You have used this game's asks for this hour: recorded examples here. The other games still answer live.": {
+    "source": "You have used this game's asks for this hour: recorded examples here. The other games still answer live.",
+    "text": "Vous avez utilisé les demandes de ce jeu pour cette heure : voici des exemples enregistrés. Les autres jeux répondent toujours en direct."
   },
   "copy:A short history of AI": {
     "source": "A short history of AI",

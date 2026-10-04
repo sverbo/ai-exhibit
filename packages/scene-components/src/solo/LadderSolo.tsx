@@ -20,10 +20,10 @@ import {
   startLive,
 } from "../language/thenAndNow.ts";
 import { SOLO } from "./copy.ts";
-import { LADDER_COST, type SoloEnv } from "./env.ts";
-import { BusyNotice, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
+import { canAsk, type SoloEnv } from "./env.ts";
+import { AsksLeft, BusyNotice, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
 
-export default function LadderSolo({ env, remaining }: { env: SoloEnv; remaining?: number | null }) {
+export default function LadderSolo({ env }: { env: SoloEnv }) {
   const { locale } = env;
   const riddle = pickQuestions(undefined, "game").find((q) => q.ladder);
   const [draft, setDraft] = useState(riddle ? tr(riddle.question, locale) : "");
@@ -31,7 +31,7 @@ export default function LadderSolo({ env, remaining }: { env: SoloEnv; remaining
   const [busy, setBusy] = useState(false);
   const abort = useRef<AbortController | null>(null);
   useEffect(() => () => abort.current?.abort(), []);
-  const short = typeof remaining === "number" && remaining < LADDER_COST;
+  const asking = canAsk(env, "ladder");
 
   const ask = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ export default function LadderSolo({ env, remaining }: { env: SoloEnv; remaining
           run = applyLadderEvent(run, ev);
           setLive(run);
         },
-        { ...env.cloud, signal: ac.signal },
+        { ...env.cloud("ladder"), signal: ac.signal },
       );
       if (run.running) run = failLive(run, tr(COPY.liveStreamCut, locale));
       setLive(run);
@@ -62,9 +62,10 @@ export default function LadderSolo({ env, remaining }: { env: SoloEnv; remaining
     }
   };
 
-  if (!env.live) {
+  if (!asking) {
     return (
       <SoloRoot label={tr(SOLO.ladderRecorded, locale)}>
+        <AsksLeft env={env} game="ladder" />
         <p className={styles.intro}>{tr(SOLO.ladderRecorded, locale)}</p>
         {riddle ? <Published locale={locale} /> : null}
       </SoloRoot>
@@ -87,12 +88,13 @@ export default function LadderSolo({ env, remaining }: { env: SoloEnv; remaining
           onChange={(e) => setDraft(e.currentTarget.value)}
         />
         <div className={styles.buttons}>
-          <button type="submit" className={cx(styles.button, styles.primary)} disabled={!liveQuestion(draft) || live?.running === true || short}>
+          <button type="submit" className={cx(styles.button, styles.primary)} disabled={!liveQuestion(draft) || live?.running === true}>
             {tr(COPY.liveAsk, locale)}
           </button>
         </div>
       </form>
-      <p className={styles.note}>{tr(short ? SOLO.cannotAfford : SOLO.ladderCost, locale)}</p>
+      <p className={styles.note}>{tr(SOLO.ladderCost, locale)}</p>
+      <AsksLeft env={env} game="ladder" />
       {busy ? <BusyNotice locale={locale} /> : null}
       {live ? (
         <ol className={styles.list}>

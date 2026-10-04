@@ -10,12 +10,12 @@ export const SOLO = {
   recordedNote: { en: "Recorded real examples: live answers are not available right now." },
   // Tokens
   tokensField: { en: "Your sentence" },
-  tokensFree: { en: "Free: cutting into tokens does not use your live answers." },
+  tokensFree: { en: "Free: cutting into tokens counts no ask." },
   tokensRecorded: { en: "Pick an example: typing needs the live tokenizer." },
   // Words as points
   wordsField: { en: "A word or a short phrase" },
   wordsHint: { en: "Drag to move, pinch to zoom, tap a dot to see its neighbours." },
-  wordsCost: { en: "A word already on the map is free; any other word uses one live answer." },
+  wordsCost: { en: "A word already on the map is free; any other word counts as one ask." },
   // Base model and assistant
   baseIntro: { en: "A model fresh out of pretraining. It only continues your text." },
   baseField: { en: "The start of a text" },
@@ -29,7 +29,11 @@ export const SOLO = {
   pickQuestion: { en: "Pick a question: these answers were recorded." },
   // Then and now
   ladderIntro: { en: "One question, three open models of increasing size, answering at the same time." },
-  ladderCost: { en: "One question uses three live answers, one per model." },
+  ladderCost: { en: "One question counts as one ask, even with three models answering." },
   ladderRecorded: { en: "The talk's riddle, as four generations of GPT answered it." },
-  cannotAfford: { en: "Not enough live answers left for three models." },
+  // Asks: each game has a few per phone and hour
+  asksLeft: { en: "{n} of {m} asks left for this game this hour." },
+  gameUsedUp: {
+    en: "You have used this game's asks for this hour: recorded examples here. The other games still answer live.",
+  },
 } satisfies Record<string, L10n>;

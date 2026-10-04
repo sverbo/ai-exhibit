@@ -14,8 +14,8 @@ import { assistantMessages, CHAT_PRESETS, DEFAULT_BASE_PROMPT } from "../languag
 import { stripEmphasis } from "../language/format.ts";
 import { useCloudRecording } from "../language/runtime.ts";
 import { SOLO } from "./copy.ts";
-import type { SoloEnv } from "./env.ts";
-import { BusyNotice, Chips, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
+import { canAsk, type SoloEnv } from "./env.ts";
+import { AsksLeft, BusyNotice, Chips, cx, RecordedTag, SoloRoot, soloStyles as styles } from "./ui.tsx";
 
 /** Tokens the base model adds per press. */
 export const ADD_TOKENS = 10;
@@ -44,6 +44,7 @@ function BaseModel({ env }: { env: SoloEnv }) {
   const [pending, setPending] = useState(false);
   const [busy, setBusy] = useState(false);
   const run = useRef(0);
+  const live = canAsk(env, "base");
 
   const startOver = (text = planned) => {
     run.current++;
@@ -57,7 +58,7 @@ function BaseModel({ env }: { env: SoloEnv }) {
   const add = async () => {
     const id = ++run.current;
     setBusy(false);
-    if (!env.live) {
+    if (!live) {
       const rec = findCloudRecording(recordings, "base", planned);
       setPrompt(planned);
       setAdded(rec ? [rec.text] : []);
@@ -67,7 +68,7 @@ function BaseModel({ env }: { env: SoloEnv }) {
     setPending(true);
     try {
       const full = prompt + added.join("");
-      const r = await cloudComplete({ prompt: full, maxTokens: ADD_TOKENS, temperature: TEMPERATURE }, env.cloud);
+      const r = await cloudComplete({ prompt: full, maxTokens: ADD_TOKENS, temperature: TEMPERATURE }, env.cloud("base"));
       if (id !== run.current) return;
       setAdded((a) => [...a, r.text]);
       setSource("live");
@@ -88,7 +89,8 @@ function BaseModel({ env }: { env: SoloEnv }) {
         </h3>
         <p className={styles.intro}>{tr(SOLO.baseIntro, locale)}</p>
       </header>
-      {env.live ? (
+      <AsksLeft env={env} game="base" />
+      {live ? (
         <label className={styles.form}>
           <span className={styles.label}>{tr(SOLO.baseField, locale)}</span>
           <textarea
@@ -115,10 +117,10 @@ function BaseModel({ env }: { env: SoloEnv }) {
         <button
           type="button"
           className={cx(styles.button, styles.primary)}
-          disabled={pending || !prompt.trim() || full.length > MAX_INPUT_CHARS * 4 || (!env.live && source === "recorded")}
+          disabled={pending || !prompt.trim() || full.length > MAX_INPUT_CHARS * 4 || (!live && source === "recorded")}
           onClick={() => void add()}
         >
-          {env.live ? tr(SOLO.addTokens, locale) : tr(SOLO.showRecorded, locale)}
+          {live ? tr(SOLO.addTokens, locale) : tr(SOLO.showRecorded, locale)}
         </button>
         {added.length ? (
           <button type="button" className={styles.button} onClick={() => startOver()}>
@@ -147,6 +149,7 @@ function Assistant({ env }: { env: SoloEnv }) {
   const [pending, setPending] = useState(false);
   const [busy, setBusy] = useState(false);
   const run = useRef(0);
+  const live = canAsk(env, "assistant");
 
   const recorded = (question: string) => {
     const rec = findCloudRecording(recordings, "chat", question);
@@ -158,11 +161,11 @@ function Assistant({ env }: { env: SoloEnv }) {
     if (!question) return;
     const id = ++run.current;
     setBusy(false);
-    if (!env.live) return recorded(question);
+    if (!live) return recorded(question);
     setPending(true);
     setAnswer(null);
     try {
-      const r = await cloudChat({ messages: assistantMessages(locale, question), maxTokens: ANSWER_TOKENS, temperature: 0 }, env.cloud);
+      const r = await cloudChat({ messages: assistantMessages(locale, question), maxTokens: ANSWER_TOKENS, temperature: 0 }, env.cloud("assistant"));
       if (id !== run.current) return;
       setAnswer({ question, text: r.text, cut: r.finishReason === "length", source: "live" });
     } catch (err) {
@@ -188,7 +191,8 @@ function Assistant({ env }: { env: SoloEnv }) {
         </h3>
         <p className={styles.intro}>{tr(SOLO.assistantIntro, locale)}</p>
       </header>
-      {env.live ? (
+      <AsksLeft env={env} game="assistant" />
+      {live ? (
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.label} htmlFor="solo-question">
             {tr(SOLO.questionField, locale)}
@@ -234,7 +238,7 @@ function Assistant({ env }: { env: SoloEnv }) {
           {answer.source === "recorded" ? <RecordedTag locale={locale} /> : null}
         </div>
       ) : null}
-      {env.live ? <p className={styles.note}>{tr(SOLO.shortAnswers, locale)}</p> : null}
+      {live ? <p className={styles.note}>{tr(SOLO.shortAnswers, locale)}</p> : null}
     </div>
   );
 }

@@ -41,7 +41,7 @@ export default function TokensSolo({ env }: { env: SoloEnv }) {
     }
     const ac = new AbortController();
     const timer = setTimeout(() => {
-      cloudTokenize(text, TOKENIZER, { ...env.cloud, signal: ac.signal }).then(
+      cloudTokenize(text, TOKENIZER, { ...env.cloud(), signal: ac.signal }).then(
         (r) => {
           if (id !== request.current) return;
           setTokens(r.tokens);

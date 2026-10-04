@@ -16,8 +16,8 @@ export interface CloudStatus {
   codeAccepted?: boolean;
   /** The server's Hugging Face key: valid, plan, inference permission, credits refused lately. Absent from older servers. */
   key?: { valid: boolean | null; plan: "free" | "pro" | null; inference: boolean | null; creditsExhausted: boolean };
-  /** Audience requests only: model requests this device may still make this hour, of `perHour`. */
-  audience?: { remaining: number; perHour: number };
+  /** Audience requests only: this device's asks left this hour per game, of `perHour` each. */
+  audience?: { perHour: number; games: Record<AudienceGame, number> };
 }
 
 /** Header the server reads the access code from (packages/cloud-api ACCESS_CODE_HEADER). */
@@ -29,8 +29,23 @@ const ACCESS_CODE_KEY = "ai-exhibit:access-code";
  * presenter's (packages/cloud-api AUDIENCE_HEADER).
  */
 export const AUDIENCE_HEADER = "x-ai-exhibit-audience";
-/** The device's model requests left this hour, on audience answers (packages/cloud-api REMAINING_HEADER). */
+/** On audience answers: the game's asks left this hour (packages/cloud-api REMAINING_HEADER). */
 export const REMAINING_HEADER = "x-ai-exhibit-remaining";
+
+/** The Play tab's games that call a model, each with its own asks per device (packages/cloud-api AUDIENCE_GAMES). */
+export const AUDIENCE_GAMES = ["words", "base", "assistant", "ladder"] as const;
+export type AudienceGame = (typeof AUDIENCE_GAMES)[number];
+
+/** A refusal of the audience budgets. */
+export interface AudienceBudget {
+  /** "minute": try again soon; "hour": used up for now. */
+  window: "minute" | "hour";
+  /** The game's asks left this hour. */
+  remaining: number;
+  game?: AudienceGame;
+  /** "device": this game on this phone; "room": every phone at this address. */
+  scope?: "device" | "room";
+}
 
 /** The access code this browser remembers, or null. */
 export function getAccessCode(): string | null {
@@ -85,7 +100,7 @@ export class CloudLlmError extends Error {
     readonly code: CloudErrorCode,
     message: string,
     /** Audience refusals: the full window ("minute": try again soon; "hour": used up) and the requests left. */
-    readonly budget?: { window: "minute" | "hour"; remaining: number },
+    readonly budget?: AudienceBudget,
   ) {
     super(message);
     this.name = "CloudLlmError";
@@ -102,7 +117,7 @@ export interface CloudOptions {
   accessCode?: string | null;
   /** Audience device id: the call goes to the audience budgets (AUDIENCE_HEADER). */
   audience?: string;
-  /** Audience calls: told the device's model requests left this hour after each answer. */
+  /** Audience calls: told the game's asks left this hour after each answer. */
   onRemaining?: (remaining: number) => void;
 }
 
@@ -125,7 +140,10 @@ function refusal(res: Response, body: Record<string, unknown> | null, opts: Clou
   // A stored code the server refuses is stale: forget it, so the presenter is asked again.
   if (error === "access-code" && opts.accessCode === undefined && code) setAccessCode(null);
   const window: "minute" | "hour" | null = body?.window === "minute" || body?.window === "hour" ? body.window : null;
-  const budget = window && typeof body?.remaining === "number" ? { window, remaining: body.remaining } : undefined;
+  const game = (AUDIENCE_GAMES as readonly unknown[]).includes(body?.game) ? (body!.game as AudienceGame) : undefined;
+  const scope = body?.scope === "device" || body?.scope === "room" ? body.scope : undefined;
+  const budget: AudienceBudget | undefined =
+    window && typeof body?.remaining === "number" ? { window, remaining: body.remaining, ...(game ? { game } : {}), ...(scope ? { scope } : {}) } : undefined;
   return new CloudLlmError(error, typeof body?.message === "string" ? body.message : `HTTP ${res.status}`, budget);
 }
 

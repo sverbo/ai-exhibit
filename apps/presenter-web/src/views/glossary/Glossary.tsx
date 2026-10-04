@@ -4,6 +4,7 @@ import { glossary, resources, type GlossaryEntry } from "@ai-exhibit/content/glo
 import { cloudStatus } from "@ai-exhibit/ml-runtime/lm";
 import { currentStampedTheme } from "../../theme.ts";
 import { guessLocale } from "./locale.ts";
+import { deviceId } from "./play/play.ts";
 import { letterOf, searchGlossary, termId } from "./search.ts";
 import styles from "./Glossary.module.css";
 
@@ -81,7 +82,8 @@ function usePlayAvailable(): boolean {
   const [ok, setOk] = useState(false);
   useEffect(() => {
     let alive = true;
-    cloudStatus({ accessCode: null })
+    // As an audience request: on the local runtime, phones on the LAN may only ask that way.
+    cloudStatus({ accessCode: null, audience: deviceId() })
       .then((s) => {
         if (alive) setOk(Boolean(s.configured && s.reachable !== false && s.key?.valid !== false && !s.codeRequired));
       })

@@ -47,12 +47,15 @@ laptop included. Audience calls therefore get their own budgets:
 - Each phone makes a random **device id** once (`crypto.randomUUID`, kept in
   localStorage, never personal data) and sends it in `x-ai-exhibit-audience`
   on every Play call. The header moves the call to the audience budgets.
-- **Per device**: 10 model requests per hour, 3 per minute. The ladder costs
-  one request per model (3). Tokenizing is free (30 per minute, no hourly
-  count), and so is a word already in the map's vocabulary (no call).
-- **Room cap per address**, all audience devices together: 200 model requests
-  per hour, 30 per minute. On the local runtime every LAN phone shares one
-  room budget.
+- **Per device and game**: 5 asks per hour for each game that calls a model:
+  words (embedding a new word), base model (+10 tokens), assistant, and the
+  three-model ladder. One ask counts 1 whatever the number of models behind
+  it, so a ladder question is one ask. A device makes at most 3 asks a minute,
+  all games together. Tokenizing is free (30 per minute, no hourly count), and
+  so is a word already on the map (no call).
+- **Room cap per address**, all audience devices together, in model requests:
+  200 per hour, 30 per minute; a ladder question counts 3 here. On the local
+  runtime every LAN phone shares one room budget.
 - **Smaller answers**: at most 60 output tokens (the base model asks for 10),
   2 chat messages, 1 text to embed; the 300-character input cap stays.
 - The presenter's budgets (per-minute, 100 per hour per address) never see
@@ -61,13 +64,16 @@ laptop included. Audience calls therefore get their own budgets:
   anything else are refused for audience calls. On the local runtime, LAN
   clients reach these endpoints only with the header; everything else stays
   for the presenter's machine.
-- Answers carry `x-ai-exhibit-remaining` (the device's requests left this
-  hour, the room cap included); the audience status returns
-  `audience: { remaining, perHour }` and no key details. The tab shows it
+- A game's answers carry `x-ai-exhibit-remaining`: that game's asks left this
+  hour (the room cap included). The audience status returns
+  `audience: { perHour, games: { words, base, assistant, ladder } }` and, of
+  the key, only whether it is valid. Each game shows its own asks left,
   discreetly.
-- Refusals are `429` with `window: "minute" | "hour"`: "minute" says "busy,
-  try again in a few seconds"; "hour" says the live answers are used up for
-  now and switches the tab to the recorded examples.
+- Refusals are `429` with `window: "minute" | "hour"`, the `game` and the
+  `scope` (`"device"` or `"room"`). "minute" says "busy, try again in a few
+  seconds". A device's game spent switches that game to its recorded
+  examples and says the other games still answer live; the room spent (or
+  every game spent) switches the whole tab to recordings.
 
 Limits: a determined user can reset the device id (clear storage), so the
 per-address room cap and the Hugging Face spending limit are the real
@@ -77,7 +83,7 @@ instances each count on their own): best effort, as for the presenter.
 ## Recorded fallback
 
 When live calls are not possible (no token on the server, an access code
-required, the server unreachable, or the hourly budget used up), each demo
+required, the server unreachable, or the game's asks used up), each demo
 shows recorded real examples with a short note: tokenizations of the
 prepared sentences, the vocabulary's precomputed neighbours, the base model's
 and the assistant's recorded answers to the prepared prompts, and the

@@ -61,7 +61,7 @@ function safeStorage(): Storage | null {
  * "no-token": the server has no Hugging Face token (Simulation);
  * "code": the server requires an access code, which phones do not have;
  * "offline": the server or Hugging Face cannot be reached;
- * "used-up": this phone's (or the room's) live answers for this hour are spent;
+ * "used-up": every game's asks on this phone (or the room's requests) for this hour are spent;
  * "failed": a live call failed.
  */
 export type RecordedWhy = "no-token" | "code" | "offline" | "used-up" | "failed";
@@ -76,6 +76,7 @@ export function decidePlay(status: CloudStatus | null | "error", stopped: "used-
   if (!status.configured) return { mode: "recorded", why: "no-token" };
   if (status.reachable === false) return { mode: "recorded", why: "offline" };
   if (status.codeRequired) return { mode: "recorded", why: "code" };
-  if (status.audience && status.audience.remaining <= 0) return { mode: "recorded", why: "used-up" };
+  // Every game's asks spent (or the room's requests): nothing can answer live this hour.
+  if (status.audience && Object.values(status.audience.games).every((n) => n <= 0)) return { mode: "recorded", why: "used-up" };
   return { mode: "live" };
 }
