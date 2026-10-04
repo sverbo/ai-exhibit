@@ -381,10 +381,11 @@ function LadderView({ q, stage, locale }: { q: ThenAndNowQuestion; stage: number
               </span>
             </span>
             <span className={styles.rungText}>
-              <q className={styles.rungAnswer} lang="en">
-                {r.answer}
-              </q>
-              <Translation text={locale === "en" ? undefined : own(r.translation as Partial<Record<Locale, string>> | undefined, locale)} locale={locale} />
+              <AnswerInLocale
+                answer={r.answer}
+                translated={locale === "en" ? undefined : own(r.translation as Partial<Record<Locale, string>> | undefined, locale)}
+                locale={locale}
+              />
             </span>
             <Mark correct={r.correct} locale={locale} />
           </li>
@@ -403,6 +404,31 @@ function LadderView({ q, stage, locale }: { q: ThenAndNowQuestion; stage: number
       </ol>
       <p className={styles.ladderSource}>{tr(COPY.publishedBy, locale)}</p>
     </div>
+  );
+}
+
+/**
+ * A recorded English answer shown in the talk's language: the translation
+ * first (labelled, in italics, so it is never taken for the model's own
+ * words), then the original English, small. In English, just the answer.
+ */
+export function AnswerInLocale({ answer, translated, locale }: { answer: string; translated: string | undefined; locale: Locale }) {
+  if (!translated || locale === "en") {
+    return (
+      <q className={styles.rungAnswer} lang="en">
+        {answer}
+      </q>
+    );
+  }
+  return (
+    <>
+      <span className={styles.rungAnswer}>
+        <em>{typeset(translated, locale)}</em> <span className={styles.translationLabel}>({tr(COPY.translatedFromEnglish, locale)})</span>
+      </span>
+      <span className={styles.translation}>
+        <span className={styles.translationLabel}>{tr(COPY.original, locale)}</span> <q lang="en">{answer}</q>
+      </span>
+    </>
   );
 }
 

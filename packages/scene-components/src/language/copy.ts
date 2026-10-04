@@ -188,6 +188,9 @@ export const COPY = {
   askedInEnglish: {  en: "Asked in English:" },
   /** Label before the translation of an English model answer (never a model output itself). */
   translation: {  en: "Translation:" },
+  /** Before the model's own English words, under a translated answer. */
+  original: { en: "Original:" },
+  translatedFromEnglish: { en: "translated from English" },
   estimatedCost: {  en: "training:" },
   costUnknown: {  en: "training cost unknown" },
   correctMark: {  en: "Correct" },

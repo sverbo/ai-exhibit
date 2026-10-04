@@ -164,12 +164,16 @@ function Published({ locale }: { locale: Locale }) {
                 </span>
               </header>
               <p className={styles.answer}>
-                <q lang="en">{r.answer}</q>
-                {translation ? (
-                  <span className={styles.translation}>
-                    {tr(COPY.translation, locale)} <em>{typeset(translation, locale)}</em>
-                  </span>
-                ) : null}
+                {translation && locale !== "en" ? (
+                  <>
+                    <em>{typeset(translation, locale)}</em> ({tr(COPY.translatedFromEnglish, locale)})
+                    <span className={styles.translation}>
+                      {tr(COPY.original, locale)} <q lang="en">{r.answer}</q>
+                    </span>
+                  </>
+                ) : (
+                  <q lang="en">{r.answer}</q>
+                )}
               </p>
               <Mark correct={r.correct} locale={locale} />
             </li>

@@ -3575,6 +3575,14 @@
     "source": "Translation:",
     "text": "Traduction :"
   },
+  "copy:Original:": {
+    "source": "Original:",
+    "text": "Original :"
+  },
+  "copy:translated from English": {
+    "source": "translated from English",
+    "text": "traduit de l'anglais"
+  },
   "copy:training:": {
     "source": "training:",
     "text": "entraînement :"
