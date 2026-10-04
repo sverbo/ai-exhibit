@@ -220,6 +220,17 @@ export const storySources: SourceRecord[] = [
     verification: "verified",
   },
   {
+    id: "st-deepmind-alphago",
+    title: "AlphaGo",
+    url: "https://deepmind.google/research/breakthroughs/alphago/",
+    publisher: "Google DeepMind",
+    retrieved: "2026-10-04",
+    kind: "documentation",
+    claim: "AlphaGo beat Lee Sedol (winner of 18 world titles) 4 games to 1 in Seoul, South Korea, in March 2016. It first learned from thousands of expert human games, then played against different versions of itself thousands of times, learning from its mistakes (reinforcement learning).",
+    evidence: "observed",
+    verification: "verified",
+  },
+  {
     id: "st-vaswani-2017-attention",
     title: "Attention Is All You Need",
     url: "https://arxiv.org/abs/1706.03762",

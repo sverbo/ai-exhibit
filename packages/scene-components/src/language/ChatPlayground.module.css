@@ -105,52 +105,68 @@
   gap: var(--space-1);
 }
 
-/* Chat and, on reveal, the raw text the model reads, side by side. */
-.body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
+/*
+ * On reveal, the raw text the model reads replaces the chat (it holds the
+ * question and the answer) and fills the stage: tighter frame padding, the
+ * text in two balanced columns, the notes in one row. It all fits above the
+ * controller's rail at 1080; the text scrolls only for a live answer far
+ * longer than any recorded one.
+ */
+.rawMain {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-3);
 }
-.split {
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  align-items: start;
-}
-.split .user,
-.split .assistant {
-  max-width: 100%;
-}
-.split .answer {
-  max-height: 420px;
+.rawMain .head {
+  margin-bottom: var(--space-2);
 }
 
 .raw {
+  flex: 0 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3);
+  padding: var(--space-2) var(--space-3);
   background: var(--color-surface);
   border: 2px solid var(--color-line);
   border-radius: var(--radius);
+}
+.rawHeadRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px var(--space-3);
 }
 .rawHead {
   font-family: var(--font-display);
   font-size: var(--text-md);
   color: var(--color-text);
 }
+.rawHeadRow .odds {
+  margin-left: auto;
+}
+/* Last resort: the columns keep their natural height and this box scrolls. */
+.rawScroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
 .rawText {
   margin: 0;
-  max-height: 470px;
-  overflow: hidden;
+  column-count: 2;
+  column-gap: var(--space-5);
+  column-rule: 1px solid var(--color-line);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  line-height: 1.7;
+  line-height: 1.45;
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--color-text);
   /* "<|" and "|>" stay literal: no programming ligatures. */
   font-variant-ligatures: none;
   font-feature-settings: "calt" 0, "liga" 0;
-  mask-image: linear-gradient(to bottom, var(--color-text) 85%, transparent);
 }
 
 /* Role colours: system, user, assistant. Shape (chip) plus colour, and the notes name them. */
@@ -191,12 +207,13 @@
 .rawNotes {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  padding: var(--space-1) 0 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-line);
   font-size: var(--text-xs);
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--color-text-muted);
 }
 .rawNotes li {

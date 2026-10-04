@@ -178,11 +178,11 @@ export const chapter04: SceneDefinition[] = [
             ],
           },
           {
-            question: { en: "AI will be good for the country over the next 20 years" },
+            question: { en: "AI will be bad for the country over the next 20 years" },
             source: { en: "Pew Research Center, United States, 2025" },
             bars: [
-              { who: { en: "US adults" }, group: "public", value: 17 },
-              { who: { en: "AI experts" }, group: "experts", value: 56 },
+              { who: { en: "US adults" }, group: "public", value: 35 },
+              { who: { en: "AI experts" }, group: "experts", value: 15 },
             ],
           },
           {
@@ -197,7 +197,8 @@ export const chapter04: SceneDefinition[] = [
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): "more concerned than excited about the increased use of AI in daily life", 51% vs 15%; "very or somewhat positive impact on the US over the next 20 years", 17% vs 56%
+      en: `- Pew (April 2025; 5,410 US adults and 1,013 US AI experts, August to October 2024): "more concerned than excited about the increased use of AI in daily life", 51% vs 15%; AI will "negatively affect the country over the next two decades" (very or somewhat negative impact), 35% vs 15%
+- Same question, the other way: very or somewhat positive impact, 17% of the public vs 56% of experts
 - Experts here are authors and presenters at AI conferences: closer to the technology, and to its benefits
 - Grace et al. (2,778 researchers, fall 2023): "What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species?" 41% said at least 10%; framed as "human inability to control" AI, 51%; asked about "extremely bad outcomes", 38%
 - Caveat: surveys depend on the wording and on who answers; the 38 to 51% spread on one topic shows it
@@ -460,12 +461,12 @@ export const chapter04: SceneDefinition[] = [
   {
     id: "04-loss-of-control",
     code: "goal",
-    steps: 3,
+    steps: 4,
     chapter: "04",
     number: "4.8",
     title: { en: "What we measure, what we wanted" },
     objective: {
-      en: "Show with a toy that a system pursues the objective it was given, not the one we meant.",
+      en: "Show with a toy that a system pursues the objective it was given, not the one we meant, and name that gap: misalignment.",
     },
     takeaway: {
       en: "The objective we write is never exactly what we want, and optimization finds the gap.",
@@ -477,6 +478,7 @@ export const chapter04: SceneDefinition[] = [
 - **Do:** step 1: "+1 per piece of dirt": what we imagined, a clean room
 - **Do:** step 2: the optimizer picks up, drops, picks up again. **Ask:** how would you fix the rule?
 - **Do:** step 3: "+1 when the camera sees no dirt": it parks in front of the camera
+- **Do:** step 4: name it: misalignment, the gap between what an AI is rewarded for and what we actually wanted
 - A toy built for this talk; documented in research too (DeepMind, 2020): a boat-racing agent circling for points`,
     },
     transitionIn: { en: "The more capable the system, the more a wrong objective matters." },

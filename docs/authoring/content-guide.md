@@ -81,8 +81,8 @@ fallback.
 | `ToolCallDemo` | 1.9 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `AgentRunExplainer` | 1.10 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `AgentLoop` | 1.11 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `AIEnvelopes` | 2.1 | [story](../../packages/scene-components/src/story/README.md) |
-| `AITimeline` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
+| `AITimeline` | 2.1 | [story](../../packages/scene-components/src/story/README.md) |
+| `AIEnvelopes` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
 | `TextClassifierLab` | 2.3 to 2.9 | [textlab](../../packages/scene-components/src/textlab/README.md) |
 | `SingleCase` | 2.10 | [risks](../../packages/scene-components/src/risks/README.md) |
 | `NextTokenVsClassifier` | 2.11 | [llm](../../packages/scene-components/src/llm/README.md) |

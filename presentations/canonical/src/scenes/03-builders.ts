@@ -11,7 +11,7 @@ export const chapter03: SceneDefinition[] = [
   {
     id: "03-industry",
     code: "stack",
-    steps: 12,
+    steps: 13,
     chapter: "03",
     number: "3.1",
     title: { en: "Who builds it" },
@@ -29,13 +29,14 @@ export const chapter03: SceneDefinition[] = [
 - Click 2, Musk and Altman: in 2015 Altman writes to Musk that it would be good for "someone other than Google" to do it first
 - Click 3, OpenAI (maker of ChatGPT): December 2015, a non-profit with a $1 billion pledge. 2019: a capped-profit company under the non-profit, then $1 billion from Microsoft
 - Click 4, Musk leaves: he quits OpenAI's board in February 2018
-- Click 5, Dario Amodei (OpenAI vice president of research) leaves and co-founds Anthropic (maker of Claude) in 2021 with other former OpenAI staff, a lab centred on safety
-- Click 6, xAI (maker of Grok): Musk launches it in July 2023. Meanwhile: ChatGPT (Nov 2022); the board fires Altman in Nov 2023, he is back five days later; OpenAI becomes a public benefit corporation (Oct 2025); Musk's lawsuit dismissed as time-barred (May 2026), appeal announced
-- Click 7, Meta
-- Click 8, Arthur Mensch leaves DeepMind Paris and co-founds Mistral AI in 2023 with two former Meta researchers
-- Click 9, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) and Z.ai (Zhipu): many publish their model weights openly
-- Click 10, NVIDIA designs the chips; its founder Jensen Huang has run it since 1993
-- Clicks 11 and 12, TSMC (Taiwan) makes most of them, about 72% of the top ten foundries' revenue (Q2 2026); ASML (Netherlands) is the only maker of EUV machines
+- Click 5, Dario Amodei appears at OpenAI: vice president of research there
+- Click 6, Anthropic (maker of Claude): Amodei leaves OpenAI and co-founds it in 2021 with other former OpenAI staff, a lab centred on safety
+- Click 7, xAI (maker of Grok): Musk launches it in July 2023. Meanwhile: ChatGPT (Nov 2022); the board fires Altman in Nov 2023, he is back five days later; OpenAI becomes a public benefit corporation (Oct 2025); Musk's lawsuit dismissed as time-barred (May 2026), appeal announced
+- Click 8, Meta
+- Click 9, Mistral AI, with Arthur Mensch: he worked at DeepMind in Paris, then co-founded it in 2023 with two former Meta researchers
+- Click 10, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) and Z.ai (Zhipu): many publish their model weights openly
+- Click 11, NVIDIA designs the chips; its founder Jensen Huang has run it since 1993
+- Clicks 12 and 13, TSMC (Taiwan) makes most of them, about 72% of the top ten foundries' revenue (Q2 2026); ASML (Netherlands) is the only maker of EUV machines
 - **Ask:** where is the power in this chain?`,
     },
     transitionIn: { en: "From how it works to who builds it." },

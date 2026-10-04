@@ -354,6 +354,14 @@
   display: flex;
   align-items: center;
 }
+/* The tree alone: how to read it, where the sentence goes later. */
+.treeRead {
+  margin: 0;
+  max-width: 1400px;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
 .treeRow {
   flex: 1;
   min-height: 0;

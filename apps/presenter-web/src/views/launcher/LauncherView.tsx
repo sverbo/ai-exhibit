@@ -154,6 +154,10 @@ export default function LauncherView() {
           version, send me the link and a short description (for example: kid friendly, 60 minutes) and I will add it to the
           list below.
         </p>
+        <p>
+          <b>Gave the talk?</b> Tell me on Signal, <b>{SIGNAL}</b>: which version, how it went, and roughly how many people
+          were there. It helps keep a count of how many people this talk has reached.
+        </p>
         <p>The Hugging Face token behind this site is mine, offered for free: please keep usage light.</p>
       </section>
 

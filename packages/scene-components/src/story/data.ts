@@ -179,6 +179,17 @@ export const AI_MILESTONES: Milestone[] = [
     sourceIds: ["st-krizhevsky-2012-alexnet", "st-imagenet-2012-results"],
   },
   {
+    id: "alphago-2016",
+    track: "promise",
+    when: { en: "2016" },
+    short: { en: "Go" },
+    title: { en: "A machine wins at Go" },
+    text: {
+      en: "AlphaGo beats Lee Sedol, winner of 18 world titles, 4 games to 1. Nobody wrote its strategy: it learned from thousands of human games, then from playing against itself.",
+    },
+    sourceIds: ["st-deepmind-alphago"],
+  },
+  {
     id: "transformer-2017",
     track: "promise",
     when: { en: "2017" },

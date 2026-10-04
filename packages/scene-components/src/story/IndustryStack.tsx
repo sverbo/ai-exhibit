@@ -7,11 +7,12 @@ import { stopShellKeys } from "../evidence/shared.ts";
 import { Credits } from "./Credits.tsx";
 import { Flags } from "./Flags.tsx";
 import { logoBox } from "./data.ts";
-import { INDUSTRY_STEPS, LAYERS, MOVES, PEOPLE, placementsAt, waitingPlace, type LayerId, type PersonMove } from "./industry.ts";
+import { INDUSTRY_STEPS, LAYERS, MOVES, PEOPLE, placementsAt, type LayerId, type PersonMove } from "./industry.ts";
 import styles from "./IndustryStack.module.css";
 
-/* Stage geometry (1920 x 1080 logical px). Everything is placed absolutely so
-   portraits and link lines can travel between organisations. */
+/* Stage geometry (1920 x 1080 logical px). Everything is placed absolutely:
+   each place a person stands in is its own portrait and link line, which fade
+   in and out with the step. Nothing travels. */
 const LEFT = 64;
 const RIGHT = 1856;
 const LOGO_X0 = 372;
@@ -19,7 +20,7 @@ const PORTRAIT = 100;
 const INLINE_PORTRAIT = 84; // a portrait standing beside its logo inside a layer
 const FLAG_GAP = 8; // between a logo and its flags
 const PRODUCT_GAP = 30; // from the top of the flags to the product chip (ChatGPT, Claude)
-const LANE_Y = 46; // top of the portraits in the lane above the labs (room above for hop arrows)
+const LANE_Y = 46; // top of the portraits in the lane above the labs
 const LINK_FROM_Y = 190; // just under the names
 const LAYER_BOX: Record<LayerId, { top: number; height: number; rows: number }> = {
   labs: { top: 206, height: 252, rows: 2 },
@@ -81,17 +82,6 @@ function portraitOrigin(move: PersonMove): { x: number; y: number } {
   return { x: personX(move) - PORTRAIT / 2, y: LANE_Y };
 }
 
-/** Arc over the portrait lane for a hop, from the start organisation to the new one. */
-export function hopArc(move: PersonMove): string | null {
-  if (!move.from) return null;
-  const x1 = personX({ ...move, org: move.from.org, dx: move.from.dx });
-  const x2 = personX(move);
-  const y = LANE_Y - 4;
-  const mid = (x1 + x2) / 2;
-  const toward = x2 > x1 ? -1 : 1;
-  return `M ${x1} ${y} Q ${mid} ${y - 64} ${x2 + toward * 30} ${y}`;
-}
-
 const COPY = {
   label: { en: "The AI industry, layer by layer" },
   sources: { en: "Sources for what is lit" },
@@ -101,8 +91,10 @@ const COPY = {
  * The whole industry as a stack: machines that make chips, chip factories,
  * chip designers, data centers and cloud, AI labs. Every mark is drawn in one
  * ink and starts dimmed; each step lights only what the presenter talks about.
- * Portraits move between organisations, with a line to where each person
- * works; lines detach before a move and draw in after it. No state.
+ * Portraits stand at the organisation where each person works, linked to it by
+ * a line. Every change is one click and a plain fade: when a person changes
+ * organisation, the old portrait and line fade out as the new ones fade in.
+ * No state.
  */
 export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>>) {
   const { locale, role } = ctx;
@@ -190,51 +182,36 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
       )}
 
       <svg className={styles.links} viewBox="0 0 1920 1080" aria-hidden="true">
-        <defs>
-          <marker id="industry-hop-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--color-accent)" />
-          </marker>
-        </defs>
-        {[...placements.values()]
-          .filter((m) => m.org !== null)
-          .map((m) => {
-            const target = ACTORS.get(m.org!)!;
-            const x = personX(m);
-            const hopping = m.step === step && m.from !== undefined;
-            const d = m.inline
-              ? `M ${x - INLINE_PORTRAIT / 2 - 6} ${target.y - 10} L ${target.x + target.w / 2 + 10} ${target.y - 10}`
-              : `M ${x} ${LINK_FROM_Y} L ${target.x} ${target.y - target.h / 2 - 10}`;
-            return <path key={`${m.person}-${m.org}`} className={`${styles.link} ${hopping ? styles.linkLate : ""}`} d={d} pathLength={1} />;
-          })}
-        {MOVES.filter((m) => m.step === step && m.from).map((m) => [
-          <path key={`hop-${m.person}`} className={styles.hop} d={hopArc(m)!} pathLength={1} />,
-          // The arrowhead rides on an unstroked copy so it can appear once the arc is drawn.
-          <path key={`hop-head-${m.person}`} className={styles.hopHead} d={hopArc(m)!} markerEnd="url(#industry-hop-arrow)" />,
-        ])}
+        {MOVES.filter((m) => m.org !== null).map((m) => {
+          const target = ACTORS.get(m.org!)!;
+          const x = personX(m);
+          const d = m.inline
+            ? `M ${x - INLINE_PORTRAIT / 2 - 6} ${target.y - 10} L ${target.x + target.w / 2 + 10} ${target.y - 10}`
+            : `M ${x} ${LINK_FROM_Y} L ${target.x} ${target.y - target.h / 2 - 10}`;
+          const shown = placements.get(m.person) === m;
+          return (
+            <path
+              key={`${m.person}@${m.step}`}
+              className={`${styles.link} ${shown ? styles.shown : styles.hidden}`}
+              d={d}
+              data-link={shown ? `${m.person}-${m.org}` : undefined}
+            />
+          );
+        })}
       </svg>
 
-      {PEOPLE.map((person) => {
-        const move = placements.get(person.id) ?? waitingPlace(person.id);
-        if (!move) return null;
-        const shown = placements.has(person.id);
+      {MOVES.map((move) => {
+        const person = PEOPLE.find((p) => p.id === move.person)!;
+        const shown = placements.get(move.person) === move;
         const image = getStoryImage(person.image);
         const at = portraitOrigin(move);
-        const hopping = shown && move.step === step && move.from !== undefined;
-        const fromAt = hopping ? portraitOrigin({ ...move, org: move.from!.org, dx: move.from!.dx }) : at;
-        const style = {
-          transform: `translate(${at.x}px, ${at.y}px)`,
-          "--from-x": `${fromAt.x}px`,
-          "--from-y": `${fromAt.y}px`,
-          "--to-x": `${at.x}px`,
-          "--to-y": `${at.y}px`,
-        } as CSSProperties;
         return (
           <figure
-            key={person.id}
-            className={`${styles.person} ${shown ? styles.shown : styles.hidden} ${move.org === null ? styles.apart : ""} ${move.inline ? styles.inline : ""} ${hopping ? styles.hopping : ""}`}
-            style={style}
+            key={`${move.person}@${move.step}`}
+            className={`${styles.person} ${shown ? styles.shown : styles.hidden} ${move.org === null ? styles.apart : ""} ${move.inline ? styles.inline : ""}`}
+            style={{ transform: `translate(${at.x}px, ${at.y}px)` }}
             aria-hidden={!shown}
-            data-person={person.id}
+            data-person={shown ? person.id : undefined}
             data-org={shown ? (move.org ?? "none") : undefined}
           >
             {image ? <img className={styles.portrait} src={image.url} alt="" draggable={false} /> : <span className={styles.portrait} />}

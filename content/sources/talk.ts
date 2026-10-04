@@ -820,13 +820,13 @@ export const talkSources: SourceRecord[] = [
     url: "https://www.pewresearch.org/internet/2025/04/03/how-the-us-public-and-ai-experts-view-artificial-intelligence/",
     publisher: "Pew Research Center",
     date: "2025-04-03",
-    retrieved: "2026-10-03",
+    retrieved: "2026-10-04",
     kind: "report",
     claim:
-      "Surveys of 5,410 U.S. adults (12 to 18 August 2024) and 1,013 U.S.-based AI experts (authors and presenters at 21 AI conferences, 14 August to 31 October 2024): 51% of adults vs 15% of experts say they are more concerned than excited about the increased use of AI in daily life (11% vs 47% more excited than concerned); 17% of adults vs 56% of experts think AI will have a very or somewhat positive impact on the United States over the next 20 years.",
+      "Surveys of 5,410 U.S. adults (12 to 18 August 2024) and 1,013 U.S.-based AI experts (authors and presenters at 21 AI conferences, 14 August to 31 October 2024): 51% of adults vs 15% of experts say they are more concerned than excited about the increased use of AI in daily life (11% vs 47% more excited than concerned); 17% of adults vs 56% of experts think AI will have a very or somewhat positive impact on the United States over the next 20 years, and 35% of adults vs 15% of experts a very or somewhat negative one (33% vs 23% equally positive and negative, 16% vs 6% unsure).",
     evidence: "observed",
     verification: "verified",
-    notes: "Question wording as summarised in the report; the exact questionnaire is in Pew's topline PDF (not opened). Experts are a non-probability sample.",
+    notes: "Question wording as summarised in the report; the exact questionnaire is in Pew's topline PDF (not opened). Experts are a non-probability sample. The negative-impact figures are in the report's chapter \"Public and expert predictions for AI's next 20 years\" (https://www.pewresearch.org/internet/2025/04/03/public-and-expert-predictions-for-ais-next-20-years/).",
   },
   {
     id: "tk-grace-2024-ai-authors",

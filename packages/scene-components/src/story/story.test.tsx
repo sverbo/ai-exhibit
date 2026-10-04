@@ -16,7 +16,7 @@ import { candidateAt, DEMO_CIPHERTEXT, DEMO_CRIB, DEMO_PLAINTEXT, DEMO_SETTINGS,
 import { AI_MILESTONES, ENVELOPES, logoBox } from "./data.ts";
 import { INDUSTRY_STEPS, LAYERS, MOVES, PEOPLE, placementsAt } from "./industry.ts";
 import { COUNTRY_NAMES, flagImageId, HEADQUARTERS } from "./countries.ts";
-import { hopArc, IndustryStack, layoutActors, personX } from "./IndustryStack.tsx";
+import { IndustryStack, layoutActors, personX } from "./IndustryStack.tsx";
 import { CAMERAS, CROWD, CROWD_STEP, CROWD_TRAITS, FIGURES, INTELLIGENCE_STEPS, IntelligenceScale, LOOP_CAPTION, LOOP_GROWTH, LOOP_NAME, LOOP_NODES, LOOP_STEP, screenX } from "./IntelligenceScale.tsx";
 
 const byId = new Map<string, SourceRecord>(sources.map((s) => [s.id, s]));
@@ -75,6 +75,7 @@ describe("story data", () => {
       ["ai-winters", "setback"],
       ["deep-blue-1997", "promise"],
       ["deep-learning-2012", "promise"],
+      ["alphago-2016", "promise"],
       ["transformer-2017", "promise"],
       ["gpt2-2019", "promise"],
       ["gpt3-2020", "promise"],
@@ -84,7 +85,9 @@ describe("story data", () => {
     expect(winter.period).toBe(true);
     expect(winter.sourceIds).toEqual(expect.arrayContaining(["st-lighthill-1973-report", "st-wiki-perceptrons-book", "st-wiki-expert-system", "st-wiki-ai-winter"]));
     expect(AI_MILESTONES.find((m) => m.id === "deep-learning-2012")!.text.en).toContain("CNN");
-    expect(timelineSteps()).toBe(9);
+    expect(timelineSteps()).toBe(10);
+    // Go contrasts with chess: learned from games, not rules written by people.
+    expect(AI_MILESTONES.find((m) => m.id === "alphago-2016")!.text.en).toContain("against itself");
     expect(AI_MILESTONES.find((m) => m.id === "enigma-1939")!.demo).toBe("bombe");
     const companies = /openai|google|deepmind|microsoft|anthropic|meta\b|nvidia|amazon|\bibm\b/i;
     for (const m of AI_MILESTONES) {
@@ -237,19 +240,20 @@ describe("IndustryStack", () => {
 
   it("lights entries in the briefed order", () => {
     const lit = (step: number) => actors.filter((a) => a.lightAt === step).map((a) => a.id);
-    expect(INDUSTRY_STEPS).toBe(12);
+    expect(INDUSTRY_STEPS).toBe(13);
     expect(lit(1)).toEqual(["google-deepmind"]);
     expect(lit(2)).toEqual([]);
     expect(lit(3)).toEqual(["openai"]);
     expect(lit(4)).toEqual([]);
-    expect(lit(5)).toEqual(["anthropic"]);
-    expect(lit(6)).toEqual(["xai"]);
-    expect(lit(7)).toEqual(["meta"]);
-    expect(lit(8)).toEqual(["mistral"]);
-    expect(lit(9)).toEqual(["deepseek", "qwen", "moonshot-ai", "zai"]);
-    expect(lit(10)).toEqual(["nvidia"]);
-    expect(lit(11)).toEqual(["tsmc"]);
-    expect(lit(12)).toEqual(["asml"]);
+    expect(lit(5)).toEqual([]);
+    expect(lit(6)).toEqual(["anthropic"]);
+    expect(lit(7)).toEqual(["xai"]);
+    expect(lit(8)).toEqual(["meta"]);
+    expect(lit(9)).toEqual(["mistral"]);
+    expect(lit(10)).toEqual(["deepseek", "qwen", "moonshot-ai", "zai"]);
+    expect(lit(11)).toEqual(["nvidia"]);
+    expect(lit(12)).toEqual(["tsmc"]);
+    expect(lit(13)).toEqual(["asml"]);
   });
 
   it("every move is sourced, localized and points at a known lab", () => {
@@ -269,14 +273,40 @@ describe("IndustryStack", () => {
     expect(placementsAt(3).get("elon-musk")?.org).toBe("openai");
     expect(placementsAt(4).get("elon-musk")?.org).toBeNull();
     expect(placementsAt(4).has("dario-amodei")).toBe(false);
-    const dario = placementsAt(5).get("dario-amodei")!;
-    expect([dario.from?.org, dario.org]).toEqual(["openai", "anthropic"]);
-    expect(placementsAt(6).get("elon-musk")?.org).toBe("xai");
-    const mensch = placementsAt(8).get("arthur-mensch")!;
-    expect([mensch.from?.org, mensch.org]).toEqual(["google-deepmind", "mistral"]);
-    expect(placementsAt(9).has("jensen-huang")).toBe(false);
-    expect(placementsAt(10).get("jensen-huang")).toMatchObject({ org: "nvidia", inline: true });
-    for (const m of MOVES.filter((x) => x.from)) expect(hopArc(m)).toMatch(/^M /);
+    expect(placementsAt(5).get("dario-amodei")?.org).toBe("openai");
+    expect(placementsAt(6).get("dario-amodei")?.org).toBe("anthropic");
+    expect(placementsAt(6).get("elon-musk")?.org).toBeNull();
+    expect(placementsAt(7).get("elon-musk")?.org).toBe("xai");
+    expect(placementsAt(8).has("arthur-mensch")).toBe(false);
+    expect(placementsAt(9).get("arthur-mensch")?.org).toBe("mistral");
+    expect(placementsAt(10).has("jensen-huang")).toBe(false);
+    expect(placementsAt(11).get("jensen-huang")).toMatchObject({ org: "nvidia", inline: true });
+  });
+
+  it("changes one thing per click: a person appears or moves only on its own step or with the lab it joins", () => {
+    // A lab never lights on the same click as a move to another organisation.
+    for (let step = 1; step <= INDUSTRY_STEPS; step++) {
+      const lit = actors.filter((a) => a.lightAt === step).map((a) => a.id);
+      const moves = MOVES.filter((m) => m.step === step);
+      if (lit.length) for (const m of moves) expect(m.org === null || lit.includes(m.org), `step ${step}`).toBe(true);
+      expect(lit.length + moves.length, `step ${step} changes nothing`).toBeGreaterThan(0);
+    }
+    // Arthur Mensch simply appears at Mistral when Mistral lights: no earlier place.
+    expect(MOVES.filter((m) => m.person === "arthur-mensch").map((m) => [m.step, m.org])).toEqual([[9, "mistral"]]);
+  });
+
+  it("only the current place of each person is visible: no travel, no hop, no staged drawing", () => {
+    for (let step = 0; step <= INDUSTRY_STEPS; step++) {
+      const html = render(IndustryStack, {}, ctx("display", step, "en"));
+      const shown = [...html.matchAll(/data-person="([^"]+)" data-org="([^"]+)"/g)].map((m) => `${m[1]}:${m[2]}`);
+      const expected = [...placementsAt(step).values()].map((m) => `${m.person}:${m.org ?? "none"}`);
+      expect(shown.sort(), `step ${step}`).toEqual(expected.sort());
+      const links = [...html.matchAll(/data-link="([^"]+)"/g)].map((m) => m[1]);
+      expect(links.length, `step ${step}`).toBe(expected.filter((e) => !e.endsWith(":none")).length);
+      expect(html).not.toMatch(/<marker|industry-hop/);
+    }
+    const css = readFileSync(new URL("./IndustryStack.module.css", import.meta.url), "utf8");
+    expect(css).not.toMatch(/animation-delay|\d+ms both|transition:\s*transform/);
   });
 
   it("portraits never overlap and logos stay inside the stage", () => {

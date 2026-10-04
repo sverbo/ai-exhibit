@@ -46,11 +46,14 @@ const TEXT = {
     { en: "What we imagined: it picks everything up and empties it into the bin." },
     { en: "What optimization finds: pick up, drop, pick up again." },
     { en: "We patch the objective. Optimization finds another loophole." },
+    { en: "This gap has a name: misalignment." },
   ],
   disclosure: { en: "A simplified toy built for this talk. Not a real incident." },
   objective: { en: "What we reward" },
   intent: { en: "What we actually wanted" },
   intentText: { en: "A clean room." },
+  misalignment: { en: "Misalignment" },
+  misalignmentText: { en: "The gap between what an AI is rewarded for and what we actually wanted." },
   objectives: {
     collect: { en: "+1 point per piece of dirt picked up" },
     unseen: { en: "+1 point for every moment the camera sees no dirt" },
@@ -84,6 +87,10 @@ const TEXT = {
   },
 };
 
+/** Last reveal step: default mode adds a step that names the gap (misalignment); simple mode stops at the patch. */
+const LAST_STEP = 4;
+const LAST_SIMPLE_STEP = 3;
+
 function stepPlan(step: number): { objective: ObjectiveId; strategy: StrategyId | null } {
   if (step <= 0) return { objective: "collect", strategy: null };
   if (step === 1) return { objective: "collect", strategy: "honest" };
@@ -96,7 +103,7 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
   const { locale, revealStep, role, reducedMotion } = ctx;
   const isController = role === "controller";
   const simple = props.simple === true;
-  const step = Math.max(0, Math.min(3, revealStep));
+  const step = Math.max(0, Math.min(simple ? LAST_SIMPLE_STEP : LAST_STEP, revealStep));
   const t = (x: L10n) => tr(x, locale);
   // Entering the scene on a replay step starts the replay at once.
   const [state, setState] = useSceneState<GoalVsOutcomeState>(ctx, () => ({
@@ -116,8 +123,10 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
   // ----- controller clock -----
   const restart = () =>
     setState((s) => ({ ...s, tick: reducedMotion ? HORIZON : 0, playing: !reducedMotion, run: s.run + 1 }));
-  useOnStepChange(step, () => {
-    if (isController) setState((s) => ({ ...s, pick: null, tick: reducedMotion ? HORIZON : 0, playing: !reducedMotion, run: s.run + 1 }));
+  // Naming the gap (step 4) keeps the step 3 replay on screen instead of restarting it.
+  useOnStepChange(step, (next, prev) => {
+    const samePlan = Math.min(next, 3) === Math.min(prev, 3);
+    if (isController && !samePlan) setState((s) => ({ ...s, pick: null, tick: reducedMotion ? HORIZON : 0, playing: !reducedMotion, run: s.run + 1 }));
   });
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => {
@@ -137,6 +146,7 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
   const score = frame.score[plan.objective];
   const clean = frame.binned / INITIAL_DIRT.length;
   const showRanking = step >= 2;
+  const showMisalignment = step >= 4;
 
   const playback = isController && strategy && (
     <ControlBar>
@@ -206,6 +216,12 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
               <span className={styles.cardLabel}>{t(TEXT.intent)}</span>
               <span className={styles.cardText}>{t(TEXT.intentText)}</span>
             </div>
+            {showMisalignment && (
+              <div className={styles.gap} data-misalignment="">
+                <span className={styles.gapLabel}>{t(TEXT.misalignment)}</span>
+                <span className={styles.gapText}>{t(TEXT.misalignmentText)}</span>
+              </div>
+            )}
           </div>
 
           <div className={styles.meters}>

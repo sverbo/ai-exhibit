@@ -105,4 +105,20 @@ describe("embedding components render in every role, step and locale", () => {
     }
     expect(render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "en"))).toContain("Show all words");
   });
+
+  it("gives the presenter a Show all words toggle in the search panel, in 2D and 3D", () => {
+    const toggle = /<button[^>]*aria-pressed="(true|false)"[^>]*>Show all words<\/button>/;
+    for (const view of ["2d", "3d"] as const) {
+      const html = render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "en", { view }));
+      expect(html).toMatch(toggle);
+      // One toggle, beside the view buttons: none left in the map corner.
+      expect(html.match(/Show all words/g)).toHaveLength(1);
+    }
+    const on = render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "en", { showAll: true }));
+    expect(on.match(toggle)?.[1]).toBe("true");
+    // The audience screens follow the labels, never the control.
+    for (const role of ["display", "preview"] as const) {
+      expect(render(EmbeddingExplorer, { mode: "search" }, ctx(role, 0, "en", { showAll: true }))).not.toContain("Show all words");
+    }
+  });
 });

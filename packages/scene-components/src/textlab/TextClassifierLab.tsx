@@ -41,7 +41,7 @@ export interface TextClassifierLabState {
 export const TEXT_STEPS: Record<TextStage, number> = {
   task: 1,
   rules: 1,
-  tree: 1,
+  tree: 2,
   "tree-unseen": 1,
   network: 3,
   learning: 4,
@@ -74,7 +74,9 @@ const T = {
     subs: [
       { en: "24 sentences, each labelled by a person." },
       { en: "The machine picked these questions by itself, from the examples." },
+      { en: "One example at a time, down the tree." },
     ],
+    read: { en: "Each box asks: does the sentence contain this word? Follow yes or no down to an answer." },
     says: { en: "The tree says" },
     prev: { en: "Previous example" },
     next: { en: "Next example" },
@@ -218,7 +220,7 @@ export function TextClassifierLab({ props, ctx }: SceneComponentProps<TextClassi
       const n = pick(SMALL_SET, locale).length;
       const example = (((state.example ?? TREE_EXAMPLE) % n) + n) % n;
       body = <TreeStage step={step} t={t} locale={locale} example={example} />;
-      if (isController && step >= 1) {
+      if (isController && step >= 2) {
         controls = (
           <>
             <SceneButton onClick={() => setState({ ...state, example: example - 1 })}>{t(T.tree.prev)}</SceneButton>
@@ -500,7 +502,18 @@ function pathMarks(text: string, locale: Locale, steps: TreeStep[]): Map<number,
   return out;
 }
 
-function TreeStage({ step, t, locale, example }: { step: number; t: Tr; locale: Locale; example: number }) {
+/**
+ * 0 the 24 labelled sentences, 1 the learned tree alone (no sentence, no
+ * path), 2 one example walks down the tree (previous / next on the controller).
+ *
+ * Steps 1 and 2 return one layout keyed by the example: going from the tree
+ * alone to the first walk keeps the DOM, so the path lights up smoothly, while
+ * a new example mounts fresh. Reusing the DOM across examples made the CSS
+ * transitions start from the previous example: its highlight slid onto
+ * whatever word of the new sentence sat at the same position, and its leaf
+ * stayed lit while the new verdict was already printed.
+ */
+export function TreeStage({ step, t, locale, example }: { step: number; t: Tr; locale: Locale; example: number }) {
   const set = pick(SMALL_SET, locale);
   if (step === 0) {
     return (
@@ -517,21 +530,33 @@ function TreeStage({ step, t, locale, example }: { step: number; t: Tr; locale: 
       </div>
     );
   }
-  const s = set[example]!;
   const tree = textTree(locale);
+  const walk = step >= 2;
+  const s = set[example]!;
   const { steps, verdict } = treePath(tree, wordSet(s.text, locale));
   return (
-    <div className={styles.treeLayout}>
+    <div className={styles.treeLayout} key={`example-${example}`} data-example={walk ? example : undefined}>
       <div className={styles.treeTop}>
-        <Sentence text={s.text} locale={locale} marks={pathMarks(s.text, locale, steps)} className={styles.bigSentence} />
+        {walk ? (
+          <Sentence text={s.text} locale={locale} marks={pathMarks(s.text, locale, steps)} className={styles.bigSentence} />
+        ) : (
+          <p className={styles.treeRead}>{t(T.tree.read)}</p>
+        )}
       </div>
       <div className={styles.treeRow}>
         <div className={styles.treeCol}>
-          <TreeDiagram tree={tree} width={1100} levelH={190} text={treeText(t, locale)} path={steps} verdictWrong={verdict !== s.label} />
+          <TreeDiagram
+            tree={tree}
+            width={1100}
+            levelH={190}
+            text={treeText(t, locale)}
+            path={walk ? steps : undefined}
+            verdictWrong={walk && verdict !== s.label}
+          />
         </div>
         <div className={styles.treeSide}>
-          <Truth sport={s.label} t={t} />
-          <Verdict who={t(T.tree.says)} sport={verdict} right={verdict === s.label} t={t} />
+          {walk && <Truth sport={s.label} t={t} />}
+          {walk && <Verdict who={t(T.tree.says)} sport={verdict} right={verdict === s.label} t={t} />}
           <p className={styles.score}>
             {locale === "fr"
               ? `Apprises sur 24 exemples. Juste pour ${SCORES.fr.treeSmall} d'entre eux.`

@@ -119,6 +119,15 @@ async function request<T>(path: string, init: RequestInit, opts: CloudOptions): 
   }
 }
 
+/**
+ * The server refuses longer texts (MAX_INPUT_CHARS in packages/cloud-api): trim
+ * before sending. A continuation keeps the end of its prompt, the part that
+ * matters for the next words; other texts keep their start.
+ */
+export const MAX_INPUT_CHARS = 300;
+const keepEnd = (text: string) => (text.length > MAX_INPUT_CHARS ? text.slice(-MAX_INPUT_CHARS) : text);
+const keepStart = (text: string) => text.slice(0, MAX_INPUT_CHARS);
+
 export function cloudStatus(opts: CloudOptions = {}): Promise<CloudStatus> {
   return request<CloudStatus>("/api/llm/status", { method: "GET" }, { timeoutMs: 6000, ...opts });
 }
@@ -130,7 +139,7 @@ export function cloudComplete(
 ): Promise<CloudCompletion> {
   return request<CloudCompletion>(
     "/api/llm/complete",
-    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(req) },
+    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...req, prompt: keepEnd(req.prompt) }) },
     opts,
   );
 }
@@ -142,7 +151,11 @@ export function cloudChat(
 ): Promise<CloudChatAnswer> {
   return request<CloudChatAnswer>(
     "/api/llm/chat",
-    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(req) },
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...req, messages: req.messages.map((m) => ({ ...m, content: keepStart(m.content) })) }),
+    },
     opts,
   );
 }
@@ -162,7 +175,7 @@ export interface CloudEmbedding {
 export function cloudEmbed(texts: string[], opts: CloudOptions = {}): Promise<CloudEmbedding> {
   return request<CloudEmbedding>(
     "/api/embed",
-    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ texts }) },
+    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ texts: texts.map(keepStart) }) },
     { timeoutMs: 15_000, ...opts },
   );
 }
@@ -200,7 +213,7 @@ export interface CloudNextToken {
 export function cloudNextToken(req: { prompt: string; temperature?: number }, opts: CloudOptions = {}): Promise<CloudNextToken> {
   return request<CloudNextToken>(
     "/api/llm/next",
-    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(req) },
+    { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...req, prompt: keepEnd(req.prompt) }) },
     opts,
   );
 }

@@ -7,7 +7,7 @@ import { Rich } from "../primitives/Rich.tsx";
 import { decideSource, requestedSource, resetCloudStatus, useCloudStatus } from "../language/source.ts";
 import { SourceBadge } from "../language/ui.tsx";
 import { Cloud3D } from "./Cloud3D.tsx";
-import { EXPLORER, formatSimilarity, TRAINING, tr } from "./copy.ts";
+import { EXPLORER, formatSimilarity, MAP_CONTROLS, TRAINING, tr } from "./copy.ts";
 import { clusterColor, useEmbeddingSpace } from "./data.ts";
 import { InteractiveMap } from "./InteractiveMap.tsx";
 import { NeighbourCard, selectionMarks } from "./Selection.tsx";
@@ -165,6 +165,21 @@ function ViewToggle({ ctx, state }: { ctx: Ctx; state: ExplorerState }) {
         {tr(EXPLORER.view3d, ctx.locale)}
       </button>
     </div>
+  );
+}
+
+/**
+ * "Show all words" beside the view buttons, where the presenter looks for the
+ * map's controls (a pill in the map corner was easy to miss on the presenter's
+ * small stage, and the 3D cloud has none). Labels are a 2D map feature, so
+ * turning it on from the 3D cloud goes back to the map.
+ */
+function ShowAllToggle({ state, locale, patch }: { state: ExplorerState; locale: Locale; patch: (next: Partial<ExplorerState>) => void }) {
+  const on = Boolean(state.showAll) && (state.view ?? "2d") === "2d";
+  return (
+    <button type="button" className={styles.button} aria-pressed={on} onClick={() => patch(on ? { showAll: false } : { showAll: true, view: "2d" })}>
+      {tr(MAP_CONTROLS.showAll, locale)}
+    </button>
   );
 }
 
@@ -351,7 +366,6 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               labelBudget={query ? 120 : preview ? 0 : 200}
               zoomTarget={query?.position ?? null}
               showAll={!preview && Boolean(state.showAll)}
-              onShowAll={(on) => patch({ showAll: on })}
               interactive={controller}
               camera={preview ? null : state.camera}
               onCamera={(c) => patch({ camera: c })}
@@ -389,6 +403,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
                   </button>
                 )}
                 <ViewToggle ctx={ctx} state={state} />
+                <ShowAllToggle state={state} locale={locale} patch={patch} />
               </div>
               {!query && <p className={styles.hint}>{tr(useModel ? EXPLORER.tryThese : EXPLORER.tryVocabulary, locale)}</p>}
             </form>

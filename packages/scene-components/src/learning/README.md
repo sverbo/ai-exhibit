@@ -20,7 +20,7 @@ Every component accepts an optional `heading: L10n` that replaces its default ti
 
 ## GoalVsOutcome
 
-Props: `{ simple?: boolean }`. Used by 8.2 and by 04-loss-of-control (`simple: true`).
+Props: `{ simple?: boolean }`. Used by 8.2 and by 04-loss-of-control (default mode).
 
 ### `simple: true`: pictures, one line per step
 
@@ -54,5 +54,6 @@ click any ranked strategy to replay it.
 | 1 | same | the intended one: pick up and empty into the bin (score 6, room clean) |
 | 2 | same | the optimizer's pick: pick up, drop, pick up again (score 29, room dirty) |
 | 3 | +1 per moment the camera sees no dirt | the new pick: park in front of the camera (score 58); hiding dirt under the rug also beats cleaning |
+| 4 | same | nothing new (the step 3 replay stays); a band under the two cards names the gap: "Misalignment: the gap between what an AI is rewarded for and what we actually wanted" |
 
-`scene.steps`: 3.
+`scene.steps`: 4 (3 without the naming step). Simple mode stops at step 3.

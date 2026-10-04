@@ -48,34 +48,45 @@ export interface Limits {
   timeoutMs: number;
   /** Requests per rolling minute (per client or for everyone, see `rateLimit`). */
   perMinute: number;
+  /**
+   * Model requests (everything that calls Hugging Face) per rolling hour and
+   * client address, all endpoints together. Tokenizing runs locally on the
+   * server and does not count.
+   */
+  perHour: number;
   bodyBytes: number;
 }
 
+/** Longest text any endpoint accepts in one field (prompt, message, text to embed or tokenize). */
+export const MAX_INPUT_CHARS = 300;
+
 /** The presenter's own machine. */
 export const LOCAL_LIMITS: Limits = {
-  promptChars: 2000,
+  promptChars: MAX_INPUT_CHARS,
   messages: 4,
   maxTokens: 160,
   defaultMaxTokens: 60,
   embedTexts: 16,
-  embedChars: 300,
-  tokenizeChars: 2000,
+  embedChars: MAX_INPUT_CHARS,
+  tokenizeChars: MAX_INPUT_CHARS,
   timeoutMs: 20_000,
   perMinute: 30,
+  perHour: 100,
   bodyBytes: 32_000,
 };
 
 /** A public deployment: smaller prompts and answers, a budget per visitor. */
 export const PUBLIC_LIMITS: Limits = {
-  promptChars: 1200,
+  promptChars: MAX_INPUT_CHARS,
   messages: 4,
   maxTokens: 120,
   defaultMaxTokens: 60,
   embedTexts: 4,
-  embedChars: 160,
-  tokenizeChars: 400,
+  embedChars: MAX_INPUT_CHARS,
+  tokenizeChars: MAX_INPUT_CHARS,
   timeoutMs: 20_000,
   perMinute: 20,
+  perHour: 100,
   bodyBytes: 16_000,
 };
 
@@ -288,9 +299,28 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const now = options.now ?? Date.now;
   const perClient = options.rateLimit === "per-client";
   const windows = new Map<string, number[]>();
+  const hours = new Map<string, number[]>();
   let reachable: { value: boolean; at: number } | null = null;
 
   const requiredCode = () => options.accessCode?.()?.trim() || null;
+
+  /** The hourly model budget, always per client address (in-memory: per server instance). */
+  const allowHour = (ip: string) => {
+    const key = ip || "unknown";
+    const t = now();
+    if (hours.size > 5000) {
+      for (const [k, list] of hours) if (!list.length || t - list[list.length - 1]! > 3_600_000) hours.delete(k);
+    }
+    const list = hours.get(key) ?? [];
+    while (list.length && t - list[0]! > 3_600_000) list.shift();
+    if (list.length >= limits.perHour) {
+      hours.set(key, list);
+      return false;
+    }
+    list.push(t);
+    hours.set(key, list);
+    return true;
+  };
 
   const allow = (ip: string) => {
     const key = perClient ? ip || "unknown" : "*";
@@ -493,6 +523,9 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
         const body = await readJson(request, limits);
         if (!tokenless.has(pathname) && !options.token()) throw new CloudError("not-configured", "HF_TOKEN is not set");
         if (!allow(client.ip)) throw new CloudError("rate-limited", `More than ${limits.perMinute} requests in a minute`);
+        if (!tokenless.has(pathname) && !allowHour(client.ip)) {
+          throw new CloudError("rate-limited", `More than ${limits.perHour} model requests in an hour from this address`);
+        }
         return jsonResponse(200, await route(body));
       } catch (err) {
         return errorResponse(err);

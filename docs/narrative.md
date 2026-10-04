@@ -66,24 +66,26 @@ thing in the middle? Let us open the box.
 
 ## Chapter 2. History and how it works
 
-**2.1 Envelopes.** "AI" is the big family: anything imitating human intelligence,
-even with rules written by people. Inside it, machine learning: the rules are
-learned from examples. Inside that, neural networks. Inside those, large language
-models: neural networks trained on text.
-
-**2.2 A very short history.** Promise, failure, promise. 1936: Turing describes
-one universal machine that can run any step-by-step procedure. 1939 to 1945: at
-Bletchley Park, building on Polish work, Turing helps break Enigma; on screen a
-Bombe starts from a guessed word ("Wetterbericht"), searches the settings, stops on
-the one that fits, and the message decodes: a machine finding settings from data,
-by search rather than learning. 1956: the name. 1958:
-the perceptron, the first neural network that learns. Then the AI winters of the
-1970s and 1980s: promises unmet, funding dries up. 1997: Deep Blue beats Kasparov
-with search and rules written by people. 2012: a neural network for images (a CNN)
-wins ImageNet on gaming graphics cards, and deep learning takes off. 2017: the
+**2.1 A very short history.** Before opening the box, where it comes from. Promise,
+failure, promise. 1936: Turing describes one universal machine that can run any
+step-by-step procedure. 1939 to 1945: at Bletchley Park, building on Polish work,
+Turing helps break Enigma; on screen a Bombe starts from a guessed word
+("Wetterbericht"), searches the settings, stops on the one that fits, and the
+message decodes: a machine finding settings from data, by search rather than
+learning. 1956: the name. 1958: the perceptron, the first neural network that
+learns. Then the AI winters of the 1970s and 1980s: promises unmet, funding dries
+up. 1997: Deep Blue beats Kasparov with search and rules written by people. 2012: a
+neural network for images (a CNN) wins ImageNet on gaming graphics cards, and deep
+learning takes off. 2016: AlphaGo beats Lee Sedol at Go, 4 games to 1; unlike Deep
+Blue, it learned from games, first human ones, then against itself. 2017: the
 Transformer, the T in GPT: an architecture that reads all the words at once, so
 training spreads over thousands of chips, far faster and hungry for electricity.
 Then GPT-2 and GPT-3.
+
+**2.2 Envelopes.** These eras left us a few words. "AI" is the big family: anything
+imitating human intelligence, even with rules written by people. Inside it, machine
+learning: the rules are learned from examples. Inside that, neural networks. Inside
+those, large language models: neural networks trained on text.
 
 **2.3 Football or basketball?** One running example for the eras. Short sentences
 about sport: which sport is it? Obvious to us. How would you explain it to a

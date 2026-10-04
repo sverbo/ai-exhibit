@@ -98,7 +98,7 @@ learns), then `network-fail`. Training is shown once, in `learning`.
 | --- | --- | --- | --- | --- |
 | `task` | One big sentence, "Football ? Basketball" | Four labelled sentences per sport | | 1 |
 | `rules` | The three-line rule, a sentence it gets right (keyword marked), "right on 18 of 24" | A new basketball sentence with "kicked" in it: the rule says football ("dunk" shown faint, never reached) | | 1 |
-| `tree` | The 24 labelled sentences | The learned tree; one example walks through it (path lit, tested word marked), "right on 23 of them" | | 1 |
+| `tree` | The 24 labelled sentences | The learned tree alone, to read its questions: no sentence, no path, no verdict; "Each box asks: does the sentence contain this word? Follow yes or no down to an answer.", "right on 23 of them" | One example walks through it (path lit, tested word marked, "To us", "The tree says"); previous / next example on the controller | 2 |
 | `tree-unseen` | The tree and the trap sentence, posed as a question: "What will the tree answer?", "The tree says ?" (no path, no word marked, no verdict) | Everything at once: "To us: football", "The tree says basketball" wrong, the path lit, "net" (or "baskets") marked | | 1 |
 | `network` | Words go in: chips lit, "1" on each (trap sentence) | Every connection is a weight: lines take thickness and colour, three of them labelled with their real number | Each neuron adds up what reaches it: neurons fill | Step 3, out come two scores: Football >99%, "On 200 new sentences: tree 58%, network 99.5%. And it gets the trap sentence right." | 3 |
 | `network-fail` | The failure goes through: Basketball 96%, wrong; stamp "Football"; "Confident, and wrong." | Open the hood: the diagram with every neuron's value, and a table of every drawn weight; "All the lines and numbers are there. None of them says why." | "We can test it. We cannot know in advance where it will fail." | 2 |
@@ -121,7 +121,14 @@ Example sentences (English / French):
 
 Controller only (published via state, small):
 
-- `tree`, step 1: previous / next example (`{ example }`).
+- `tree`, step 2: previous / next example (`{ example }`, any integer,
+  read modulo 24). Steps 1 and 2 render one layout keyed by the example: the
+  tree alone turns into the first walk smoothly (same DOM), and each new
+  example mounts afresh. Reusing the DOM across examples let the CSS
+  transitions start from the previous example (its highlight slid onto the
+  word at the same position in the new sentence, its leaf stayed lit for a
+  moment beside the new verdict). `render.test.tsx` checks every example on
+  the controller and the display, and the key.
 - `learning`, step 4: the training snapshot (`{ train }`: steps, sentences
   seen, current sentence, its drawn weights rounded, neuron values, output;
   under 1 KB). "Train again" (`trainRun`), "Skip to the end" (`trainSkip`).

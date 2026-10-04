@@ -5,7 +5,7 @@
  * the ready questions (typing disabled). The guardrail example asks a harmful
  * question: live, or its recorded real refusal.
  *
- * Reveal step 1 shows, next to the chat, the exact text the model reads: the
+ * Reveal step 1 shows, in place of the chat, the exact text the model reads: the
  * hidden (example) system prompt and the role tags of the model's own chat
  * template (rendered from its published template, never imitated), then the
  * answer as the continuation of that text, and the end token that stops it.
@@ -178,14 +178,20 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
       </>
     ) : null;
 
+  // With the hidden text shown, it takes the whole stage: it already holds the
+  // question and the answer (as the continuation), so the chat steps aside and
+  // every line stays visible above the controller's rail.
   return (
-    <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
+    <Frame controls={controls} label={tr(ctx.scene.title, locale)} mainClassName={showRaw ? styles.rawMain : undefined}>
       <header className={styles.head}>
         <span className={styles.title}>{tr(COPY.assistantTitle, locale)}</span>
         <span className={styles.model}>{view.turns.at(-1)?.model ?? CLOUD_LABEL}</span>
-        <span className={styles.sub}>{tr(COPY.assistantSub, locale)}</span>
+        {showRaw && view.turns.at(-1)?.source === "recorded" ? <span className={styles.recorded}>{tr(COPY.fallback, locale)}</span> : null}
+        {showRaw ? null : <span className={styles.sub}>{tr(COPY.assistantSub, locale)}</span>}
       </header>
-      <div className={cx(styles.body, showRaw && styles.split)}>
+      {showRaw ? (
+        <RawPanel turn={view.turns.at(-1) ?? null} locale={locale} />
+      ) : (
       <ol className={styles.chat}>
         {view.turns.map((t, i) => (
           <li key={i} className={styles.turn}>
@@ -204,8 +210,7 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
           </li>
         ))}
       </ol>
-      {showRaw ? <RawPanel turn={view.turns.at(-1) ?? null} locale={locale} /> : null}
-      </div>
+      )}
       {view.notice && role !== "preview" ? (
         <div className={styles.footer}>
           <Notice reason={view.notice} locale={locale} />
@@ -224,9 +229,23 @@ function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) 
   const ended = turn?.state === "done" && turn.stopReason === "eos" && turn.endTag;
   return (
     <section className={styles.raw} aria-label={tr(COPY.hiddenFormat, locale)}>
-      <header className={styles.rawHead}>{tr(COPY.hiddenFormat, locale)}</header>
+      <header className={styles.rawHeadRow}>
+        <span className={styles.rawHead}>{tr(COPY.hiddenFormat, locale)}</span>
+        {turn?.raw && turn.firstTokens?.[0]?.top.length ? (
+          <p className={styles.odds}>
+            {tr(COPY.firstWordOdds, locale)}{" "}
+            {turn.firstTokens[0].top.slice(0, 4).map((t, i) => (
+              <span key={i} className={styles.odd}>
+                <code>{t.token.replace(/\n/g, "↵")}</code> {Math.round(t.p * 100)}
+                {locale === "fr" ? " %" : "%"}
+              </span>
+            ))}
+          </p>
+        ) : null}
+      </header>
       {turn && turn.raw ? (
         <>
+          <div className={styles.rawScroll}>
           <pre className={styles.rawText}>
             {segments.map((seg, i) =>
               seg.kind === "newline" ? (
@@ -243,31 +262,24 @@ function RawPanel({ turn, locale }: { turn: Turn | null; locale: "fr" | "en" }) 
               <span className={cx(styles.tag, styles.endTag, !ended && styles.notReached)}>{turn.endTag}</span>
             ) : null}
           </pre>
+          </div>
           <ul className={styles.rawNotes}>
             <li>
               <span className={cx(styles.swatch, styles.roleSystem)} aria-hidden="true" />
-              <Rich text={tr(COPY.systemExample, locale)} />
+              {/* One span per note: the row is flex, and rich text has several nodes. */}
+              <span>
+                <Rich text={tr(COPY.systemExample, locale)} />
+              </span>
             </li>
             <li>
               <span className={cx(styles.swatch, styles.roleAssistant)} aria-hidden="true" />
-              {tr(COPY.continuesText, locale)}
+              <span>{tr(COPY.continuesText, locale)}</span>
             </li>
             <li>
               <span className={cx(styles.swatch, styles.endSwatch)} aria-hidden="true" />
-              {tr(COPY.endTagNote, locale)}
+              <span>{tr(COPY.endTagNote, locale)}</span>
             </li>
           </ul>
-          {turn.firstTokens?.[0]?.top.length ? (
-            <p className={styles.odds}>
-              {tr(COPY.firstWordOdds, locale)}{" "}
-              {turn.firstTokens[0].top.slice(0, 4).map((t, i) => (
-                <span key={i} className={styles.odd}>
-                  <code>{t.token.replace(/\n/g, "↵")}</code> {Math.round(t.p * 100)}
-                  {locale === "fr" ? "\u00a0%" : "%"}
-                </span>
-              ))}
-            </p>
-          ) : null}
         </>
       ) : (
         <p className={styles.rawEmpty}>{tr(COPY.rawEmpty, locale)}</p>

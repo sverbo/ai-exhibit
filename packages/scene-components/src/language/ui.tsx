@@ -30,16 +30,19 @@ export function Frame({
   children,
   controls,
   className,
+  mainClassName,
   label,
 }: {
   children?: ReactNode;
   controls?: ReactNode;
   className?: string;
+  /** Extra class on the content area, e.g. to tighten its padding. */
+  mainClassName?: string;
   label?: string;
 }) {
   return (
     <section className={cx(styles.frame, className)} aria-label={label === undefined ? undefined : plainText(label)}>
-      <div className={styles.main}>{children}</div>
+      <div className={cx(styles.main, mainClassName)}>{children}</div>
       {controls ? (
         <div className={styles.rail} data-keys-local="">
           {controls}

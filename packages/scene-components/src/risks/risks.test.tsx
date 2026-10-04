@@ -10,7 +10,7 @@ import { IncidentStory, incidentBeatAt } from "./IncidentStory.tsx";
 import { PictureCards, pictureCardsLayout, pictureCardsSteps, visiblePictureCards, type PictureCardsProps } from "./PictureCards.tsx";
 import { chapter05 } from "../../../../presentations/canonical/src/scenes/05-closing.ts";
 import { isPictureId, PICTURE_IDS, Picture } from "./pictures.tsx";
-import { OpinionGap, opinionGapSteps, type OpinionGapProps } from "./OpinionGap.tsx";
+import { OpinionGap, opinionGapSteps, orderedBars, type OpinionGapProps } from "./OpinionGap.tsx";
 import { ResourceList } from "./ResourceList.tsx";
 import { resources } from "@ai-exhibit/content/glossary";
 import { SingleCase, singleCaseSteps, type SingleCaseProps } from "./SingleCase.tsx";
@@ -247,6 +247,21 @@ describe("OpinionGap (04-opinions)", () => {
       expect(html.match(/data-shown=""/g)?.length ?? 0).toBe(step + 1);
     }
     expect(render(OpinionGap, props, ctx("preview", 0, "fr")).match(/data-shown=""/g)?.length).toBe(props.rows.length);
+  });
+
+  it("draws every row the same way: public above experts, whatever the data order", () => {
+    const groups = (html: string) => [...html.matchAll(/data-group="(\w+)"/g)].map((m) => m[1]);
+    const html = render(OpinionGap, props, ctx("preview", 0, "en"));
+    const expected = props.rows.flatMap((row) => orderedBars(row.bars).map((b) => b.group));
+    expect(groups(html)).toEqual(expected);
+    expect(expected.join(" ")).toBe("public experts public experts experts");
+    // Both Pew rows ask a worry question ("Who worries more?"), so the public's bar is the longer one in each.
+    for (const row of props.rows.filter((r) => r.bars.length === 2)) {
+      const [pub, exp] = orderedBars(row.bars);
+      expect(pub!.value, row.question.en).toBeGreaterThan(exp!.value);
+    }
+    const swapped = { ...props, rows: props.rows.map((row) => ({ ...row, bars: [...row.bars].reverse() })) };
+    expect(groups(render(OpinionGap, swapped, ctx("preview", 0, "en")))).toEqual(expected);
   });
 });
 

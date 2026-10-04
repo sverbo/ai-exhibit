@@ -10,8 +10,9 @@ import { partOpener } from "../chapters.ts";
 const baseVsInstructPrompt: L10n = {  en: "How can I sleep better?" };
 
 /**
- * Chapter 02: how it works (storyboard v1, scenes 2.1 to 2.20).
- * AI, machine learning and neural networks through one running example (is a
+ * Chapter 02: history and how it works (storyboard v1, scenes 2.1 to 2.19).
+ * A very short history first, then the words (AI, machine learning, neural
+ * networks), then those eras through one running example (is a
  * sentence about football or basketball?), then language models with the same
  * vocabulary. Numbers and network diagrams appear only in the text classifier
  * scenes and the training scene.
@@ -19,46 +20,14 @@ const baseVsInstructPrompt: L10n = {  en: "How can I sleep better?" };
 export const chapter02: SceneDefinition[] = [
   partOpener("02", "phow"),
   {
-    id: "02-envelopes",
-    code: "nest",
-    steps: 3,
-    chapter: "02",
-    number: "2.1",
-    title: { en: "AI, machine learning, neural networks" },
-    objective: {
-      en: "Place the words: AI contains machine learning, which contains neural networks, which contain language models.",
-    },
-    takeaway: {
-      en: "AI is the big family; language models are one small, recent branch of it.",
-    },
-    visual: { layout: "component", component: "AIEnvelopes", props: {} },
-    interaction: "presenter",
-    speakerNotes: {
-      en: `- AI: anything that imitates human intelligence, even rules written by people
-- Machine learning: the rules are learned from examples
-- Neural networks, also called "deep learning" (many layers): one way of learning, loosely inspired by the brain
-- Language models (LLMs): neural networks trained on text
-- Each circle sits inside the previous one`,
-    },
-    transitionIn: { en: "From what it does to what it is." },
-    transitionOut: { en: "These words have a history." },
-    evidenceLevel: "none",
-    sourceIds: [],
-    runtimeClass: "A",
-    artifacts: [],
-    fallback: { kind: "deterministic" },
-    durationSec: 120,
-    optional: false,
-  },
-  {
     id: "02-short-history",
     code: "hist",
-    steps: 9,
+    steps: 10,
     chapter: "02",
-    number: "2.2",
+    number: "2.1",
     title: { en: "A very short history" },
     objective: {
-      en: "Give a very short history of the field, from Turing's universal machine to the Transformer, GPT-2 and GPT-3.",
+      en: "Give a very short history of the field, from Turing's universal machine to Go, the Transformer, GPT-2 and GPT-3.",
     },
     takeaway: {
       en: "AI is an old idea; what changed recently is learning from huge amounts of data.",
@@ -74,12 +43,11 @@ export const chapter02: SceneDefinition[] = [
 - Click 4, 1970s to 1980s: the AI winters. Promises unmet, simple networks hit their limits, rule-based expert systems prove brittle, funding dries up twice
 - Click 5, 1997: Deep Blue beats Kasparov at chess with search and scoring rules written by people
 - Click 6, 2012: a neural network for images (a CNN) wins the ImageNet contest, trained on two gaming graphics cards: deep learning takes off
-- Click 7, 2017: the Transformer, the T in GPT: it reads all the words at once, so training spreads over thousands of chips; far faster, but hungry for electricity. Clicks 8 and 9: GPT-2 (2019) and GPT-3 (2020), models only, no company names yet`,
+- Click 7, 2016: AlphaGo beats Lee Sedol at Go, 4 games to 1. Contrast with Deep Blue: Deep Blue followed rules and search written by people; AlphaGo learned from games, first thousands of human games, then games against itself
+- Click 8, 2017: the Transformer, the T in GPT: it reads all the words at once, so training spreads over thousands of chips; far faster, but hungry for electricity. Clicks 9 and 10: GPT-2 (2019) and GPT-3 (2020), models only, no company names yet`,
     },
-    transitionIn: { en: "From the family tree to its history." },
-    transitionOut: {
-      en: "To see the difference between these eras, one simple example.",
-    },
+    transitionIn: { en: "Before opening the box, where it comes from." },
+    transitionOut: { en: "These eras left us a few words. How do they fit together?" },
     evidenceLevel: "observed",
     sourceIds: [
       "st-turing-1936-computable-numbers",
@@ -96,6 +64,7 @@ export const chapter02: SceneDefinition[] = [
       "st-ibm-deep-blue",
       "st-krizhevsky-2012-alexnet",
       "st-imagenet-2012-results",
+      "st-deepmind-alphago",
       "llm-vaswani-2017",
       "llm-gpt2-paper",
       "llm-gpt3-paper",
@@ -106,6 +75,40 @@ export const chapter02: SceneDefinition[] = [
     durationSec: 120,
     optional: false,
 
+  },
+  {
+    id: "02-envelopes",
+    code: "nest",
+    steps: 3,
+    chapter: "02",
+    number: "2.2",
+    title: { en: "AI, machine learning, neural networks" },
+    objective: {
+      en: "Place the words: AI contains machine learning, which contains neural networks, which contain language models.",
+    },
+    takeaway: {
+      en: "AI is the big family; language models are one small, recent branch of it.",
+    },
+    visual: { layout: "component", component: "AIEnvelopes", props: {} },
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- AI: anything that imitates human intelligence, even rules written by people
+- Machine learning: the rules are learned from examples
+- Neural networks, also called "deep learning" (many layers): one way of learning, loosely inspired by the brain
+- Language models (LLMs): neural networks trained on text
+- Each circle sits inside the previous one`,
+    },
+    transitionIn: { en: "From the history to the words it left us." },
+    transitionOut: {
+      en: "To see the difference between these words, one simple example.",
+    },
+    evidenceLevel: "none",
+    sourceIds: [],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "deterministic" },
+    durationSec: 120,
+    optional: false,
   },
   {
     id: "02-text-task",
@@ -129,7 +132,7 @@ export const chapter02: SceneDefinition[] = [
 - **Do:** next: a few labelled sentences for each sport
 - Obvious for us; how would you explain it to a computer?`,
     },
-    transitionIn: { en: "From history to one concrete task." },
+    transitionIn: { en: "From the words to one concrete task." },
     transitionOut: { en: "First idea: write the rule ourselves." },
     evidenceLevel: "none",
     sourceIds: [],
@@ -174,7 +177,7 @@ export const chapter02: SceneDefinition[] = [
   {
     id: "02-text-tree",
     code: "tree",
-    steps: 1,
+    steps: 2,
     chapter: "02",
     number: "2.5",
     title: { en: "Learn the rule" },
@@ -188,9 +191,10 @@ export const chapter02: SceneDefinition[] = [
     interaction: "presenter",
     speakerNotes: {
       en: `- We give 24 sentences, each labelled by a person
-- The computer only asks "does the sentence contain the word X?"
-- It picks the question that best separates the examples, then repeats
-- **Do:** walk one example through the tree
+- **Do:** the learned tree, alone. Its only question: "does the sentence contain the word X?"
+- It picked the question that best separates the examples, then repeated: "net"? basketball. Else "hoop"? basketball. Else football
+- **Do:** one example goes down the tree: path lit, word found marked, answer on the right
+- **Do:** "Next example" for more. "Previous example" from the first jumps to its one mistake (a dunk: no net, no hoop)
 - Right on 23 of 24, and nobody wrote this rule`,
     },
     transitionIn: { en: "From writing rules to learning them." },

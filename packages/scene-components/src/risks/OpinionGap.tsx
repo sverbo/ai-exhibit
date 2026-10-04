@@ -33,6 +33,13 @@ export function opinionGapSteps(props: OpinionGapProps): number {
   return Math.max(0, props.rows.length - 1);
 }
 
+/** Every row draws its bars in this order, so the public and experts never swap places between rows. */
+const GROUP_ORDER: Record<OpinionBar["group"], number> = { public: 0, experts: 1 };
+
+export function orderedBars(bars: OpinionBar[]): OpinionBar[] {
+  return [...bars].sort((a, b) => GROUP_ORDER[a.group] - GROUP_ORDER[b.group]);
+}
+
 function percent(value: number, locale: "en" | "fr"): string {
   return locale === "fr" ? `${value} %` : `${value}%`;
 }
@@ -44,8 +51,9 @@ function barLabel(b: OpinionBar, locale: "en" | "fr"): string {
 
 /**
  * OpinionGap {heading?, rows}: survey answers as horizontal bars on one 0 to
- * 100% scale, the public in one color and experts in another. One row per
- * step. No state; preview shows every row, still.
+ * 100% scale, the public in one color and experts in another. Every row has
+ * the same layout: same axis, public bar above experts, labels in the same
+ * columns. One row per step. No state; preview shows every row, still.
  */
 export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>) {
   const { locale, role } = ctx;
@@ -72,7 +80,7 @@ export function OpinionGap({ props, ctx }: SceneComponentProps<OpinionGapProps>)
               aria-hidden={!shown}
             >
               <h3 className={styles.question}><Rich text={tr(row.question, locale)} /></h3>
-              {row.bars.map((b, j) => (
+              {orderedBars(row.bars).map((b, j) => (
                 <div key={j} className={styles.bar} data-group={b.group}>
                   <span className={styles.who}>
                     <Rich text={tr(b.who, locale)} />

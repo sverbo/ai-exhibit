@@ -10,7 +10,7 @@ import {
   decodeCanonical,
 } from "../../ml-runtime/src/embeddings/index.ts";
 import { Tokenizer } from "@huggingface/tokenizers";
-import { ACCESS_CODE_HEADER, createCloudApi, NEXT_MODEL, PUBLIC_LIMITS } from "./core.ts";
+import { ACCESS_CODE_HEADER, createCloudApi, MAX_INPUT_CHARS, NEXT_MODEL, PUBLIC_LIMITS } from "./core.ts";
 import { toSentenceVectors } from "./embed.ts";
 import { forgetCloudTokenizers, tokenizeWith } from "./tokenize.ts";
 import { handleVercel } from "./vercel.ts";
@@ -89,6 +89,32 @@ describe("cloud API", () => {
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.2")).status).toBe(200);
     t = 61_000;
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.1")).status).toBe(200);
+  });
+
+  it("caps every text field at 300 characters", async () => {
+    const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) => okJson({ choices: [{ text: "x" }] }));
+    const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch });
+    expect(MAX_INPUT_CHARS).toBe(300);
+    expect((await call(api, req("POST", "/api/llm/complete", { prompt: "x".repeat(300) }))).status).toBe(200);
+    expect((await call(api, req("POST", "/api/llm/complete", { prompt: "x".repeat(301) }))).status).toBe(400);
+    const long = { messages: [{ role: "user", content: "x".repeat(301) }] };
+    expect((await call(api, req("POST", "/api/llm/chat", long))).status).toBe(400);
+  });
+
+  it("allows 100 model requests an hour per address, all endpoints together", async () => {
+    const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) => okJson({ choices: [{ text: "x" }] }));
+    let t = 0;
+    const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS, rateLimit: "per-client", now: () => t });
+    // Spread the calls so the per-minute budget never trips: only the hourly one does.
+    for (let i = 0; i < PUBLIC_LIMITS.perHour; i++) {
+      t = i * 10_000;
+      expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.9")).status).toBe(200);
+    }
+    t += 10_000;
+    expect((await call(api, req("POST", "/api/llm/chat", { messages: [{ role: "user", content: "a" }] }), "198.51.100.9")).status).toBe(429);
+    expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.10")).status).toBe(200);
+    t = 3_600_000 + 20_000;
+    expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.9")).status).toBe(200);
   });
 
   it("refuses oversized bodies before calling out", async () => {

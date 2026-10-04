@@ -80,9 +80,12 @@ model, chat model, next-token probabilities, embeddings).
 | `AI_EXHIBIT_ACCESS_CODE` | no | When set, every model call must carry this code: the presenter view asks for it once and the browser remembers it. When unset, anyone with the URL can call the endpoints |
 
 In the project's Settings, Deployment Protection, turn off Vercel
-Authentication so the audience can open the glossary from the QR code. Each
-visitor is rate limited (`PUBLIC_LIMITS` in `packages/cloud-api/src/core.ts`),
-best effort only: keep the Hugging Face spending limit.
+Authentication so the audience can open the glossary from the QR code. Every
+endpoint refuses texts over 300 characters, and each address gets at most 100
+model requests an hour, all endpoints together (tokenizing does not count),
+plus a per-minute cap (`PUBLIC_LIMITS` in `packages/cloud-api/src/core.ts`).
+These counters live in memory, per serverless instance: best effort only, so
+keep the Hugging Face spending limit.
 
 ## Repository map
 
