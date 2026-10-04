@@ -316,7 +316,7 @@ export const chapter01: SceneDefinition[] = [
             picture: "slides",
             title: { en: "This presentation" },
             line: {
-              en: "The story is mine; the slides, animations and demos were built by AI agents working in parallel.",
+              en: "Beyond the story, AI agents built the tool, animations and live demos in a few hours, in parallel.",
             },
             evidence: "observed",
             sourceIds: ["tk-ai-exhibit-repository"],
@@ -331,7 +331,7 @@ export const chapter01: SceneDefinition[] = [
 - **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas
 - **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); "next" is my projection
 - **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed
-- **Do:** this presentation: the story and the choices are mine, and I checked every claim and source; Claude Code agents, several in parallel for a few hours, wrote the code, drew the pictograms and animations, built the live demos and looked up sources, over many rounds of my feedback and their revisions
+- **Do:** this presentation: beside the flow of the story and a few rounds of iteration, the tool itself, the animations and the live demos were built by several AI agents (Claude Code) running in parallel within a few hours, taking initiative and testing in the browser themselves; I directed it and checked every claim and source
 - My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly
 - **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)`,
     },
