@@ -79,18 +79,18 @@ export default function LauncherView() {
       </div>
 
       <main className={styles.entries}>
-        <a
-          className={`${styles.entry} ${styles.primary}`}
-          href="/presenter"
-        >
-          <span className={styles.entryTitle}>Presenter</span>
-          <span className={styles.entryHint}>Notes, timer and controls.</span>
-        </a>
-
-        <a className={styles.entry} href="/projector">
+        <a className={`${styles.entry} ${styles.primary}`} href="/projector">
           <span className={styles.entryTitle}>Projector</span>
           <span className={styles.entryHint}>
-            Works alone: put it full screen on the projector; arrows or a clicker advance it. Open the Presenter too for notes.
+            For the main screen and the audience. Put it full screen; the arrows or a clicker advance it. It is all you need.
+          </span>
+        </a>
+
+        <a className={styles.entry} href="/presenter">
+          <span className={styles.entryTitle}>Presenter (optional)</span>
+          <span className={styles.entryHint}>
+            For you, on your own screen: notes, timer and full control. Open it whenever you like; it stays linked to the
+            Projector.
           </span>
         </a>
 
