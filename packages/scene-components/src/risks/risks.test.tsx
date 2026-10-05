@@ -291,11 +291,10 @@ describe("OpinionGap (04-opinions)", () => {
     const expected = props.rows.flatMap((row) => orderedBars(row.bars).map((b) => b.group));
     expect(groups(html)).toEqual(expected);
     expect(expected.join(" ")).toBe("public experts public experts experts");
-    // Both Pew rows ask a worry question ("Who worries more?"), so the public's bar is the longer one in each.
-    for (const row of props.rows.filter((r) => r.bars.length === 2)) {
-      const [pub, exp] = orderedBars(row.bars);
-      expect(pub!.value, row.question.en).toBeGreaterThan(exp!.value);
-    }
+    // The Pew rows: the public worries more about daily life; experts are more hopeful for the country.
+    const [worry, hope] = props.rows.filter((r) => r.bars.length === 2).map((r) => orderedBars(r.bars));
+    expect(worry![0]!.value).toBeGreaterThan(worry![1]!.value);
+    expect(hope![1]!.value).toBeGreaterThan(hope![0]!.value);
     const swapped = { ...props, rows: props.rows.map((row) => ({ ...row, bars: [...row.bars].reverse() })) };
     expect(groups(render(OpinionGap, swapped, ctx("preview", 0, "en")))).toEqual(expected);
   });

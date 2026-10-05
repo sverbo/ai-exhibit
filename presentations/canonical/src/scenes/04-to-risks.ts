@@ -94,11 +94,11 @@ export const chapter04: SceneDefinition[] = [
             ],
           },
           {
-            question: { en: "AI will be bad for the country over the next 20 years" },
+            question: { en: "AI will be good for the country over the next 20 years" },
             source: { en: "Pew Research Center, United States, 2025" },
             bars: [
-              { who: { en: "US adults" }, group: "public", value: 35 },
-              { who: { en: "AI experts" }, group: "experts", value: 15 },
+              { who: { en: "US adults" }, group: "public", value: 17 },
+              { who: { en: "AI experts" }, group: "experts", value: 56 },
             ],
           },
           {
@@ -127,7 +127,7 @@ export const chapter04: SceneDefinition[] = [
     interaction: "presenter",
     speakerNotes: {
       en: `- The public worries more about AI in daily life; AI experts, closer to the technology and its benefits, are more optimistic about the coming years
-- Pew (April 2025; 5,410 US adults and 1,013 US AI experts): "more concerned than excited about the increased use of AI in daily life", **51% vs 15%**; AI will hurt the country over the next 20 years, **35% vs 15%** (a positive impact: 17% vs 56%)
+- Pew (April 2025; 5,410 US adults and 1,013 US AI experts): "more concerned than excited about the increased use of AI in daily life", **51% vs 15%**; AI will be good for the country over the next 20 years, **17% vs 56%** (bad for it: 35% vs 15%)
 - Yet the researchers building AI (not quite the same experts): **between 38% and 51%** give at least a **1 in 10** chance to outcomes as bad as human extinction, depending on the wording (Grace et al., 2,778 researchers, fall 2023). Roughly one in two
 - The point of this slide: **humility**. It is a very complex subject, and it is easy to stay in our bubble and call it science fiction. Thinking about it is the daily job of researchers, and of many philosophers; most of them do not say the risk is zero
 - The seatbelt: maybe nothing will happen. You will probably never have a car accident either, yet buckling up is not silly, because it can really happen. "The risk is 0%" is not what researchers say, and that is why we must work on it
