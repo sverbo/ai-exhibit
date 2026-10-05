@@ -31,6 +31,16 @@ in the preview) shows the end state at once. The controller has a `Replay`
 button (state `replay`, a counter) that replays it on every screen. Controller
 and projector each run the same deterministic animation locally.
 
+The controller also has `2D map` / `3D cloud` buttons at every step (state
+`view`, default `2d`, so the steps above are unchanged). In 3D the same story
+plays in the turning cloud: the words start as a tight seeded cloud near the
+centre (`randomStart3d`) and glide to their real 3D positions
+(`space.coords.umap3d`) with the same easing and length (`trainingPosition3d`,
+in `motion.ts` beside the 2D helpers). The cloud keeps turning from step to
+step and can be dragged at any step (`camera3d`); the steps, `Replay`, reduced
+motion and previews (always 2D) behave as in 2D. At step 2 the cloud's corner
+has its own `Show all words` button, like the 2D map.
+
 ### Exploring the map (training last step, search, cloud)
 
 On the controller the 2D map pans and zooms (`InteractiveMap.tsx`, maths in
@@ -55,9 +65,16 @@ On the controller the 2D map pans and zooms (`InteractiveMap.tsx`, maths in
   (`selected`, or `query` in search mode) are published in scene state at most
   every 90 ms; the projector eases toward each update (or jumps with reduced
   motion), so it shows the same view, at any screen size.
-- The 3D cloud (cloud and search modes): drag rotates (and tilts), wheel or
+- The 3D cloud (all three modes): drag rotates (and tilts), wheel or
   pinch zooms, buttons zoom and reset. It stops turning on its own once moved;
   `camera3d` is published the same way.
+- `Show all words` (state `showAll`) labels words in whichever view is shown.
+  In 3D every word gets a label (433 of them), checked on every frame:
+  highlighted words first, then group names (dropped from 2x zoom), then the
+  other words, nearest first within each; a label that would overlap one kept
+  before it, the query, or the buttons' corner is hidden for that frame, so
+  more words appear as the cloud is zoomed in. Hidden labels stop being moved
+  once faded out, and a still cloud is not redrawn.
 
 ### `mode: "cloud"` (scene 2.4), set `steps: 2`
 

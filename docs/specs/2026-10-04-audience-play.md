@@ -17,8 +17,8 @@ a presenter, and without ever using up the presenter's budget.
   them: **Then and now** (one question, three models of increasing size
   answer; the clock riddle opens the talk), **Tokens** (type a sentence, see
   its tokens, free), **Words as points** (search a word, see its nearest
-  neighbours, in the scene's views: the 2D map, with "show all words", and
-  the 3D cloud), **Base model and assistant** (the base model continues a
+  neighbours, in the scene's views: the 2D map and the 3D cloud, both with
+  "show all words"), **Base model and assistant** (the base model continues a
   text by 10 tokens; the assistant answers a question).
 - The words demo on touch: on the map, one finger pans, two pinch to zoom; in
   the 3D cloud, one finger turns it, two pinch to zoom; a tap on a dot shows

@@ -89,8 +89,9 @@
     transform: translateY(8px);
   }
 }
+/* Wide, but it stops before the map's own buttons (bottom right of the map), which sit at the same height. */
 .wideCaption {
-  max-width: 1560px;
+  max-width: 1200px;
 }
 .captionBlock {
   display: flex;
@@ -99,7 +100,7 @@
 }
 .illustrative {
   margin: 0;
-  max-width: 1480px;
+  max-width: 1200px;
   font-size: 20px;
   line-height: 1.35;
   color: var(--color-text-muted);

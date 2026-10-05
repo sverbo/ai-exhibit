@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { estimateWidth, placeLabels } from "./labels.ts";
+import { estimateWidth, keepFree, placeLabels } from "./labels.ts";
 import { loadEmbeddingSpace } from "./data.ts";
 import { fromLocated, searchVocabulary, SHOWN_NEIGHBOURS } from "./search.ts";
 import { clusterMedoids, fitBox } from "./MapView.tsx";
-import { project3d } from "./Cloud3D.tsx";
-import { randomStart, randomVector, START_SPREAD, trainingPosition } from "./Training.tsx";
+import { cloudFrame, labelOrder, project3d } from "./Cloud3D.tsx";
+import { randomStart, randomStart3d, randomVector, START_SPREAD, START_SPREAD_3D, trainingPosition, trainingPosition3d } from "./motion.ts";
 import { clusterColor } from "./data.ts";
 
 describe("placeLabels", () => {
@@ -93,6 +93,53 @@ describe("training animation", () => {
     const v = randomVector(6);
     expect(v).toEqual(randomVector(6));
     for (const x of v) expect(Math.abs(x)).toBeLessThanOrEqual(0.02);
+  });
+
+  it("in 3D, starts from a seeded tight cloud and lands exactly on the real layout", () => {
+    const centre = [0.5, -1, 2];
+    const s = randomStart3d(433, centre, 4);
+    expect(randomStart3d(433, centre, 4)).toEqual(s);
+    expect(s).toHaveLength(433);
+    const mean = [0, 1, 2].map((d) => s.reduce((a, p) => a + p[d]! / s.length, 0));
+    mean.forEach((m, d) => expect(Math.abs(m - centre[d]!)).toBeLessThan(0.1));
+    for (const p of s) expect(Math.hypot(p[0] - 0.5, p[1] + 1, p[2] - 2)).toBeLessThan(4 * START_SPREAD_3D * 6);
+    const a = [1, 2, 3];
+    const b = [-4, 5, 0.5];
+    for (const i of [0, 7, 432]) {
+      expect(trainingPosition3d(a, b, i, 0, 0.3)).toEqual(a);
+      trainingPosition3d(a, b, i, 1, 0.3).forEach((x, d) => expect(x).toBeCloseTo(b[d]!, 9));
+      // Halfway, every point is between its start and its end (give or take the wobble).
+      const mid = trainingPosition3d(a, b, i, 0.5, 0);
+      mid.forEach((x, d) => expect(x).toBeGreaterThanOrEqual(Math.min(a[d]!, b[d]!) - 1e-9));
+      mid.forEach((x, d) => expect(x).toBeLessThanOrEqual(Math.max(a[d]!, b[d]!) + 1e-9));
+    }
+    // Without wobble, the 3D path matches the 2D one on x and y.
+    const p2 = trainingPosition([1, 2], [-4, 5], 3, 0.4);
+    const p3 = trainingPosition3d([1, 2, 3], [-4, 5, 0.5], 3, 0.4, 26);
+    expect(p3[0]).toBeCloseTo(p2[0], 9);
+    expect(p3[1]).toBeCloseTo(p2[1], 9);
+  });
+
+  it("frames the 3D cloud on its centroid and farthest point", () => {
+    const f = cloudFrame([[1, 0, 0], [-1, 0, 0], [0, 2, 0], [0, -2, 0]]);
+    expect(f.c).toEqual([0, 0, 0]);
+    expect(f.r).toBeCloseTo(2);
+  });
+});
+
+describe("3D cloud labels", () => {
+  it("keeps highlighted words, then group names, then other words, nearest first", () => {
+    const order = labelOrder(["word", "cluster", "strong", "word", "cluster"], [0.5, 0.9, 1, -0.5, -0.2]);
+    expect(order).toEqual([2, 4, 1, 3, 0]);
+  });
+
+  it("hides any label that overlaps one kept before it, an obstacle, or has no place", () => {
+    const r = (x: number) => ({ x0: x, y0: 0, x1: x + 50, y1: 20 });
+    const kept = keepFree([r(0), r(30), r(60), null, r(200)], [{ x0: 190, y0: 0, x1: 210, y1: 10 }]);
+    expect([...kept]).toEqual([1, 0, 1, 0, 0]);
+    // A label with a second place (below its dot) takes it when the first is taken.
+    const below = { x0: 0, y0: 40, x1: 50, y1: 60 };
+    expect([...keepFree([r(0), [r(10), below], [r(20)]])]).toEqual([1, 2, 0]);
   });
 });
 

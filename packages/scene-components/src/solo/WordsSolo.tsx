@@ -1,7 +1,8 @@
 /**
  * Words as points, solo: the embedding map of the talk on a phone, in the
- * scene's views: the 2D map (drag, pinch, tap a dot, show all words) and the
- * 3D cloud (drag to turn, pinch to zoom, tap a dot, loaded only when chosen),
+ * scene's views: the 2D map (drag, pinch, tap a dot) and the 3D cloud (drag to
+ * turn, pinch to zoom, tap a dot, loaded only when chosen), both with "show
+ * all words",
  * and a search. A word already on the map uses its precomputed neighbours
  * (free); any other text is embedded live (one ask), else matched to the
  * closest prepared word. Reuses the explorer's map, cloud, search and copy.
@@ -138,13 +139,9 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
         <button
           type="button"
           className={styles.button}
-          aria-pressed={showAll && view === "2d"}
-          // Labels for every word are a map feature: from the cloud, this goes back to the map.
-          onClick={() => {
-            const on = !(showAll && view === "2d");
-            setShowAll(on);
-            if (on) setView("2d");
-          }}
+          aria-pressed={showAll}
+          // Labels words in whichever view is shown; in 3D, more appear as the cloud is zoomed in.
+          onClick={() => setShowAll(!showAll)}
         >
           {tr(MAP_CONTROLS.showAll, locale)}
         </button>
@@ -162,6 +159,7 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
               clusterNames={!query}
               highlight={highlight}
               query={cloudQuery}
+              showAll={showAll}
               spinning={!env.reducedMotion}
               reducedMotion={env.reducedMotion}
               interactive

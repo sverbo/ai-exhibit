@@ -116,12 +116,48 @@ describe("embedding components render in every role, step and locale", () => {
       // One toggle, beside the view buttons: none left in the map corner.
       expect(html.match(/Show all words/g)).toHaveLength(1);
     }
-    const on = render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "en", { showAll: true }));
-    expect(on.match(toggle)?.[1]).toBe("true");
+    // On in either view: it no longer sends the 3D cloud back to the map.
+    for (const view of ["2d", "3d"] as const) {
+      const on = render(EmbeddingExplorer, { mode: "search" }, ctx("controller", 0, "en", { showAll: true, view }));
+      expect(on.match(toggle)?.[1]).toBe("true");
+      expect(on).toContain(view === "3d" ? "3D cloud of words" : "Map of words");
+    }
     // The audience screens follow the labels, never the control.
     for (const role of ["display", "preview"] as const) {
       expect(render(EmbeddingExplorer, { mode: "search" }, ctx(role, 0, "en", { showAll: true }))).not.toContain("Show all words");
     }
+  });
+
+  it("labels every word in the 3D cloud with show all", () => {
+    const count = (html: string) => (html.match(/<text/g) ?? []).length;
+    for (const role of ["controller", "display"] as const) {
+      const normal = count(render(EmbeddingExplorer, { mode: "search" }, ctx(role, 0, "en", { view: "3d" })));
+      const all = count(render(EmbeddingExplorer, { mode: "search" }, ctx(role, 0, "en", { view: "3d", showAll: true })));
+      expect(all).toBeGreaterThanOrEqual(normal + 400);
+    }
+  });
+
+  it("plays the training in the 3D cloud too, from the view buttons", () => {
+    for (const role of ["controller", "display"] as const) {
+      for (const locale of ["fr", "en"] as const) {
+        for (const step of [0, 1, 2]) {
+          const html = render(EmbeddingExplorer, { mode: "training" }, ctx(role, step, locale, { view: "3d", showAll: true }));
+          expect(html).toContain(locale === "fr" ? "Nuage de mots en 3D" : "3D cloud of words");
+          expect(html).not.toMatch(/NaN|undefined/);
+        }
+      }
+    }
+    // Default and previews: the 2D map, so the steps read as before.
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", 1, "en"))).not.toContain("3D cloud of words");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("preview", 1, "en", { view: "3d" }))).not.toContain("3D cloud of words");
+    // The presenter switches views at any step; the projector gets no buttons.
+    const controller = render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 0, "en"));
+    expect(controller).toContain("2D map");
+    expect(controller).toContain("3D cloud");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", 0, "en"))).not.toContain("2D map");
+    // Last step in 3D: the cloud's own Show all words button, as on the 2D map.
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 2, "en", { view: "3d" }))).toContain("Show all words");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 1, "en", { view: "3d" }))).not.toContain("Show all words");
   });
 
   it("MeaningDimensions renders every step, and pêche only in French", () => {

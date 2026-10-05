@@ -1,10 +1,13 @@
 import type { EmbeddingSpace } from "@ai-exhibit/ml-runtime/embeddings";
 import { intlLocale, plainText, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Cloud3D, cloudFrame } from "./Cloud3D.tsx";
 import { TRAINING, tr } from "./copy.ts";
 import { clusterColor } from "./data.ts";
 import { InteractiveMap } from "./InteractiveMap.tsx";
 import { fitBox, MapView } from "./MapView.tsx";
+import { randomStart, randomStart3d, randomVector, TRAINING_MS, trainingPosition } from "./motion.ts";
+import type { Camera3D } from "./search.ts";
 import { NeighbourCard, selectionMarks } from "./Selection.tsx";
 import type { Camera } from "./view.ts";
 import styles from "./Training.module.css";
@@ -14,70 +17,12 @@ const MARGIN = 40;
 export const SHOWCASE_WORD: L10n = { en: "cat" };
 /** Groups singled out at step 2. */
 export const FOCUS_GROUPS = ["animals", "emotions", "countries", "capitals"];
-/** Total length of the illustrative training animation. */
-export const TRAINING_MS = 5200;
-
-/** mulberry32, so every screen draws the same "random" start. */
-function rng(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 /** Where the "cat as numbers" card sits (map pixels). */
 export const CARD_RECT = { x0: 1208, y0: 0, x1: 1728, y1: 235 };
 const CARD_AVOID = [CARD_RECT];
-/** Spread of the starting cloud, in map pixels (standard deviation). */
-export const START_SPREAD = 46;
 
-/**
- * Deterministic start positions in map pixels: a tight random cloud around the
- * centre, because embeddings start as small random values near zero.
- */
-export function randomStart(count: number, width: number, height: number): [number, number][] {
-  const r = rng(20261002);
-  const gauss = () => Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r());
-  return Array.from({ length: count }, () => [width / 2 + gauss() * START_SPREAD, height / 2 + gauss() * START_SPREAD]);
-}
-
-/** Deterministic "untrained" numbers for the showcase word: small random values near zero. */
-export function randomVector(length: number): number[] {
-  const r = rng(7);
-  return Array.from({ length }, () => Math.round((r() * 2 - 1) * 0.02 * 1000) / 1000);
-}
-
-/** Big moves first, then small refinements: the shape of a learning curve. */
 function formatVectorValue(x: number, locale: Locale): string {
   return x.toLocaleString(intlLocale(locale), { minimumFractionDigits: 3, maximumFractionDigits: 3 });
-}
-
-const easeOut = (t: number) => 1 - (1 - t) ** 3;
-
-/**
- * Position of point `i` at global progress `t` in [0, 1]: each point starts a
- * little later than the previous ones, moves fast then slows down while it
- * wanders less and less, and lands exactly on its final position at t = 1.
- */
-export function trainingPosition(
-  start: readonly [number, number],
-  end: readonly [number, number],
-  i: number,
-  t: number,
-): [number, number] {
-  const delay = ((i * 0.618034) % 1) * 0.3;
-  const local = Math.min(1, Math.max(0, (t - delay) / (1 - delay)));
-  const e = easeOut(local);
-  const wobble = Math.sin(local * Math.PI) * (1 - local) * 26;
-  const phase = i * 2.39996;
-  return [
-    start[0] + (end[0] - start[0]) * e + Math.cos(phase + local * 9) * wobble,
-    start[1] + (end[1] - start[1]) * e + Math.sin(phase + local * 7) * wobble,
-  ];
 }
 
 export interface TrainingViewProps {
@@ -90,11 +35,18 @@ export interface TrainingViewProps {
   replay: number;
   /** Jump cuts instead of motion (reduced motion, paused, preview). */
   still: boolean;
-  /** Last step: pan, zoom and click words (controller), followed by the projector. */
+  /**
+   * The 2D map, or the same story in the turning 3D cloud: a tight random
+   * cloud that grows into the real 3D layout. Default "2d".
+   */
+  view?: "2d" | "3d";
+  /** Last step: pan, zoom and click words (controller), followed by the projector. In 3D, turning works at every step. */
   explore?: {
     interactive: boolean;
     camera: Camera | null | undefined;
     onCamera: (c: Camera) => void;
+    camera3d?: Camera3D | null;
+    onCamera3d?: (c: Camera3D) => void;
     selected: number | null;
     onSelect: (i: number | null) => void;
     reducedMotion: boolean;
@@ -103,10 +55,14 @@ export interface TrainingViewProps {
   };
 }
 
-export function TrainingView({ space, locale, width, height, step, replay, still, explore }: TrainingViewProps) {
+export function TrainingView({ space, locale, width, height, step, replay, still, view = "2d", explore }: TrainingViewProps) {
   const n = space.items.length;
   const nClusters = space.json.clusters.length;
   const start = useMemo(() => randomStart(n, width, height), [n, width, height]);
+  const start3d = useMemo(() => {
+    const f = cloudFrame(space.coords.umap3d);
+    return randomStart3d(n, f.c, f.r);
+  }, [space, n]);
   const end = useMemo(() => {
     const coords = space.coords.umap2d;
     const f = fitBox(coords, width, height, MARGIN);
@@ -144,12 +100,16 @@ export function TrainingView({ space, locale, width, height, step, replay, still
   const circles = useRef<(SVGCircleElement | null)[]>([]);
   const showcaseLabel = useRef<SVGGElement | null>(null);
   const bar = useRef<HTMLSpanElement | null>(null);
+  // Progress of the running animation, read by the 3D cloud on each of its frames.
+  const progress = useRef(0);
   useEffect(() => {
     if (!animating) return;
     let raf = 0;
     const t0 = performance.now();
+    progress.current = 0;
     const frame = (now: number) => {
-      const t = Math.min(1, (now - t0) / TRAINING_MS);
+      const t = Math.min(1, Math.max(0, (now - t0) / TRAINING_MS));
+      progress.current = t;
       for (let i = 0; i < n; i++) {
         const el = circles.current[i];
         if (!el) continue;
@@ -176,6 +136,11 @@ export function TrainingView({ space, locale, width, height, step, replay, still
   // run yet: treat the animation as already pending so the end state never flashes.
   const pending = !still && ((prev.current.step === 0 && step === 1) || (step >= 1 && replay !== prev.current.replay));
   const trained = step >= 1 && !animating && !pending;
+  // The 3D cloud's clock: the start at step 0 (and just before an animation
+  // starts), the running animation's progress, else the trained cloud.
+  const morphProgress = () => (step === 0 || pending ? 0 : animating ? progress.current : 1);
+  const pairHighlight = useMemo(() => (showcase < 0 ? [] : partner >= 0 ? [showcase, partner] : [showcase]), [showcase, partner]);
+  const showcaseOnly = useMemo(() => (showcase < 0 ? [] : [showcase]), [showcase]);
   const vector = useMemo(() => {
     if (showcase < 0) return [];
     return trained ? Array.from(space.vectors[showcase]!.slice(0, 4)) : randomVector(4);
@@ -201,7 +166,29 @@ export function TrainingView({ space, locale, width, height, step, replay, still
 
   return (
     <div className={styles.wrap}>
-      {trained && step >= 2 && explore ? (
+      {view === "3d" ? (
+        // One cloud for every step, so it keeps turning from one step to the next.
+        <Cloud3D
+          space={space}
+          locale={locale}
+          width={width}
+          height={height}
+          colored
+          clusterNames={trained}
+          focus={trained && step >= 2 ? focus : null}
+          highlight={trained ? pairHighlight : showcaseOnly}
+          dimOthers={false}
+          avoid={step <= 1 ? CARD_AVOID : undefined}
+          morph={{ from: start3d, progress: morphProgress }}
+          showAll={trained && step >= 2 && Boolean(explore?.showAll)}
+          onShowAll={trained && step >= 2 ? explore?.onShowAll : undefined}
+          spinning={!still}
+          reducedMotion={explore?.reducedMotion ?? still}
+          interactive={explore?.interactive}
+          camera={explore?.camera3d ?? null}
+          onCamera={explore?.onCamera3d}
+        />
+      ) : trained && step >= 2 && explore ? (
         <>
           <InteractiveMap
             space={space}

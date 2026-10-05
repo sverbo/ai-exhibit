@@ -1,7 +1,7 @@
 import { type EmbeddingSpace, locateQuery, queryText } from "@ai-exhibit/ml-runtime/embeddings";
 import { cloudEmbed } from "@ai-exhibit/ml-runtime/lm";
 import type { Locale } from "@ai-exhibit/presentation-core";
-import { type FormEvent, type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, type KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
 import { MAX_FIELD_CHARS } from "../primitives/Controls.tsx";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
@@ -49,6 +49,7 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const step = Math.max(0, Math.min(ctx.revealStep, TRAINING.captions.length - 1));
   const preview = role === "preview";
   const still = ctx.reducedMotion || preview;
+  const view = preview ? "2d" : (state.view ?? "2d");
   const { patch, interactive } = useExplorer(ctx);
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`}>
@@ -65,6 +66,7 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
           step={step}
           replay={state.replay ?? 0}
           still={still}
+          view={view}
           explore={
             preview
               ? undefined
@@ -72,6 +74,8 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
                   interactive,
                   camera: state.camera,
                   onCamera: (c) => patch({ camera: c }),
+                  camera3d: state.camera3d ?? null,
+                  onCamera3d: (c) => patch({ camera3d: c }),
                   selected: state.selected ?? null,
                   onSelect: (i) => patch({ selected: i }),
                   reducedMotion: ctx.reducedMotion,
@@ -90,11 +94,14 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
             <Rich text={tr(TRAINING.illustrative, locale)} />
           </p>
         </div>
-        {interactive && step >= 1 && (
+        {interactive && (
           <div className={styles.controllerBar} onKeyDown={stopKeys}>
-            <button type="button" className={styles.button} onClick={() => patch({ replay: (state.replay ?? 0) + 1 })}>
-              {tr(TRAINING.replay, locale)}
-            </button>
+            {step >= 1 && (
+              <button type="button" className={styles.button} onClick={() => patch({ replay: (state.replay ?? 0) + 1 })}>
+                {tr(TRAINING.replay, locale)}
+              </button>
+            )}
+            <ViewToggle ctx={ctx} state={state} patch={patch} />
           </div>
         )}
       </footer>
@@ -183,13 +190,13 @@ function ViewToggle({ ctx, state, patch: set }: { ctx: Ctx; state: ExplorerState
 /**
  * "Show all words" beside the view buttons, where the presenter looks for the
  * map's controls (a pill in the map corner was easy to miss on the presenter's
- * small stage, and the 3D cloud has none). Labels are a 2D map feature, so
- * turning it on from the 3D cloud goes back to the map.
+ * small stage). It labels words in whichever view is shown: the 2D map, or the
+ * 3D cloud (nearest words first, more of them as it is zoomed in).
  */
 function ShowAllToggle({ state, locale, patch }: { state: ExplorerState; locale: Locale; patch: (next: Partial<ExplorerState>) => void }) {
-  const on = Boolean(state.showAll) && (state.view ?? "2d") === "2d";
+  const on = Boolean(state.showAll);
   return (
-    <button type="button" className={styles.button} aria-pressed={on} onClick={() => patch(on ? { showAll: false } : { showAll: true, view: "2d" })}>
+    <button type="button" className={styles.button} aria-pressed={on} onClick={() => patch({ showAll: !on })}>
       {tr(MAP_CONTROLS.showAll, locale)}
     </button>
   );
@@ -343,7 +350,9 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const query = preview ? null : (state.query ?? null);
   const neighbours = query?.neighbours ?? [];
   const mapQuery = query?.position ? { text: query.text, position: query.position, neighbours: neighbours.map((n) => n.index) } : null;
-  const highlight = neighbours.map((n) => n.index);
+  // Stable while the query is unchanged, so the 3D cloud's frame loop keeps running.
+  const highlight = useMemo(() => (query?.neighbours ?? []).map((n) => n.index), [query]);
+  const cloudQuery = useMemo(() => (query?.position3d ? { text: query.text, position: query.position3d } : null), [query]);
   const view = preview ? "2d" : (state.view ?? "2d");
 
   let notice: string | null = null;
@@ -364,7 +373,8 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
               colored
               clusterNames={!query}
               highlight={highlight}
-              query={query?.position3d ? { text: query.text, position: query.position3d } : null}
+              query={cloudQuery}
+              showAll={Boolean(state.showAll)}
               spinning={!ctx.reducedMotion}
               reducedMotion={ctx.reducedMotion}
               interactive={interactive}

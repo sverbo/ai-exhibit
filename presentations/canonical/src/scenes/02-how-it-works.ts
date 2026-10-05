@@ -703,7 +703,8 @@ export const chapter02: SceneDefinition[] = [
 - Our classifier only knew whether a word was there; richer: give each word a **list of numbers**, a point in space
 - We are in machine learning, so nobody places the words by hand: before training, the points are scattered **at random**
 - Play: the training loop we saw, repeated on huge amounts of text, gathers words that appear in the same sentences: "blue" ends up near "sky" and "red", because they keep showing up together (not always on the same pages)
-- The animation is illustrative; the final map is real`,
+- The animation is illustrative; the final map is real
+- **3D cloud** button (any step, default 2D): the same story in 3D, a tight random cloud that grows into the real 3D layout while it turns; drag to turn it, Replay plays it again`,
     },
     transitionIn: { en: "From numbered pieces to points with meaning." },
     transitionOut: { en: "Let's explore the map with your words." },
@@ -739,6 +740,7 @@ export const chapter02: SceneDefinition[] = [
 - We cannot picture more than three dimensions: the 2D and 3D maps are a **projection** (UMAP) that tries to keep each word's close neighbours. Distances between far-apart groups and the axes mean nothing, and some true neighbours may show up far away
 - **The list is exact; the map is an approximation**
 - "Show all words" labels every word; zoom in (wheel or pinch) to read one corner of the map
+- It works in 3D too: the nearest words win where labels would overlap, and more appear as you zoom in
 - Honest detail if asked: this demo model makes embeddings of words and sentences (the kind used for search); a chatbot's own input points work the same way, and in a chatbot the next layers then move each word with its context ("a peach" to eat or "fishing")`,
     },
     transitionIn: { en: "The prepared map becomes interactive." },

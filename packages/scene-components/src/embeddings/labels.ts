@@ -29,7 +29,7 @@ export interface PlacedLabel {
   size: number;
 }
 
-interface Rect {
+export interface Rect {
   x0: number;
   y0: number;
   x1: number;
@@ -46,7 +46,7 @@ function overlaps(a: Rect, b: Rect): boolean {
 }
 
 /** Rectangles bucketed on a coarse grid, so overlap checks stay fast with many labels. */
-class RectIndex {
+export class RectIndex {
   private cells = new Map<number, Rect[]>();
   constructor(private readonly size = 64) {}
   private keys(r: Rect): number[] {
@@ -72,6 +72,30 @@ class RectIndex {
     }
     return false;
   }
+}
+
+/**
+ * Fixed-position labels, most important first: each one is kept when it
+ * overlaps no obstacle and no label kept before it (null: not shown at all).
+ * A label given several places takes the first free one. Returns, per label,
+ * the place used (1 for a single rect) or 0 when hidden. Used by the 3D cloud
+ * on every frame.
+ */
+export function keepFree(
+  rects: readonly (Rect | readonly Rect[] | null)[],
+  obstacles: readonly Rect[] = [],
+  out = new Uint8Array(rects.length),
+): Uint8Array {
+  const taken = new RectIndex();
+  for (const o of obstacles) taken.add(o);
+  rects.forEach((r, i) => {
+    // Several places for one label: the first free one is used (1-based), 0 is hidden.
+    const options = r === null ? [] : Array.isArray(r) ? r : [r as Rect];
+    const k = options.findIndex((o) => !taken.hits(o));
+    out[i] = k + 1;
+    if (k >= 0) taken.add(options[k]!);
+  });
+  return out;
 }
 
 export interface PlaceOptions {
