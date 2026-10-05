@@ -8,9 +8,9 @@
 import type { L10n } from "@ai-exhibit/presentation-core";
 
 export type FruitKind = "apple" | "pear";
-export type BoxId = "training" | "validation" | "test";
+export type BoxId = "training" | "test";
 
-export const BOX_IDS: readonly BoxId[] = ["training", "validation", "test"];
+export const BOX_IDS: readonly BoxId[] = ["training", "test"];
 
 /** One picture of the data. Every apple in it is red, every pear green: that is the gap. */
 export interface Fruit {
@@ -19,30 +19,30 @@ export interface Fruit {
   box: BoxId;
 }
 
-/** Reveal steps after the initial pile: split, train, check, real world, lesson. */
-export const FRUIT_STEPS = 5;
+/** Reveal steps after the initial pile: split, train, the caution, mock exam, final exam (the real world), lesson. */
+export const FRUIT_STEPS = 6;
 
 /**
  * The pile, in the order it is drawn: 20 pictures, 10 apples and 10 pears,
- * shuffled by hand. 14 go to training (70%), 3 to validation and 3 to test (15% each).
+ * shuffled by hand. 16 go to training (80%) and 4 to test (20%), two apples and two pears.
  */
 export const FRUITS: readonly Fruit[] = (
   [
     ["apple", "training"],
-    ["pear", "validation"],
+    ["pear", "training"],
     ["pear", "training"],
     ["apple", "training"],
     ["apple", "test"],
     ["pear", "training"],
     ["apple", "training"],
     ["pear", "training"],
-    ["apple", "validation"],
+    ["apple", "training"],
     ["pear", "test"],
     ["pear", "training"],
     ["apple", "training"],
     ["apple", "training"],
     ["pear", "training"],
-    ["apple", "validation"],
+    ["apple", "test"],
     ["pear", "training"],
     ["apple", "training"],
     ["pear", "test"],
@@ -52,7 +52,7 @@ export const FRUITS: readonly Fruit[] = (
 ).map(([kind, box], id) => ({ id, kind, box }));
 
 export function boxCounts(fruits: readonly Fruit[] = FRUITS): Record<BoxId, number> {
-  const counts: Record<BoxId, number> = { training: 0, validation: 0, test: 0 };
+  const counts: Record<BoxId, number> = { training: 0, test: 0 };
   for (const f of fruits) counts[f.box]++;
   return counts;
 }
@@ -63,13 +63,15 @@ export interface FruitView {
   step: number;
   /** Fruits sit in their boxes (else in the pile). */
   split: boolean;
-  /** The box being talked about; null when none stands out. */
-  focus: BoxId | "checks" | "world" | null;
+  /** What is being talked about (a box, or the final exam); null when nothing stands out. */
+  focus: BoxId | "world" | null;
   /** The model and the rule it learned are drawn. */
   model: boolean;
-  /** Boxes that show their 100% check. */
+  /** The reminder that a neural network's rule cannot be read in advance (until the final exam takes its place). */
+  caution: boolean;
+  /** Boxes that show their 100% check: the mock exam. */
   checked: BoxId[];
-  /** The green apple from the real world, and the model's wrong answer. */
+  /** The final exam: a green apple from the real world, and the model's wrong answer. */
   world: boolean;
   /** Each box shows that it holds no green apple; the lesson is the caption. */
   lesson: boolean;
@@ -77,15 +79,16 @@ export interface FruitView {
 
 export function fruitView(revealStep: number): FruitView {
   const step = Math.min(FRUIT_STEPS, Math.max(0, Math.floor(Number.isFinite(revealStep) ? revealStep : 0)));
-  const focus: FruitView["focus"] = step === 2 ? "training" : step === 3 ? "checks" : step === 4 ? "world" : null;
+  const focus: FruitView["focus"] = step === 2 || step === 3 ? "training" : step === 4 ? "test" : step === 5 ? "world" : null;
   return {
     step,
     split: step >= 1,
     focus,
     model: step >= 2,
-    checked: step >= 3 ? ["validation", "test"] : [],
-    world: step >= 4,
-    lesson: step >= 5,
+    caution: step >= 3 && step < 5,
+    checked: step >= 4 ? ["test"] : [],
+    world: step >= 5,
+    lesson: step >= 6,
   };
 }
 
@@ -108,13 +111,12 @@ const BOX_H = 396;
 export const BOX_HEADER = 136;
 
 export const BOXES: Record<BoxId, Rect> = {
-  training: { x: 90, y: BOX_TOP, w: 840, h: BOX_H },
-  validation: { x: 980, y: BOX_TOP, w: 400, h: BOX_H },
-  test: { x: 1430, y: BOX_TOP, w: 400, h: BOX_H },
+  training: { x: 90, y: BOX_TOP, w: 1120, h: BOX_H },
+  test: { x: 1260, y: BOX_TOP, w: 570, h: BOX_H },
 };
 
 const CELL = 112;
-const TRAINING_COLS = 7;
+const TRAINING_COLS = 8;
 
 export interface Placement {
   /** Top left of the fruit's cell before scaling (the cell scales around its centre). */
@@ -173,10 +175,11 @@ export function fruitPlacement(fruit: Fruit, view: FruitView): Placement {
 export const TEXT = {
   captions: [
     { en: "The data: pictures labelled by people." },
-    { en: "We split the pile into three boxes, like at school." },
+    { en: "We split the pile into two boxes, like at school." },
     { en: "Training: the model finds the simplest rule that works." },
-    { en: "Every check passes." },
-    { en: "Real world: a green apple. None of the boxes had one." },
+    { en: "Careful: remember, the model is a neural network. We cannot know this rule in advance." },
+    { en: "The mock exam passes: 100%." },
+    { en: "The final exam, in the real world: a green apple. Neither box had one." },
     { en: "You cannot blame the model: the gap was in the data, and it shows up only in the real world." },
   ],
   kinds: {
@@ -185,21 +188,22 @@ export const TEXT = {
   } satisfies Record<FruitKind, L10n>,
   boxes: {
     training: { name: { en: "Training" }, role: { en: "The exercises, with corrections" } },
-    validation: { name: { en: "Validation" }, role: { en: "Mock exams, to tune and choose" } },
-    test: { name: { en: "Test" }, role: { en: "The final exam, used once" } },
+    test: { name: { en: "Test" }, role: { en: "The mock exam" } },
   } satisfies Record<BoxId, { name: L10n; role: L10n }>,
   model: { en: "The model" },
   ruleHeading: { en: "The rule it found" },
   ruleGreen: { en: "Green means pear." },
   ruleRed: { en: "Red means apple." },
-  world: { en: "Real world" },
+  cautionHeading: { en: "Remember" },
+  cautionLine: { en: "In a neural network, this rule is only numbers: nobody can read it, so we cannot know it in advance." },
+  world: { en: "Final exam: the real world" },
   sure: { en: "{pct} sure" },
   wrong: { en: "Wrong answer" },
   passed: { en: "Passed" },
   noGreenApple: { en: "Green apples: 0" },
 } as const;
 
-/** Share of the pile in each box, as a fraction (0.7, 0.15, 0.15). */
+/** Share of the pile in each box, as a fraction (0.8, 0.2). */
 export function boxShare(box: BoxId, fruits: readonly Fruit[] = FRUITS): number {
   return boxCounts(fruits)[box] / fruits.length;
 }

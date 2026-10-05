@@ -1474,4 +1474,406 @@ export const talkSources: SourceRecord[] = [
     notes:
       "nytimes.com answers 403 to automated fetches; read through the Wayback Machine copy (byline 'By Nico Grant and Kashmir Hill', published 2023-05-22). The article also reports that Microsoft OneDrive's photo search 'drew a blank for every animal we tried' and that Amazon Photos was 'over-inclusive', showing 'a menagerie of primates' for gorillas.",
   },
+
+  /* ------------------------------------------------------------------ */
+  /* Speaker notes: concentration, labs, misuse, governance              */
+  /* ------------------------------------------------------------------ */
+  {
+    id: "tk-nvidia-ai-accelerator-share",
+    title: "The leading generative AI companies",
+    url: "https://iot-analytics.com/leading-generative-ai-companies/",
+    publisher: "IoT Analytics",
+    authors: ["Joaquin Fernandez"],
+    date: "2025-03-04",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "Nvidia held about 92% of the data centre GPU market in 2024, a market IoT Analytics sizes at $125 billion, a share similar to 2023.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Market-research estimate, not a vendor or filing figure. It measures data centre GPUs, not all AI accelerators: custom silicon such as Google's TPUs and Amazon's Trainium sits outside it, which is why figures of 80% to 90% circulate for 'AI accelerators by revenue'. This source gives no 2025 or 2026 number, so do not say 'today' on stage; Nvidia's own revenue is in sc-nvidia-2026-fy-results.",
+  },
+  {
+    id: "tk-tsmc-advanced-node-share",
+    title: "As political winds shift, top chipmaker TSMC looks beyond Taiwan",
+    url: "https://www.npr.org/2025/12/01/nx-s1-5620992/tsmc-chipmaker-expands-beyond-taiwan",
+    publisher: "NPR",
+    authors: ["John Ruwitch"],
+    date: "2025-12-01",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "By some estimates, TSMC produces over 90% of the world's most advanced chips.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The hedge is the source's own: 'By some estimates, it produces over 90% of the world's most advanced chips.' No single methodology is disclosed and 'most advanced' is not tied to a node. The closest audited figure is BCG and SIA (April 2021), which put all capacity below 10 nm in Taiwan (92%) and South Korea (8%); that is a country figure, not a TSMC figure. TSMC's overall foundry share is in sc-trendforce-2026-foundry-q2.",
+  },
+  {
+    id: "tk-deepmind-2014-google-acquisition",
+    title: "Google Acquires Artificial Intelligence Startup DeepMind For More Than $500M",
+    url: "https://techcrunch.com/2014/01/26/google-deepmind/",
+    publisher: "TechCrunch",
+    authors: ["Catherine Shu"],
+    date: "2014-01-26",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "Google bought London-based DeepMind in January 2014 for a reported price of more than $500 million; DeepMind says it started in 2010.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The price was never confirmed by either company: TechCrunch reported 'more than $500 million' against an earlier Re/code report of $400 million, and the figure of $650 million (or $643 million) comes from later accounts. Say 'a reported sum of several hundred million dollars' rather than a precise number. The founding year is DeepMind's own ('DeepMind started in 2010', deepmind.google/about); the London headquarters is also in sc-wiki-google-deepmind.",
+  },
+  {
+    id: "tk-openai-2024-musk-blog",
+    title: "OpenAI and Elon Musk",
+    url: "https://openai.com/index/openai-elon-musk/",
+    publisher: "OpenAI",
+    authors: ["Greg Brockman", "Ilya Sutskever", "John Schulman", "Sam Altman", "Wojciech Zaremba"],
+    date: "2024-03-05",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "In OpenAI's account, when the group decided in late 2017 to create a for-profit entity, 'Elon wanted majority equity, initial board control, and to be CEO'; no agreement was reached, and he left in late February 2018.",
+    evidence: "contested",
+    verification: "verified",
+    notes:
+      "OpenAI's own account in a dispute with Musk; present it as OpenAI's position, not as settled fact. openai.com answers 403 to automated fetches; read through the Wayback Machine copy (dated 5 March 2024, signed by Greg Brockman, Ilya Sutskever, John Schulman, Sam Altman, Wojciech Zaremba and OpenAI). The post also says the non-profit raised less than $45M from Musk, and quotes him on 'attach to Tesla as its cash cow'. Musk's own filings are not covered here.",
+  },
+  {
+    id: "tk-altman-ceo-2019",
+    title: "OpenAI LP",
+    url: "https://openai.com/index/openai-lp/",
+    publisher: "OpenAI",
+    date: "2019-03-11",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "OpenAI's announcement of OpenAI LP, on 11 March 2019, lists Sam Altman as CEO; three days earlier he had stepped down as president of Y Combinator, where he was replaced, to focus on OpenAI, which he had co-chaired since 2015.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "openai.com answers 403 to automated fetches; read through the Wayback Machine copy of the 11 March 2019 post, which names the non-profit board as 'Greg Brockman (Chairman & CTO), Ilya Sutskever (Chief Scientist), and Sam Altman (CEO)'. The Y Combinator change is in YC's own 'Updates from YC' (8 March 2019) and TechCrunch's report the same day: Altman 'joined YC as a partner in 2011 and was named president in 2014', and 'will focus on other efforts, including OpenAI, a research organization in which he co-chairs'. No OpenAI post announces the CEO title itself, so the LP page is the earliest primary record found.",
+  },
+  {
+    id: "tk-amodei-2020-leaves-openai",
+    title: "Organizational Update from OpenAI",
+    url: "https://openai.com/index/organizational-update/",
+    publisher: "OpenAI",
+    date: "2020-12-29",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "On 29 December 2020 OpenAI announced that Dario Amodei, VP of Research, was leaving after nearly five years, and that he and a handful of colleagues were planning a new project focused less on product development and more on research.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "openai.com answers 403 to automated fetches; read through the Wayback Machine copy (dated 29 December 2020). The post gives no reason beyond the new project; reported motives are in st-wiki-anthropic. Anthropic was founded in 2021 (st-wiki-anthropic), so the departure precedes Altman's removal of November 2023 (st-nbc-2023-altman-removed) by nearly three years: the two events are unconnected.",
+  },
+  {
+    id: "tk-mandiant-2024-time-to-exploit",
+    title: "How Low Can You Go? An Analysis of 2023 Time-to-Exploit Trends",
+    url: "https://cloud.google.com/blog/topics/threat-intelligence/time-to-exploit-trends-2023",
+    publisher: "Google Cloud (Mandiant)",
+    authors: ["Casey Charrier", "Robert Weiner"],
+    date: "2024-10-15",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "Across 138 vulnerabilities disclosed in 2023 and exploited in the wild, the average time-to-exploit fell to five days, from 32 days in 2021 to 2022 and 63 days in 2018 to 2019; 97 of the 138 (70%) were exploited as zero-days.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The post calls the 2023 average 'just five days. This is less than a sixth of the previously observed TTE'. The zero-day to n-day ratio moved from 62:38 in 2021 to 2022 to 70:30 in 2023. Figures come from Mandiant's own tracking, so they measure what Mandiant observed, not all exploitation.",
+  },
+  {
+    id: "tk-synnovis-2024-ransomware",
+    title: "Ransomware attack continues to disrupt healthcare in London nearly two years later",
+    url: "https://therecord.media/ransomware-nhs-cyberattack-disruption",
+    publisher: "The Record (Recorded Future News)",
+    authors: ["Alexander Martin"],
+    date: "2026-04-17",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "NHS England said 10,152 acute outpatient appointments and 1,710 elective procedures were postponed because of the June 2024 ransomware attack on the pathology provider Synnovis, which impaired blood testing across South East London.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "NHS England's own Synnovis pages answer 403 and return no body to automated fetches, so the national figures are taken from this report of them. Trust-level counts are not comparable with the national ones: Lewisham and Greenwich NHS Trust reported more than 11,000 cancelled appointments, Guy's and St Thomas' recorded no harm. King's College Hospital recorded one patient death in which the attack was considered a contributing factor, without being able to say it directly caused it; do not state a death toll beyond that wording. The attack is attributed to the Qilin group and involved publication of patient data.",
+  },
+  {
+    id: "tk-xbow-2025-hackerone",
+    title: "We Ran 1,060 Autonomous Attacks: What We Learned",
+    url: "https://xbow.com/blog/we-ran-1060-autonomous-attacks",
+    publisher: "XBOW",
+    retrieved: "2026-10-05",
+    kind: "documentation",
+    claim:
+      "XBOW, an autonomous penetration testing system, says it became the first autonomous system to reach number 1 on HackerOne's US leaderboard, in June 2025, after submitting over 1,060 vulnerabilities on real-world production targets, with humans reviewing reports for compliance but not taking part in discovery or exploitation.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The company's own claim about its own product; present it as such. Press accounts differ on the detail: Help Net Security (25 June 2025) says 'the number one spot on HackerOne's global leaderboard', and independent commentary notes the ranking is reputation gained over a chosen date range (April to June 2025) rather than an all-time standing. The resolved or validated share of the 1,060 reports is not given.",
+  },
+  {
+    id: "tk-darpa-2025-aixcc",
+    title: "AI Cyber Challenge marks pivotal inflection point for cyber defense",
+    url: "https://www.darpa.mil/news/2025/aixcc-results",
+    publisher: "DARPA",
+    date: "2025-08-08",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "In the AI Cyber Challenge final at DEF CON in August 2025, the finalists' systems found 54 of 63 synthetic vulnerabilities (86%) and patched 43 (68%), analysed more than 54 million lines of code, submitted patches in an average of 45 minutes, and also found 18 real, non-synthetic vulnerabilities, for which they provided 11 patches.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Winners: Team Atlanta first, Trail of Bits second, Theori third. The real vulnerabilities break down as 6 in C and 12 in Java codebases. An independent write-up of the competition counts the real findings differently (distinct zero-days across open-source projects), so quote DARPA's own numbers on stage.",
+  },
+  {
+    id: "tk-wittmann-2025-biosecurity-screening",
+    title: "Strengthening nucleic acid biosecurity screening against generative protein design tools",
+    url: "https://doi.org/10.1126/science.adu8578",
+    publisher: "Science",
+    authors: ["Bruce J. Wittmann", "Tessa Alexanian", "Craig Bartling", "Jacob Beal", "Adam Clore", "James Diggans", "Kevin Flyangolts", "Bryan T. Gemler", "Tom Mitchell", "Steven T. Murphy", "Nicole E. Wheeler", "Eric Horvitz"],
+    date: "2025-10-02",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "The authors evaluated open-source AI protein design software for its ability to create variants of proteins of concern that could evade the biosecurity screening tools used by nucleic acid synthesis providers, identified a vulnerability where AI-redesigned sequences could not be detected reliably by current tools, and in response developed and deployed patches, greatly improving detection rates of the variants more likely to keep the original function.",
+    evidence: "evaluation",
+    verification: "verified",
+    notes:
+      "Claim follows the abstract (Science 390, 82 to 87). science.org answers 403 to automated fetches, so the abstract was read through Crossref and the publisher's press release. The release adds that the screening of more than 75,000 variants covered four screening systems, that three of the four providers deployed updates without significantly increasing false positives, and that no tool achieved complete coverage. Secondary summaries put post-patch detection at about 97%, leaving about 3% of the likely-functional variants undetected; that figure is not in the abstract and could not be confirmed in the paper, so do not quote it. Stay at this level of generality on stage: no proteins, tasks or protocols named.",
+  },
+  {
+    id: "tk-urbina-2022-dual-use",
+    title: "Dual use of artificial-intelligence-powered drug discovery",
+    url: "https://doi.org/10.1038/s42256-022-00465-9",
+    publisher: "Nature Machine Intelligence",
+    authors: ["Fabio Urbina", "Filippa Lentzos", "Cédric Invernizzi", "Sean Ekins"],
+    date: "2022-03-07",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "The authors took their own generative model for drug discovery, which normally penalises toxicity, flipped it to reward toxicity instead, and in less than six hours of machine time it generated 40,000 molecules predicted to be toxic, including known chemical warfare agents and many molecules absent from public databases.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Nature Machine Intelligence 4, 189 to 191, published 7 March 2022; the article is paywalled, so the figures were checked against Scientific American's report of 21 April 2022 ('40,000 substances' in 'less than six hours of machine time') and a National Academies proceedings volume, which restates the result as 'more than 40,000 molecules' in 'less than 24 hours'. Six hours is the authors' own figure; the 24 hour version is the looser retelling. The authors state they did not narrow down or test any of the designs. This is a chemistry example, not a biological one.",
+  },
+  {
+    id: "tk-dna-synthesis-screening",
+    title: "Framework for Nucleic Acid Synthesis Screening",
+    url: "https://bidenwhitehouse.archives.gov/wp-content/uploads/2024/10/OSTP-Nucleic-Acid_Synthesis_Screening_Framework-Sep2024-Final.pdf",
+    publisher: "White House Office of Science and Technology Policy",
+    date: "2024-04",
+    retrieved: "2026-10-05",
+    kind: "regulation",
+    claim:
+      "The United States has no general law requiring the screening of synthetic DNA orders: the 2024 federal framework reaches only purchasers of federal life sciences funding, for whom funding agencies require that synthetic nucleic acids and benchtop synthesis equipment be bought from providers adhering to the framework, with adherence resting on the provider's own public attestation; outside that, screening rests on voluntary industry commitments.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Framework dated April 2024, revised September 2024; the funding requirement 'will take effect for all purchases of synthetic nucleic acids and benchtop nucleic synthesis equipment that take place on or after April 26, 2025', and the first of the six provider actions is to 'Attest to implementing this screening framework'. Status in 2026: following the executive order of 5 May 2025, the US government says federal departments 'will revise or replace the 2024 Framework' and that its page 'will be updated once the new framework is available' (aspr.gov), so there is currently no successor framework. The voluntary side is the International Gene Synthesis Consortium, whose members 'together represent a majority of commercial gene synthesis capacity world-wide' (genesynthesisconsortium.org); a 2026 policy review in Frontiers in Bioengineering and Biotechnology (Zakaria, Peresson, Sharkey and Engel) describes the consortium's commitments as voluntary and reports that only 69 of more than 700 known providers worldwide have publicly identifiable screening mechanisms.",
+  },
+  {
+    id: "tk-who-2025-sago-origins",
+    title: "WHO Scientific advisory group issues report on origins of COVID-19",
+    url: "https://www.who.int/news/item/27-06-2025-who-scientific-advisory-group-issues-report-on-origins-of-covid-19",
+    publisher: "World Health Organization",
+    date: "2025-06-27",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "In June 2025 WHO's Scientific Advisory Group for the Origins of Novel Pathogens reported that 'the work to understand the origins of SARS-CoV-2 remains unfinished' and that 'all hypotheses must remain on the table, including zoonotic spillover and lab leak'; WHO had asked China for early genetic sequences, market animal data and information on laboratory work and biosafety in Wuhan, and says that to date China has not shared it with SAGO or WHO.",
+    evidence: "contested",
+    verification: "verified",
+    notes:
+      "The report's own position is that the weight of available evidence points to zoonotic spillover while a laboratory-related incident cannot be ruled out, because the data needed to settle it were not provided. Keep both halves together on stage; stating either hypothesis as established misreports the source.",
+  },
+  {
+    id: "tk-alizon-2009-virulence-tradeoff",
+    title: "Virulence evolution and the trade-off hypothesis: history, current state of affairs and the future",
+    url: "https://doi.org/10.1111/j.1420-9101.2008.01658.x",
+    publisher: "Journal of Evolutionary Biology",
+    authors: ["Samuel Alizon", "Amy Hurford", "Nicole Mideo", "Minus van Baalen"],
+    date: "2009-02",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "This review argues that pathogen evolution does not simply maximise virulence: under the trade-off hypothesis, 'virulence is an unavoidable consequence of parasite transmission', so the two are linked, and the authors conclude that trade-offs exist 'but may not be of the simple form that is usually assumed'.",
+    evidence: "contested",
+    verification: "verified",
+    notes:
+      "Journal of Evolutionary Biology 22(2), 245 to 259. Wiley answers 403 to automated fetches; the abstract was read through Crossref. The trade-off hypothesis is itself debated: the review says it 'has been increasingly challenged' since the 1990s and that this debate 'is the heart of the current debate in the field', while holding that 'the trade-off hypothesis and its basic extensions are necessary to assess the qualitative impacts of virulence management strategies'. The review replaced an older assumption that parasites always evolve towards avirulence, so do not use it to claim that pathogens must become milder either.",
+  },
+  {
+    id: "tk-un-2023-laws-resolution",
+    title: "Resolution 78/241: Lethal autonomous weapons systems",
+    url: "https://docs.un.org/en/A/RES/78/241",
+    publisher: "United Nations General Assembly",
+    date: "2023-12-22",
+    retrieved: "2026-10-05",
+    kind: "regulation",
+    claim:
+      "The General Assembly adopted its first resolution on lethal autonomous weapons systems, 78/241, on 22 December 2023 by 152 votes to 4 with 11 abstentions; it requests the Secretary-General to seek the views of states on such systems and on the role of humans in the use of force, and to report back.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The resolution number, title, adoption date and operative paragraph 2 are confirmed by a UNODA document reproducing them ('Resolution 78/241 \"Lethal autonomous weapons systems\" adopted by the United Nations General Assembly on 22 December 2023'). The vote counts come from Human Rights Watch's report of 3 January 2024, which also calls it 'the first-ever United Nations General Assembly resolution' on the subject: against were Belarus, India, Mali and Russia. The resolution creates no obligation; negotiations stayed in the CCW group of governmental experts.",
+  },
+  {
+    id: "tk-ukraine-ai-drones",
+    title: "Ukraine's Future Vision and Current Capabilities for Waging AI-Enabled Autonomous Warfare",
+    url: "https://www.csis.org/analysis/ukraines-future-vision-and-current-capabilities-waging-ai-enabled-autonomous-warfare",
+    publisher: "Center for Strategic and International Studies",
+    authors: ["Kateryna Bondar"],
+    date: "2025-03-06",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "Ukraine fields drones with AI-enabled automatic target recognition and autonomous final approach: the report says such systems let a drone lock on to targets up to 2 km away and make strikes three to four times more likely to succeed, and that Ukrainian forces began buying 10,000 AI-enhanced drones in 2024, against roughly 2 million drones produced domestically that year.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "The report's own caveat matters on stage: full autonomy 'is not yet present on the battlefield in the war in Ukraine'. What is deployed is partial autonomy, mostly on the last stretch of the flight, with humans still deciding to engage. Success rates quoted as rising from about 10% to 20% up to 70% to 80% are the report's figures for autonomous terminal navigation.",
+  },
+  {
+    id: "tk-ross-2001-oil-democracy",
+    title: "Does Oil Hinder Democracy?",
+    url: "https://www.cmsconsultores.com/wp-content/uploads/2012/03/doesoil.pdf",
+    publisher: "World Politics",
+    authors: ["Michael L. Ross"],
+    date: "2001-04",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "Using data on 113 states from 1971 to 1997, Ross finds that 'the oil-impedes-democracy claim is both valid and statistically robust', that the effect is not confined to the Middle East, and offers as one mechanism a 'rentier effect', where 'governments use low tax rates and patronage to relieve pressures for greater accountability'.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "World Politics 53 (April 2001), 325 to 361. Read from a public copy of the article text, since the publisher's page is paywalled. Ross's own caveat on mechanism: 'the causality tests rely on data that are incomplete and potentially biased, so the results should be treated as suggestive, not conclusive'. He also tests a repression effect and a modernization effect, so the rentier effect is one candidate among three, not a settled finding.",
+  },
+  {
+    id: "tk-drago-laine-2025-intelligence-curse",
+    title: "The Intelligence Curse",
+    url: "https://intelligence-curse.ai/",
+    publisher: "intelligence-curse.ai",
+    authors: ["Luke Drago", "Rudolf Laine"],
+    date: "2025-04",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "Drago and Laine argue by analogy with the resource curse that with AGI, powerful actors will lose their incentive to invest in regular people, just as resource-rich states today neglect their citizens because their wealth comes from natural resources rather than from taxing human labour.",
+    evidence: "thought-experiment",
+    verification: "verified",
+    notes:
+      "An essay series by two authors writing in a personal capacity, published April 2025: an argument, not evidence. The original sentence joins its two halves with a dash where this claim uses a comma. The series also argues the outcome is not inevitable and proposes diffusing AI capability widely and strengthening institutions. The empirical resource-curse literature it borrows from is in tk-ross-2001-oil-democracy, whose own caveats apply.",
+  },
+  {
+    id: "tk-us-2025-ai-action-plan",
+    title: "Winning the Race: America's AI Action Plan",
+    url: "https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf",
+    publisher: "The White House",
+    date: "2025-07",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "The United States' AI policy document of July 2025 is titled 'Winning the Race: America's AI Action Plan' and opens: 'The United States is in a race to achieve global dominance in artificial intelligence (AI)', adding 'Just like we won the space race, it is imperative that the United States and its allies win this race.'",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Read from the published PDF. The plan is organised in three pillars (accelerate AI innovation, build American AI infrastructure, lead in international AI diplomacy and security). A quotation from President Trump on the title page calls technological dominance 'a national security imperative'. Quote the document, not an intention behind it.",
+  },
+  {
+    id: "tk-musk-altman-public-feud",
+    title: "OpenAI unanimously rejects Elon Musk's $97.4 billion takeover bid",
+    url: "https://www.cbsnews.com/news/openai-rejects-elon-musks-97-4-billion/",
+    publisher: "CBS News",
+    date: "2025-02-14",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "Musk sued OpenAI in 2024, alleging breach of contract over its founding non-profit aims, and in February 2025 a Musk-led investor group made an unsolicited $97.4 billion bid for the non-profit parent's assets; OpenAI's board rejected it unanimously, its chair Bret Taylor saying 'OpenAI is not for sale, and the board has unanimously rejected Mr. Musk's latest attempt to disrupt his competition'.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Documented events only; neither side's motives are established. The report also notes that Musk later added Microsoft as a defendant, that he contributed about $45 million to OpenAI up to 2018, and that OpenAI's lawyers called the bid 'not a bid at all'. The lawsuit's outcome is in st-cbs-2026-musk-verdict; Musk's own AI company is in st-cbs-2023-xai-launch.",
+  },
+  {
+    id: "tk-bluedot-impact",
+    title: "BlueDot Impact",
+    url: "https://bluedot.org",
+    publisher: "BlueDot Impact",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "BlueDot Impact, a non-profit, runs courses on AI and its risks (among them the self-paced 'The Future of AI' and the group course 'AGI Strategy'); the talk borrows some of its explanations and examples.",
+    evidence: "none",
+    verification: "verified",
+    notes:
+      "Credited on 05-credits. The home page describes it as 'the leading talent accelerator for beneficial AI and societal resilience'. A separate organisation from ML4Good (tk-ml4good).",
+  },
+  {
+    id: "tk-ml4good",
+    title: "ML4Good: AI safety bootcamps",
+    url: "https://www.ml4good.org",
+    publisher: "ML4Good",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "ML4Good runs free, intensive in-person AI safety bootcamps (eight days, a technical track and a governance and strategy track); the talk borrows some of its explanations and examples.",
+    evidence: "none",
+    verification: "verified",
+    notes: "Credited on 05-credits, on one line with BlueDot Impact (tk-bluedot-impact), a separate organisation.",
+  },
+  {
+    id: "tk-ai-in-context",
+    title: "AI In Context (YouTube channel)",
+    url: "https://www.youtube.com/@AI_In_Context",
+    publisher: "80,000 Hours",
+    date: "2025-07-09",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "AI In Context is a YouTube channel produced by 80,000 Hours and hosted by Aric Floyd, with documentary-style videos about transformative AI, its risks and what people can do; the talk borrows some of its explanations and examples, and opens with its welcome video.",
+    evidence: "none",
+    verification: "verified",
+    notes:
+      "Launch announced on the EA Forum on 2025-07-09 ('80,000 Hours is producing AI in Context, a new YouTube channel'). youtube.com answers automated fetches with a consent page; the channel address is the one in content/glossary/resources.ts.",
+  },
+  {
+    id: "tk-hao-2025-empire-of-ai",
+    title: "Empire of AI: Dreams and Nightmares in Sam Altman's OpenAI",
+    url: "https://www.penguinrandomhouse.com/books/743569/empire-of-ai-by-karen-hao/",
+    publisher: "Penguin Press",
+    authors: ["Karen Hao"],
+    date: "2025-05-20",
+    retrieved: "2026-10-05",
+    kind: "book",
+    claim:
+      "A book of investigative reporting on OpenAI's rise under Sam Altman and on the compute, data and labor behind the AI boom; the talk borrows some of its explanations and examples.",
+    evidence: "none",
+    verification: "verified",
+    notes: "Hardcover published 2025-05-20 (publisher's page and the book's Wikipedia page).",
+  },
+  {
+    id: "tk-christian-2020-alignment-problem",
+    title: "The Alignment Problem: Machine Learning and Human Values",
+    url: "https://wwnorton.com/books/the-alignment-problem",
+    publisher: "W. W. Norton & Company",
+    authors: ["Brian Christian"],
+    date: "2020-10-06",
+    retrieved: "2026-10-05",
+    kind: "book",
+    claim:
+      "A book, based on interviews with researchers, on the effort to build machine learning systems aligned with human values; the talk borrows some of its explanations and examples.",
+    evidence: "none",
+    verification: "verified",
+    notes: "Publication date from the book's Wikipedia page (W. W. Norton, 2020-10-06).",
+  },
 ];

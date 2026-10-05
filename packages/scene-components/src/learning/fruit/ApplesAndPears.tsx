@@ -26,8 +26,9 @@ function percent(value: number, locale: Locale): string {
 }
 
 /**
- * ApplesAndPears (no props): the presenter's analogy for training, validation
- * and test sets, scripted click by click (see fruit.ts and the README). No
+ * ApplesAndPears (no props): the presenter's analogy for training and test
+ * sets (the exercises and the mock exam; the final exam is the real world),
+ * scripted click by click (see fruit.ts and the README). No
  * state and no model: every window draws the frame of `ctx.revealStep`; the
  * preview shows the last frame, still.
  */
@@ -35,10 +36,7 @@ export function ApplesAndPears({ ctx }: SceneComponentProps<Record<string, never
   const { locale, role } = ctx;
   const still = role === "preview" || ctx.reducedMotion;
   const view = fruitView(role === "preview" ? FRUIT_STEPS : ctx.revealStep);
-  const dimBox = (id: BoxId): boolean =>
-    (view.focus === "training" && id !== "training") ||
-    (view.focus === "checks" && id === "training") ||
-    view.focus === "world";
+  const dimBox = (id: BoxId): boolean => view.focus === "world" || (view.focus !== null && view.focus !== id);
 
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`} data-step={view.step}>
@@ -63,7 +61,7 @@ export function ApplesAndPears({ ctx }: SceneComponentProps<Record<string, never
         return (
           <section
             key={id}
-            className={`${styles.box} ${view.split ? styles.shown : styles.hidden} ${dimBox(id) ? styles.dim : ""} ${view.focus === "training" && id === "training" ? styles.focus : ""}`}
+            className={`${styles.box} ${view.split ? styles.shown : styles.hidden} ${dimBox(id) ? styles.dim : ""} ${view.focus === id ? styles.focus : ""}`}
             style={{ left: r.x, top: r.y, width: r.w, height: r.h }}
             data-box={id}
             aria-hidden={!view.split}
@@ -79,7 +77,6 @@ export function ApplesAndPears({ ctx }: SceneComponentProps<Record<string, never
             </header>
             <p
               className={`${styles.check} ${checked ? styles.shown : styles.hidden}`}
-              data-delay={id === "test" ? "" : undefined}
               aria-hidden={!checked}
               aria-label={`${plainText(tr(TEXT.passed, locale))} ${percent(1, locale)}`}
             >
@@ -133,7 +130,7 @@ export function ApplesAndPears({ ctx }: SceneComponentProps<Record<string, never
           <Robot className={styles.robot} />
           <span className={styles.modelName}>{tr(TEXT.model, locale)}</span>
         </div>
-        <div className={styles.rule}>
+        <div className={`${styles.rule} ${view.caution ? styles.ruleHidden : ""}`}>
           <p className={styles.ruleHeading}>{tr(TEXT.ruleHeading, locale)}</p>
           <p className={styles.ruleRow}>
             <span className={`${styles.swatch} ${styles.swatchGreen}`} aria-hidden="true" />
@@ -145,6 +142,16 @@ export function ApplesAndPears({ ctx }: SceneComponentProps<Record<string, never
           </p>
         </div>
       </div>
+
+      <aside className={`${styles.caution} ${view.caution ? styles.shown : styles.hidden}`} aria-hidden={!view.caution}>
+        <p className={styles.cautionHeading}>
+          <span className={styles.cautionMark} aria-hidden="true">!</span>
+          {tr(TEXT.cautionHeading, locale)}
+        </p>
+        <p className={styles.cautionLine}>
+          <Rich text={tr(TEXT.cautionLine, locale)} />
+        </p>
+      </aside>
 
       <section className={`${styles.world} ${view.world ? styles.shown : styles.hidden}`} aria-hidden={!view.world}>
         <h2 className={styles.worldName}>{tr(TEXT.world, locale)}</h2>

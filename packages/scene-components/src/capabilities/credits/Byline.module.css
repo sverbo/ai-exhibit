@@ -1,0 +1,50 @@
+/* The talk's byline, under the title (holding slide) or atop the credits. */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.own {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.large .own {
+  font-size: var(--text-lg);
+}
+.original {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.url {
+  font-size: var(--text-xs);
+  color: var(--color-accent-2);
+  font-variant-ligatures: none;
+}
+
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+.own .link {
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, currentColor 22%, transparent);
+}
+.url.link {
+  color: var(--color-accent-2);
+}
+.link:hover,
+.link:focus-visible {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}

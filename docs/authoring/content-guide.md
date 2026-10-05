@@ -102,6 +102,8 @@ fallback.
 | `GoalVsOutcome` | 4.7 | [learning](../../packages/scene-components/src/learning/README.md) |
 | `IncidentStory` | 4.8 | [risks](../../packages/scene-components/src/risks/README.md) |
 | `DefenseInDepth` | 5.2 | [evidence](../../packages/scene-components/src/evidence/README.md) |
+| `ResourceList` | 5.4 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `CreditsSlide` | 5.5 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 
 A name that is not registered renders a labelled placeholder and is a
 `verify:content` warning, so content can land before its component.

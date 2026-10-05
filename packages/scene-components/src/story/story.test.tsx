@@ -256,6 +256,45 @@ describe("IndustryStack", () => {
     expect(lit(13)).toEqual(["asml"]);
   });
 
+  it("shows market shares for the near-monopolies, beside their logo once lit", () => {
+    const shares = actors.filter((a) => a.share);
+    expect(shares.map((a) => [a.id, a.share!.value.en])).toEqual([
+      ["nvidia", "~92%"],
+      ["tsmc", "~72%"],
+      ["asml", "100%"],
+    ]);
+    for (const a of shares) {
+      expectL10n(a.share!.value, `${a.id} share`);
+      expectL10n(a.share!.what, `${a.id} share`);
+      expectSources(a.share!.sourceIds, `${a.id} share`);
+      expect(a.share!.sourceIds.every((id) => byId.get(id)?.verification === "verified"), a.id).toBe(true);
+    }
+    // Every share is sourced.
+    expect(shares.filter((a) => a.share!.sourceIds.length === 0).map((a) => a.id)).toEqual([]);
+    expect(actors.find((a) => a.id === "nvidia")!.share!.what.en).toContain("est.");
+    const shown = (step: number) => [...render(IndustryStack, {}, ctx("display", step, "en")).matchAll(/data-share="([^"]+)"/g)].map((m) => m[1]);
+    expect(shown(10)).toEqual([]);
+    expect(shown(11)).toEqual(["nvidia"]);
+    expect(shown(12)).toEqual(["nvidia", "tsmc"]);
+    expect(shown(13)).toEqual(["nvidia", "tsmc", "asml"]);
+    expect(render(IndustryStack, {}, ctx("display", 13, "fr"))).toContain("100 %");
+  });
+
+  it("tags the Chinese labs as open weights when they light, citing their model cards", () => {
+    const open = actors.filter((a) => a.openWeights);
+    expect(open.map((a) => a.id)).toEqual(["deepseek", "qwen", "moonshot-ai", "zai"]);
+    for (const a of open) {
+      expect(a.openWeights!.sourceIds.length).toBeGreaterThan(0);
+      expectSources(a.openWeights!.sourceIds, `${a.id} open weights`);
+      expect(a.openWeights!.sourceIds.every((id) => byId.get(id)?.verification === "verified"), a.id).toBe(true);
+    }
+    const tagged = (step: number) => [...render(IndustryStack, {}, ctx("display", step, "en")).matchAll(/data-open-weights="([^"]+)"/g)].map((m) => m[1]);
+    expect(tagged(9)).toEqual([]);
+    expect(tagged(10)).toEqual(["deepseek", "qwen", "moonshot-ai", "zai"]);
+    expect(tagged(13)).toEqual(["deepseek", "qwen", "moonshot-ai", "zai"]);
+    expect(render(IndustryStack, {}, ctx("display", 10, "fr"))).toContain("poids ouverts");
+  });
+
   it("every move is sourced, localized and points at a known lab", () => {
     for (const m of MOVES) {
       expectL10n(m.what, `${m.person}@${m.step}`);

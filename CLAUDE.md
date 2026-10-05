@@ -51,6 +51,17 @@ If someone asks you to set up their own copy of the talk, follow
 - `pnpm typecheck`, `pnpm test` and `pnpm verify:content` must pass before a
   commit. See `CONTRIBUTING.md` for pull requests.
 
+## Credits and forks
+
+Authorship lives in one place, `presentations/canonical/src/credits.ts`: the
+original author (Samuel Verboomen, https://ai-exhibit.samverbo.com) and a
+`fork` field, null in the original. The first slide (`00-holding`) and the
+credits slide (`05-credits`) read it. A fork is welcome to present under its own
+name by setting `fork`; the author asks that it keep the line "Original
+presentation by Samuel Verboomen" with its link to ai-exhibit.samverbo.com on
+both slides (they show it on their own when `fork` is set). The content license,
+CC BY 4.0, asks for attribution anyway.
+
 ## Working in a shared tree
 
 The presenter may be running `pnpm dev` on this tree: keep it runnable after

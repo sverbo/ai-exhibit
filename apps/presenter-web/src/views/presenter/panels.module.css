@@ -22,12 +22,51 @@
   gap: 18px;
 }
 /* Only the talking points scroll: takeaway and transition stay in view. */
+.pointsWrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* The scrollbar stays visible (no overlay scrollbar), so a long list reads as long. */
 .pointsScroll {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
   margin-right: -10px;
   padding-right: 10px;
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-text-muted) color-mix(in srgb, var(--color-line) 60%, transparent);
+}
+.pointsScroll::-webkit-scrollbar {
+  width: 12px;
+}
+.pointsScroll::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--color-line) 60%, transparent);
+  border-radius: 6px;
+}
+.pointsScroll::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+/* "N more notes below": a pill over a fade at the bottom of the list; a click scrolls on. */
+.moreBelow {
+  position: absolute;
+  left: 0;
+  right: 14px;
+  bottom: 0;
+  padding: 28px 0 4px;
+  border: none;
+  background: linear-gradient(to bottom, transparent, var(--color-bg) 70%);
+  font-family: var(--font-body);
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-align: center;
+  cursor: pointer;
 }
 .aside {
   margin-right: 0.35em;
@@ -213,7 +252,8 @@
   height: 100%;
 }
 .segment {
-  min-width: 18px;
+  position: relative;
+  min-width: 0;
   display: flex;
   align-items: center;
   padding: 0 6px;
@@ -235,6 +275,46 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
+}
+/* One invisible cell per slide; hovering the strip shows the cells, and a click jumps there. */
+.cells {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.cell {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.strip:hover .cell + .cell {
+  box-shadow: inset 1px 0 0 color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+}
+.cell.cellHover,
+.cell:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  outline: none;
+}
+.stripTip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  translate: -50% 0;
+  max-width: 420px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--ui-text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 5;
 }
 .markPos,
 .markClock {
@@ -244,7 +324,7 @@
   width: 3px;
   translate: -1px 0;
   border-radius: 2px;
-  pointer-events: auto;
+  pointer-events: none;
 }
 .markPos {
   background: var(--color-text);

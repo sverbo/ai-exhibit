@@ -21,8 +21,11 @@ Every component accepts an optional `heading: L10n` that replaces its default ti
 
 ## ApplesAndPears
 
-No props. Used by 02-apples-and-pears. The presenter's analogy for training,
-validation and test sets, as a scripted animation: no model, no state. Every
+No props. Used by 02-apples-and-pears. The presenter's analogy for training
+and test sets, as a scripted animation: no model, no state. Training is the
+exercises with corrections, test is the mock exam, and the final exam is the
+real world (production). There is no validation box, to keep the story
+simple; the speaker notes mention it. Every
 window draws the frame of `ctx.revealStep` (`fruit/fruit.ts`, tested), so
 previous and next work both ways; reduced motion and the preview change
 states at once, and the preview shows the last frame. The thought-experiment
@@ -31,11 +34,11 @@ badge stays on screen.
 | Step | Caption | On stage |
 | --- | --- | --- |
 | 0 | The data: pictures labelled by people | A pile of 20 labelled fruits: only red apples and green pears |
-| 1 | We split the pile into three boxes, like at school | The fruits fly into Training (70%, the exercises), Validation (15%, mock exams) and Test (15%, the final exam) |
+| 1 | We split the pile into two boxes, like at school | The fruits fly into Training (80%, 16 fruits, the exercises with corrections) and Test (20%, 4 fruits, the mock exam) |
 | 2 | Training: the model finds the simplest rule that works | Training is highlighted; the model and its rule: "Green means pear. Red means apple." |
-| 3 | Every check passes | Validation, then Test, get a 100% stamp |
-| 4 | Real world: a green apple. None of the boxes had one | A green apple arrives; the model answers "pear, 97% sure", with a cross |
-| 5 | You cannot blame the model: the gap was in the data, and it shows up only in the real world | Each box shows "Green apples: 0"; the model dims |
+| 3 | The mock exam passes: 100% | Test is highlighted and gets a 100% stamp |
+| 4 | The final exam, in the real world: a green apple. Neither box had one | The "Final exam: the real world" panel: a green apple arrives; the model answers "pear, 97% sure", with a cross |
+| 5 | You cannot blame the model: the gap was in the data, and it shows up only in the real world | Both boxes show "Green apples: 0"; the model dims |
 
 `scene.steps`: 5.
 

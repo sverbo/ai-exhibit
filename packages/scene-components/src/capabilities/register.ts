@@ -8,6 +8,7 @@ import { HoldingSlide } from "./intro/HoldingSlide.tsx";
 import { FrontierProgress } from "./progress/FrontierProgress.tsx";
 import { Agenda } from "./agenda/Agenda.tsx";
 import { SectionDivider } from "./agenda/SectionDivider.tsx";
+import { CreditsSlide } from "./credits/CreditsSlide.tsx";
 
 registerSceneComponent("ConnectedAssistant", ConnectedAssistant);
 registerSceneComponent("AgentRunExplainer", AgentRunExplainer);
@@ -17,3 +18,4 @@ registerSceneComponent("HoldingSlide", HoldingSlide);
 registerSceneComponent("FrontierProgress", FrontierProgress);
 registerSceneComponent("Agenda", Agenda);
 registerSceneComponent("SectionDivider", SectionDivider);
+registerSceneComponent("CreditsSlide", CreditsSlide);

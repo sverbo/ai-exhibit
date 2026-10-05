@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { tr, type Locale, type PresentationDefinition, type SceneDefinition, type SourceRecord } from "@ai-exhibit/presentation-core";
 import { Rich, EvidenceBadge, getSceneComponent } from "@ai-exhibit/scene-components";
 import { formatDuration, type Pace } from "../../control/pace.ts";
@@ -7,6 +7,7 @@ import { cloudHealthText, useCloudHealth } from "../../talk/runtime.ts";
 import type { Talk } from "../../talk/useTalk.ts";
 import chrome from "../../ui/chrome.module.css";
 import { SpeakerNotes } from "../../ui/SpeakerNotes.tsx";
+import { plainInline } from "../../ui/notes.ts";
 import styles from "./panels.module.css";
 
 /** Scene-level plus card-level source IDs, deduplicated. */
@@ -26,17 +27,52 @@ export function sceneTodos(scene: SceneDefinition): string[] {
   return todos;
 }
 
-const NOTES_SCALE_KEY = "ai-exhibit:notes-scale";
-const SCALE_MIN = 0.7;
+// v2: the default moved to the small end (0.7), with two steps below it.
+const NOTES_SCALE_KEY = "ai-exhibit:notes-scale-v2";
+const SCALE_MIN = 0.5;
 const SCALE_MAX = 1.6;
+const SCALE_DEFAULT = 0.7;
 
 function readScale(): number {
   try {
-    const v = Number(localStorage.getItem(NOTES_SCALE_KEY));
-    return v >= SCALE_MIN && v <= SCALE_MAX ? v : 1;
+    const raw = localStorage.getItem(NOTES_SCALE_KEY);
+    const v = Number(raw);
+    return raw !== null && v >= SCALE_MIN && v <= SCALE_MAX ? v : SCALE_DEFAULT;
   } catch {
-    return 1;
+    return SCALE_DEFAULT;
   }
+}
+
+/**
+ * How many talking points are cut off below the visible part of a scrolling
+ * list, kept up to date on scroll, resize and content changes.
+ */
+function useHiddenBelow(ref: React.RefObject<HTMLElement | null>, key: unknown): number {
+  const [hidden, setHidden] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const bottom = el.getBoundingClientRect().bottom;
+      let n = 0;
+      for (const li of el.querySelectorAll<HTMLElement>("[data-note-kind]")) {
+        if (li.getBoundingClientRect().bottom > bottom + 2) n++;
+      }
+      setHidden(n);
+    };
+    measure();
+    el.addEventListener("scroll", measure, { passive: true });
+    const resize = new ResizeObserver(measure);
+    resize.observe(el);
+    const mutate = new MutationObserver(measure);
+    mutate.observe(el, { childList: true, subtree: true, characterData: true });
+    return () => {
+      el.removeEventListener("scroll", measure);
+      resize.disconnect();
+      mutate.disconnect();
+    };
+  }, [ref, key]);
+  return hidden;
 }
 
 /** Notes text size, persisted per machine (A- / A+). */
@@ -73,6 +109,12 @@ export function NotesPanel({
   personalNote?: string;
 }) {
   const { t } = useUi();
+  const pointsRef = useRef<HTMLDivElement | null>(null);
+  const hiddenBelow = useHiddenBelow(pointsRef, `${scene?.id}:${scale}:${locale}`);
+  // A new scene starts at its first point.
+  useEffect(() => {
+    pointsRef.current?.scrollTo({ top: 0 });
+  }, [scene?.id]);
   if (!scene) return null;
   const takeaway = tr(scene.takeaway, locale);
   const transition = tr(scene.transitionOut, locale);
@@ -83,8 +125,19 @@ export function NotesPanel({
           <span className={styles.aside}>{t("takeaway")}</span> {takeaway}
         </p>
       ) : null}
-      <div className={styles.pointsScroll}>
-        <SpeakerNotes markdown={tr(scene.speakerNotes, locale)} variant="desk" personal={personalNote} />
+      <div className={styles.pointsWrap}>
+        <div className={styles.pointsScroll} ref={pointsRef}>
+          <SpeakerNotes markdown={tr(scene.speakerNotes, locale)} variant="desk" personal={personalNote} />
+        </div>
+        {hiddenBelow > 0 ? (
+          <button
+            type="button"
+            className={styles.moreBelow}
+            onClick={() => pointsRef.current?.scrollBy({ top: pointsRef.current.clientHeight * 0.8, behavior: "smooth" })}
+          >
+            ▼ {hiddenBelow === 1 ? t("moreNotesOne") : t("moreNotes").replace("{n}", String(hiddenBelow))}
+          </button>
+        ) : null}
       </div>
       <div className={styles.then}>
         {transition ? (
@@ -247,29 +300,97 @@ export function ChapterStrip({
   pace,
   presentation,
   locale,
+  scenes,
+  onGo,
 }: {
   pace: Pace;
   presentation: PresentationDefinition;
   locale: Locale;
+  /** The scenes the pace was computed on, in talk order; slides are those with a duration. */
+  scenes: SceneDefinition[];
+  /** Jump to a scene: hovering the strip splits each part into one cell per slide. */
+  onGo: (sceneId: string) => void;
 }) {
   const { t } = useUi();
+  const stripRef = useRef<HTMLDivElement | null>(null);
+  const [hover, setHover] = useState<{ id: string; label: string; left: number } | null>(null);
   // One unit per visible slide: segments and markers follow slide counts, not time or clicks.
   const total = pace.slideTotal || 1;
   const pct = (slides: number) => `${Math.min(100, Math.max(0, (slides / total) * 100))}%`;
+  // The slides of each run of scenes, in the order computePace built its chapters (a part can come back after a reorder).
+  const runs: SceneDefinition[][] = [];
+  scenes.forEach((sc, i) => {
+    if (i === 0 || scenes[i - 1]!.chapter !== sc.chapter) runs.push([]);
+    if (sc.durationSec > 0) runs[runs.length - 1]!.push(sc);
+  });
+  // Where each slide's cell really is: parts are not exactly proportional (labels, gaps), so markers sit on the cells.
+  const [cells, setCells] = useState<{ left: number; width: number }[]>([]);
+  useLayoutEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const measure = () => {
+      const origin = strip.getBoundingClientRect().left;
+      setCells(
+        [...strip.querySelectorAll<HTMLElement>("[data-slide-cell]")].map((el) => {
+          const r = el.getBoundingClientRect();
+          return { left: r.left - origin, width: r.width };
+        }),
+      );
+    };
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(strip);
+    return () => resize.disconnect();
+  }, [scenes, pace.chapters, locale]);
+  /** A position in slides (3.5 = halfway through the fourth slide), as a left offset on the strip. */
+  const at = (slides: number): string => {
+    if (cells.length !== pace.slideTotal || !cells.length) return pct(slides);
+    const k = Math.floor(slides);
+    if (k >= cells.length) return `${cells[cells.length - 1]!.left + cells[cells.length - 1]!.width}px`;
+    const c = cells[Math.max(0, k)]!;
+    return `${c.left + Math.max(0, slides - k) * c.width}px`;
+  };
+  const show = (e: React.MouseEvent<HTMLButtonElement>, scene: SceneDefinition) => {
+    const strip = stripRef.current?.getBoundingClientRect();
+    const cell = e.currentTarget.getBoundingClientRect();
+    if (!strip) return;
+    setHover({
+      id: scene.id,
+      label: `${scene.number} ${plainInline(tr(scene.title, locale))}`,
+      // Kept inside the strip so the label never runs off either end.
+      left: Math.min(strip.width - 140, Math.max(140, cell.left + cell.width / 2 - strip.left)),
+    });
+  };
   return (
-    <div className={styles.strip}>
+    <div className={styles.strip} ref={stripRef} onMouseLeave={() => setHover(null)}>
       <div className={styles.segments}>
-        {pace.chapters.filter((c) => c.slideCount > 0).map((c) => {
+        {pace.chapters.map((c, run) => {
+          if (c.slideCount === 0) return null;
           const title = tr(presentation.chapters.find((ch) => ch.id === c.id)?.title ?? { en: c.id }, locale);
+          const own = runs[run] ?? [];
           return (
             <div
               key={`${c.id}-${c.plannedStartSec}`}
               className={`${styles.segment} ${styles[`seg_${c.status}`]}`}
-              style={{ flexGrow: c.slideCount }}
-              title={`${c.id} · ${title} · ${formatDuration(c.plannedSec)}`}
+              // Width strictly proportional to the slide count: the current part's title never widens its segment.
+              style={{ flex: `${c.slideCount} 1 0px` }}
             >
               <span className={styles.segLabel}>
                 <span className={chrome.mono}>{c.id}</span> {c.status === "current" ? title : ""}
+              </span>
+              <span className={styles.cells}>
+                {own.map((sc) => (
+                  <button
+                    key={sc.id}
+                    type="button"
+                    data-slide-cell
+                    className={`${styles.cell} ${hover?.id === sc.id ? styles.cellHover : ""}`}
+                    aria-label={`${sc.number} ${plainInline(tr(sc.title, locale))}`}
+                    onMouseEnter={(e) => show(e, sc)}
+                    onFocus={(e) => show(e as unknown as React.MouseEvent<HTMLButtonElement>, sc)}
+                    onClick={() => onGo(sc.id)}
+                  />
+                ))}
               </span>
             </div>
           );
@@ -277,9 +398,15 @@ export function ChapterStrip({
       </div>
       {pace.slideTotal > 0 ? (
         <>
-          <span className={styles.markPos} style={{ left: pct(pace.slideIndex) }} title={t("scene")} />
-          <span className={styles.markClock} style={{ left: pct(pace.clockSlides) }} title={t("timer")} />
+          {/* The current slide's cell, centred; the clock marker moves through the cells as time passes. */}
+          <span className={styles.markPos} style={{ left: at(pace.slideIndex + 0.5) }} title={t("scene")} />
+          <span className={styles.markClock} style={{ left: at(pace.clockSlides) }} title={t("timer")} />
         </>
+      ) : null}
+      {hover ? (
+        <span className={styles.stripTip} style={{ left: hover.left }} role="tooltip">
+          {hover.label}
+        </span>
       ) : null}
     </div>
   );

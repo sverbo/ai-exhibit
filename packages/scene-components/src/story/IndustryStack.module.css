@@ -87,6 +87,50 @@
   -webkit-mask: var(--logo) center / contain no-repeat;
   mask: var(--logo) center / contain no-repeat;
 }
+/* A market share, right-aligned against the left of its logo: the figure, then
+   what it is a share of. Read with the layer name: "Chip designers, ~90% of AI
+   accelerators, NVIDIA". */
+.share {
+  position: absolute;
+  transform: translate(-100%, -50%);
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  width: max-content;
+  /* Narrow enough to clear a one-line layer name ("Chip designers") on its left. */
+  max-width: 124px;
+  text-align: right;
+  transition: opacity 760ms var(--ease);
+}
+.shareValue {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+.shareWhat {
+  font-size: 17px;
+  font-weight: 550;
+  line-height: 1.12;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+/* "open weights", after the flags of a lab that publishes its model weights. */
+.tag {
+  position: absolute;
+  transform: translateY(-50%);
+  padding: 3px 10px 4px;
+  border: 1.5px solid var(--color-text);
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-text);
+  transition: opacity 760ms var(--ease);
+}
 .stroke {
   position: absolute;
   width: 48px;

@@ -238,3 +238,8 @@ how many we stack is a choice societies can make.
 **5.2 Closing question.** Who should decide how these systems are built and
 deployed? Companies, governments, international bodies, experts, citizens? I won't
 pick for you. I hope you leave with a better picture to think with.
+
+**Resources and credits.** The talk leaves a few places to keep learning, then
+ends on its credits: who made it, and the four works it borrowed most from (the
+BlueDot Impact and ML4Good courses, the AI In Context channel, Karen Hao's
+Empire of AI and Brian Christian's The Alignment Problem).

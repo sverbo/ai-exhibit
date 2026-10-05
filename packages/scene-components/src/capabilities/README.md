@@ -163,7 +163,7 @@ it rehearses the offline card) without reporting them.
 
 ## HoldingSlide
 
-Props: `{ title: L10n; line?: L10n }`. Scene `00-holding` (0.1), the first
+Props: `{ title: L10n; line?: L10n; credits?: TalkCredits }`. Scene `00-holding` (0.1), the first
 scene of a fresh session: shown while the room fills up, it never advances by
 itself. The talk's title (`talkTitle` in `presentations/canonical/src/chapters.ts`,
 also the presentation title), "The talk starts in a moment", the glossary QR
@@ -173,7 +173,27 @@ asked again every 15 s): the language demos (Simulation counts as ready, with
 a discreet "simulation" note; Hugging Face needs `GET /api/llm/status`
 configured and reachable, and the access code when one is required) and the
 YouTube player script loaded. The presenter's own screen also says which check
-is still waiting. `scene.steps`: 0.
+is still waiting. `scene.steps`: 0. Under the title, the byline from
+`credits` (see CreditsSlide): "by Samuel Verboomen", or in a fork the fork's
+own byline and, below it, "Original presentation by Samuel Verboomen" with
+its link.
+
+## CreditsSlide
+
+Props: `{ credits: TalkCredits; heading?: L10n; intro?: L10n; items: CreditsItem[] }`.
+Scene `05-credits` (5.5), the last slide. `scene.steps`: 0, no state.
+
+`credits` comes from the presentation's single attribution config,
+`presentations/canonical/src/credits.ts` (`{ original, fork }`, `fork` null in
+the original talk). `credits/Byline.tsx` renders it for this slide and the
+holding slide: the presenter's line ("Presentation by {name}"), then, when
+`fork` is set, "Original presentation by Samuel Verboomen" with the link to
+ai-exhibit.samverbo.com. In French, "de" is elided before a name starting with
+a vowel. Then `intro` and the `items`, two by two: a title (a plain string for
+a proper title, or an `L10n`), a "by" line, optional `links`
+(`{ url, label? }`, shown as the domain) and the `sourceIds` behind the line.
+Links open in a new tab on the live screens and stay plain text in the
+preview, like ResourceList.
 
 ## FrontierProgress
 

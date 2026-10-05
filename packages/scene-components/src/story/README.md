@@ -106,25 +106,41 @@ own portrait and line, so a change of organisation fades the old ones out as
 the new ones fade in. Jensen Huang stands beside the NVIDIA logo inside its
 layer. Reduced motion and preview skip the fades.
 
-| Step | Lights | People |
-| --- | --- | --- |
-| 0 | nothing | |
-| 1 | Google DeepMind | |
-| 2 | | Elon Musk and Sam Altman appear, portraits only, no line yet |
-| 3 | OpenAI | lines from both to OpenAI (founded December 2015) |
-| 4 | | Musk unlinks and stands apart (left the board, February 2018) |
-| 5 | | Dario Amodei appears at OpenAI (vice president of research) |
-| 6 | Anthropic | Amodei now at Anthropic (co-founded 2021) |
-| 7 | xAI | Musk now at xAI (announced July 2023) |
-| 8 | Meta | |
-| 9 | Mistral AI | Arthur Mensch appears at Mistral AI (co-founded 2023) |
-| 10 | DeepSeek, Qwen, Moonshot AI, Z.ai | |
-| 11 | NVIDIA | Jensen Huang (founder and CEO) beside the logo |
-| 12 | TSMC | |
-| 13 | ASML | |
+The slide argues that the chain is complex yet has few actors, some of them
+near-monopolies, so two kinds of marks appear with their actor and stay:
+
+- **Market shares** (`share` on an actor: `value`, `what`, `sourceIds`), drawn
+  left of the logo, right-aligned and centred in the layer: the figure large in
+  the accent colour, what it is a share of below it in muted ink. Estimates say
+  so ("est.", "estimation"). The figure carries its French inline
+  (`{ en: "~72%", fr: "~72 %" }`), so changing it touches one line; `what` goes
+  through the catalog.
+- **"open weights" tags** (`openWeights: { sourceIds }`, citing the model
+  cards), a small outlined pill after the flags of the Chinese labs. French
+  uses the glossary's translation, "poids ouverts".
+
+Before their actor lights they are hidden, not ghosted.
+
+| Step | Lights | People | Marks |
+| --- | --- | --- | --- |
+| 0 | nothing | | |
+| 1 | Google DeepMind | | |
+| 2 | | Elon Musk and Sam Altman appear, portraits only, no line yet | |
+| 3 | OpenAI | lines from both to OpenAI (founded December 2015) | |
+| 4 | | Musk unlinks and stands apart (left the board, February 2018) | |
+| 5 | | Dario Amodei appears at OpenAI (vice president of research) | |
+| 6 | Anthropic | Amodei now at Anthropic (co-founded 2021) | |
+| 7 | xAI | Musk now at xAI (announced July 2023) | |
+| 8 | Meta | | |
+| 9 | Mistral AI | Arthur Mensch appears at Mistral AI (co-founded 2023) | |
+| 10 | DeepSeek, Qwen, Moonshot AI, Z.ai | | "open weights" on all four |
+| 11 | NVIDIA | Jensen Huang (founder and CEO) beside the logo | ~90% of AI accelerators (est.), provisional and unsourced: the scene has a todo |
+| 12 | TSMC | | ~72% of foundry revenue (Q2 2026), TrendForce |
+| 13 | ASML | | 100% of EUV machines (the only maker) |
 
 Each move cites sources (`MOVES` in `industry.ts`); the controller's "Sources
-for what is lit" lists the moves so far and every source behind what is lit.
+for what is lit" lists the moves so far and every source behind what is lit,
+including those behind the shares and tags.
 The projector shows one small credit line. No state.
 
 ## `IntelligenceScale` (risks: AGI vs ASI)

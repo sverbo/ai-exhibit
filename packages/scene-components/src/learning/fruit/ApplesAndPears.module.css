@@ -1,7 +1,7 @@
 /*
- * Apples and pears on the 1920 x 1080 stage: a caption on top, the three
- * boxes in a row, the model and its rule below the training box, the real
- * world below validation and test. Positions of boxes and fruits come from
+ * Apples and pears on the 1920 x 1080 stage: a caption on top, the two
+ * boxes in a row (training wide, test on the right), the model and its rule
+ * below the training box, the final exam (the real world) on the right. Positions of boxes and fruits come from
  * fruit.ts (inline styles); everything else is placed here.
  */
 .root {
@@ -143,8 +143,8 @@
 .check.hidden {
   transform: scale(0.6);
 }
-.check.shown[data-delay] {
-  transition-delay: 650ms;
+.check.shown {
+  transition-delay: 250ms;
 }
 .tick {
   width: 36px;
@@ -357,6 +357,55 @@
 }
 
 /* The real world ----------------------------------------------------------- */
+/* The reminder: in a real network the rule above is not readable. Same place as the final exam, which replaces it. */
+.caution {
+  position: absolute;
+  left: 980px;
+  top: 760px;
+  width: 850px;
+  box-sizing: border-box;
+  padding: 22px 32px 26px;
+  border: 4px dashed var(--color-accent);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--color-surface);
+  transition: opacity var(--dur) var(--ease);
+}
+.caution.hidden {
+  opacity: 0;
+}
+.caution.shown {
+  opacity: 1;
+}
+.cautionHeading {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.cautionMark {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-weight: 800;
+}
+.cautionLine {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.25;
+}
+/* While the reminder shows, the rule looks hidden: a dashed outline. */
+.rule.ruleHidden {
+  border-style: dashed;
+}
+
 .world {
   position: absolute;
   left: 980px;

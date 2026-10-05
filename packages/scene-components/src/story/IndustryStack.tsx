@@ -6,6 +6,7 @@ import { SourceList } from "../evidence/SourceList.tsx";
 import { stopShellKeys } from "../evidence/shared.ts";
 import { Credits } from "./Credits.tsx";
 import { Flags } from "./Flags.tsx";
+import { flagImageId, HEADQUARTERS } from "./countries.ts";
 import { logoBox } from "./data.ts";
 import { INDUSTRY_STEPS, LAYERS, MOVES, PEOPLE, placementsAt, type LayerId, type PersonMove } from "./industry.ts";
 import styles from "./IndustryStack.module.css";
@@ -20,6 +21,9 @@ const PORTRAIT = 100;
 const INLINE_PORTRAIT = 84; // a portrait standing beside its logo inside a layer
 const FLAG_GAP = 8; // between a logo and its flags
 const PRODUCT_GAP = 30; // from the top of the flags to the product chip (ChatGPT, Claude)
+const FLAG_H = 22; // Flags.module.css
+const TAG_GAP = 10; // from the flags to the "open weights" tag
+const SHARE_GAP = 18;// from the left edge of a logo to its market share
 const LANE_Y = 46; // top of the portraits in the lane above the labs
 const LINK_FROM_Y = 190; // just under the names
 const LAYER_BOX: Record<LayerId, { top: number; height: number; rows: number }> = {
@@ -83,9 +87,17 @@ function portraitOrigin(move: PersonMove): { x: number; y: number } {
   return { x: personX(move) - PORTRAIT / 2, y: LANE_Y };
 }
 
+/** Width of an actor's flag row (Flags.module.css: 22px high, 6px apart). */
+function flagRowWidth(actorId: string): number {
+  const countries = HEADQUARTERS[actorId]?.countries ?? [];
+  const widths = countries.map((c) => FLAG_H * (getStoryImage(flagImageId(c))?.aspect ?? 1.5));
+  return widths.reduce((sum, w) => sum + w, 0) + 6 * Math.max(0, widths.length - 1);
+}
+
 const COPY = {
   label: { en: "The AI industry, layer by layer" },
   sources: { en: "Sources for what is lit" },
+  openWeights: { en: "open weights" },
 } as const;
 
 /**
@@ -95,6 +107,9 @@ const COPY = {
  * Portraits stand at the organisation where each person works, linked to it by
  * a line. Every change is one click and a plain fade: when a person changes
  * organisation, the old portrait and line fade out as the new ones fade in.
+ * Market shares (left of their logo) and "open weights" tags (after the
+ * flags) fade in with their actor and stay; they are hidden, not ghosted,
+ * before that.
  * No state.
  */
 export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>>) {
@@ -106,7 +121,10 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
   const newest = Math.max(0, ...litNow.map((a) => a.lightAt ?? 0));
 
   const litSources = [
-    ...new Set([...litNow.flatMap((a) => a.sourceIds), ...[...placements.values()].flatMap((m) => m.sourceIds)]),
+    ...new Set([
+      ...litNow.flatMap((a) => [...a.sourceIds, ...(a.share?.sourceIds ?? []), ...(a.openWeights?.sourceIds ?? [])]),
+      ...[...placements.values()].flatMap((m) => m.sourceIds),
+    ]),
   ];
   const imageIds = [...PEOPLE.map((p) => p.image), ...LAYERS.flatMap((l) => l.actors.map((a) => a.image))];
 
@@ -168,6 +186,30 @@ export function IndustryStack({ ctx }: SceneComponentProps<Record<string, never>
                   aria-hidden="true"
                 />
                 {actor.product.name}
+              </span>
+            ) : null,
+            actor.share ? (
+              <span
+                key={`${actor.id}-share`}
+                className={`${styles.share} ${on ? styles.shown : styles.hidden}`}
+                // Centred in the layer, not on the logo (set a little high): three lines of caption fit.
+                style={{ left: p.x - p.w / 2 - SHARE_GAP, top: LAYER_BOX[p.layer].top + LAYER_BOX[p.layer].height / 2 }}
+                aria-hidden={!on}
+                data-share={on ? actor.id : undefined}
+              >
+                <span className={styles.shareValue}>{tr(actor.share.value, locale)}</span>
+                <span className={styles.shareWhat}>{tr(actor.share.what, locale)}</span>
+              </span>
+            ) : null,
+            actor.openWeights ? (
+              <span
+                key={`${actor.id}-open`}
+                className={`${styles.tag} ${on ? styles.shown : styles.hidden}`}
+                style={{ left: p.x + flagRowWidth(actor.id) / 2 + TAG_GAP, top: p.y + p.h / 2 + FLAG_GAP + FLAG_H / 2 }}
+                aria-hidden={!on}
+                data-open-weights={on ? actor.id : undefined}
+              >
+                {tr(COPY.openWeights, locale)}
               </span>
             ) : null,
             // The accent stroke is a sibling: a child of the masked logo would be masked away.

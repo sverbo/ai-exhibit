@@ -287,7 +287,7 @@ export default function PresenterView() {
 
       {/* ------------------------------------------------------ chapter strip */}
       <footer className={styles.footer}>
-        <ChapterStrip pace={pace} presentation={presentation} locale={locale} />
+        <ChapterStrip pace={pace} presentation={presentation} locale={locale} scenes={talk.personal.timed} onGo={(id) => actions.goto(id)} />
       </footer>
 
       {palette ? (

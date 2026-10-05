@@ -6,10 +6,21 @@ import type { L10n } from "@ai-exhibit/presentation-core";
  * presenter talks about, and portraits appear beside the organisations where
  * people work. Every change waits for a click: within a step, things only fade
  * in or out, never travel. Every lit actor and every move cites sources (st-
- * and sc- IDs).
+ * and sc- IDs). A few actors also show a market share, and the Chinese labs
+ * an "open weights" tag: a complex chain, but few actors, some of them
+ * near-monopolies.
  */
 
 export type LayerId = "labs" | "cloud" | "chips" | "foundries" | "equipment";
+
+/** A market share shown beside a logo once it lights, and kept afterwards. */
+export interface MarketShare {
+  /** The figure as shown, e.g. "~72%". */
+  value: L10n;
+  /** What it is a share of, with its date, or "est." when it is an estimate. */
+  what: L10n;
+  sourceIds: string[];
+}
 
 export interface StackActor {
   id: string;
@@ -24,6 +35,10 @@ export interface StackActor {
   weight?: number;
   /** The product the audience knows (mark image ID in credits.ts and its name), shown under the lab logo. */
   product?: { image: string; name: string };
+  /** Market share, beside the logo from `lightAt` on. */
+  share?: MarketShare;
+  /** Publishes its model weights: tagged "open weights" from `lightAt` on (sources: its model cards). */
+  openWeights?: { sourceIds: string[] };
   sourceIds: string[];
 }
 
@@ -47,10 +62,10 @@ export const LAYERS: StackLayer[] = [
       { id: "xai", image: "xai", label: l("xAI"), lightAt: 7, weight: 0.8, product: { image: "grok", name: "Grok" }, sourceIds: ["st-cbs-2023-xai-launch", "sc-wiki-xai", "st-wiki-grok"] },
       { id: "meta", image: "meta", label: l("Meta"), lightAt: 8, weight: 0.8, sourceIds: ["sc-wiki-meta-ai"] },
       { id: "mistral", image: "mistral", label: l("Mistral AI"), lightAt: 9, weight: 0.9, sourceIds: ["sc-wiki-mistral", "st-techcrunch-2023-mistral-seed"] },
-      { id: "deepseek", image: "deepseek", label: l("DeepSeek"), lightAt: 10, row: 1, sourceIds: ["sc-wiki-deepseek", "sc-deepseek-r1-card", "st-openrouter-2026-open-weight"] },
-      { id: "qwen", image: "qwen", label: l("Qwen (Alibaba)"), lightAt: 10, row: 1, weight: 0.95, sourceIds: ["sc-wiki-qwen", "sc-hf-qwen3"] },
-      { id: "moonshot-ai", image: "moonshot-ai", label: l("Moonshot AI (Kimi)"), lightAt: 10, row: 1, weight: 0.85, sourceIds: ["st-hf-kimi-k2"] },
-      { id: "zai", image: "zai", label: l("Z.ai (Zhipu)"), lightAt: 10, row: 1, weight: 0.7, sourceIds: ["st-wiki-zai", "st-hf-glm-4-5", "st-openrouter-2026-open-weight"] },
+      { id: "deepseek", image: "deepseek", label: l("DeepSeek"), lightAt: 10, row: 1, openWeights: { sourceIds: ["sc-deepseek-r1-card"] }, sourceIds: ["sc-wiki-deepseek", "sc-deepseek-r1-card", "st-openrouter-2026-open-weight"] },
+      { id: "qwen", image: "qwen", label: l("Qwen (Alibaba)"), lightAt: 10, row: 1, weight: 0.95, openWeights: { sourceIds: ["sc-hf-qwen3"] }, sourceIds: ["sc-wiki-qwen", "sc-hf-qwen3"] },
+      { id: "moonshot-ai", image: "moonshot-ai", label: l("Moonshot AI (Kimi)"), lightAt: 10, row: 1, weight: 0.85, openWeights: { sourceIds: ["st-hf-kimi-k2"] }, sourceIds: ["st-hf-kimi-k2"] },
+      { id: "zai", image: "zai", label: l("Z.ai (Zhipu)"), lightAt: 10, row: 1, weight: 0.7, openWeights: { sourceIds: ["st-hf-glm-4-5"] }, sourceIds: ["st-wiki-zai", "st-hf-glm-4-5", "st-openrouter-2026-open-weight"] },
     ],
   },
   {
@@ -69,7 +84,15 @@ export const LAYERS: StackLayer[] = [
     id: "chips",
     name: { en: "Chip designers" },
     actors: [
-      { id: "nvidia", image: "nvidia", label: l("NVIDIA"), lightAt: 11, sourceIds: ["sc-wiki-nvidia", "sc-nvidia-2026-fy-results"] },
+      {
+        id: "nvidia",
+        image: "nvidia",
+        label: l("NVIDIA"),
+        lightAt: 11,
+        // IoT Analytics' estimate of the data-centre GPU market (2024); TPUs and other in-house chips are not counted.
+        share: { value: { en: "~92%", fr: "~92 %" }, what: { en: "of data-centre GPUs (2024, est.)" }, sourceIds: ["tk-nvidia-ai-accelerator-share"] },
+        sourceIds: ["sc-wiki-nvidia", "sc-nvidia-2026-fy-results"],
+      },
       { id: "amd", image: "amd", label: l("AMD"), sourceIds: ["sc-wiki-amd-instinct"] },
       { id: "google-tpu", image: "google", label: { en: "Google (TPU chips)" }, sourceIds: ["sc-google-cloud-tpu"] },
       { id: "huawei", image: "huawei", label: { en: "Huawei (Ascend chips)" }, sourceIds: ["sc-wiki-hisilicon"] },
@@ -79,7 +102,16 @@ export const LAYERS: StackLayer[] = [
     id: "foundries",
     name: { en: "Chip factories" },
     actors: [
-      { id: "tsmc", image: "tsmc", label: l("TSMC"), lightAt: 12, weight: 0.8, sourceIds: ["sc-tsmc-2025-annual-report", "sc-trendforce-2026-foundry-q2"] },
+      {
+        id: "tsmc",
+        image: "tsmc",
+        label: l("TSMC"),
+        lightAt: 12,
+        weight: 0.8,
+        // TrendForce: 72.5% of the top ten foundries' revenue.
+        share: { value: { en: "~72%", fr: "~72 %" }, what: { en: "of foundry revenue (Q2 2026)" }, sourceIds: ["sc-trendforce-2026-foundry-q2"] },
+        sourceIds: ["sc-tsmc-2025-annual-report", "sc-trendforce-2026-foundry-q2"],
+      },
       { id: "samsung", image: "samsung", label: l("Samsung"), sourceIds: ["sc-samsung-foundry", "sc-trendforce-2026-foundry-q2"] },
       { id: "intel", image: "intel", label: l("Intel"), sourceIds: ["sc-intel-foundry"] },
       { id: "smic", image: "smic", label: l("SMIC"), sourceIds: ["sc-smic-about", "sc-trendforce-2026-foundry-q2"] },
@@ -89,7 +121,16 @@ export const LAYERS: StackLayer[] = [
     id: "equipment",
     name: { en: "Machines that make chips" },
     actors: [
-      { id: "asml", image: "asml", label: l("ASML"), lightAt: 13, weight: 0.9, sourceIds: ["sc-asml-about", "sc-asml-2021-euv-only"] },
+      {
+        id: "asml",
+        image: "asml",
+        label: l("ASML"),
+        lightAt: 13,
+        weight: 0.9,
+        // The only maker of EUV lithography machines.
+        share: { value: { en: "100%", fr: "100 %" }, what: { en: "of EUV machines" }, sourceIds: ["sc-asml-2021-euv-only"] },
+        sourceIds: ["sc-asml-about", "sc-asml-2021-euv-only"],
+      },
       { id: "applied-materials", image: "applied-materials", label: l("Applied Materials"), sourceIds: ["sc-wiki-applied-materials"] },
       { id: "lam-research", image: "lam-research", label: l("Lam Research"), sourceIds: ["sc-lam-investor"] },
       { id: "tokyo-electron", image: "tokyo-electron", label: l("Tokyo Electron"), sourceIds: ["sc-wiki-tokyo-electron"] },

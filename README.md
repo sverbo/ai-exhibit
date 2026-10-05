@@ -26,7 +26,12 @@ There are three ways to take part:
    with `gh`, installs, sets the optional Hugging Face token in `.env`, runs
    `pnpm dev` and guides you through hosting on Vercel. Big changes (a new
    language, new scenes) use a lot of tokens: a Claude plan with generous
-   usage (for example Max) is recommended.
+   usage (for example Max) is recommended. Present it under your own name:
+   set `fork` in
+   [`presentations/canonical/src/credits.ts`](presentations/canonical/src/credits.ts),
+   and please keep the line "Original presentation by Samuel Verboomen" with
+   its link to <https://ai-exhibit.samverbo.com>, which the first slide and the
+   credits slide then show under your byline.
 3. **Hosting a version.** Send the author its link and a one-line description
    (audience, length, languages): it will be listed under "Exhibits" on the
    original site's home page.

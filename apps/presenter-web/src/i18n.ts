@@ -78,6 +78,8 @@ const UI = {
   notes: { fr: "Notes", en: "Notes" },
   smallerText: { fr: "Texte plus petit", en: "Smaller text" },
   largerText: { fr: "Texte plus grand", en: "Larger text" },
+  moreNotesOne: { fr: "1 note de plus en dessous", en: "1 more note below" },
+  moreNotes: { fr: "{n} notes de plus en dessous", en: "{n} more notes below" },
   takeaway: { fr: "À retenir", en: "Takeaway" },
   transitionOut: { fr: "Transition", en: "Transition" },
   objective: { fr: "Objectif", en: "Objective" },

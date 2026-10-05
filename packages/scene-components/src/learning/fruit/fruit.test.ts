@@ -31,13 +31,14 @@ describe("apples and pears script", () => {
     const firstOn = (key: "split" | "model" | "world" | "lesson") => frames.findIndex((f) => f[key]);
     expect(firstOn("split")).toBe(1);
     expect(firstOn("model")).toBe(2);
-    expect(firstOn("world")).toBe(4);
-    expect(firstOn("lesson")).toBe(5);
+    expect(firstOn("world")).toBe(5);
+    expect(firstOn("lesson")).toBe(6);
     for (const key of ["split", "model", "world", "lesson"] as const) {
       expect(frames.slice(firstOn(key)).every((f) => f[key]), key).toBe(true);
     }
-    expect(frames.map((f) => f.checked)).toEqual([[], [], [], ["validation", "test"], ["validation", "test"], ["validation", "test"]]);
-    expect(frames.map((f) => f.focus)).toEqual([null, null, "training", "checks", "world", null]);
+    expect(frames.map((f) => f.checked)).toEqual([[], [], [], [], ["test"], ["test"], ["test"]]);
+    expect(frames.map((f) => f.focus)).toEqual([null, null, "training", "training", "test", "world", null]);
+    expect(frames.map((f) => f.caution)).toEqual([false, false, false, true, true, false, false]);
   });
 
   it("depends on the step only: the same step always draws the same frame", () => {
@@ -48,10 +49,11 @@ describe("apples and pears script", () => {
     }
   });
 
-  it("splits the pile 70 / 15 / 15, with both fruits in every box", () => {
-    expect(boxCounts()).toEqual({ training: 14, validation: 3, test: 3 });
-    expect(boxShare("training")).toBeCloseTo(0.7);
-    expect(boxShare("validation")).toBeCloseTo(0.15);
+  it("splits the pile 80 / 20 into two boxes, with both fruits in each", () => {
+    expect(BOX_IDS).toEqual(["training", "test"]);
+    expect(boxCounts()).toEqual({ training: 16, test: 4 });
+    expect(boxShare("training")).toBeCloseTo(0.8);
+    expect(boxShare("test")).toBeCloseTo(0.2);
     for (const box of BOX_IDS) {
       const kinds = new Set(FRUITS.filter((f) => f.box === box).map((f) => f.kind));
       expect([...kinds].sort(), box).toEqual(["apple", "pear"]);

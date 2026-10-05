@@ -3,6 +3,7 @@ import type { SceneComponentProps } from "../../contract.ts";
 import { Rich } from "../../primitives/Rich.tsx";
 import { cx } from "../../learning/shared/ui.tsx";
 import { GlossaryQr } from "../agenda/GlossaryQr.tsx";
+import { Byline, type TalkCredits } from "../credits/Byline.tsx";
 import { isReady, useReadiness, type Check } from "./readiness.ts";
 import styles from "./HoldingSlide.module.css";
 
@@ -10,10 +11,13 @@ export interface HoldingSlideProps {
   /** The talk's title (the presentation title). */
   title: L10n;
   line?: L10n;
+  /** Who made the talk (presentations/canonical/src/credits.ts): the byline under the title. */
+  credits?: TalkCredits;
 }
 
 const COPY = {
   line: { en: "The talk starts in a moment" },
+  byline: { en: "by {name}" },
   ready: { en: "Ready" },
   gettingReady: { en: "Getting ready" },
   simulation: { en: "simulation" },
@@ -45,6 +49,7 @@ export function HoldingSlide({ props, ctx }: SceneComponentProps<HoldingSlidePro
         <h1 className={styles.title}>
           <Rich text={t(props.title)} />
         </h1>
+        {props.credits && <Byline credits={props.credits} line={COPY.byline} locale={ctx.locale} role={ctx.role} />}
         <p className={styles.line}>
           <Rich text={t(props.line ?? COPY.line)} />
         </p>

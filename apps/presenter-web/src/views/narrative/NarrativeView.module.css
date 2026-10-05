@@ -1,0 +1,66 @@
+/* A long text to read: one comfortable column, the talk's theme tokens. */
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  background: var(--color-bg);
+}
+.note {
+  margin: 8px 0 32px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  line-height: 1.5;
+}
+.text {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+.text h1 {
+  margin: 56px 0 16px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.text h1:first-child {
+  margin-top: 8px;
+}
+.text h2 {
+  margin: 40px 0 8px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.text p {
+  margin: 0 0 14px;
+}
+.text strong {
+  color: var(--color-text);
+}
+.text blockquote {
+  margin: 0 0 16px;
+  padding: 10px 16px;
+  border-left: 3px solid var(--color-accent-2);
+  background: color-mix(in srgb, var(--color-accent-2) 8%, transparent);
+  color: var(--color-text-muted);
+  font-size: 16px;
+}
+.text blockquote p {
+  margin: 0;
+}

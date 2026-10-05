@@ -430,34 +430,36 @@ export const chapter02: SceneDefinition[] = [
   {
     id: "02-apples-and-pears",
     code: "fruit",
-    steps: 5,
+    steps: 6,
     chapter: "02",
     number: "2.11",
     title: { en: "Apples and pears" },
     objective: {
-      en: "Show why validation and test sets cannot reveal a gap that the whole dataset shares: it shows up only in the real world.",
+      en: "Show why a test set cannot reveal a gap that the whole dataset shares: it shows up only in the real world, the final exam.",
     },
     takeaway: {
-      en: "Tests only check what is in the data: a gap in the data shows up only in the real world.",
+      en: "The mock exam only checks what is in the data, so a gap in the data shows up only at the final exam: the real world.",
     },
     visual: { layout: "component", component: "ApplesAndPears" },
     interaction: "presenter",
     speakerNotes: {
       en: `- A thought experiment: our pile holds only red apples and green pears, every picture labelled by a person
-- Before training, we split the data into three boxes, like at school
-- **Training**, about 70 to 80%: the exercises, with the corrections. The model learns from these
-- **Validation**, about 10 to 15%: mock exams. We use them to tune the model and choose between versions
-- **Test**, about 10 to 15%: the final exam. Set aside, never seen during training, used once at the end
-- Then **production**: real life, with no corrections
-- Typical splits: 80/10/10 or 70/15/15
-- Why set data aside at all: a model can learn the answers by heart (**overfitting**). It shines on its exercises and fails on anything new; the exams catch that
+- Before training, we split the data into two boxes, like at school
+- **Training**, about 80%: the exercises, with the corrections. The model learns from these
+- **Test**, about 20%: the mock exam. Set aside, never used for training
+- The **final exam** is **production**: the real world, with no corrections
+- A typical split: 80/20
+- Why set data aside at all: a model can learn the answers by heart (**overfitting**). It shines on its exercises and fails on anything new; the mock exam catches that
+- Like a student who wants to pass the exam rather than be good at the job, a model is tuned to score well on the test. Absurd, but that is how it works
 - Here colour alone separates the two fruits perfectly, so the model takes the shortcut: green means pear
-- Validation and test both score 100%, and honestly so: they come from the same pile
-- The first green apple: "pear", 97% sure
-- You cannot blame the model: nothing in its data told it otherwise. The test set shares the blind spots of the data; it can only check what the pile contains
-- Real datasets have the same kind of gap, with people: the **Gender Shades** study (2018) found commercial gender classifiers wrong on up to 34.7% of darker-skinned women, against 0.8% of lighter-skinned men
+- Careful, remember: a real model is a neural network. Its rule is only numbers, so we could not read "green means pear" in advance; we only find out by testing
+- The mock exam passes at 100%, and honestly so: both boxes come from the same pile, so they share its blind spots
+- The first green apple, in the real world: "pear", 97% sure
+- You cannot blame the model: the gap was in the data, and neither box could show it
+- Real datasets have the same kind of gap, with people: the **Gender Shades** study (2018) found commercial gender classifiers wrong up to 34.7% of the time on darker-skinned women, against 0.8% on lighter-skinned men
 - Back to the photo app: the same kind of gap, found by users after release
-- The fix lives in the data: look for what is missing, collect it, and test on the cases that matter in the real world`,
+- The fix lives in the data: look for what is missing, collect it, and test on the cases that matter in the real world
+- In practice, engineers often keep a third set (validation) to tune the model; we leave it out to keep the story simple`,
     },
     transitionIn: { en: "Why did no test catch it before release? An analogy." },
     transitionOut: { en: "Now, the same ideas applied to language." },

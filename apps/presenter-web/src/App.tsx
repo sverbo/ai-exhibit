@@ -9,6 +9,7 @@ const OverviewView = lazy(() => import("./views/overview/OverviewView.tsx"));
 const HandoutView = lazy(() => import("./views/handout/HandoutView.tsx"));
 const LabView = lazy(() => import("./views/lab/LabView.tsx"));
 const GlossaryView = lazy(() => import("./views/glossary/GlossaryView.tsx"));
+const NarrativeView = lazy(() => import("./views/narrative/NarrativeView.tsx"));
 
 export function App() {
   return (
@@ -23,6 +24,7 @@ export function App() {
           <Route path="/handout" element={<HandoutView />} />
           <Route path="/lab" element={<LabView />} />
           <Route path="/glossary" element={<GlossaryView />} />
+          <Route path="/narrative" element={<NarrativeView />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

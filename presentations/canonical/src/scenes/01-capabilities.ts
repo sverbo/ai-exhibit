@@ -1,5 +1,6 @@
 import type { SceneDefinition } from "@ai-exhibit/presentation-core";
 import { agendaItems, partOpener, talkTitle } from "../chapters.ts";
+import { credits } from "../credits.ts";
 
 /**
  * Introduction (chapter "00": holding slide 0.1, opening video 0.2, agenda 0.3,
@@ -15,7 +16,7 @@ export const chapter01: SceneDefinition[] = [
     number: "0.1",
     title: { en: "Before the talk" },
     objective: {
-      en: "Hold the screen while the room fills up: the talk's title, a calm line, the glossary QR code and a quiet readiness dot.",
+      en: "Hold the screen while the room fills up: the talk's title and byline, a calm line, the glossary QR code and a quiet readiness dot.",
     },
     takeaway: {
       en: "The talk starts in a moment.",
@@ -23,7 +24,8 @@ export const chapter01: SceneDefinition[] = [
     visual: {
       layout: "component",
       component: "HoldingSlide",
-      props: { title: talkTitle },
+      // Forks: set your own name in credits.ts and keep the original line (see localizationNotes).
+      props: { title: talkTitle, credits },
     },
     steps: 0,
     interaction: "presenter",
@@ -46,7 +48,8 @@ export const chapter01: SceneDefinition[] = [
       hosts: ["www.youtube.com"],
       why: "Checks that the YouTube player script loads, for the opening video.",
     },
-    localizationNotes: "The title is the presentation title (talkTitle in chapters.ts).",
+    localizationNotes:
+      "The title is the presentation title (talkTitle in chapters.ts). The byline comes from credits.ts: a fork may present under its own name (set credits.fork), and is asked to keep the line \"Original presentation by Samuel Verboomen\" with its link to ai-exhibit.samverbo.com, shown here and on 05-credits.",
   },
   {
     id: "00-welcome-video",
