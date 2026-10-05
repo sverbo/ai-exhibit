@@ -156,8 +156,13 @@ export interface Limits {
    * small model at featherless-ai may first need to load (up to about 30 s).
    */
   ladderTimeoutMs: number;
-  /** Requests per rolling minute (per client or for everyone, see `rateLimit`). */
+  /** Model requests per rolling minute (per client or for everyone, see `rateLimit`). */
   perMinute: number;
+  /**
+   * Requests per rolling minute for what calls no model (tokenizing, run on the server): typing
+   * sends one per pause, so it gets its own, larger cap instead of eating the model budget.
+   */
+  freePerMinute: number;
   /**
    * Model requests (everything that calls Hugging Face) per rolling hour and
    * client address, all endpoints together. Tokenizing runs locally on the
@@ -189,6 +194,7 @@ export const LOCAL_LIMITS: Limits = {
   timeoutMs: 25_000,
   ladderTimeoutMs: 50_000,
   perMinute: 30,
+  freePerMinute: 240,
   perHour: 100,
   bodyBytes: 32_000,
 };
@@ -207,6 +213,7 @@ export const PUBLIC_LIMITS: Limits = {
   // Inside the 30 s a Vercel function may run (vercel.json maxDuration).
   ladderTimeoutMs: 27_000,
   perMinute: 20,
+  freePerMinute: 240,
   perHour: 100,
   bodyBytes: 16_000,
 };
@@ -241,8 +248,8 @@ export interface AudienceLimits {
    * model requests per rolling minute and device id (a ladder question counts
    * one). Timeouts come from the server's own limits.
    */
-  limits: Omit<Limits, "timeoutMs" | "ladderTimeoutMs" | "perHour">;
-  /** Free requests (tokenizing, status) per rolling minute and device id. */
+  limits: Omit<Limits, "timeoutMs" | "ladderTimeoutMs" | "perHour" | "freePerMinute">;
+  /** Free requests (tokenizing, status) per rolling minute and device id: typing sends one per pause. */
   freePerMinute: number;
 }
 
@@ -258,7 +265,7 @@ export const AUDIENCE_LIMITS: AudienceLimits = {
     perMinute: 3,
     bodyBytes: 4_000,
   },
-  freePerMinute: 30,
+  freePerMinute: 120,
 };
 
 export type CloudErrorCode =
@@ -632,11 +639,12 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     return true;
   };
 
-  /** The presenter's per-minute budget (per client, or one for the whole server). */
-  const allow = (ip: string) => {
-    const key = perClient ? ip || "unknown" : "*";
+  /** The presenter's per-minute budget (per client, or one for the whole server); `free`: calls no model. */
+  const allow = (ip: string, free = false) => {
+    const base = perClient ? ip || "unknown" : "*";
+    const key = free ? `free:${base}` : base;
     const t = now();
-    if (minutes.used(key, t) >= limits.perMinute) return false;
+    if (minutes.used(key, t) >= (free ? limits.freePerMinute : limits.perMinute)) return false;
     minutes.take(key, t);
     return true;
   };
@@ -644,7 +652,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   // Audience caps. Their keys never collide with the presenter's ("*", "local" or an address).
   const aud = options.audience === false ? null : (options.audience ?? AUDIENCE_LIMITS);
   const audLimits: Limits | null = aud
-    ? { ...aud.limits, perHour: Infinity, timeoutMs: limits.timeoutMs, ladderTimeoutMs: limits.ladderTimeoutMs }
+    ? { ...aud.limits, perHour: Infinity, freePerMinute: aud.freePerMinute, timeoutMs: limits.timeoutMs, ladderTimeoutMs: limits.ladderTimeoutMs }
     : null;
 
   /** The audience's anti-burst cap: `max` requests per rolling minute and device id, in `bucket`. */
@@ -1025,7 +1033,10 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
         }
         const body = await readJson(request, limits);
         if (!tokenless.has(pathname) && !options.token()) throw new CloudError("not-configured", "HF_TOKEN is not set");
-        if (!allow(client.ip)) throw new CloudError("rate-limited", `More than ${limits.perMinute} requests in a minute`);
+        const free = tokenless.has(pathname);
+        if (!allow(client.ip, free)) {
+          throw new CloudError("rate-limited", `More than ${free ? limits.freePerMinute : limits.perMinute} requests in a minute`);
+        }
         if (!tokenless.has(pathname) && !allowHour(client.ip, cost[pathname] ?? 1)) {
           throw new CloudError("rate-limited", `More than ${limits.perHour} model requests in an hour from this address`);
         }

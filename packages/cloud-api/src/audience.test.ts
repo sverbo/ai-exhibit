@@ -103,3 +103,19 @@ describe("audience requests", () => {
     expect((await call(off, base(PHONE_A), ROOM)).status).toBe(403);
   });
 });
+
+describe("presenter requests", () => {
+  it("count tokenizing in its own, larger per-minute cap, not in the model budget", async () => {
+    const { api, at } = setup();
+    at(0);
+    // Typing a sentence sends a tokenize request per pause: more than the model cap, never refused.
+    for (let i = 0; i < PUBLIC_LIMITS.perMinute + 5; i++) {
+      const tok = await call(api, req("POST", "/api/tokenize", { text: "hello" }), ROOM);
+      expect(tok.status).not.toBe(429);
+    }
+    // The model budget is untouched.
+    for (let i = 0; i < PUBLIC_LIMITS.perMinute; i++) expect((await call(api, base(), ROOM)).status).toBe(200);
+    expect(PUBLIC_LIMITS.freePerMinute).toBeGreaterThan(PUBLIC_LIMITS.perMinute);
+  });
+});
+

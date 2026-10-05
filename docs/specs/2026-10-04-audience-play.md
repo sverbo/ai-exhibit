@@ -76,7 +76,7 @@ and each phone counts its own asks.
   tab. The header keeps the call out of the presenter's budget (per minute,
   100 per hour per address), so the presenter's demos keep working. The
   server only applies an anti-burst cap per device id: 3 model requests a
-  minute (a ladder question counts one), 30 free ones (tokenizing, status),
+  minute (a ladder question counts one), 120 free ones (tokenizing, status),
   in memory per server instance, best effort. A refusal is a `429`
   `rate-limited`; the demo says "busy, try again in a few seconds".
 - **Same caps as everyone**: the 300-character input cap, the output ceiling,

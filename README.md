@@ -97,7 +97,9 @@ endpoint refuses texts over 300 characters; answers are free (models stop on
 their own, under a 1024-token safety ceiling, and anything still running after
 25 s is cut and says so, inside Vercel's 30 s). Each address gets at most 100
 model requests an hour, all endpoints together (tokenizing does not count),
-plus a per-minute cap (`PUBLIC_LIMITS` in `packages/cloud-api/src/core.ts`).
+plus a per-minute cap: 20 model requests a minute, and a separate, larger one
+for tokenizing, which calls no model and is sent at every pause in typing
+(`PUBLIC_LIMITS` in `packages/cloud-api/src/core.ts`).
 These counters live in memory, per serverless instance: best effort only, so
 keep the Hugging Face spending limit.
 

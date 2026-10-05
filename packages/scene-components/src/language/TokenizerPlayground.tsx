@@ -1,6 +1,6 @@
-import { type CSSProperties, useEffect, useMemo, useRef } from "react";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
-import { cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
+import { CloudLlmError, cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
@@ -12,6 +12,11 @@ import { useSourceDecision } from "./source.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
 import styles from "./TokenizerPlayground.module.css";
 import { Button, cx, Frame, Notice, Pending, RecordedTag, Segmented, SourceBadge, TextField } from "./ui.tsx";
+
+/** Tokenize once typing pauses this long: one request per pause, not one per letter. */
+const TYPING_PAUSE_MS = 350;
+/** After a "too many requests" answer, try again this much later. */
+const RATE_LIMIT_RETRY_MS = 2000;
 
 type Action =
   | { type: "text"; text: string }
@@ -60,8 +65,10 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
   const { decision, cloudFailed } = useSourceDecision(ctx);
   const live = decision.active === "hf";
 
-  // Controller: (re)tokenize whenever the text or tokenizer changes.
+  // Controller: (re)tokenize whenever the text or tokenizer changes, once typing pauses.
   const request = useRef(0);
+  // Bumped to try again after the server said "too many requests": that is not a failure of the model.
+  const [retry, setRetry] = useState(0);
   useEffect(() => {
     if (role !== "controller") return;
     const id = ++request.current;
@@ -79,18 +86,22 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
           if (id !== request.current) return;
           setState((s) => ({ ...s, tokens: r.tokens, source: "live", notice: null }));
         },
-        () => {
+        (err: unknown) => {
           if (id !== request.current || ac.signal.aborted) return;
+          if (err instanceof CloudLlmError && err.code === "rate-limited") {
+            setTimeout(() => setRetry((n) => n + 1), RATE_LIMIT_RETRY_MS);
+            return;
+          }
           cloudFailed();
         },
       );
-    }, 120);
+    }, TYPING_PAUSE_MS);
     return () => {
       clearTimeout(timer);
       ac.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role, state.text, state.tokenizerId, live, recording]);
+  }, [role, state.text, state.tokenizerId, live, recording, retry]);
 
   // Every window's controls come here; only the stage owner changes the state.
   const act = useSceneActions<Action, TokenizerState>(ctx, (a) => {
