@@ -81,7 +81,8 @@ export const chapter01: SceneDefinition[] = [
 - Just to set the mood: press **Play**, on the presenter screen or on the projector itself; the sound comes from the projector only
 - "Welcome to AI In Context", 57 seconds, by the YouTube channel **AI In Context** (from 80,000 Hours)
 - Say the channel's name out loud: it is in the resources at the end, and it has a few other very good videos
-- Subtitles: this video has English captions only, so a French talk shows English subtitles; YouTube may pick an automatic dub, check on the projector before the talk
+- On the projector, YouTube's own controls work too: subtitles on or off, their language (English only for this video, or YouTube's automatic translation), and the audio track when YouTube offers dubs. The presenter view follows what you do there
+- YouTube may pick an automatic dub by itself: check the audio on the projector before the talk
 - Offline, the slide shows the address instead: say it in one sentence and move on`,
     },
     transitionIn: { en: "From the waiting room to a short video." },

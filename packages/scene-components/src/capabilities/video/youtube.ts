@@ -39,11 +39,14 @@ export const PLAYER_TIMEOUT_MS = 20_000;
 
 export const watchUrl = (videoId: string) => `https://www.youtube.com/watch?v=${videoId}`;
 
-/** Player parameters: no YouTube controls (the presenter drives), captions in the slide's language. */
+/**
+ * Player parameters: YouTube's own controls on the audience screen (subtitles and their language, the audio
+ * track when YouTube offers one), captions on in the slide's language. The talk's buttons drive the same player.
+ */
 export function playerVars(locale: string, origin?: string): Record<string, string | number> {
   return {
     autoplay: 0,
-    controls: 0,
+    controls: 1,
     disablekb: 1,
     fs: 0,
     playsinline: 1,

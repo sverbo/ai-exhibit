@@ -13,7 +13,7 @@ const DASH = new RegExp("[\\u2013\\u2014]");
 describe("youtube helpers", () => {
   it("turns captions on in the slide's language, without YouTube controls", () => {
     const v = playerVars("fr", "http://127.0.0.1:5173");
-    expect(v).toMatchObject({ cc_load_policy: 1, cc_lang_pref: "fr", hl: "fr", controls: 0, autoplay: 0, origin: "http://127.0.0.1:5173" });
+    expect(v).toMatchObject({ cc_load_policy: 1, cc_lang_pref: "fr", hl: "fr", controls: 1, autoplay: 0, origin: "http://127.0.0.1:5173" });
     expect(playerVars("en")).not.toHaveProperty("origin");
   });
 

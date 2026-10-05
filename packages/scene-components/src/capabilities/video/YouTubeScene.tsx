@@ -50,13 +50,24 @@ const TEXT = {
 };
 
 /** What any interactive window can ask; the stage owner applies it (interaction from any window). */
-type VideoAction = { type: "toggle"; at: number } | { type: "restart" } | { type: "seek"; to: number };
+type VideoAction =
+  | { type: "toggle"; at: number }
+  | { type: "restart" }
+  | { type: "seek"; to: number }
+  /** The projector's own YouTube controls were used: publish what its player now does. */
+  | { type: "sync"; playing: boolean; position: number };
 
+const UNSTARTED = -1;
+const CUED = 5;
 const PLAYING = 1;
 const BUFFERING = 3;
 const ENDED = 0;
 /** Still not playing this long after Play (and not loading): assume the browser blocked sound, play muted and ask for a click. */
 const BLOCKED_AFTER_MS = 6000;
+/** After the shared state changes, give the player this long to follow before reading it back. */
+const FOLLOW_GRACE_MS = BLOCKED_AFTER_MS + 2000;
+/** How far the player may stray from the shared playhead before its own position is published. */
+const REPORT_DRIFT_S = 3;
 type Status = "loading" | "ready" | "offline";
 
 export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeSceneProps, VideoState>) {
@@ -74,6 +85,8 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
   const [status, setStatus] = useState<Status>("loading");
   const [blocked, setBlocked] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const actRef = useRef<(a: VideoAction) => void>(() => {});
+  const followedAt = useRef(0);
 
   // The player: only on the audience screen. Offline or blocked, the card below takes over.
   useEffect(() => {
@@ -146,8 +159,18 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
       if (state.playing && !running && !atEnd) p.playVideo();
       if (!state.playing && running) p.pauseVideo();
     };
+    // Applied once per change of the shared state: in between, the projector's own YouTube controls are free.
     apply();
-    if (!state.playing) return;
+    followedAt.current = Date.now();
+    if (!state.playing) {
+      // YouTube starts playing when a video that has not started yet is sought: hold it paused.
+      p.pauseVideo();
+      const hold = setTimeout(() => {
+        const ps = p.getPlayerState();
+        if (ps === PLAYING || ps === BUFFERING) p.pauseVideo();
+      }, 1500);
+      return () => clearTimeout(hold);
+    }
     // Autoplay with sound needs a gesture on this page: if playback does not start, play muted and ask for a click.
     const check = setTimeout(() => {
       const ps = p.getPlayerState();
@@ -157,12 +180,45 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
         setBlocked(true);
       }
     }, BLOCKED_AFTER_MS);
-    const id = setInterval(apply, 1000);
-    return () => {
-      clearTimeout(check);
-      clearInterval(id);
-    };
+    return () => clearTimeout(check);
   }, [state, status, duration]);
+
+  // The YouTube controls on the projector (play, seek, subtitles, audio track): read the player back and
+  // publish what it does, so the presenter's view follows. Only the audience screen has a player.
+  useEffect(() => {
+    if (!withPlayer || status !== "ready") return;
+    const id = setInterval(() => {
+      const p = playerRef.current;
+      if (!p || Date.now() - followedAt.current < FOLLOW_GRACE_MS) return;
+      const s = stateRef.current;
+      const ps = p.getPlayerState();
+      const cur = p.getCurrentTime();
+      if (ps === ENDED) {
+        if (s.playing) actRef.current({ type: "sync", playing: false, position: duration ?? cur });
+        return;
+      }
+      if (ps === UNSTARTED || ps === CUED) return;
+      const running = ps === PLAYING || ps === BUFFERING;
+      const expected = expectedPosition(s, Date.now(), duration);
+      if (running !== s.playing || Math.abs(cur - expected) > (running ? REPORT_DRIFT_S : 1)) {
+        followedAt.current = Date.now();
+        actRef.current({ type: "sync", playing: running, position: cur });
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [withPlayer, status, duration]);
+
+  // A click in the YouTube player gives it the keyboard: hand it back to the page, so the clicker and arrows still work.
+  useEffect(() => {
+    if (!withPlayer) return;
+    const onBlur = () =>
+      setTimeout(() => {
+        const el = document.activeElement;
+        if (el instanceof HTMLIFrameElement && wrapRef.current?.contains(el)) el.blur();
+      }, 0);
+    window.addEventListener("blur", onBlur);
+    return () => window.removeEventListener("blur", onBlur);
+  }, [withPlayer]);
 
   // A click on the audience screen counts as the gesture that unlocks sound.
   useEffect(() => {
@@ -208,12 +264,14 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
       setNow(at);
       return setState((s) => seekTo(s, a.to, at));
     }
+    if (a.type === "sync") return setState((s) => setPlaying(s, a.playing, a.position, at));
     // The owner's own player knows the true position; otherwise the asking window's estimate.
     const p = playerRef.current;
     const cur = p ? p.getCurrentTime() : a.at;
     const atEnd = duration !== undefined && cur >= duration - 0.5;
     setState((s) => setPlaying(s, !s.playing, atEnd ? 0 : cur, at));
   });
+  actRef.current = act;
   const controls = canInteract(ctx);
   const header = (
     <header className={styles.header}>
@@ -240,7 +298,7 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
       {header}
       <div className={styles.frame}>
         {withPlayer && (
-          // No pointer events: clicks and keys stay with the page (clicker, unlock gesture).
+          // YouTube's own controls are live here (subtitles, their language, audio track when offered).
           <div ref={wrapRef} className={cx(styles.player, status !== "ready" && styles.loading)} aria-hidden="true" />
         )}
         {withPlayer && status === "offline" && (
