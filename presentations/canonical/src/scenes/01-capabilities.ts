@@ -525,7 +525,9 @@ export const chapter01: SceneDefinition[] = [
     visual: { layout: "component", component: "VideoScene", props: { src: "personal-demo.mp4", audio: false } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- What I asked, in one sentence; which product and model, and when I recorded it
+      en: `- What I asked, in one Slack message: check whether Remco Evenepoel won the European Championship and, if so, recolour the website in the Belgian jersey's colours with animations; book a slot in my calendar between 8 and 9 pm to watch the best moments; look through my recent emails and meetings for someone who wants to watch it with me
+- Recorded on 5 October 2026 with Claude (desktop app, Opus 5.5), 67 seconds, no sound
+- What it chained on its own, through its connectors: it read Slack, my emails, my past meetings and my Google Drive; it created documents; it wrote the code itself, then took screenshots of what it was building to test it; it booked the slot in my calendar, then answered on Slack
 - The point: show what it can do, and that I use it every day
 - Pause where it acts on its own; point at the moment it asks before acting
 - What it got wrong, if anything
@@ -537,17 +539,14 @@ export const chapter01: SceneDefinition[] = [
     transitionOut: {
       en: "Let's slow one request down and look at every step.",
     },
-    evidenceLevel: "observed",
+    // The presenter's own screen recording: shown, not cited.
+    evidenceLevel: "none",
     sourceIds: [],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "deterministic" },
-    durationSec: 120,
+    durationSec: 100,
     optional: false,
-    todo: [
-      "Record the demo and put it at content/assets/media/personal-demo.mp4; note the product, model and recording date in the notes.",
-      "Set durationSec to the video length plus about 30 seconds once recorded.",
-    ],
   },
   {
     id: "01-tool-call",

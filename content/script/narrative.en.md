@@ -90,7 +90,7 @@ I see it at home every day. I have given my agent access to almost everything. I
 
 **Takeaway:** This is not a lab demo: it is my everyday use, and it already works.
 
-Here is what it looks like when I flip those switches myself. As I start the video, I tell you what I asked it, with which product and which model, and when I recorded it. I pause when it acts on its own, and I show you the moment it asks me before acting; if it missed something, I tell you that too. This is not a lab demo, it is my everyday use. In many companies, permissions are limited, Copilot does not do all of this, and many people are on Windows. But in fact, this is what it is: it is doable today.
+Here is what it looks like when I flip those switches myself. In a single Slack message, I asked it to check whether Remco Evenepoel had won the European Championship and, if so, to recolour the website in the Belgian jersey's colours, to book a slot in my calendar to watch the best moments, and to look through my emails for someone who would like to watch it with me. I recorded it on 5 October 2026, with Claude. And look at everything it chains on its own, through its connectors: it reads Slack, my emails, my past meetings and my Google Drive, creates documents, writes the code itself, takes screenshots of what it is building to test it, books the slot in my calendar, then answers on Slack. I pause when it acts on its own, and I show you the moment it asks me before acting; if it missed something, I tell you that too. This is not a lab demo, it is my everyday use. In many companies, permissions are limited, Copilot does not do all of this, and many people are on Windows. But in fact, this is what it is: it is doable today.
 
 ## 1.7 Chat or agent: calling a tool
 
