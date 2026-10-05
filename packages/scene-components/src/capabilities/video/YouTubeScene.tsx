@@ -220,6 +220,17 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
     return () => window.removeEventListener("blur", onBlur);
   }, [withPlayer]);
 
+  // Leaving the slide forgets the video: coming back (previous or next) starts it over, paused at 0:00.
+  const leaveRef = useRef({ isController, sendCommand: ctx.sendCommand, sceneId: ctx.scene.id });
+  leaveRef.current = { isController, sendCommand: ctx.sendCommand, sceneId: ctx.scene.id };
+  useEffect(
+    () => () => {
+      const { isController: owner, sendCommand, sceneId } = leaveRef.current;
+      if (owner) sendCommand({ type: "resetScene", sceneId });
+    },
+    [],
+  );
+
   // A click on the audience screen counts as the gesture that unlocks sound.
   useEffect(() => {
     if (!blocked) return;
