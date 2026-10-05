@@ -51,7 +51,7 @@ export const chapter02: SceneDefinition[] = [
 - Spoiler: the school that lets the machine learn has clearly won. Rich Sutton called it **"The Bitter Lesson"** (2019): general methods that use more computing beat built-in human knowledge. Often the winner is simple, with lots of data, lots of computing, lots of money
 - Click 9, 2017: the **Transformer** (Google), the **T in GPT**. Just remember: a mathematical trick to process all the words **in parallel** instead of one after another, so training spreads over thousands of chips at once. It made possible models that could never have been trained before, at an enormous electricity cost
 - Click 10, 2019: **GPT-2**, barely noticed by the public (still often incoherent), though OpenAI first called it too dangerous to release in full
-- Click 11, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing (about $2.1 million according to Epoch AI; AI Digest says about $690,000), not counting research. It worked: developers and researchers were stunned
+- Click 11, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing for its last training run (about $2.1 million according to Epoch AI), not counting the trials and the research. It worked: developers and researchers were stunned
 - The public boom came two years later: **ChatGPT**, 30 November 2022, built on **GPT-3.5**, a GPT-3 trained further to chat. That difference is the base model and assistant story at the end of this chapter`,
     },
     transitionIn: { en: "Before opening the box, where it comes from." },

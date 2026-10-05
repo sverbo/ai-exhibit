@@ -36,6 +36,8 @@
 }
 .panel {
   margin: 0;
+  /* A long subtitle wraps instead of widening its column and pushing the last panel off the stage. */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -61,11 +63,11 @@
 }
 .panelSub {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
+  gap: 2px 10px;
   font-size: 18px;
   color: var(--color-text-muted);
-  white-space: nowrap;
 }
 .benchTitle {
   display: flex;

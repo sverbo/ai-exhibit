@@ -242,7 +242,7 @@ export const chapter01: SceneDefinition[] = [
       en: `- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date
 - The riddle: "When ten plus four is two, what is nine plus six?" Let the **room answer first** (3, on a clock)
 - Clicks 1 to 4: GPT-2 (2019) wrong, GPT-3 (2020) wrong, GPT-3.5 (2022) still wrong, GPT-4 (2023) gets it
-- The costs on screen are **AI Digest's estimates** (GPT-3 about $690,000, GPT-4 about $50 million); other estimates differ (Epoch AI: GPT-3 about $2.1 million, two slides on). Only the order of magnitude matters
+- The costs on screen are the **last training run** only (Epoch AI's estimates, the same as the next slides): GPT-2 about $4,300, GPT-3 about $2.1 million, GPT-4 about $37 million. With every trial, experiment and failed run, a model's development takes about 1.2 to 4 times that compute (2.2 times typically), salaries not included. Rented on the cloud, the bills were higher still: GPT-2 about $43,000, GPT-3 about $4.6 million, and Altman said GPT-4 cost "more than" $100 million
 - Click 5: today's reasoning model, a recorded answer with its name and date
 - Click 6, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)
 - Try other tricks, for example with letters: "How many r's are in the word strawberry?" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**
@@ -254,7 +254,7 @@ export const chapter01: SceneDefinition[] = [
     },
     transitionOut: { en: "The riddle is a toy. What about the real world?" },
     evidenceLevel: "observed",
-    sourceIds: ["tk-aidigest-2023-progress", "tk-hagendorff-2022-crt", "tk-berglund-2023-reversal-curse", "llm-gpt2-paper"],
+    sourceIds: ["tk-aidigest-2023-progress", "tk-epoch-notable-models", "tk-cottier-2024-dev-compute-ratio", "tk-hagendorff-2022-crt", "tk-berglund-2023-reversal-curse", "llm-gpt2-paper"],
     // C: the last step asks open models live (/api/llm/ladder); the recorded steps need nothing.
     runtimeClass: "C",
     artifacts: [],
@@ -389,7 +389,7 @@ export const chapter01: SceneDefinition[] = [
     speakerNotes: {
       en: `- **Everything went up**, and fast: in seven years, not a small improvement but a boom on every axis at once
 - Do not read every figure: pick a few ratios
-  - **Cost** of training: about **84,000 times** more, from about $4,300 (GPT-2, 2019) to about $366 million (GPT-4.5, 2025)
+  - **Cost** of training: about **84,000 times** more, from about $4,300 (GPT-2, 2019) to about $366 million (GPT-4.5, 2025) (last training run only; with all the trials and failed runs, about 1.2 to 4 times more compute)
   - **Electricity**: about **130 times** more from GPT-3 (1.8 GWh) to Grok 3 (237 GWh, a year of electricity for about 22,000 US homes); electricity is becoming the bottleneck
   - **Reliability**: the length of task a top model finishes half the time went from about 3 seconds of expert work (GPT-2) to about 17 hours (April 2026), about **20,000 times** longer
   - **Tests**: PhD-level science questions, from 36% (GPT-4, 2023) to **96%**, above PhDs in the field (65%)

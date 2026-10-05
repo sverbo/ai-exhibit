@@ -192,7 +192,7 @@ export const COPY = {
   /** Before the model's own English words, under a translated answer. */
   original: { en: "Original:" },
   translatedFromEnglish: { en: "translated from English" },
-  estimatedCost: {  en: "training:" },
+  estimatedCost: {  en: "last training run:" },
   costUnknown: {  en: "training cost unknown" },
   correctMark: {  en: "Correct" },
   incorrectMark: {  en: "Incorrect" },

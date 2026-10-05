@@ -210,7 +210,7 @@ export const PANELS: Panel[] = [
     id: "cost",
     step: STEP_COST,
     title: { en: "Training cost" },
-    sub: { en: "final training run, US dollars" },
+    sub: { en: "last training run, US dollars (all trials: ×1.2 to ×4)" },
     kind: "estimate",
     max: 460e6,
     tick: { value: 400e6, label: { en: "$400M" } },
@@ -224,7 +224,7 @@ export const PANELS: Panel[] = [
       },
       sourceIds: ["tk-epoch-2024-training-cost-trend", "tk-epoch-notable-models"],
     },
-    sourceIds: ["tk-epoch-notable-models"],
+    sourceIds: ["tk-epoch-notable-models", "tk-cottier-2024-dev-compute-ratio"],
   },
   {
     id: "electricity",

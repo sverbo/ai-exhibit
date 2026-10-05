@@ -54,7 +54,10 @@ export interface PublishedRung {
   year: number;
   /** Exact model identifier as published. */
   model: string;
-  /** Estimated final training run cost as published; null when the source says unknown. */
+  /**
+   * Estimated cost of the final training run (Epoch AI, amortized hardware and energy, 2023 US dollars,
+   * tk-epoch-notable-models), the same figures as the "Everything went up" slide; null when unknown.
+   */
   cost: L10n | null;
   /** Verbatim, in the language it was asked (English). */
   answer: string;
@@ -140,7 +143,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           generation: "GPT-2",
           year: 2019,
           model: "gpt2-xl",
-          cost: { en: "~$4.6k", fr: "~4 600 $" },
+          cost: { en: "~$4.3k", fr: "~4 300 $" },
           answer: "The answer is nine plus six.",
           translation: { fr: "La réponse est neuf plus six." },
           correct: false,
@@ -149,7 +152,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           generation: "GPT-3",
           year: 2020,
           model: "davinci",
-          cost: { en: "~$690k", fr: "~690 000 $" },
+          cost: { en: "~$2.1M", fr: "~2,1 M$" },
           answer: "The answer is 15.",
           translation: { fr: "La réponse est 15." },
           correct: false,
@@ -167,7 +170,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
           generation: "GPT-4",
           year: 2023,
           model: "gpt-4-0613",
-          cost: { en: "~$50m", fr: "~50 M$" },
+          cost: { en: "~$37M", fr: "~37 M$" },
           answer:
             '"ten plus four" equals two because if it is ten o\'clock and you add four hours, it becomes two o\'clock. So, if we apply the same logic to "nine plus six", we get three.',
           translation: {

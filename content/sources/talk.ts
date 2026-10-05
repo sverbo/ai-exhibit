@@ -1876,4 +1876,19 @@ export const talkSources: SourceRecord[] = [
     verification: "verified",
     notes: "Publication date from the book's Wikipedia page (W. W. Norton, 2020-10-06).",
   },
+  {
+    id: "tk-cottier-2024-dev-compute-ratio",
+    title: "The rising costs of training frontier AI models",
+    url: "https://arxiv.org/abs/2405.21015",
+    publisher: "arXiv (Epoch AI)",
+    authors: ["Ben Cottier", "Robi Rahman", "Loredana Fattorini", "Nestor Maslej", "David Owen"],
+    date: "2024-05-31",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "The authors estimate that the total compute used to develop a model (experiments, evaluations, fine-tuning) is 1.2x to 4x the compute of its final training run, with a median of 2.2x; for frontier models such as GPT-4 and Gemini, AI accelerator chips and staff costs each cost tens of millions of dollars.",
+    evidence: "projection",
+    verification: "verified",
+    notes: "Ratio from section A.6 ('ratio of total compute to final training run compute ranges from 1.2x to 4x, with a median of 2.2x'), based on evidence from GPT-3, OPT-175B, BLOOM and Meta's infrastructure. Staff costs come on top.",
+  },
 ];
