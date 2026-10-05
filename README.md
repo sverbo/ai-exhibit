@@ -32,6 +32,13 @@ There are three ways to take part:
    and please keep the line "Original presentation by Samuel Verboomen" with
    its link to <https://ai-exhibit.samverbo.com>, which the first slide and the
    credits slide then show under your byline.
+   The slide "My own demo" plays a screen recording of an agent at work
+   (`content/assets/media/personal-demo.mp4`). Feel free to replace it with a
+   recording of your own work, an agent doing something you really use it for:
+   it speaks to the room far more when it is yours. Otherwise keep the
+   author's, no problem. See
+   [`content/assets/media/README.md`](content/assets/media/README.md) for the
+   encoding; the file is ignored by git, so add it with `git add -f`.
 3. **Hosting a version.** Send the author its link and a one-line description
    (audience, length, languages): it will be listed under "Exhibits" on the
    original site's home page.

@@ -68,6 +68,13 @@ presentation by Samuel Verboomen" with its link to ai-exhibit.samverbo.com on
 both slides (they show it on their own when `fork` is set). The content license,
 CC BY 4.0, asks for attribution anyway.
 
+The slide "My own demo" (`01-personal-demo`) plays the author's screen recording
+of an agent at work, `content/assets/media/personal-demo.mp4` (videos there are
+gitignored: add one with `git add -f`). A fork is free to keep it, and invited to
+replace it with a recording of the presenter's own everyday use of an agent: it
+speaks to the room more. Then update that slide's notes (what was asked, product,
+model, date, what the agent did) and both narratives.
+
 ## Working in a shared tree
 
 The presenter may be running `pnpm dev` on this tree: keep it runnable after
