@@ -294,7 +294,9 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
   ) : null;
 
   return (
-    <div className={styles.root}>
+    // While it plays, the video takes the whole stage: no title, no caption. The talk's controls show on hover,
+    // except where YouTube's own controls are (the audience screen), so the two bars never overlap.
+    <div className={cx(styles.root, state.playing && role !== "preview" && styles.wide, withPlayer && styles.hasPlayer)}>
       {header}
       <div className={styles.frame}>
         {withPlayer && (

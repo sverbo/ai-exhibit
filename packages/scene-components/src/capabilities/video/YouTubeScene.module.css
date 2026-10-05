@@ -1,4 +1,5 @@
 .root {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -169,4 +170,34 @@
   font-size: var(--text-xs);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* Playing: the video fills the stage; paused, the slide comes back as it was. */
+.wide {
+  padding: 0;
+  gap: 0;
+}
+.wide .header,
+.wide .caption {
+  display: none;
+}
+.wide .player,
+.wide .card {
+  border-radius: 0;
+  box-shadow: none;
+}
+.wide .controls {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 20px;
+  opacity: 0;
+  transition: opacity var(--dur, 200ms) ease;
+}
+.wide:hover .controls,
+.wide:focus-within .controls {
+  opacity: 1;
+}
+.wide.hasPlayer .controls {
+  display: none;
 }
