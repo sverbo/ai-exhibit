@@ -33,7 +33,10 @@ export const chapter03: SceneDefinition[] = [
 - Click 5, **Dario Amodei**, vice president of research at OpenAI
 - Click 6, **Anthropic** (maker of Claude): Amodei leaves OpenAI at the end of 2020 and co-founds Anthropic in 2021 with other former OpenAI staff, a lab centred on safety. Started for a good cause; but the market pushes it into the same race as the others
 - Click 7, **xAI** (maker of Grok): Musk launches it in July 2023 (he had bought Twitter, now X, in 2022)
-- Meanwhile: ChatGPT (November 2022). November 2023: OpenAI's board fires Altman, saying he "was not consistently candid"; he is back five days later. That is three years after Amodei left. OpenAI becomes a public benefit corporation (October 2025)
+- November 2022: ChatGPT comes out
+- 17 November 2023: OpenAI's board fires Altman, saying he "was not consistently candid" with it. Five days later he is back as CEO, with a new board (Bret Taylor, Larry Summers, Adam D'Angelo): of the four members who fired him, only D'Angelo stays. In the end, it is Altman who wins
+- That is nearly three years after Amodei left (end of 2020), and four months after Musk launched xAI (July 2023)
+- October 2025: OpenAI becomes a public benefit corporation
 - Musk against OpenAI: lawsuits since 2024, an unsolicited bid of about $97.4 billion for OpenAI in February 2025 (rejected); his lawsuit was dismissed as time-barred in May 2026, appeal announced
 - Why all this drama matters: these people do not like each other, and their rivalry speeds up the race. Everything we will say about risks is made worse by it. Calling them megalomaniacs is my opinion: say it as such, the facts speak for themselves
 - Click 8, **Meta**
