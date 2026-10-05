@@ -84,6 +84,14 @@ So a model is never called twice for one step, and the projector makes no
 model calls. `ctx.mode === "fallback"` (the `F` key) swaps live calls for recorded
 or deterministic data.
 
+Which window owns the stage (`stageOwner` in `packages/session-protocol`): a
+visible window before a hidden one (browsers slow down a background tab's
+timers, which would freeze animations), then the presenter view before a
+projector acting alone, then the window that joined first. A new owner resumes
+from the published state. Animations driven by timers are paced on the wall
+clock, so a late timer catches up instead of freezing. Entering a scene (forward,
+back or by jump) clears its state: every visit starts it over.
+
 ## Live models and Simulation
 
 | Endpoint | What |

@@ -68,7 +68,21 @@ function reduce(state: SessionState, command: SessionCommand): Patch | null {
     case "goto": {
       const revealStep = Math.max(0, Math.floor(command.revealStep));
       if (command.sceneId === state.sceneId && revealStep === state.revealStep) return null;
-      return { sceneId: command.sceneId, revealStep };
+      if (command.sceneId === state.sceneId) return { sceneId: command.sceneId, revealStep };
+      // Entering a scene (forward, back or by jump) starts it over: its animations, runs and answers
+      // begin again from zero instead of resuming a past visit.
+      const entered: Patch = { sceneId: command.sceneId, revealStep };
+      if (command.sceneId in state.sceneStates) {
+        const sceneStates = { ...state.sceneStates };
+        delete sceneStates[command.sceneId];
+        entered.sceneStates = sceneStates;
+      }
+      if (state.requests && command.sceneId in state.requests) {
+        const requests = { ...state.requests };
+        delete requests[command.sceneId];
+        entered.requests = requests;
+      }
+      return entered;
     }
     case "setSceneState": {
       if (sameJson(state.sceneStates[command.sceneId], command.state)) return null;

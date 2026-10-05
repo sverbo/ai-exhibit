@@ -5,6 +5,9 @@
  * calls, animations, streamed answers). The rule is deterministic, so every
  * window reaches the same answer from the same client list:
  *
+ * 0. a visible window wins over a hidden one (a background tab or a minimised
+ *    window): browsers slow down its timers, and animations would freeze. When
+ *    every window is hidden, the rules below apply to all of them;
  * 1. a presenter view wins over a solo window (the projector acting alone);
  * 2. between two of the same kind, the one that joined first wins (the client
  *    list is in joining order);
@@ -21,8 +24,14 @@ const RANK: Partial<Record<ClientRole, number>> = { presenter: 0, solo: 1 };
 
 /** Client id of the window that runs the stage, or null when none is present. */
 export function stageOwner(clients: readonly ClientSummary[]): string | null {
+  const visible = clients.filter((c) => !c.hidden && RANK[c.role] !== undefined);
+  return ownerAmong(visible.length ? visible : clients, clients);
+}
+
+function ownerAmong(candidates: readonly ClientSummary[], all: readonly ClientSummary[]): string | null {
   let best: { c: ClientSummary; i: number } | null = null;
-  clients.forEach((c, i) => {
+  candidates.forEach((c) => {
+    const i = all.indexOf(c);
     const rank = RANK[c.role];
     if (rank === undefined) return;
     if (!best) {

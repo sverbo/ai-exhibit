@@ -913,13 +913,20 @@ function useLiveTraining({
       publishRef.current(snapshotOf(tr));
       return;
     }
+    // Paced on the wall clock: when the browser delays a timer (a background window), the next tick
+    // catches up on every beat it missed instead of freezing the animation.
+    let due = Date.now() + (tr.steps === 0 ? 600 : next(tr.steps).delay);
     const tick = () => {
-      const { batches } = next(tr.steps);
-      for (let k = 0; k < batches && tr.step(); k++);
+      const now = Date.now();
+      while (!tr.done && due <= now) {
+        const { batches } = next(tr.steps);
+        for (let k = 0; k < batches && tr.step(); k++);
+        due += next(tr.steps).delay;
+      }
       publishRef.current(snapshotOf(tr));
-      if (!tr.done) timer = setTimeout(tick, next(tr.steps).delay);
+      if (!tr.done) timer = setTimeout(tick, Math.max(0, due - Date.now()));
     };
-    if (!tr.done) timer = setTimeout(tick, tr.steps === 0 ? 600 : next(tr.steps).delay);
+    if (!tr.done) timer = setTimeout(tick, Math.max(0, due - Date.now()));
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isController, locale, run, skip, reducedMotion]);

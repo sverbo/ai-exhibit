@@ -133,4 +133,13 @@ describe("scene requests", () => {
     expect(Object.keys(s2.requests ?? {})).toEqual(["a", "b"]);
     expect(applyCommand(s2, { type: "sceneRequest", sceneId: "a", request: req }, "projector")).toBe(s2);
   });
+
+  it("goto into another scene starts it over; a step change in the same scene keeps its state", () => {
+    let s = applyCommand(init(), { type: "setSceneState", sceneId: "01-b", state: { tick: 9 } }, "solo");
+    s = applyCommand(s, { type: "goto", sceneId: "01-b", revealStep: 0 }, "solo");
+    expect(s.sceneStates["01-b"]).toBeUndefined();
+    s = applyCommand(s, { type: "setSceneState", sceneId: "01-b", state: { tick: 3 } }, "solo");
+    s = applyCommand(s, { type: "goto", sceneId: "01-b", revealStep: 2 }, "solo");
+    expect(s.sceneStates["01-b"]).toEqual({ tick: 3 });
+  });
 });

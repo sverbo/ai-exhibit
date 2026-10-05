@@ -72,7 +72,7 @@ type ChannelMessage =
   | { t: "snap"; from: string; to: string; state: SessionState }
   | { t: "state"; from: string; state: SessionState }
   | { t: "bye"; from: string }
-  | { t: "here"; from: string; role: ClientRole; since: number; ask?: boolean };
+  | { t: "here"; from: string; role: ClientRole; since: number; hidden?: boolean; ask?: boolean };
 
 const KNOWN_ROLES: readonly ClientRole[] = ["projector", "presenter", "solo"];
 
@@ -109,8 +109,18 @@ class BroadcastSessionClient implements SessionClient {
   private snapshots: { from: string; state: SessionState }[] = [];
   private snapshotTimer: ReturnType<typeof setTimeout> | null = null;
   /** BroadcastChannel presence: other windows, by id. */
-  private peers = new Map<string, { role: ClientRole; since: number; seen: number }>();
+  private peers = new Map<string, { role: ClientRole; since: number; hidden: boolean; seen: number }>();
   private readonly since = Date.now();
+  /** This window is not visible (background tab, minimised): it tells the others, so a visible one runs the stage. */
+  private hidden = isDocumentHidden();
+  private readonly onVisibility = () => {
+    const hidden = isDocumentHidden();
+    if (hidden === this.hidden) return;
+    this.hidden = hidden;
+    this.here();
+    this.refreshClients();
+    this.notify();
+  };
   private presenceTimer: ReturnType<typeof setInterval> | null = null;
   private presenceReadyTimer: ReturnType<typeof setTimeout> | null = null;
   private presenceKnown = false;
@@ -132,6 +142,7 @@ class BroadcastSessionClient implements SessionClient {
     this.locks = opts.locks === undefined ? (nav?.locks ?? null) : opts.locks;
 
     (globalThis as { addEventListener?: (t: string, f: () => void) => void }).addEventListener?.("pagehide", this.onPageHide);
+    (globalThis as { document?: { addEventListener?: (t: string, f: () => void) => void } }).document?.addEventListener?.("visibilitychange", this.onVisibility);
     this.startBroadcast();
   }
 
@@ -181,6 +192,7 @@ class BroadcastSessionClient implements SessionClient {
     this.clearTimers();
     this.stopPresence();
     (globalThis as { removeEventListener?: (t: string, f: () => void) => void }).removeEventListener?.("pagehide", this.onPageHide);
+    (globalThis as { document?: { removeEventListener?: (t: string, f: () => void) => void } }).document?.removeEventListener?.("visibilitychange", this.onVisibility);
     if (this.channel) {
       this.post({ t: "bye", from: this.clientId });
       this.channel.onmessage = null;
@@ -208,7 +220,7 @@ class BroadcastSessionClient implements SessionClient {
   }
 
   private here(ask = false): void {
-    this.post({ t: "here", from: this.clientId, role: this.role, since: this.since, ...(ask ? { ask: true } : {}) });
+    this.post({ t: "here", from: this.clientId, role: this.role, since: this.since, ...(this.hidden ? { hidden: true } : {}), ...(ask ? { ask: true } : {}) });
   }
 
   private startPresence(): void {
@@ -293,8 +305,8 @@ class BroadcastSessionClient implements SessionClient {
   /** Client list from BroadcastChannel presence: this window and its peers, oldest first. */
   private refreshClients(): void {
     const all: ClientSummary[] = [
-      { clientId: this.clientId, role: this.role, since: this.since },
-      ...[...this.peers].map(([clientId, p]) => ({ clientId, role: p.role, since: p.since })),
+      { clientId: this.clientId, role: this.role, since: this.since, ...(this.hidden ? { hidden: true } : {}) },
+      ...[...this.peers].map(([clientId, p]) => ({ clientId, role: p.role, since: p.since, ...(p.hidden ? { hidden: true } : {}) })),
     ];
     all.sort((a, b) => a.since! - b.since! || (a.clientId < b.clientId ? -1 : a.clientId > b.clientId ? 1 : 0));
     this.clients = all;
@@ -414,9 +426,10 @@ class BroadcastSessionClient implements SessionClient {
       case "here": {
         if (!(KNOWN_ROLES as readonly string[]).includes(msg.role) || typeof msg.since !== "number") return;
         const known = this.peers.get(msg.from);
-        this.peers.set(msg.from, { role: msg.role, since: msg.since, seen: Date.now() });
+        const hidden = msg.hidden === true;
+        this.peers.set(msg.from, { role: msg.role, since: msg.since, hidden, seen: Date.now() });
         if (msg.ask) this.here();
-        if (!known || known.role !== msg.role || known.since !== msg.since) {
+        if (!known || known.role !== msg.role || known.since !== msg.since || known.hidden !== hidden) {
           this.refreshClients();
           this.notify();
         }
@@ -447,4 +460,10 @@ class BroadcastSessionClient implements SessionClient {
     if (this.snapshotTimer) clearTimeout(this.snapshotTimer);
     this.snapshotTimer = null;
   }
+}
+
+/** True when this page is not visible (no document outside a browser: visible). */
+function isDocumentHidden(): boolean {
+  const d = (globalThis as { document?: { visibilityState?: string } }).document;
+  return d?.visibilityState === "hidden";
 }

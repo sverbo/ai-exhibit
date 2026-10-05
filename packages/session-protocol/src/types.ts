@@ -81,6 +81,8 @@ export interface ClientSummary {
   role: ClientRole;
   /** When the window joined (epoch ms). */
   since?: number;
+  /** The window is not visible (a background tab, minimised): its timers slow down, so it should not run the stage. */
+  hidden?: boolean;
 }
 
 /**

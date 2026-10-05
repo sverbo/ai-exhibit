@@ -20,4 +20,13 @@ describe("stageOwner", () => {
     // Same join time: the smaller id, whatever the list order.
     expect(stageOwner([{ clientId: "d", role: "solo", since: 5 }, { clientId: "c", role: "solo", since: 5 }])).toBe("c");
   });
+
+  it("prefers a visible window: a hidden presenter hands the stage to a visible projector", () => {
+    const presenter = { clientId: "z", role: "presenter" as const, since: 1 };
+    const projector = { clientId: "p", role: "solo" as const, since: 2 };
+    expect(stageOwner([presenter, projector])).toBe("z");
+    expect(stageOwner([{ ...presenter, hidden: true }, projector])).toBe("p");
+    // Everyone hidden: the usual rule.
+    expect(stageOwner([{ ...presenter, hidden: true }, { ...projector, hidden: true }])).toBe("z");
+  });
 });

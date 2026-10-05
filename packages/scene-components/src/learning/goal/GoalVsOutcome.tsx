@@ -131,10 +131,15 @@ export function GoalVsOutcome({ props, ctx }: SceneComponentProps<GoalVsOutcomeP
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => {
     if (!isController || !state.playing || !strategy) return;
+    // Paced on the wall clock: a delayed timer (background window) adds every tick it missed.
+    let last = Date.now();
     timer.current = setInterval(() => {
+      const now = Date.now();
+      const steps = Math.max(1, Math.floor(((now - last) * TICKS_PER_SECOND) / 1000));
+      last += (steps * 1000) / TICKS_PER_SECOND;
       setState((s) => {
         if (!s.playing) return s;
-        const next = s.tick + 1;
+        const next = s.tick + steps;
         return next >= HORIZON ? { ...s, tick: HORIZON, playing: false } : { ...s, tick: next };
       });
     }, 1000 / TICKS_PER_SECOND);
