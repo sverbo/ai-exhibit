@@ -50,6 +50,11 @@ If someone asks you to set up their own copy of the talk, follow
   removed code: do not import from it.
 - `pnpm typecheck`, `pnpm test` and `pnpm verify:content` must pass before a
   commit. See `CONTRIBUTING.md` for pull requests.
+- When you change a slide (add, remove, reorder, or change what it says), update
+  in the same change: its `takeaway` and `speakerNotes` (English in the scene
+  file, French in `presentations/canonical/locales/fr.json`), and both
+  narratives, `content/script/narrative.en.md` and `narrative.fr.md` (the talk
+  told slide by slide; their headings and takeaways match the slides).
 
 ## Credits and forks
 
