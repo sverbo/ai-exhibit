@@ -97,13 +97,13 @@ fallback.
 | `ChatPlayground` | 2.18 | [language](../../packages/scene-components/src/language/README.md) |
 | `IndustryStack` | 3.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `RaceDilemma` | 3.2 | [evidence](../../packages/scene-components/src/evidence/README.md) |
-| `PictureCards` | 1.2, 4.1, 4.3 to 4.5, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `PictureCards` | 1.2, 4.1, 4.3 to 4.5, 5.2, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
 | `IntelligenceScale` | 4.6 | [story](../../packages/scene-components/src/story/README.md) |
 | `GoalVsOutcome` | 4.7 | [learning](../../packages/scene-components/src/learning/README.md) |
 | `IncidentStory` | 4.8 | [risks](../../packages/scene-components/src/risks/README.md) |
-| `DefenseInDepth` | 5.2 | [evidence](../../packages/scene-components/src/evidence/README.md) |
-| `ResourceList` | 5.4 | [risks](../../packages/scene-components/src/risks/README.md) |
-| `CreditsSlide` | 5.5 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `DefenseInDepth` | 5.1 | [evidence](../../packages/scene-components/src/evidence/README.md) |
+| `ResourceList` | 5.5 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `CreditsSlide` | 5.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 
 A name that is not registered renders a labelled placeholder and is a
 `verify:content` warning, so content can land before its component.

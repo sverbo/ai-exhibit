@@ -1640,6 +1640,66 @@
     "text": "Les lois et la gouvernance sont l'une de ces couches. Où en est la régulation ?"
   },
   "05-governance/transitionOut": {
+    "source": "Laws are slow. What can each of us do, starting today?",
+    "text": "Les lois sont lentes. Que peut faire chacun de nous, dès aujourd'hui ?"
+  },
+  "05-what-you-can-do/title": {
+    "source": "What you can do",
+    "text": "Ce que vous pouvez faire"
+  },
+  "05-what-you-can-do/objective": {
+    "source": "Leave each person with four concrete ways to act: understand and talk about it, make it a political issue, use it with care, and get involved.",
+    "text": "Laisser à chacun quatre façons concrètes d'agir : comprendre et en parler, en faire un sujet politique, s'en servir avec prudence, et s'engager."
+  },
+  "05-what-you-can-do/takeaway": {
+    "source": "Everyone can act: understand it and talk about it, make it a political issue, use it with care, and, for those who want to, get involved.",
+    "text": "Tout le monde peut agir : comprendre et en parler, en faire un sujet politique, s'en servir avec prudence et, pour ceux qui le veulent, s'engager."
+  },
+  "05-what-you-can-do/visual.props.heading": {
+    "source": "What you can do, starting today",
+    "text": "Ce que vous pouvez faire, dès aujourd'hui"
+  },
+  "05-what-you-can-do/visual.props.cards.0.title": {
+    "source": "Understand, and talk about it",
+    "text": "Comprendre, et en parler"
+  },
+  "05-what-you-can-do/visual.props.cards.0.line": {
+    "source": "Keep learning, and pass it on: most people's picture of AI is two years old.",
+    "text": "Continuer à apprendre, et transmettre : l'idée que la plupart des gens se font de l'IA date de deux ans."
+  },
+  "05-what-you-can-do/visual.props.cards.1.title": {
+    "source": "Make it a political issue",
+    "text": "En faire un sujet politique"
+  },
+  "05-what-you-can-do/visual.props.cards.1.line": {
+    "source": "Among your reasons to choose a party, make AI one of them. Tell your representatives.",
+    "text": "Faire de l'IA l'une de ses raisons de choisir un parti. Le dire à ses élus."
+  },
+  "05-what-you-can-do/visual.props.cards.2.title": {
+    "source": "Use it, with care",
+    "text": "S'en servir, avec prudence"
+  },
+  "05-what-you-can-do/visual.props.cards.2.line": {
+    "source": "Use AI in your work, and think twice before giving an agent more permissions.",
+    "text": "Utiliser l'IA dans son travail, et réfléchir avant de donner plus de permissions à un agent."
+  },
+  "05-what-you-can-do/visual.props.cards.3.title": {
+    "source": "Get involved",
+    "text": "S'engager"
+  },
+  "05-what-you-can-do/visual.props.cards.3.line": {
+    "source": "Join a campaign such as PauseAI, give, or make AI safety your job.",
+    "text": "Rejoindre une campagne comme PauseAI, donner, ou faire de la sécurité de l'IA son métier."
+  },
+  "05-what-you-can-do/speakerNotes": {
+    "source": "- After all the risks: what can each of us do, starting today?\n- **Understand, and talk about it**: keep learning (the glossary's resources: the AI In Context channel, BlueDot Impact's free courses); talk about it with family, colleagues, friends. I think most people's picture of AI is two years old, and that is exactly what this talk tries to change\n- **Make it a political issue**: there are many reasons to prefer one party to another, and you are free to choose; but I think the way a party handles AI should be one of your criteria when you vote. It has to become a subject politicians address. You can also write to your representatives, or sign a petition, when a law on AI is being discussed (for example the EU AI Act and its postponements)\n- **Use it, with care**: use AI in your work. We could have a whole other debate about technology, but refusing it on principle is, I think, dangerous for yourself and your place in society, and it paints a reality that is not the real one. Use it with care: think before giving an agent more permissions (remember automation bias), do not paste personal data everywhere, install your updates. At work, push for thoughtful use (which data, which permissions) rather than a ban or \"accept everything\"\n- **Get involved**: for those who want to act: join a campaign such as PauseAI; give to AI safety organisations if you can (the field gets about a thousandth of what goes into AI itself, see the regulation slide)\n- **Make it your job**: if you are technical and looking for meaning, AI safety can become your field, and it also needs people in policy, law and communication; many programmes are funded (BlueDot Impact's courses are a free way in, 80,000 Hours gives career advice). Come and talk to me if you are interested\n- Keep both eyes open: neither \"it is all hype\" nor \"it is all lost\"; both lead to doing nothing",
+    "text": "- Après tous ces risques : que peut faire chacun de nous, dès aujourd'hui ?\n- **Comprendre, et en parler** : continuer à apprendre (les ressources du lexique : la chaîne AI In Context, les cours gratuits de BlueDot Impact) ; en parler en famille, avec ses collègues, ses amis. Je pense que l'idée que la plupart des gens se font de l'IA date de deux ans, et c'est exactement ce que cette présentation essaie de changer\n- **En faire un sujet politique** : il y a plein de raisons de préférer un parti à un autre, et vous êtes libres de choisir ; mais je pense que la manière dont un parti traite l'IA devrait être l'un de vos critères quand vous votez. Il faut que ça devienne un sujet dont les politiques s'emparent. Vous pouvez aussi écrire à vos élus, ou signer une pétition, quand une loi sur l'IA est en discussion (par exemple l'AI Act européen et ses reports)\n- **S'en servir, avec prudence** : utilisez l'IA dans votre travail. On pourrait avoir tout un autre débat sur la technologie, mais la refuser par principe, c'est, je pense, dangereux pour vous et pour votre place dans la société, et ça donne une image de la réalité qui n'est pas la vraie. S'en servir avec prudence : réfléchir avant de donner plus de permissions à un agent (souvenez-vous du biais d'automatisation), ne pas coller ses données personnelles partout, faire ses mises à jour. Au travail, pousser pour un usage réfléchi (quelles données, quelles permissions) plutôt qu'une interdiction ou un « tout accepter »\n- **S'engager** : pour ceux qui veulent agir : rejoindre une campagne comme PauseAI ; donner à des organisations de sécurité de l'IA si vous le pouvez (le domaine reçoit environ un millième de ce qui va à l'IA elle-même, voir la slide sur la régulation)\n- **En faire son métier** : si vous êtes du côté technique et que vous cherchez du sens, la sécurité de l'IA peut devenir votre domaine, et elle a aussi besoin de gens en politiques publiques, en droit et en communication ; beaucoup de programmes sont financés (les cours de BlueDot Impact sont une porte d'entrée gratuite, 80,000 Hours donne des conseils de carrière). Venez m'en parler si ça vous intéresse\n- Garder les deux yeux ouverts : ni « tout ça, c'est du vent », ni « tout est perdu » ; les deux mènent à ne rien faire"
+  },
+  "05-what-you-can-do/transitionIn": {
+    "source": "Laws are slow. What can each of us do, starting today?",
+    "text": "Les lois sont lentes. Que peut faire chacun de nous, dès aujourd'hui ?"
+  },
+  "05-what-you-can-do/transitionOut": {
     "source": "Which leaves the real question.",
     "text": "Ce qui laisse la vraie question."
   },

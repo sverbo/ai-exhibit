@@ -450,19 +450,27 @@ Où en est-on ? Le message principal, c'est qu'on n'y est pas encore, et de loin
 
 Mais beaucoup reste volontaire, et certains pays n'ont pas grand intérêt à freiner : pour eux, le plus important, c'est la course. Le plan d'action américain de juillet 2025 parle explicitement de « gagner la course à l'IA ». À côté des gouvernements, des militants poussent pour une pause, comme la lettre ouverte de 2023 qui demandait six mois de pause, ou PauseAI aujourd'hui. Et des fonds philanthropiques mettent de plus en plus d'argent dans la sécurité de l'IA : environ 111 millions de dollars en 2024 pour les principaux financeurs, ce qui reste environ un millième des 109 milliards investis dans l'IA aux seuls États-Unis.
 
-## 5.3 La question de clôture
+## 5.3 Ce que vous pouvez faire
+
+**À retenir :** Tout le monde peut agir : comprendre et en parler, en faire un sujet politique, s'en servir avec prudence et, pour ceux qui le veulent, s'engager.
+
+Après tous ces risques, que peut faire chacun de nous, dès aujourd'hui ? La première chose, c'est de comprendre, et d'en parler. Continuer à apprendre : les ressources du lexique, la chaîne AI In Context, les cours gratuits de BlueDot Impact. Et en parler en famille, avec vos collègues, vos amis : je pense que l'idée que la plupart des gens se font de l'IA date de deux ans, et c'est exactement ce que cette présentation essaie de changer. La deuxième, c'est d'en faire un sujet politique. Il y a plein de raisons de préférer un parti à un autre, et vous êtes libres de choisir ; mais je pense que la manière dont un parti traite l'IA devrait être l'un de vos critères quand vous votez. Il faut que ça devienne un sujet dont les politiques s'emparent. Vous pouvez aussi écrire à vos élus, ou signer une pétition, quand une loi sur l'IA est en discussion, comme l'AI Act européen et ses reports.
+
+La troisième, c'est de s'en servir, avec prudence. Utilisez l'IA dans votre travail. On pourrait avoir tout un autre débat sur la technologie, mais la refuser par principe, c'est, je pense, dangereux pour vous et pour votre place dans la société, et ça donne une image de la réalité qui n'est pas la vraie. Mais avec prudence : réfléchir avant de donner plus de permissions à un agent, se souvenir du biais d'automatisation, ne pas coller ses données personnelles partout, faire ses mises à jour. Au travail, pousser pour un usage réfléchi, quelles données et quelles permissions, plutôt qu'une interdiction ou un « tout accepter ». Et pour ceux qui veulent aller plus loin : s'engager. Rejoindre une campagne comme PauseAI, ou donner à des organisations de sécurité de l'IA si vous le pouvez, puisque le domaine reçoit environ un millième de ce qui va à l'IA elle-même. Si vous êtes du côté technique et que vous cherchez du sens, la sécurité de l'IA peut même devenir votre métier, et elle a aussi besoin de gens en politiques publiques, en droit et en communication ; beaucoup de programmes sont financés, les cours de BlueDot Impact sont une porte d'entrée gratuite, et 80,000 Hours donne des conseils de carrière. Venez m'en parler si ça vous intéresse. Surtout, gardez les deux yeux ouverts : ni « tout ça, c'est du vent », ni « tout est perdu », parce que les deux mènent à ne rien faire.
+
+## 5.4 La question de clôture
 
 **À retenir :** Qui devrait décider de comment ces systèmes sont construits et déployés ? La réponse n'est pas technique : elle nous appartient à tous.
 
 Le mot de la fin, c'est une question : qui devrait décider de la manière dont ces systèmes sont construits et déployés ? Les entreprises ? Les gouvernements ? Des institutions internationales ? Les experts ? Les citoyens ? Chaque réponse a ses forces et ses faiblesses, et je ne choisirai pas pour vous. Mon rôle aujourd'hui, c'était de vous donner de quoi y réfléchir. Merci, et place à vos questions.
 
-## 5.4 Pour aller plus loin
+## 5.5 Pour aller plus loin
 
 **À retenir :** La présentation s'arrête ici ; l'apprentissage, pas forcément.
 
 Je laisse à l'écran quelques ressources pour aller plus loin, les mêmes que dans le glossaire du QR code : une chaîne de vidéos, un cours gratuit, et une pétition de PauseAI pour ceux qui veulent agir.
 
-## 5.5 Crédits
+## 5.6 Crédits
 
 **À retenir :** Cette présentation s'appuie sur le travail de beaucoup d'autres.
 

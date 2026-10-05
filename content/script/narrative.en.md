@@ -450,19 +450,27 @@ Where do things stand? The main message is that we are not there yet, far from i
 
 But much remains voluntary, and some countries have little interest in slowing down: for them, what matters most is the race. The US action plan of July 2025 talks explicitly about "winning the AI race". Alongside governments, campaigners are pushing for a pause, like the 2023 open letter that asked for a six-month pause, or PauseAI today. And philanthropic funds are putting more and more money into AI safety: about $111 million in 2024 for the main funders, which is still about a thousandth of the $109 billion invested in AI in the United States alone.
 
-## 5.3 Closing question
+## 5.3 What you can do
+
+**Takeaway:** Everyone can act: understand it and talk about it, make it a political issue, use it with care, and, for those who want to, get involved.
+
+After all these risks, what can each of us do, starting today? The first thing is to understand, and to talk about it. Keep learning: the resources in the glossary, the AI In Context channel, BlueDot Impact's free courses. And talk about it with your family, your colleagues, your friends: I think most people's picture of AI is two years old, and that is exactly what this talk tries to change. The second is to make it a political issue. There are many reasons to prefer one party to another, and you are free to choose; but I think the way a party handles AI should be one of your criteria when you vote. It has to become a subject politicians address. You can also write to your representatives, or sign a petition, when a law on AI is being discussed, like the European AI Act and its postponements.
+
+The third is to use it, with care. Use AI in your work. We could have a whole other debate about technology, but refusing it on principle is, I think, dangerous for yourself and for your place in society, and it paints a reality that is not the real one. Use it with care, though: think before giving an agent more permissions, remember automation bias, do not paste your personal data everywhere, install your updates. At work, push for thoughtful use, which data and which permissions, rather than a ban or "accept everything". And for those who want to go further: get involved. Join a campaign such as PauseAI, or give to AI safety organisations if you can, since the field gets about a thousandth of what goes into AI itself. If you are technical and looking for meaning, AI safety can even become your job, and it also needs people in policy, law and communication; many programmes are funded, BlueDot Impact's courses are a free way in, and 80,000 Hours gives career advice. Come and talk to me if you are interested. Above all, keep both eyes open: neither "it is all hype" nor "it is all lost", because both lead to doing nothing.
+
+## 5.4 Closing question
 
 **Takeaway:** Who should decide how these systems are built and deployed? The answer is not technical; it belongs to all of us.
 
 The last word is a question: who should decide how these systems are built and deployed? Companies? Governments? International institutions? Experts? Citizens? Each answer has its strengths and weaknesses, and I won't choose for you. My job today was to give you something to think with. Thank you, and over to your questions.
 
-## 5.4 Resources
+## 5.5 Resources
 
 **Takeaway:** The talk ends here; the learning does not have to.
 
 I leave a few resources on screen for those who want to go further, the same ones as in the glossary behind the QR code: a video channel, a free course, and a PauseAI petition for those who want to act.
 
-## 5.5 Credits
+## 5.6 Credits
 
 **Takeaway:** This talk stands on the work of many others.
 

@@ -52,6 +52,11 @@ export const PICTURE_IDS = [
   "summit",
   "promise",
   "chips",
+  // Chapter 05: what you can do
+  "talk",
+  "vote",
+  "use",
+  "join",
 ] as const;
 
 export type PictureId = (typeof PICTURE_IDS)[number];
@@ -64,11 +69,13 @@ type Tone = "ink" | "ai" | "alt" | "warn" | "ok" | "muted" | "cut";
 
 const GROUND = 212;
 
-/** A person, 60 x 100 at scale 1, standing with feet centred on (x, y). */
-function Person({ x, y = GROUND, s = 1, tone = "ink" }: { x: number; y?: number; s?: number; tone?: Tone }) {
+/** A person, 60 x 100 at scale 1, standing with feet centred on (x, y); `arm` raises one arm above the head. */
+function Person({ x, y = GROUND, s = 1, tone = "ink", arm }: { x: number; y?: number; s?: number; tone?: Tone; arm?: "left" | "right" }) {
   return (
     <g transform={`translate(${x - 30 * s} ${y - 100 * s}) scale(${s})`}>
       <g className={styles[tone]}>
+        {arm === "right" ? <rect x="44" y="-10" width="14" height="52" rx="7" transform="rotate(20 51 40)" /> : null}
+        {arm === "left" ? <rect x="2" y="-10" width="14" height="52" rx="7" transform="rotate(-20 9 40)" /> : null}
         <circle cx="30" cy="13" r="13" />
         <path d="M6 70 V48 Q6 30 30 30 Q54 30 54 48 V70 Z" />
         <rect x="11" y="62" width="16" height="38" rx="7" />
@@ -620,6 +627,61 @@ const DRAW: Record<PictureId, () => ReactNode> = {
       <path d="M184 30 Q212 30 212 58 Q212 82 184 112 Q156 82 156 58 Q156 30 184 30 Z" className={styles.warn} />
       <circle cx="184" cy="58" r="11" className={styles.cut} />
       <path d="M150 112 Q166 112 172 100" className={styles.dashMuted} />
+      <Ground />
+    </>
+  ),
+  talk: () => (
+    <>
+      <Person x={56} s={1.15} />
+      <Person x={150} s={0.95} />
+      <Person x={204} s={0.95} />
+      <g transform="translate(104 50) scale(1.45) translate(-104 -50)">
+        <Bubble x={104} y={50}>
+          <Robot x={104} y={66} s={0.34} />
+        </Bubble>
+      </g>
+      <Ground />
+    </>
+  ),
+  vote: () => (
+    <>
+      <Person x={44} s={1.05} />
+      <rect x="92" y="132" width="124" height="80" rx="6" className={styles.ink} />
+      <rect x="84" y="116" width="140" height="22" rx="6" className={styles.ink} />
+      <rect x="120" y="123" width="68" height="9" rx="4" className={styles.cut} />
+      <g transform="rotate(-6 154 84)">
+        <rect x="126" y="34" width="56" height="94" rx="6" className={styles.page} />
+        <Check x={154} y={74} s={1.3} />
+      </g>
+      <Ground />
+    </>
+  ),
+  use: () => (
+    <>
+      <Person x={52} s={1.2} />
+      <rect x="84" y="108" width="66" height="46" rx="5" className={styles.ink} />
+      <rect x="91" y="115" width="52" height="32" rx="2" className={styles.cut} />
+      <rect x="76" y="152" width="82" height="7" rx="3" className={styles.ink} />
+      <rect x="16" y="158" width="208" height="12" rx="4" className={styles.muted} />
+      <Robot x={194} y={158} s={0.7} />
+      <path d="M156 130 H166" className={styles.dashAi} />
+      <path d="M182 50 V38 Q194 16 206 38 V50" className={styles.strokeInk} />
+      <rect x="170" y="46" width="48" height="38" rx="7" className={styles.ink} />
+      <circle cx="194" cy="62" r="6" className={styles.cut} />
+      <rect x="191.5" y="64" width="5" height="11" rx="2.5" className={styles.cut} />
+      <Ground />
+    </>
+  ),
+  join: () => (
+    <>
+      <line x1="138" y1="168" x2="138" y2="64" className={styles.strokeInk} />
+      <rect x="98" y="22" width="80" height="48" rx="6" className={styles.alt} />
+      <line x1="114" y1="40" x2="162" y2="40" className={styles.strokeCut} />
+      <line x1="114" y1="54" x2="148" y2="54" className={styles.strokeCut} />
+      <Person x={46} s={0.95} arm="left" />
+      <Person x={120} s={0.95} />
+      <rect x="132" y="132" width="13" height="36" rx="6.5" className={styles.ink} />
+      <Person x={194} s={0.95} arm="right" />
       <Ground />
     </>
   ),

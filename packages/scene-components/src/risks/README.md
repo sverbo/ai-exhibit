@@ -20,7 +20,8 @@ in the accent color, danger in the danger color. Only theme tokens; cut-outs use
 `report`, `warning`, `code`, `car`, `runner`, `math`, `misuse`, `systemic`,
 `control`, `cyber`, `bio`, `jobs`, `power`, `skills`, `disempowerment`,
 `human-ai`, `watched`, `unwatched`, `photo-app`, `law`, `test-lab`, `summit`,
-`promise`, `chips`.
+`promise`, `chips`, `talk`, `vote`, `use`, `join`. A `Person` can raise one
+arm (`arm: "left" | "right"`).
 
 ## `PictureCards`
 
@@ -57,7 +58,8 @@ Used by `01-already-here` (4), `04-to-risks` (3), `04-misuse` (2: cyberattacks,
 biological and chemical weapons), `04-systemic` (4: jobs, power, skills, our
 say), `04-agi` (0),
 `05-governance` (7: five cards, then civil-society
-organisations as name wordmarks, then the presenter's assessment).
+organisations as name wordmarks, then the presenter's assessment),
+`05-what-you-can-do` (4: talk about it, vote, use it with care, get involved).
 
 ## `IncidentStory`
 

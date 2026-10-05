@@ -54,10 +54,14 @@ function render(component: SceneComponent, props: object, c: SceneContext): stri
   return renderToStaticMarkup(createElement(component, { props, ctx: c }));
 }
 
-// PictureCards is used by chapter 04 and by "Already here" in chapter 01.
-const pictureScenes = [...chapter01, ...chapter04].filter(
+// PictureCards is used by chapter 04, by "Already here" in chapter 01 and by chapter 05
+// (governance, with its organisations and takeaway footer, is tested on its own below).
+const pictureScenes = [...chapter01, ...chapter04, ...chapter05].filter(
   (s): s is SceneDefinition & { visual: { layout: "component"; component: string; props: PictureCardsProps } } =>
-    s.visual.layout === "component" && s.visual.component === "PictureCards",
+    s.visual.layout === "component" &&
+    s.visual.component === "PictureCards" &&
+    !(s.visual.props as unknown as PictureCardsProps).orgs &&
+    !(s.visual.props as unknown as PictureCardsProps).takeaway,
 );
 
 describe("pictures", () => {

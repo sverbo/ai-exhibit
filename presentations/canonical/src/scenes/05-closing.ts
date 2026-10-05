@@ -153,7 +153,7 @@ export const chapter05: SceneDefinition[] = [
 - The last line on screen is my assessment`,
     },
     transitionIn: { en: "Laws and governance are one of those layers. Where is regulation today?" },
-    transitionOut: { en: "Which leaves the real question." },
+    transitionOut: { en: "Laws are slow. What can each of us do, starting today?" },
     evidenceLevel: "observed",
     sourceIds: [
       "cg-ec-ai-act",
@@ -195,10 +195,82 @@ export const chapter05: SceneDefinition[] = [
     localizationNotes: "Name the organisations neutrally, as examples of campaigners and donors outside governments, never as endorsements; mention the groups pushing the other way. Funding totals are estimates: say so. Say every date out loud from the notes.",
   },
   {
+    id: "05-what-you-can-do",
+    code: "doit",
+    steps: 4,
+    chapter: "05",
+    number: "5.3",
+    title: { en: "What you can do" },
+    objective: {
+      en: "Leave each person with four concrete ways to act: understand and talk about it, make it a political issue, use it with care, and get involved.",
+    },
+    takeaway: {
+      en: "Everyone can act: understand it and talk about it, make it a political issue, use it with care, and, for those who want to, get involved.",
+    },
+    visual: {
+      layout: "component",
+      component: "PictureCards",
+      props: {
+        heading: { en: "What you can do, starting today" },
+        cards: [
+          {
+            picture: "talk",
+            title: { en: "Understand, and talk about it" },
+            line: { en: "Keep learning, and pass it on: most people's picture of AI is two years old." },
+          },
+          {
+            picture: "vote",
+            title: { en: "Make it a political issue" },
+            line: { en: "Among your reasons to choose a party, make AI one of them. Tell your representatives." },
+          },
+          {
+            picture: "use",
+            title: { en: "Use it, with care" },
+            line: { en: "Use AI in your work, and think twice before giving an agent more permissions." },
+          },
+          {
+            picture: "join",
+            title: { en: "Get involved" },
+            line: { en: "Join a campaign such as PauseAI, give, or make AI safety your job." },
+            sourceIds: ["tk-pauseai-proposal", "tk-bluedot-impact", "tk-mcaleese-2025-ai-safety-funding"],
+          },
+        ],
+      },
+    },
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- After all the risks: what can each of us do, starting today?
+- **Understand, and talk about it**: keep learning (the glossary's resources: the AI In Context channel, BlueDot Impact's free courses); talk about it with family, colleagues, friends. I think most people's picture of AI is two years old, and that is exactly what this talk tries to change
+- **Make it a political issue**: there are many reasons to prefer one party to another, and you are free to choose; but I think the way a party handles AI should be one of your criteria when you vote. It has to become a subject politicians address. You can also write to your representatives, or sign a petition, when a law on AI is being discussed (for example the EU AI Act and its postponements)
+- **Use it, with care**: use AI in your work. We could have a whole other debate about technology, but refusing it on principle is, I think, dangerous for yourself and your place in society, and it paints a reality that is not the real one. Use it with care: think before giving an agent more permissions (remember automation bias), do not paste personal data everywhere, install your updates. At work, push for thoughtful use (which data, which permissions) rather than a ban or "accept everything"
+- **Get involved**: for those who want to act: join a campaign such as PauseAI; give to AI safety organisations if you can (the field gets about a thousandth of what goes into AI itself, see the regulation slide)
+- **Make it your job**: if you are technical and looking for meaning, AI safety can become your field, and it also needs people in policy, law and communication; many programmes are funded (BlueDot Impact's courses are a free way in, 80,000 Hours gives career advice). Come and talk to me if you are interested
+- Keep both eyes open: neither "it is all hype" nor "it is all lost"; both lead to doing nothing`,
+    },
+    transitionIn: { en: "Laws are slow. What can each of us do, starting today?" },
+    transitionOut: { en: "Which leaves the real question." },
+    evidenceLevel: "none",
+    sourceIds: [
+      "tk-ai-in-context",
+      "tk-bluedot-impact",
+      "cg-ec-ai-act",
+      "sc-ec-2026-omnibus-in-force",
+      "tk-pauseai-proposal",
+      "tk-mcaleese-2025-ai-safety-funding",
+      "tk-stanford-2025-ai-index",
+    ],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "none", reason: "Static pictures." },
+    durationSec: 120,
+    optional: false,
+    localizationNotes: "Advice, not a party line: never name a party to vote for. The presenter's opinions are marked as such (\"I think\"); keep them marked. PauseAI is an example of a campaign, not an endorsement. Name local representatives or petitions only as examples.",
+  },
+  {
     id: "05-closing-question",
     code: "close",
     chapter: "05",
-    number: "5.3",
+    number: "5.4",
     title: { en: "Closing question" },
     objective: {
       en: "Open the discussion on who should decide how these systems are built and deployed, without prescribing an answer.",
@@ -236,7 +308,7 @@ export const chapter05: SceneDefinition[] = [
     code: "more",
     steps: 0,
     chapter: "05",
-    number: "5.4",
+    number: "5.5",
     title: { en: "Resources" },
     objective: {
       en: "Leave the room with a few places to keep learning, the same list as on the audience glossary page.",
@@ -267,7 +339,7 @@ export const chapter05: SceneDefinition[] = [
     code: "creds",
     steps: 0,
     chapter: "05",
-    number: "5.5",
+    number: "5.6",
     title: { en: "Credits" },
     objective: {
       en: "Say who made the talk and name the works it borrowed most from.",
