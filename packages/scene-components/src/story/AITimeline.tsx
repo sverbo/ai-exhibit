@@ -1,7 +1,6 @@
 import { plainText, tr } from "@ai-exhibit/presentation-core";
 import { useEffect, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
-import { SourceList } from "../evidence/SourceList.tsx";
 import { Rich } from "../primitives/Rich.tsx";
 import { stopShellKeys } from "../evidence/shared.ts";
 import { BombeDemo, BOMBE_TICKS, TICK_MS } from "./BombeDemo.tsx";
@@ -129,13 +128,6 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
           <p className={styles.aside}>
             <Rich text={tr(current.aside, locale)} />
           </p>
-        ) : null}
-        {interactive ? (
-          // Presenter only: some publishers are companies, and this scene names none on the projector.
-          <div className={styles.sources}>
-            {/* Long lists (the winters cite six sources) collapse to short labels to keep the date on stage. */}
-            <SourceList sourceIds={current.sourceIds} role={role} locale={locale} getSource={ctx.getSource} compact={current.sourceIds.length > 3} />
-          </div>
         ) : null}
         {demo ? (
           <p className={styles.caption}>

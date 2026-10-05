@@ -5,27 +5,27 @@ import { l, type L10n, type Locale } from "../../learning/shared/ui.tsx";
  * The "search" scenario of ToolCallDemo: a chatbot alone next to the same model
  * with a web search tool, the tool side shown as real Messages API blocks (same
  * shapes as weather.ts, checked against the tool-use docs on 2026-10-02).
- * The match, clubs, sites and score are invented for the example.
+ * Two clubs everyone knows; the match, the sites and the score are invented for the example.
  */
 
 export const SEARCH_TOOL_USE_ID = "toolu_01T1x1fJ34qAmk2tNTrN7Up6";
 
 export const SEARCH_TEXT = {
-  question: { en: "Who won last night's match, Westhoek against Damme?" },
+  question: { en: "Who won last night's match, Barcelona against Real Madrid?" },
   chatAnswer: l(
     "Je ne peux pas le savoir : mes connaissances s'arrêtent à la date de mon entraînement.",
     "I can't know that: my knowledge stops at the date of my training.",
   ),
   chatNote: { en: "On its own, the model sees nothing that happened since." },
   toolDescription: { en: "Search the web, return the top results" },
-  query: { en: "Westhoek Damme match last night score" },
+  query: { en: "Barcelona Real Madrid match last night score" },
   results: [
-    { en: "sport.example: Westhoek 2, Damme 1" },
-    { en: "news.example: Damme beaten 2 to 1" },
+    { en: "sport.example: Barça 2, Real 1" },
+    { en: "news.example: Real Madrid lose 2-1" },
   ],
   answer: l(
-    "Westhoek a gagné 2 à 1 contre Damme hier soir (sources : sport.example, news.example).",
-    "Westhoek beat Damme 2 to 1 last night (sources: sport.example, news.example).",
+    "Barcelone a battu le Real Madrid 2 à 1 hier soir (sources : sport.example, news.example).",
+    "Barcelona beat Real Madrid 2 to 1 last night (sources: sport.example, news.example).",
   ),
 };
 

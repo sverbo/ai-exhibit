@@ -2311,9 +2311,9 @@
     "source": "text, nothing else",
     "text": "du texte, rien d'autre"
   },
-  "copy:Who won last night's match, Westhoek against Damme?": {
-    "source": "Who won last night's match, Westhoek against Damme?",
-    "text": "Qui a gagné le match d'hier soir, Westhoek contre Damme ?"
+  "copy:Who won last night's match, Barcelona against Real Madrid?": {
+    "source": "Who won last night's match, Barcelona against Real Madrid?",
+    "text": "Qui a gagné le match d'hier soir, Barcelone contre le Real Madrid ?"
   },
   "copy:On its own, the model sees nothing that happened since.": {
     "source": "On its own, the model sees nothing that happened since.",
@@ -2323,17 +2323,17 @@
     "source": "Search the web, return the top results",
     "text": "Cherche sur le web, renvoie les premiers résultats"
   },
-  "copy:Westhoek Damme match last night score": {
-    "source": "Westhoek Damme match last night score",
-    "text": "match Westhoek Damme hier soir score"
+  "copy:Barcelona Real Madrid match last night score": {
+    "source": "Barcelona Real Madrid match last night score",
+    "text": "Barcelone Real Madrid match hier soir score"
   },
-  "copy:sport.example: Westhoek 2, Damme 1": {
-    "source": "sport.example: Westhoek 2, Damme 1",
-    "text": "sport.example : Westhoek 2, Damme 1"
+  "copy:sport.example: Barça 2, Real 1": {
+    "source": "sport.example: Barça 2, Real 1",
+    "text": "sport.example : Barça 2, Real 1"
   },
-  "copy:news.example: Damme beaten 2 to 1": {
-    "source": "news.example: Damme beaten 2 to 1",
-    "text": "news.example : Damme battu 2 à 1"
+  "copy:news.example: Real Madrid lose 2-1": {
+    "source": "news.example: Real Madrid lose 2-1",
+    "text": "news.example : le Real battu 2 à 1"
   },
   "copy:Tools": {
     "source": "Tools",
