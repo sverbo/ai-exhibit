@@ -154,7 +154,7 @@ export const chapter04: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "deterministic" },
     durationSec: 105,
-    optional: true,
+    optional: false,
     localizationNotes: "Say the question wording and the year for each pair. French uses a space before '%'.",
   },
   {

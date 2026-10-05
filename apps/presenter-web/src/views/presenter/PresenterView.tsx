@@ -21,6 +21,7 @@ import styles from "./PresenterView.module.css";
 import { ConfigPanel } from "./ConfigPanel.tsx";
 import { isEmptyConfig } from "../../talk/personal.ts";
 import { openView } from "../../talk/openView.ts";
+import { deskTitle } from "../../ui/deskTitle.ts";
 
 type Tab = "notes" | "sources" | "todo" | "health";
 
@@ -108,7 +109,7 @@ export default function PresenterView() {
             ) : null}
           </span>
           <div className={styles.sceneText}>
-            <span className={styles.sceneTitle}><Rich text={scene ? tr(scene.title, locale) : t("emptyEdition")} /></span>
+            <span className={styles.sceneTitle}><Rich text={scene ? deskTitle(scene, locale) : t("emptyEdition")} /></span>
             <span className={styles.sceneMeta}>
               {chapter ? <Rich text={`${t("chapter")} ${chapter.id} · ${tr(chapter.title, locale)}`} /> : ""}
               {scenes.length ? ` · ${t("scene")} ${index + 1}/${scenes.length}` : ""}
@@ -241,7 +242,7 @@ export default function PresenterView() {
               <span className={styles.thumbTitle}>
                 {next ? (
                   <>
-                    <span className={chrome.mono}>{next.number}</span> <Rich text={tr(next.title, locale)} />
+                    <span className={chrome.mono}>{next.number}</span> <Rich text={deskTitle(next, locale)} />
                   </>
                 ) : (
                   t("endOfTalk")

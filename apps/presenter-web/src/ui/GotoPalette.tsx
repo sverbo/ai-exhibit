@@ -4,6 +4,7 @@ import { tr, type Locale, type PresentationDefinition, type SceneDefinition } fr
 import { useUi } from "../i18n.ts";
 import styles from "./GotoPalette.module.css";
 import { filterScenes } from "./sceneSearch.ts";
+import { deskTitle } from "./deskTitle.ts";
 
 export { filterScenes };
 
@@ -86,7 +87,7 @@ export function GotoPalette({
               >
                 <span className={styles.number}>{s.number}</span>
                 <span className={styles.title}>
-                  <Rich text={tr(s.title, locale)} />
+                  <Rich text={deskTitle(s, locale)} />
                   {hiddenIds?.has(s.id) ? <span className={styles.hiddenTag}>{t("configHidden")}</span> : null}
                 </span>
                 <span className={styles.chapter}>{chapterTitle(s.chapter)}</span>

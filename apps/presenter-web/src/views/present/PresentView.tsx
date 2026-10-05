@@ -21,6 +21,7 @@ import { openView } from "../../talk/openView.ts";
 import { ProgressRail } from "./ProgressRail.tsx";
 import { talkProgress } from "./progress.ts";
 import styles from "./PresentView.module.css";
+import { deskTitle } from "../../ui/deskTitle.ts";
 
 type HudMode = "full" | "strip";
 const HUD_KEY = "ai-exhibit:present-hud";
@@ -132,7 +133,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
             <span className={`${chrome.mono} ${styles.position}`}>
               {scene ? scene.number : "..."} <span className={chrome.muted}>{index + 1}/{scenes.length}</span>
             </span>
-            <span className={styles.title}><Rich text={scene ? tr(scene.title, locale) : ""} /></span>
+            <span className={styles.title}><Rich text={scene ? deskTitle(scene, locale) : ""} /></span>
             {steps > 0 ? (
               <span className={styles.steps} aria-label={`${t("step")} ${state?.revealStep ?? 0}/${steps}`}>
                 {Array.from({ length: steps }, (_, i) => (

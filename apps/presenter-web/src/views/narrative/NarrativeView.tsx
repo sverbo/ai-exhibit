@@ -5,7 +5,7 @@
  * downloadable as Markdown; `?lang=` picks one.
  */
 import { useState } from "react";
-import { tr, type Locale } from "@ai-exhibit/presentation-core";
+import { tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
 import narrativeEn from "../../../../../content/script/narrative.en.md?raw";
 import narrativeFr from "../../../../../content/script/narrative.fr.md?raw";
 import { LocalePicker } from "../../ui/LocalePicker.tsx";
@@ -13,8 +13,8 @@ import { Markdown } from "../../ui/Markdown.tsx";
 import chrome from "../../ui/chrome.module.css";
 import styles from "./NarrativeView.module.css";
 
-const TEXTS: Partial<Record<Locale, string>> = { en: narrativeEn, fr: narrativeFr };
-const LOCALES = Object.keys(TEXTS) as Locale[];
+const TEXTS: L10n = { en: narrativeEn, fr: narrativeFr };
+const LOCALES: Locale[] = ["en", "fr"];
 
 const COPY = {
   home: { en: "← Home", fr: "← Accueil" },
@@ -38,7 +38,7 @@ function download(text: string, locale: Locale) {
 
 export default function NarrativeView() {
   const [locale, setLocale] = useState<Locale>(initialLocale);
-  const text = TEXTS[locale] ?? narrativeEn;
+  const text = tr(TEXTS, locale);
   const choose = (l: Locale) => {
     setLocale(l);
     const url = new URL(window.location.href);

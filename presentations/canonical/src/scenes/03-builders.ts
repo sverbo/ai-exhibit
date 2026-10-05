@@ -118,7 +118,8 @@ export const chapter03: SceneDefinition[] = [
     visual: { layout: "component", component: "RaceDilemma", props: {} },
     interaction: "presenter",
     speakerNotes: {
-      en: `- The **prisoner's dilemma**, applied to AI labs: an analogy, not a description of real players
+      en: `- **Optional**: the drama of "Who builds it" already shows the race; this slide adds the game-theory reason. Hide it in Config if time is short
+- The **prisoner's dilemma**, applied to AI labs: an analogy, not a description of real players
 - Two labs: each can take its time or race
 - Whatever the other does, racing looks better: if the other slows down, I win; if it races, I must not fall behind
 - Both race: worse for both than taking their time together

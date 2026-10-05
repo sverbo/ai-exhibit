@@ -9,6 +9,7 @@ import chrome from "../../ui/chrome.module.css";
 import { SpeakerNotes } from "../../ui/SpeakerNotes.tsx";
 import { plainInline } from "../../ui/notes.ts";
 import styles from "./panels.module.css";
+import { deskTitle } from "../../ui/deskTitle.ts";
 
 /** Scene-level plus card-level source IDs, deduplicated. */
 export function sceneSourceIds(scene: SceneDefinition): string[] {
@@ -149,7 +150,7 @@ export function NotesPanel({
           <span className={styles.aside}>{t("upNext")}</span>{" "}
           {next ? (
             <>
-              <span className={chrome.mono}>{next.number}</span> <Rich text={tr(next.title, locale)} />
+              <span className={chrome.mono}>{next.number}</span> <Rich text={deskTitle(next, locale)} />
             </>
           ) : (
             t("endOfTalk")
@@ -356,7 +357,7 @@ export function ChapterStrip({
     if (!strip) return;
     setHover({
       id: scene.id,
-      label: `${scene.number} ${plainInline(tr(scene.title, locale))}`,
+      label: `${scene.number} ${plainInline(deskTitle(scene, locale))}`,
       // Kept inside the strip so the label never runs off either end.
       left: Math.min(strip.width - 140, Math.max(140, cell.left + cell.width / 2 - strip.left)),
     });
@@ -385,7 +386,7 @@ export function ChapterStrip({
                     type="button"
                     data-slide-cell
                     className={`${styles.cell} ${hover?.id === sc.id ? styles.cellHover : ""}`}
-                    aria-label={`${sc.number} ${plainInline(tr(sc.title, locale))}`}
+                    aria-label={`${sc.number} ${plainInline(deskTitle(sc, locale))}`}
                     onMouseEnter={(e) => show(e, sc)}
                     onFocus={(e) => show(e as unknown as React.MouseEvent<HTMLButtonElement>, sc)}
                     onClick={() => onGo(sc.id)}

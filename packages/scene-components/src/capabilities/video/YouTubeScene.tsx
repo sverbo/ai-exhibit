@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Rich } from "../../primitives/Rich.tsx";
 import type { SceneComponentProps } from "../../contract.ts";
 import { useSceneState } from "../../learning/shared/sceneState.ts";
+import { canInteract, useSceneActions } from "../../primitives/interaction.ts";
 import { ControlBar, SceneButton, cx, type L10n } from "../../learning/shared/ui.tsx";
 import { CapIcon } from "../shared/icons.tsx";
 import {
@@ -47,6 +48,9 @@ const TEXT = {
   offlineHint: { en: "Watch it later at this address:" },
   blocked: { en: "The browser blocks sound: click once in this window." },
 };
+
+/** What any interactive window can ask; the stage owner applies it (interaction from any window). */
+type VideoAction = { type: "toggle"; at: number } | { type: "restart" } | { type: "seek"; to: number };
 
 const PLAYING = 1;
 const BUFFERING = 3;
@@ -195,6 +199,22 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
   }, [role, isController, withPlayer, state.playing, duration, setState]);
 
   const position = expectedPosition(state, now, duration);
+
+  // Play, pause and seek from any window: the presenter's, or the projector's own (also when the presenter is open).
+  const act = useSceneActions<VideoAction, VideoState>(ctx, (a) => {
+    const at = Date.now();
+    if (a.type === "restart") return setState((s) => seekTo(s, 0, at));
+    if (a.type === "seek") {
+      setNow(at);
+      return setState((s) => seekTo(s, a.to, at));
+    }
+    // The owner's own player knows the true position; otherwise the asking window's estimate.
+    const p = playerRef.current;
+    const cur = p ? p.getCurrentTime() : a.at;
+    const atEnd = duration !== undefined && cur >= duration - 0.5;
+    setState((s) => setPlaying(s, !s.playing, atEnd ? 0 : cur, at));
+  });
+  const controls = canInteract(ctx);
   const header = (
     <header className={styles.header}>
       {props.kicker && (
@@ -254,16 +274,16 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
       </div>
       {caption}
 
-      {isController && (
+      {controls && (
         <div className={styles.controls}>
           <ControlBar>
             <SceneButton
               variant="primary"
               onClick={() => {
-                const p = playerRef.current;
-                const cur = p ? p.getCurrentTime() : position;
-                const atEnd = duration !== undefined && cur >= duration - 0.5;
-                setState((s) => setPlaying(s, !s.playing, atEnd ? 0 : cur, Date.now()));
+                // A click here is also the gesture that lets this window play sound.
+                playerRef.current?.unMute();
+                setBlocked(false);
+                act({ type: "toggle", at: playerRef.current ? playerRef.current.getCurrentTime() : position });
               }}
             >
               <span className={styles.btnInner}>
@@ -271,7 +291,7 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
                 <Rich text={t(state.playing ? TEXT.pause : TEXT.play)} />
               </span>
             </SceneButton>
-            <SceneButton onClick={() => setState((s) => seekTo(s, 0, Date.now()))} title={t(TEXT.restart)}>
+            <SceneButton onClick={() => act({ type: "restart" })} title={t(TEXT.restart)}>
               <CapIcon name="back" size={22} />
             </SceneButton>
             <label className={styles.seek}>
@@ -284,10 +304,8 @@ export function YouTubeScene({ props, ctx }: SceneComponentProps<YouTubeScenePro
                 step={0.5}
                 value={Math.min(position, duration ?? 0)}
                 onChange={(e) => {
-                  const v = Number(e.currentTarget.value);
-                  const at = Date.now();
-                  setNow(at);
-                  setState((s) => seekTo(s, v, at));
+                  setNow(Date.now());
+                  act({ type: "seek", to: Number(e.currentTarget.value) });
                 }}
                 onKeyDown={(e) => e.stopPropagation()}
                 onPointerUp={(e) => e.currentTarget.blur()}

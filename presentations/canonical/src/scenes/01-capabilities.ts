@@ -77,7 +77,8 @@ export const chapter01: SceneDefinition[] = [
     steps: 0,
     interaction: "presenter",
     speakerNotes: {
-      en: `- Just to set the mood: press **Play** on the presenter screen; the sound comes from the projector only
+      en: `- **Optional**: a mood-setter: the agenda carries on without it. Hide it in Config if time is short
+- Just to set the mood: press **Play**, on the presenter screen or on the projector itself; the sound comes from the projector only
 - "Welcome to AI In Context", 57 seconds, by the YouTube channel **AI In Context** (from 80,000 Hours)
 - Say the channel's name out loud: it is in the resources at the end, and it has a few other very good videos
 - Subtitles: this video has English captions only, so a French talk shows English subtitles; YouTube may pick an automatic dub, check on the projector before the talk
@@ -187,7 +188,8 @@ export const chapter01: SceneDefinition[] = [
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how
+      en: `- **Optional**: framing only: nothing later depends on it. Hide it in Config if time is short
+- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how
 - **Not about the environment**: of course a serious problem, but another talk; for many, today's risks are of another order of magnitude (my view: say it as such)
 - To calibrate: one short chatbot question is about **0.3 Wh** (Epoch AI; Google: 0.24 Wh for a median Gemini prompt), one hour of video streaming about **77 Wh** (IEA): **about 250 questions, one hour of streaming**
 - Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming
@@ -379,23 +381,21 @@ export const chapter01: SceneDefinition[] = [
       en: "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, electricity, memory, reliability, and the hardest tests, with a labelled one-year projection.",
     },
     takeaway: {
-      en: "This is not a small improvement: in seven years, cost, memory, reliability and test scores all exploded.",
+      en: "Everything went up, and fast: cost, electricity, memory, reliability and test scores, by factors of a hundred to tens of thousands.",
     },
     visual: { layout: "component", component: "FrontierProgress", props: {} },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Not a small improvement: a boom on every axis at once. Top row, what went in and what the models hold; bottom row, the hardest tests. Each label says how we know: estimate, published, measured, projection
-- Click 1, **cost** (Epoch AI estimates): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)
-- Click 2, **electricity**, power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). Electricity is becoming a real bottleneck for AI. GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known
-- Click 3, **memory, the context window** (published by the developers): 1,024 tokens for GPT-2 (about a page and a half), 2,048 for GPT-3 (about three pages), 32,768 for GPT-4's larger version (2023), 1 million for Grok 3 (2025): about **1,500 pages**
-- Why it matters: when a conversation overflowed the window, its start fell out. That is why models seemed to "forget", and why we thought they had a memory problem
-- Nuance: a big window does not mean the model uses page 1,200 as well as page 2; quality often drops on very long contexts
-- Click 4, **reliability** (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (February 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (February 2026), Claude Mythos Preview about 17 hours (April 2026; interval 8 to 55 hours)
-- Click 5, **GPQA Diamond** (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (December 2024), Gemini 3 Pro 93% (November 2025), GPT-6 Astra 96% (September 2026)
-- Click 6, **SWE-bench Verified**: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, November 2024) to 84% (Claude Opus 4.7, April 2026)
-- Click 7, tests built to be too hard. **Humanity's Last Exam** (2,500 expert questions, January 2025): 5% (September 2024) to 55% (GPT-6 Astra). **FrontierMath** (new research problems, hours or days for a mathematician; under 2% at launch, November 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)
-- Click 8, **ARC-AGI-2** (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)
-- Click 9, **projection** for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year, about 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR: doubling every 7 months, or every 131 days since 2023). Memory and test scores are not projected: the tests are near their ceiling and harder ones are being written`,
+      en: `- **Everything went up**, and fast: in seven years, not a small improvement but a boom on every axis at once
+- Do not read every figure: pick a few ratios
+  - **Cost** of training: about **84,000 times** more, from about $4,300 (GPT-2, 2019) to about $366 million (GPT-4.5, 2025)
+  - **Electricity**: about **130 times** more from GPT-3 (1.8 GWh) to Grok 3 (237 GWh, a year of electricity for about 22,000 US homes); electricity is becoming the bottleneck
+  - **Reliability**: the length of task a top model finishes half the time went from about 3 seconds of expert work (GPT-2) to about 17 hours (April 2026), about **20,000 times** longer
+  - **Tests**: PhD-level science questions, from 36% (GPT-4, 2023) to **96%**, above PhDs in the field (65%)
+- **Memory, the context window**, is a big part of why they feel so much more capable: about a page and a half for GPT-2, three pages for GPT-3, about **1,500 pages** today (1 million tokens), about **1,000 times** more
+- When a conversation overflowed the window, its start fell out: that is why models seemed to "forget". Now a whole book, a codebase or a long project fits at once
+- Each label says how we know (estimate, published, measured, projection). The last click is a projection, a trend and not a promise: training over $1 billion by October 2027
+- The other tests on screen (bugs fixed, Humanity's Last Exam, FrontierMath, ARC-AGI-2, the maths olympiad gold) are in the Sources tab if someone asks`,
     },
     transitionIn: { en: "How did we get here so fast? Seven years, in numbers." },
     transitionOut: { en: "So what is all this for? Not just answering: acting." },

@@ -227,7 +227,7 @@ export const chapter02: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "deterministic" },
     durationSec: 120,
-    optional: true,
+    optional: false,
   },
   {
     id: "02-text-tree-unseen",
@@ -318,7 +318,8 @@ export const chapter02: SceneDefinition[] = [
     visual: { layout: "component", component: "TextClassifierLab", props: { stage: "learning" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- **Gradient descent**, in a picture: a **road network** with roads more or less wide. After each trip, we look at where the car ended and where it should have ended, and widen or narrow every road a tiny bit, in the direction that would have brought it closer to the right exit. In the end, any car that enters arrives at the right place
+      en: `- **Optional**: the network slide before and "Only numbers" after carry the story; if you skip it, say in one sentence that the weights are nudged a little after each example, then frozen. Hide it in Config if time is short
+- **Gradient descent**, in a picture: a **road network** with roads more or less wide. After each trip, we look at where the car ended and where it should have ended, and widen or narrow every road a tiny bit, in the direction that would have brought it closer to the right exit. In the end, any car that enters arrives at the right place
 - (Another classic picture: a hiker in the fog who always steps down the steepest slope)
 - At first the weights are **random**, so the network guesses at random: a basketball sentence, it says "football, 56%" (only 44% basketball)
 - Compare with the right answer: the gap is the **error**. Nudge every connection a little in the direction that would have helped; watch the lines change, a few show before and after
@@ -335,7 +336,7 @@ export const chapter02: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "deterministic" },
     durationSec: 150,
-    optional: false,
+    optional: true,
   },
   {
     id: "02-text-network-fail",
@@ -424,7 +425,7 @@ export const chapter02: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "deterministic" },
     durationSec: 90,
-    optional: true,
+    optional: false,
     localizationNotes: "Keep the quoted label exactly as documented; do not paraphrase or soften it.",
   },
   {
@@ -696,7 +697,8 @@ export const chapter02: SceneDefinition[] = [
     visual: { layout: "component", component: "EmbeddingExplorer", props: { mode: "training" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- A neural network only computes with numbers (multiplications, additions, then a probability between 0 and 1): the 0.1%, 1% and 98% we saw are real computations, so words must become **numbers**
+      en: `- **Optional**: "Why so many numbers" before and the live map after already show the idea. Hide it in Config if time is short
+- A neural network only computes with numbers (multiplications, additions, then a probability between 0 and 1): the 0.1%, 1% and 98% we saw are real computations, so words must become **numbers**
 - We want close meanings to get close numbers, the way a red pixel and a dark red pixel have close values: then the computations make sense
 - Our classifier only knew whether a word was there; richer: give each word a **list of numbers**, a point in space
 - We are in machine learning, so nobody places the words by hand: before training, the points are scattered **at random**
@@ -711,7 +713,7 @@ export const chapter02: SceneDefinition[] = [
     artifacts: ["embeddings-canonical"],
     fallback: { kind: "deterministic" },
     durationSec: 120,
-    optional: false,
+    optional: true,
   },
   {
     id: "02-embedding-play",
@@ -750,7 +752,7 @@ export const chapter02: SceneDefinition[] = [
     artifacts: ["embeddings-canonical"],
     fallback: { kind: "deterministic" },
     durationSec: 90,
-    optional: true,
+    optional: false,
     todo: [
       "Rehearse with a few likely audience words and check the neighbour lists are not embarrassing or offensive; prepare two safe fallback words.",
     ],
@@ -895,6 +897,6 @@ export const chapter02: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "none" },
     durationSec: 120,
-    optional: true,
+    optional: false,
   },
 ];

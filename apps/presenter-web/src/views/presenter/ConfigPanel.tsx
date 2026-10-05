@@ -18,6 +18,7 @@ import {
 import type { Talk } from "../../talk/useTalk.ts";
 import chrome from "../../ui/chrome.module.css";
 import styles from "./ConfigPanel.module.css";
+import { deskTitle } from "../../ui/deskTitle.ts";
 
 const IMPORT_ERRORS: Record<ParseError, UiKey> = {
   json: "configErrorJson",
@@ -325,7 +326,7 @@ function SceneRow({
           </button>
           <span className={`${chrome.mono} ${styles.number}`}>{scene.number}</span>
           <span className={styles.sceneTitle}>
-            {plainText(tr(scene.title, locale))}
+            {plainText(deskTitle(scene, locale))}
             {hidden ? <span className={styles.tag}>{t("configHidden")}</span> : null}
             {note && !noteOpen ? <span className={styles.notePreview}>{note}</span> : null}
           </span>

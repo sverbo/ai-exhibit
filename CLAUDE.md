@@ -54,7 +54,8 @@ If someone asks you to set up their own copy of the talk, follow
   in the same change: its `takeaway` and `speakerNotes` (English in the scene
   file, French in `presentations/canonical/locales/fr.json`), and both
   narratives, `content/script/narrative.en.md` and `narrative.fr.md` (the talk
-  told slide by slide; their headings and takeaways match the slides).
+  told slide by slide; their headings and takeaways match the slides, and
+  an optional scene's heading ends with "(optional)" / "(optionnel)").
 
 ## Credits and forks
 

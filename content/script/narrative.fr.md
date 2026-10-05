@@ -10,7 +10,7 @@ Ce texte raconte la présentation slide par slide, dans l'ordre : sa structure g
 
 La salle se remplit. À l'écran, le titre de la présentation et un QR code qui ouvre déjà le glossaire. Quand tout le monde est installé, on commence par une courte vidéo.
 
-## 0.2 Ce n'est pas de la science-fiction
+## 0.2 Ce n'est pas de la science-fiction (optionnel)
 
 **À retenir :** Avant toute explication, une minute pour sentir l'enjeu.
 
@@ -24,7 +24,7 @@ Bienvenue. Avant de commencer, je vous invite à scanner le QR code : il ouvre u
 
 Le plan tient en cinq parties. D'abord, ce que l'IA sait faire aujourd'hui. Ensuite un peu d'histoire, puis on ira dans le détail de comment ça marche : comment une machine arrive à écrire. Puis qui la construit, avec un peu de drama et de géopolitique. Cela me permettra de vous amener doucement vers les risques, et vous verrez que c'est beaucoup moins de la science-fiction qu'il n'y paraît. Et pour finir, ce qu'on peut y faire. Les questions, je les prends à la fin.
 
-## 0.4 Ce que cette présentation n'est pas
+## 0.4 Ce que cette présentation n'est pas (optionnel)
 
 **À retenir :** Aujourd'hui, on parle de ce que l'IA sait faire et de ce qui est en jeu, pas d'outils ni d'environnement.
 
@@ -64,7 +64,7 @@ Et enfin, cette présentation elle-même. Le fil de l'histoire est le mien, mais
 
 ## 1.3 Tout a grimpé
 
-**À retenir :** Ce n'est pas une petite amélioration : en sept ans, coût, mémoire, fiabilité et scores ont tous explosé.
+**À retenir :** Tout est monté, et vite : coût, électricité, mémoire, fiabilité et scores, d'un facteur cent à des dizaines de milliers.
 
 Comment en est-on arrivé là si vite ? Ce n'est pas une petite amélioration, c'est un boom sur tous les axes à la fois. Le coût d'entraînement, d'abord, selon les estimations d'Epoch AI : environ 4 300 dollars pour GPT-2 en 2019, 2,1 millions pour GPT-3, 37 millions pour GPT-4, et environ 366 millions pour GPT-4.5 en 2025. L'électricité aussi : l'entraînement de Grok 3 a consommé autant d'électricité qu'environ 22 000 foyers américains en un an, et l'électricité devient un vrai goulot d'étranglement.
 
@@ -188,7 +188,7 @@ Pour faire mieux que l'arbre, on prend un réseau de neurones. Ce que vous voyez
 
 En sortie, autant de neurones que de classes, transformés en probabilités qui font 100 % au total. Ce ne sont que des maths, des multiplications et des additions, et ce qui sort est toujours une probabilité. Ici, la phrase piège donne football à plus de 99 %, juste cette fois. Quand c'est bien entraîné, on est souvent proche de 0 % ou de 100 %, et on prend la plus haute. Mais pas toujours : une phrase qui parle des deux sports pourrait donner 40 contre 60. Une entreprise peut alors se fixer une règle : si aucune réponse n'atteint 95 %, on considère qu'on ne sait pas, et on demande à un humain. Attention quand même, les réseaux sont souvent trop sûrs d'eux, et leur « 96 % » ne veut pas dire « juste 96 fois sur 100 ». Sur 200 nouvelles phrases, l'arbre a raison à 58 %, le réseau à 99,5 %. Mais d'où viennent tous ces poids ?
 
-## 2.8 Comment un réseau apprend
+## 2.8 Comment un réseau apprend (optionnel)
 
 **À retenir :** Apprendre, c'est ajuster un peu chaque poids après chaque exemple, des milliers de fois ; une fois entraîné, les poids sont figés.
 
@@ -268,7 +268,7 @@ Ajoutons un deuxième nombre, donc une deuxième direction. Maintenant « saumon
 
 Alors les modèles donnent à chaque mot des centaines, voire des milliers de nombres : 384 dans la carte qu'on va voir, 4 096 dans Llama 3.1 8B, 16 384 dans Llama 3.1 405B. Et personne ne nomme ces directions : c'est l'entraînement qui les fixe, et les mots employés dans les mêmes phrases finissent proches les uns des autres. Par honnêteté, les positions sur cette slide sont inventées, et un modèle numérote en réalité des tokens, pas des mots. La vraie carte, c'est la slide suivante.
 
-## 2.17 Les mots comme des points
+## 2.17 Les mots comme des points (optionnel)
 
 **À retenir :** Chaque mot devient un point dans l'espace, et l'entraînement sur d'énormes quantités de texte rapproche les mots liés.
 
@@ -332,7 +332,7 @@ Pourquoi raconter tout ça ? Parce que ces gens ne s'aiment pas, et que cette ri
 
 Le reste du paysage s'allume ensuite. Meta. Mistral AI, en France, cofondé en 2023 par Arthur Mensch, passé par DeepMind à Paris, et deux anciens chercheurs de Meta : le principal laboratoire européen, beaucoup plus petit. Les laboratoires chinois, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) et Z.ai (Zhipu), qui publient leurs modèles en open weight : n'importe qui peut les télécharger et les faire tourner. Et en bas de la chaîne, les quasi-monopoles. NVIDIA conçoit les puces, environ 92 % des GPU de data center en 2024. TSMC, à Taïwan, les fabrique : environ 72 % du chiffre d'affaires des dix plus grandes fonderies au deuxième trimestre 2026. Et ASML, aux Pays-Bas, est le seul fabricant au monde des machines EUV sans lesquelles on ne grave pas les puces les plus avancées. Ma question à la salle : où est le pouvoir dans cette chaîne ?
 
-## 3.2 La dynamique de course
+## 3.2 La dynamique de course (optionnel)
 
 **À retenir :** Même ceux qui veulent être prudents font la course, parce que ralentir seul ressemble à perdre : un dilemme du prisonnier.
 

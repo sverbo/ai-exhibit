@@ -10,7 +10,7 @@ This text tells the talk slide by slide, in order: its overall structure, its id
 
 The room fills up. On the screen, the title of the talk and a QR code that already opens the glossary. Once everyone has settled in, we start with a short video.
 
-## 0.2 This is not science fiction
+## 0.2 This is not science fiction (optional)
 
 **Takeaway:** Before any explanation, one minute to feel what is at stake.
 
@@ -24,7 +24,7 @@ Welcome. Before we start, I invite you to scan the QR code: it opens a glossary 
 
 The plan has five parts. First, what AI can do today. Then a bit of history, and after that we go into the details of how it works: how a machine manages to write. Then who builds it, with a little drama and some geopolitics. That lets me lead you gently towards the risks, and you will see they are much less science fiction than they sound. And finally, what we can do about it. I will take questions at the end.
 
-## 0.4 What this talk is not
+## 0.4 What this talk is not (optional)
 
 **Takeaway:** Today is about what AI can do and what is at stake, not about using a tool or about the environment.
 
@@ -64,7 +64,7 @@ And finally, this talk itself. The thread of the story is mine, but the tool, th
 
 ## 1.3 Everything went up
 
-**Takeaway:** This is not a small improvement: in seven years, cost, memory, reliability and test scores all exploded.
+**Takeaway:** Everything went up, and fast: cost, electricity, memory, reliability and test scores, by factors of a hundred to tens of thousands.
 
 How did we get here so fast? It is not a small improvement, it is a boom on every axis at once. First, the cost of training, according to Epoch AI's estimates: about $4,300 for GPT-2 in 2019, $2.1 million for GPT-3, $37 million for GPT-4, and about $366 million for GPT-4.5 in 2025. Electricity too: training Grok 3 used as much electricity as about 22,000 US homes in a year, and electricity is becoming a real bottleneck.
 
@@ -188,7 +188,7 @@ To do better than the tree, we take a neural network. What you see is a simplifi
 
 On the output side, as many neurons as classes, turned into probabilities that add up to 100%. It is only maths, multiplications and additions, and what comes out is always a probability. Here, the trap sentence gives football at over 99%, right this time. When it is well trained, it is often close to 0% or 100%, and we take the highest. But not always: a sentence that talks about both sports could give 40 against 60. A company can then set itself a rule: if no answer reaches 95%, we consider that we don't know, and we ask a human. Careful, though: networks are often overconfident, and their "96%" does not mean "right 96 times out of 100". On 200 new sentences, the tree is right 58% of the time, the network 99.5%. But where do all these weights come from?
 
-## 2.8 How a network learns
+## 2.8 How a network learns (optional)
 
 **Takeaway:** Learning means nudging every weight a little after each example, thousands of times; once trained, the weights are frozen.
 
@@ -268,7 +268,7 @@ Let's add a second number, so a second direction. Now "salmon" can settle betwee
 
 So models give each word hundreds, even thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B. And nobody names these directions: training sets them, and words used in the same sentences end up close to each other. To be honest, the positions on this slide are invented, and strictly speaking a model numbers tokens, not words. The real map is the next slide.
 
-## 2.17 Words as points
+## 2.17 Words as points (optional)
 
 **Takeaway:** Each word becomes a point in space, and training on huge amounts of text brings related words together.
 
@@ -332,7 +332,7 @@ Why tell all this? Because these people do not like each other, and that rivalry
 
 Then the rest of the landscape lights up. Meta. Mistral AI, in France, co-founded in 2023 by Arthur Mensch, who had worked at DeepMind in Paris, and two former Meta researchers: Europe's main lab, much smaller. The Chinese labs, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) and Z.ai (Zhipu), which publish their models as open weight: anyone can download and run them. And at the bottom of the chain, the near-monopolies. NVIDIA designs the chips, about 92% of data-centre GPUs in 2024. TSMC, in Taiwan, makes them: about 72% of the revenue of the ten largest foundries in the second quarter of 2026. And ASML, in the Netherlands, is the only maker in the world of the EUV machines without which the most advanced chips cannot be etched. My question to the room: where is the power in this chain?
 
-## 3.2 Race dynamics
+## 3.2 Race dynamics (optional)
 
 **Takeaway:** Even those who want to be careful race, because slowing down alone looks like losing: a prisoner's dilemma.
 
