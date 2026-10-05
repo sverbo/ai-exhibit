@@ -263,3 +263,10 @@ button.stationButton:focus-visible {
   transition: none !important;
   animation: none !important;
 }
+
+/* A short extra line under the text, e.g. the film. */
+.aside {
+  margin: 10px 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

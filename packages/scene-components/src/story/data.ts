@@ -79,8 +79,13 @@ export interface Milestone {
   track: MilestoneTrack;
   /** A span of years, drawn as a shaded band on its track instead of a point. */
   period?: boolean;
-  /** An animated demonstration shown in the feature panel (see BombeDemo). */
+  /**
+   * An animated demonstration shown in the feature panel (see BombeDemo). It takes two clicks:
+   * the machine appears still, then the next click runs it.
+   */
   demo?: "bombe";
+  /** A short extra line under the text, e.g. a film about it. */
+  aside?: L10n;
   /** Big label in the feature panel and on the rail. */
   when: L10n;
   /** Short label next to the rail station. */
@@ -113,7 +118,8 @@ export const AI_MILESTONES: Milestone[] = [
     text: {
       en: "At Bletchley Park an electromechanical machine, the Bombe, starts from a guessed word and searches for the Enigma settings that fit.",
     },
-    sourceIds: ["st-bletchley-turing", "st-bletchley-bombe", "st-wiki-bombe", "st-wiki-rejewski"],
+    aside: { en: "On film: “The Imitation Game” (2014)" },
+    sourceIds: ["st-bletchley-turing", "st-bletchley-bombe", "st-wiki-bombe", "st-wiki-rejewski", "tk-imitation-game-2014"],
   },
   {
     id: "dartmouth-1956",

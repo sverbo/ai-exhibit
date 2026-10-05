@@ -159,9 +159,11 @@ function Cells({ text, shown, className, lit }: { text: string; shown: number; c
 
 const number = (n: number, locale: Locale) => new Intl.NumberFormat(intlLocale(locale)).format(n);
 
-export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
-  const frame = bombeFrame(tick);
+/** `running` false: the machine stands still, ready, before the click that starts the search. */
+export function BombeDemo({ tick, locale, running = true }: { tick: number; locale: Locale; running?: boolean }) {
+  const frame = bombeFrame(running ? tick : 0);
   const searching = frame.phase === "search";
+  const spinning = running && searching;
   const rejected = searching ? [3, 2, 1].map((k) => frame.tried - k).filter((i) => i >= 0).map(candidateAt) : [];
   // X stands for a space in Enigma messages; show it as a gap.
   const plain = DEMO_PLAINTEXT.replace(/X/g, " ");
@@ -176,7 +178,7 @@ export function BombeDemo({ tick, locale }: { tick: number; locale: Locale }) {
       </div>
 
       <div className={styles.machine}>
-        <Cabinet spinning={searching} stopped={!searching} />
+        <Cabinet spinning={spinning} stopped={!searching} />
         <div className={styles.status} aria-live="polite">
           {searching ? (
             <>

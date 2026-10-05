@@ -9,7 +9,7 @@ import { sources } from "../../../../content/sources/index.ts";
 import { storySources } from "../../../../content/sources/story.ts";
 import type { SceneComponent, SceneContext, SceneRole } from "../contract.ts";
 import { AIEnvelopes, ENVELOPE_STEPS } from "./AIEnvelopes.tsx";
-import { AITimeline, focusedMilestone, timelineSteps } from "./AITimeline.tsx";
+import { AITimeline, focusedMilestone, timelineStepMap, timelineSteps } from "./AITimeline.tsx";
 import { creditLine } from "./Credits.tsx";
 import { BOMBE_TICKS, bombeFrame, BombeDemo, FOUND_SETTING, REJECTED_BEFORE_STOP, SEARCH_TICKS } from "./BombeDemo.tsx";
 import { candidateAt, DEMO_CIPHERTEXT, DEMO_CRIB, DEMO_PLAINTEXT, DEMO_SETTINGS, enigma, searchCrib } from "./enigma.ts";
@@ -85,7 +85,8 @@ describe("story data", () => {
     expect(winter.period).toBe(true);
     expect(winter.sourceIds).toEqual(expect.arrayContaining(["st-lighthill-1973-report", "st-wiki-perceptrons-book", "st-wiki-expert-system", "st-wiki-ai-winter"]));
     expect(AI_MILESTONES.find((m) => m.id === "deep-learning-2012")!.text.en).toContain("CNN");
-    expect(timelineSteps()).toBe(10);
+    // Ten milestones after the first, plus one for the Bombe: shown still, then run.
+    expect(timelineSteps()).toBe(11);
     // Go contrasts with chess: learned from games, not rules written by people.
     expect(AI_MILESTONES.find((m) => m.id === "alphago-2016")!.text.en).toContain("against itself");
     expect(AI_MILESTONES.find((m) => m.id === "enigma-1939")!.demo).toBe("bombe");
@@ -193,15 +194,18 @@ describe("rendering", () => {
   });
 
   it("AITimeline shows the newest milestone and follows controller focus", () => {
-    expect(timelineSteps("ai")).toBe(AI_MILESTONES.length - 1);
+    expect(timelineSteps("ai")).toBe(AI_MILESTONES.length);
     for (const role of roles)
       for (const locale of locales)
         for (let step = 0; step <= timelineSteps(); step++) {
           const html = render(AITimeline, { range: "ai" }, ctx(role, step, locale));
-          const expected = role === "preview" ? AI_MILESTONES.at(-1)! : AI_MILESTONES[step]!;
+          const expected = role === "preview" ? AI_MILESTONES.at(-1)! : AI_MILESTONES[timelineStepMap()[step]!.index]!;
           expect(html).toContain(tr(expected.title, locale).replace(/'/g, "&#x27;").replace(/\(\*([^*]+)\*\)/g, "(<em>$1</em>)"));
         }
     const focused = render(AITimeline, { range: "ai" }, ctx("display", 5, "en", { focus: 0, atStep: 5 }));
+    // The Bombe takes two steps: the machine still, then running.
+    const bombe = AI_MILESTONES.findIndex((m) => m.id === "enigma-1939");
+    expect(timelineStepMap().filter((st) => st.index === bombe).map((st) => st.run)).toEqual([false, true]);
     expect(focused).toContain(AI_MILESTONES[0]!.text.en.slice(0, 20));
   });
 

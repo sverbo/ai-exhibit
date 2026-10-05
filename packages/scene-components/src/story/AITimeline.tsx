@@ -1,5 +1,5 @@
 import { plainText, tr } from "@ai-exhibit/presentation-core";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { SceneComponentProps } from "../contract.ts";
 import { SourceList } from "../evidence/SourceList.tsx";
 import { Rich } from "../primitives/Rich.tsx";
@@ -16,8 +16,11 @@ export interface AITimelineProps {
 export interface AITimelineState {
   focus: number | null;
   atStep: number;
-  /** Progress of the Bombe demo (ticks of TICK_MS), published by the controller. */
-  bombe?: number;
+  /**
+   * When the Bombe search started (ms since epoch), published once by the controller. Every window
+   * computes the same frame from it, so the demo never freezes when one window's timers slow down.
+   */
+  bombeStart?: number;
 }
 
 const COPY = {
@@ -40,9 +43,20 @@ export function focusedMilestone(revealed: number, step: number, state: AITimeli
   return state.focus >= 0 && state.focus <= latest ? state.focus : latest;
 }
 
+/** What one reveal step shows: a milestone, and for a demo milestone whether its demo runs (its second step). */
+export interface TimelineStep {
+  index: number;
+  run: boolean;
+}
+
+/** Reveal steps in order: one per milestone, two for a demo (the machine still, then running). */
+export function timelineStepMap(range: "ai" = "ai"): TimelineStep[] {
+  return TIMELINES[range].flatMap((m, index) => (m.demo ? [{ index, run: false }, { index, run: true }] : [{ index, run: false }]));
+}
+
 /** Steps a scene should declare for a range: step 0 shows the first milestone. */
 export function timelineSteps(range: "ai" = "ai"): number {
-  return TIMELINES[range].length - 1;
+  return timelineStepMap(range).length - 1;
 }
 
 /**
@@ -53,8 +67,10 @@ export function timelineSteps(range: "ai" = "ai"): number {
 export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, AITimelineState>) {
   const { locale, role } = ctx;
   const milestones = TIMELINES[props.range ?? "ai"];
-  const step = role === "preview" ? milestones.length - 1 : Math.max(0, ctx.revealStep);
-  const revealed = Math.min(milestones.length, step + 1);
+  const stepMap = timelineStepMap(props.range ?? "ai");
+  const step = role === "preview" ? stepMap.length - 1 : Math.min(stepMap.length - 1, Math.max(0, ctx.revealStep));
+  const here = stepMap[step]!;
+  const revealed = here.index + 1;
   const focus = focusedMilestone(revealed, step, role === "preview" ? undefined : ctx.state);
   const current = milestones[focus]!;
   const interactive = role === "controller";
@@ -64,41 +80,34 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
     if (interactive) ctx.setState({ focus: index === revealed - 1 ? null : index, atStep: step });
   };
 
-  // The Bombe demo: the controller ticks it and publishes each tick; the projector follows.
+  // The Bombe demo: shown still on its first step, run on the next one. The controller publishes when
+  // the run started; every window draws the frame for that moment, so all of them stay in step.
   const demo = current.demo === "bombe";
+  const running = demo && here.run && focus === here.index;
   const [replay, setReplay] = useState(0);
   const keepFocus = ctx.state?.atStep === step ? ctx.state.focus : null;
-  // A window that takes over the stage mid-demo (the presenter view opened or
-  // closed) resumes from the published tick instead of starting it again.
-  const publishedTick = ctx.state?.atStep === step && typeof ctx.state?.bombe === "number" ? ctx.state.bombe : null;
-  // What was on stage when this component mounted; resuming is allowed only
-  // until the step changes or the presenter asks for a replay.
-  const mounted = useRef({ step, tick: publishedTick, resumable: true });
+  const start = ctx.state?.atStep === step && typeof ctx.state?.bombeStart === "number" ? ctx.state.bombeStart : null;
   useEffect(() => {
-    const m = mounted.current;
-    if (step !== m.step || replay !== 0) m.resumable = false;
-    const from = m.resumable ? m.tick : null;
-    if (!interactive || !demo) return;
-    const publish = (tick: number) => ctx.setState({ focus: keepFocus, atStep: step, bombe: tick });
-    if (ctx.reducedMotion) {
-      publish(BOMBE_TICKS);
-      return;
-    }
-    if (from !== null && from >= BOMBE_TICKS) return;
-    let tick = from ?? 0;
-    publish(tick);
-    const timer = setInterval(() => {
-      tick += 1;
-      publish(tick);
-      if (tick >= BOMBE_TICKS) clearInterval(timer);
-    }, TICK_MS);
-    return () => clearInterval(timer);
-    // Restart only when the demo comes on stage (or on replay), not on every published tick.
+    if (!interactive || !running) return;
+    // A window taking over the stage mid-run keeps the published start; a replay starts again.
+    if (start !== null && replay === 0) return;
+    ctx.setState({ focus: keepFocus, atStep: step, bombeStart: Date.now() });
+    // Start once per run step, and again on each replay.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interactive, demo, step, current.id, ctx.reducedMotion, replay]);
-  // Without a published tick (or with reduced motion) the demo shows its end state.
-  const bombeTick =
-    still || ctx.state?.atStep !== step || typeof ctx.state?.bombe !== "number" ? BOMBE_TICKS : ctx.state.bombe;
+  }, [interactive, running, step, replay]);
+  const [now, setNow] = useState(() => Date.now());
+  const runningTick = start === null ? 0 : Math.max(0, Math.floor((now - start) / TICK_MS));
+  useEffect(() => {
+    if (!running || still || start === null) return;
+    if (runningTick >= BOMBE_TICKS) return;
+    const id = setInterval(() => setNow(Date.now()), TICK_MS);
+    return () => clearInterval(id);
+  }, [running, still, start, runningTick >= BOMBE_TICKS]);
+  // Reduced motion, previews, or the station brought back from a later step: the end state.
+  // On its first step the machine stands still; on the next one it runs from the published start.
+  const settled = still || focus !== here.index;
+  const bombeTick = settled ? BOMBE_TICKS : running ? Math.min(BOMBE_TICKS, runningTick) : 0;
+  const bombeRunning = settled || here.run;
 
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`} aria-label={plainText(tr(COPY.label, locale))}>
@@ -116,6 +125,11 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
         <p className={styles.text}>
           <Rich text={tr(current.text, locale)} />
         </p>
+        {current.aside ? (
+          <p className={styles.aside}>
+            <Rich text={tr(current.aside, locale)} />
+          </p>
+        ) : null}
         {interactive ? (
           // Presenter only: some publishers are companies, and this scene names none on the projector.
           <div className={styles.sources}>
@@ -128,13 +142,13 @@ export function AITimeline({ props, ctx }: SceneComponentProps<AITimelineProps, 
             <Rich text={tr(COPY.bombeCaption, locale)} />
           </p>
         ) : null}
-        {demo && interactive ? (
+        {demo && interactive && here.run ? (
           <button type="button" className={styles.replay} onClick={() => setReplay((n) => n + 1)} onKeyDown={stopShellKeys}>
             {tr(COPY.replay, locale)}
           </button>
         ) : null}
         </div>
-        {demo ? <BombeDemo tick={bombeTick} locale={locale} /> : null}
+        {demo ? <BombeDemo tick={bombeTick} locale={locale} running={bombeRunning} /> : null}
       </section>
 
       <ol className={styles.rail} style={{ gridTemplateColumns: `repeat(${milestones.length}, minmax(0, 1fr))` }}>

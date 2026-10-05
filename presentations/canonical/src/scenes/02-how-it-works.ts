@@ -22,7 +22,7 @@ export const chapter02: SceneDefinition[] = [
   {
     id: "02-short-history",
     code: "hist",
-    steps: 10,
+    steps: 11,
     chapter: "02",
     number: "2.1",
     title: { en: "A very short history" },
@@ -38,20 +38,20 @@ export const chapter02: SceneDefinition[] = [
       en: `- Start, 1936: **Alan Turing** describes the universal machine, one machine that can run any step-by-step procedure: the theory behind every computer (Babbage and Ada Lovelace had imagined a programmable machine a century earlier)
 - You may have seen the film **The Imitation Game** (2014, Benedict Cumberbatch): Turing at Bletchley Park
 - Click 1, 1939 to 1945: Turing helps break **Enigma**. Polish cryptanalysts (Rejewski, Różycki, Zygalski) broke it first and shared their methods in July 1939
-- The **Bombe** starts from a **guessed word** in the message ("Wetterbericht", weather report) and searches for the Enigma settings that fit. Let the search run (about 12 seconds); "Replay the search" restarts it
+- The **Bombe** starts from a **guessed word** in the message ("Wetterbericht", weather report) and searches for the Enigma settings that fit. Click 1 shows the machine, still; click 2 runs the search (about 12 seconds); "Replay the search" restarts it
 - Why I like it: the size and design of the machine were chosen by people, like a model's **hyperparameters** (its shape, how many neurons). But the position of each rotor is not set by hand: the machine finds it from a piece of data
 - Once found, every message **of that day and that network** decodes: the settings changed every day. About **1.6 × 10^20** possible settings; the Bombe does not try them all, logic rules out whole families at once
 - Not AI, and say so: it is a **search** that rejects contradictions, from a single example, with no reward. But the picture holds: a big machine that, from data, finds by itself the exact setting of its little gears
-- Click 2, 1956: the name "artificial intelligence". Click 3, 1958: the **perceptron**, the first neural network that learns; the press already promises a computer that will read
+- Click 3, 1956: the name "artificial intelligence". Click 4, 1958: the **perceptron**, the first neural network that learns; the press already promises a computer that will read
 - Two schools, all along: those who **write knowledge in** by hand (symbolic AI: McCarthy, Minsky, Newell and Simon) and those who **let the machine learn** (connectionism: Rosenblatt's perceptron, later Hinton, LeCun, Bengio). The famous duel: Minsky against Rosenblatt
-- Click 4, the **AI winters** (two of them, 1970s and late 1980s): promises unmet, simple networks hit their limits (Minsky and Papert, 1969), expert systems proved brittle, funding dried up. Also, not enough **computing power**: what we do today is possible because we can build the hardware for it
-- Click 5, 1997: **Deep Blue** beats Kasparov: classic AI, search (about 200 million positions a second) plus scoring rules written by people. A point for the "knowledge" school
-- Click 6, 2012: **AlexNet**, a neural network for images (a CNN), wins ImageNet (top-5 error 15.3%, the next best 26.2%), trained on two gaming graphics cards: deep learning takes off
-- Click 7, 2016: **AlphaGo** beats Lee Sedol, 4 games to 1; many experts expected it a decade later. It learned from games: first human games, then games against itself
+- Click 5, the **AI winters** (two of them, 1970s and late 1980s): promises unmet, simple networks hit their limits (Minsky and Papert, 1969), expert systems proved brittle, funding dried up. Also, not enough **computing power**: what we do today is possible because we can build the hardware for it
+- Click 6, 1997: **Deep Blue** beats Kasparov: classic AI, search (about 200 million positions a second) plus scoring rules written by people. A point for the "knowledge" school
+- Click 7, 2012: **AlexNet**, a neural network for images (a CNN), wins ImageNet (top-5 error 15.3%, the next best 26.2%), trained on two gaming graphics cards: deep learning takes off
+- Click 8, 2016: **AlphaGo** beats Lee Sedol, 4 games to 1; many experts expected it a decade later. It learned from games: first human games, then games against itself
 - Spoiler: the school that lets the machine learn has clearly won. Rich Sutton called it **"The Bitter Lesson"** (2019): general methods that use more computing beat built-in human knowledge. Often the winner is simple, with lots of data, lots of computing, lots of money
-- Click 8, 2017: the **Transformer** (Google), the **T in GPT**. Just remember: a mathematical trick to process all the words **in parallel** instead of one after another, so training spreads over thousands of chips at once. It made possible models that could never have been trained before, at an enormous electricity cost
-- Click 9, 2019: **GPT-2**, barely noticed by the public (still often incoherent), though OpenAI first called it too dangerous to release in full
-- Click 10, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing (about $2.1 million according to Epoch AI; AI Digest says about $690,000), not counting research. It worked: developers and researchers were stunned
+- Click 9, 2017: the **Transformer** (Google), the **T in GPT**. Just remember: a mathematical trick to process all the words **in parallel** instead of one after another, so training spreads over thousands of chips at once. It made possible models that could never have been trained before, at an enormous electricity cost
+- Click 10, 2019: **GPT-2**, barely noticed by the public (still often incoherent), though OpenAI first called it too dangerous to release in full
+- Click 11, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing (about $2.1 million according to Epoch AI; AI Digest says about $690,000), not counting research. It worked: developers and researchers were stunned
 - The public boom came two years later: **ChatGPT**, 30 November 2022, built on **GPT-3.5**, a GPT-3 trained further to chat. That difference is the base model and assistant story at the end of this chapter`,
     },
     transitionIn: { en: "Before opening the box, where it comes from." },
