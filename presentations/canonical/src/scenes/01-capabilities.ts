@@ -522,7 +522,7 @@ export const chapter01: SceneDefinition[] = [
     takeaway: {
       en: "This is not a lab demo: it is my everyday use, and it already works.",
     },
-    visual: { layout: "component", component: "VideoScene", props: { src: "personal-demo.mp4" } },
+    visual: { layout: "component", component: "VideoScene", props: { src: "personal-demo.mp4", audio: false } },
     interaction: "presenter",
     speakerNotes: {
       en: `- What I asked, in one sentence; which product and model, and when I recorded it

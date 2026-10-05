@@ -26,6 +26,8 @@ export interface VideoSceneProps {
   /** Optional still image in the same folder, shown before playback and in previews. */
   poster?: string;
   caption?: L10n;
+  /** False when the file has no sound (a silent screen recording): the sound control is hidden. Default true. */
+  audio?: boolean;
 }
 
 const TEXT = {
@@ -227,6 +229,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
             />
             <span className={styles.time}>{formatTime(time.duration)}</span>
           </label>
+          {props.audio === false ? null : (
           <Segmented<SoundOutput>
             label={t(TEXT.sound)}
             value={state.sound === "off" ? "off" : "projector"}
@@ -244,6 +247,7 @@ export function VideoScene({ props, ctx }: SceneComponentProps<VideoSceneProps, 
             ]}
             onChange={(sound) => setState((s) => ({ ...s, sound }))}
           />
+          )}
         </ControlBar>
         </div>
       )}
