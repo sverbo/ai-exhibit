@@ -6,11 +6,10 @@ import { parseNotes, plainInline, withPersonalNote, type NoteBullet } from "./no
 import styles from "./SpeakerNotes.module.css";
 
 /**
- * Speaker notes as a numbered run of talking points. "Ask" and "Do" bullets
- * carry their cue word in the gutter and a tinted band, so they stand out at
- * arm's length; the presenter's own note (personal config) comes first, with
- * a dashed edge. Three densities: the presenter desk, the phone remote, and
- * the compact /present HUD.
+ * Speaker notes as a numbered run of plain talking points, bold words where
+ * they matter. The presenter's own note (personal config) comes first, with a
+ * dashed edge. Three densities: the presenter desk, the phone remote, and the
+ * compact /present HUD.
  */
 export function SpeakerNotes({
   markdown,
@@ -55,9 +54,9 @@ function Bullet({ bullet, number, plain, mine }: { bullet: NoteBullet; number: n
     );
   }
   return (
-    <li className={`${styles.item} ${styles[bullet.kind]}`} data-note-kind={bullet.kind}>
-      <span className={styles.gutter} aria-hidden={bullet.kind === "point" ? true : undefined}>
-        {bullet.kind === "point" ? number : bullet.cue}
+    <li className={styles.item} data-note-kind={bullet.kind}>
+      <span className={styles.gutter} aria-hidden="true">
+        {number}
       </span>
       <div className={styles.body}>
         {plain ? <span>{plainInline(bullet.text)}</span> : <Inline text={bullet.text} />}

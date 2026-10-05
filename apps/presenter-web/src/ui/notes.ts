@@ -1,17 +1,16 @@
 /**
- * Speaker notes are a short markdown bullet list (storyboard v1): the concepts
- * to explain, in order, plus optional "**Ask:**" and "**Do:**" bullets. This
- * splits them into typed bullets so every view can show them its own way.
- * Anything that is not a list (older paragraph notes) comes back as `prose`.
+ * Speaker notes are a markdown bullet list: the points to say, in order, with
+ * bold words where they matter. Every bullet is a plain point (no special
+ * "Ask" or "Do" bullets: a bold word inside the text says it). This splits
+ * them into bullets so every view can show them its own way. Anything that is
+ * not a list (older paragraph notes) comes back as `prose`.
  */
 /** "personal": the presenter's own note (personal config), plain text, always first. */
-export type NoteKind = "point" | "ask" | "do" | "personal";
+export type NoteKind = "point" | "personal";
 
 export interface NoteBullet {
   kind: NoteKind;
-  /** The cue word as written ("Ask", "Demander"...), without the colon; null for points. */
-  cue: string | null;
-  /** Inline markdown of the bullet, cue removed. */
+  /** Inline markdown of the bullet. */
   text: string;
   /** Indented sub-bullets, inline markdown. */
   sub: string[];
@@ -23,23 +22,7 @@ export interface ParsedNotes {
   prose: string;
 }
 
-const CUES: Record<string, Exclude<NoteKind, "point" | "personal">> = {
-  ask: "ask",
-  question: "ask",
-  demander: "ask",
-  demandez: "ask",
-  do: "do",
-  action: "do",
-  faire: "do",
-  faites: "do",
-  show: "do",
-  montrer: "do",
-  montrez: "do",
-};
-
 const BULLET = /^(\s*)[-*+]\s+(.*)$/;
-// "**Ask:** text", "**Ask**: text", "Ask: text", French "**Demander :** text".
-const CUE = /^(?:\*\*|__)?\s*([A-Za-zÀ-ÿ]+)\s*(?::\s*(?:\*\*|__)|(?:\*\*|__)\s*:|:)\s*(.*)$/;
 
 export function parseNotes(markdown: string): ParsedNotes {
   const bullets: NoteBullet[] = [];
@@ -56,7 +39,7 @@ export function parseNotes(markdown: string): ParsedNotes {
         last.sub.push(body);
         continue;
       }
-      last = { ...cueOf(body), sub: [] };
+      last = { kind: "point", text: body, sub: [] };
       lastIndent = indent;
       bullets.push(last);
       continue;
@@ -80,16 +63,7 @@ export function parseNotes(markdown: string): ParsedNotes {
 export function withPersonalNote(parsed: ParsedNotes, note: string | undefined): ParsedNotes {
   const text = note?.trim();
   if (!text) return parsed;
-  return { ...parsed, bullets: [{ kind: "personal", cue: null, text, sub: [] }, ...parsed.bullets] };
-}
-
-function cueOf(body: string): Pick<NoteBullet, "kind" | "cue" | "text"> {
-  const m = CUE.exec(body);
-  if (m) {
-    const kind = CUES[m[1]!.toLowerCase()];
-    if (kind) return { kind, cue: m[1]!, text: m[2]!.trim() };
-  }
-  return { kind: "point", cue: null, text: body };
+  return { ...parsed, bullets: [{ kind: "personal", text, sub: [] }, ...parsed.bullets] };
 }
 
 /** Plain text of inline markdown (bold, italics, code, links), for compact views. */

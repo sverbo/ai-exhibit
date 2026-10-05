@@ -87,9 +87,11 @@ fallback.
 | `AIEnvelopes` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
 | `TextClassifierLab` | 2.3 to 2.9 | [textlab](../../packages/scene-components/src/textlab/README.md) |
 | `SingleCase` | 2.10 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `ApplesAndPears` | 2.10a | [learning](../../packages/scene-components/src/learning/README.md) |
 | `NextTokenVsClassifier` | 2.11 | [llm](../../packages/scene-components/src/llm/README.md) |
 | `TrainingLoop` | 2.13 | [llm](../../packages/scene-components/src/llm/README.md) |
 | `TokenizerPlayground` | 2.14 | [language](../../packages/scene-components/src/language/README.md) |
+| `MeaningDimensions` | 2.15a | [embeddings](../../packages/scene-components/src/embeddings/README.md) |
 | `EmbeddingExplorer` | 2.15, 2.16 | [embeddings](../../packages/scene-components/src/embeddings/README.md) |
 | `BaseModelPlayground` | 2.17 | [language](../../packages/scene-components/src/language/README.md) |
 | `ChatPlayground` | 2.18 | [language](../../packages/scene-components/src/language/README.md) |

@@ -102,6 +102,18 @@
   line-height: 1.35;
   color: var(--color-text-muted);
 }
+/* The main takeaway: larger, on an accent band. */
+.mainTakeaway {
+  margin: 0;
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  font-size: var(--ui-text-md, 16px);
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--color-text);
+}
 .aside {
   font-size: var(--ui-text-xs);
   font-weight: 700;

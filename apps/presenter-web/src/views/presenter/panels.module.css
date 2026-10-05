@@ -10,8 +10,9 @@
 /* Notes -------------------------------------------------------------------- */
 
 /*
- * The talking points are the loudest thing on the desk: about 28 px on a
- * laptop, scaled by A-/A+. Takeaway and transition stay small and muted.
+ * The takeaway leads: one sentence, larger than the talking points, on an
+ * accent band. The points follow at about 28 px on a laptop, scaled by A-/A+;
+ * the transition stays small and muted.
  */
 .notes {
   --notes-size: calc(clamp(24px, 1.95vw, 30px) * var(--notes-scale, 1));
@@ -37,12 +38,20 @@
 }
 .takeaway {
   margin: 0;
-  padding: 2px 0 2px 12px;
-  border-left: 3px solid var(--color-accent);
+  padding: 0.45em 0.7em;
+  border-left: 0.2em solid var(--color-accent);
+  border-radius: 0 0.35em 0.35em 0;
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
   font-family: var(--font-display);
-  font-size: calc(var(--notes-size) * 0.6);
-  line-height: 1.35;
-  color: var(--color-text-muted);
+  font-size: var(--notes-size);
+  font-weight: 650;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+.takeaway .aside {
+  display: block;
+  margin-bottom: 0.25em;
+  color: var(--color-accent);
 }
 .takeaway,
 .then {

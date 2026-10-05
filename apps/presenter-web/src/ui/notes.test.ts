@@ -6,19 +6,16 @@ describe("parseNotes", () => {
     const n = parseNotes("- One idea\n- Another *idea*\n");
     expect(n.prose).toBe("");
     expect(n.bullets).toEqual([
-      { kind: "point", cue: null, text: "One idea", sub: [] },
-      { kind: "point", cue: null, text: "Another *idea*", sub: [] },
+      { kind: "point", text: "One idea", sub: [] },
+      { kind: "point", text: "Another *idea*", sub: [] },
     ]);
   });
 
-  it("recognizes Ask and Do cues in their usual spellings", () => {
-    const n = parseNotes("- **Ask:** who uses it?\n- **Do**: open the map\n- Ask: plain cue\n- **Demander :** qui ?\n- **Note:** stays a point");
-    expect(n.bullets.map((b) => [b.kind, b.cue, b.text])).toEqual([
-      ["ask", "Ask", "who uses it?"],
-      ["do", "Do", "open the map"],
-      ["ask", "Ask", "plain cue"],
-      ["ask", "Demander", "qui ?"],
-      ["point", null, "**Note:** stays a point"],
+  it("keeps every bullet a plain point, bold cue words included", () => {
+    const n = parseNotes("- **Ask:** who uses it?\n- Do: open the map");
+    expect(n.bullets.map((b) => [b.kind, b.text])).toEqual([
+      ["point", "**Ask:** who uses it?"],
+      ["point", "Do: open the map"],
     ]);
   });
 
@@ -38,8 +35,8 @@ describe("parseNotes", () => {
 describe("withPersonalNote", () => {
   it("puts the personal note first, as plain text, before every content bullet", () => {
     const n = withPersonalNote(parseNotes("- **Ask:** who?\n- One idea"), "  My *own* <b>story</b>\nsecond line ");
-    expect(n.bullets.map((b) => b.kind)).toEqual(["personal", "ask", "point"]);
-    expect(n.bullets[0]).toEqual({ kind: "personal", cue: null, text: "My *own* <b>story</b>\nsecond line", sub: [] });
+    expect(n.bullets.map((b) => b.kind)).toEqual(["personal", "point", "point"]);
+    expect(n.bullets[0]).toEqual({ kind: "personal", text: "My *own* <b>story</b>\nsecond line", sub: [] });
   });
 
   it("adds nothing for a missing or blank note, and keeps prose", () => {

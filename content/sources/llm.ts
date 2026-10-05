@@ -100,10 +100,10 @@ export const llmSources: SourceRecord[] = [
     retrieved: "2026-10-02",
     kind: "paper",
     claim:
-      "Llama 3.1's largest model has 405 billion parameters, was pre-trained on 15.6 trillion tokens (about 17% of them code), and was trained on up to 16,000 H100 GPUs.",
+      "Llama 3.1's largest model has 405 billion parameters, was pre-trained on 15.6 trillion tokens (about 17% of them code), and was trained on up to 16,000 H100 GPUs. Its model dimension (the numbers each token is turned into) is 4,096 for the 8B model, 8,192 for 70B and 16,384 for 405B.",
     evidence: "none",
     verification: "verified",
-    notes: "Section 1 (405B parameters, 15.6T tokens, 3.8 x 10^25 FLOPs); section 3.1.2 'Data mix summary': roughly 50% general knowledge, 25% mathematical and reasoning, 17% code, 8% multilingual tokens; section 3.3 (Compute): 'trained on up to 16K H100 GPUs'.",
+    notes: "Section 1 (405B parameters, 15.6T tokens, 3.8 x 10^25 FLOPs); section 3.1.2 'Data mix summary': roughly 50% general knowledge, 25% mathematical and reasoning, 17% code, 8% multilingual tokens; section 3.3 (Compute): 'trained on up to 16K H100 GPUs'; Table 3: 'Model Dimension 4,096 / 8192 / 16,384' (checked 2026-10-05).",
   },
   {
     id: "llm-llama31-model-card",

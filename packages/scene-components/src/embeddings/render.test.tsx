@@ -5,6 +5,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import type { SceneComponent, SceneContext, SceneRole } from "../contract.ts";
 import { loadEmbeddingSpace } from "./data.ts";
 import { EmbeddingExplorer } from "./EmbeddingExplorer.tsx";
+import { DIMENSION_STEPS } from "./dimensions.ts";
+import { MeaningDimensions } from "./MeaningDimensions.tsx";
 import { searchVocabulary, selectWord } from "./search.ts";
 
 function ctx(role: SceneRole, revealStep: number, locale: Locale, state?: unknown, mode: "live" | "fallback" = "live"): SceneContext {
@@ -120,5 +122,20 @@ describe("embedding components render in every role, step and locale", () => {
     for (const role of ["display", "preview"] as const) {
       expect(render(EmbeddingExplorer, { mode: "search" }, ctx(role, 0, "en", { showAll: true }))).not.toContain("Show all words");
     }
+  });
+
+  it("MeaningDimensions renders every step, and pêche only in French", () => {
+    for (const role of ["controller", "display", "preview"] as const) {
+      for (const locale of ["fr", "en"] as const) {
+        for (let step = 0; step <= DIMENSION_STEPS + 1; step++) {
+          const html = render(MeaningDimensions, {}, ctx(role, step, locale));
+          expect(html).toContain(locale === "fr" ? "saumon" : "salmon");
+          expect(html).not.toMatch(/undefined|NaN|[\u2013\u2014]/);
+        }
+      }
+    }
+    expect(render(MeaningDimensions, {}, ctx("display", 2, "fr"))).toContain("pêche");
+    expect(render(MeaningDimensions, {}, ctx("display", 2, "en"))).not.toContain("peach");
+    expect(render(MeaningDimensions, {}, ctx("display", 4, "fr"))).toContain("16\u00a0384");
   });
 });

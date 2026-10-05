@@ -1,0 +1,382 @@
+/* MeaningDimensions: one line, then a plane, then a row of numbers. Every state
+   is set by the step; transitions only ease between two states. */
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.area {
+  position: relative;
+  width: 1728px;
+  height: 600px;
+  margin-top: var(--space-4);
+  flex: none;
+}
+
+/* "1 number per word": the thread that runs through every step. */
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 28px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  animation: pop 520ms var(--ease) both;
+}
+
+.caption {
+  margin: var(--space-3) 0 0;
+  max-width: 1600px;
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+  animation: settle var(--dur) var(--ease) both;
+}
+.caption[data-bridge="true"] {
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+/* The map: a line, then a plane. ----------------------------------------- */
+.map {
+  position: absolute;
+  inset: 0;
+  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+}
+.map[data-visible="false"] {
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.axis {
+  stroke: var(--color-text);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.axisHead {
+  fill: var(--color-text);
+}
+.vAxis {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 800ms var(--ease), opacity 500ms var(--ease);
+}
+.vAxis[data-visible="false"] {
+  transform: scaleY(0);
+  opacity: 0;
+}
+.axisLabel {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-accent-2);
+  white-space: nowrap;
+  transition: opacity 500ms var(--ease) 300ms;
+}
+.axisLabel[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.group {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* The pulls on a word that does not fit. */
+.pull {
+  stroke: var(--color-danger);
+  stroke-width: 5;
+  stroke-dasharray: 14 10;
+  stroke-linecap: round;
+  transition: opacity 500ms var(--ease) 250ms;
+}
+.pull[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.pullHead {
+  fill: var(--color-danger);
+}
+
+/* Words: a dot at the exact place, the label above it, its numbers below. */
+.word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transition: transform 900ms var(--ease), opacity 500ms var(--ease);
+}
+.word[data-visible="false"] {
+  opacity: 0;
+}
+.wobble {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.dot {
+  position: absolute;
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-text);
+  box-shadow: 0 0 0 4px var(--color-bg);
+}
+.label {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  transform: translateX(-50%);
+  padding: 2px 14px;
+  border-radius: 12px;
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: var(--color-text);
+  background: transparent;
+  border: 3px solid transparent;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.value {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  animation: fade var(--dur) var(--ease) both;
+}
+
+.word[data-mood="focus"] .label,
+.word[data-mood="hesitant"] .label {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.word[data-mood="focus"] .dot,
+.word[data-mood="hesitant"] .dot {
+  background: var(--color-accent);
+}
+.word[data-mood="hesitant"] .value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-danger);
+  top: 14px;
+}
+.word[data-mood="hesitant"] .wobble {
+  animation: hesitate 2.4s ease-in-out infinite;
+}
+/* A meaning with no room of its own: it lands on top of other words. */
+.word[data-mood="clash"] .label {
+  border: 3px dashed var(--color-danger);
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+}
+.word[data-mood="clash"] .dot {
+  background: var(--color-danger);
+}
+
+/* Step 1: where the sea would go, if the line had room for it. */
+.ghost {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 500ms var(--ease) 250ms;
+}
+.ghost[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.ghostLabel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  padding: 4px 18px;
+  border: 3px dashed var(--color-text-muted);
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* The row of numbers. ------------------------------------------------------ */
+.numbers {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 600ms var(--ease) 200ms;
+}
+.numbers[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+  pointer-events: none;
+}
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 84px;
+}
+.headWord {
+  padding: 2px 18px;
+  border-radius: 12px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 48px;
+  font-weight: 600;
+}
+.equals {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+.cell {
+  min-width: 140px;
+  padding: 6px 12px;
+  border: 2px solid var(--color-line);
+  border-radius: 10px;
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  text-align: center;
+}
+.more {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.bars {
+  display: block;
+  margin-top: var(--space-3);
+}
+.barsBase {
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.bar {
+  transform-box: fill-box;
+  fill: var(--color-accent);
+}
+.bar[data-sign="pos"] {
+  transform-origin: 50% 100%;
+}
+.bar[data-sign="neg"] {
+  fill: var(--color-accent-2);
+  transform-origin: 50% 0%;
+}
+.bar[data-head="true"] {
+  fill: var(--color-text);
+}
+.numbers[data-visible="true"] .bar {
+  animation: grow 500ms var(--ease) both;
+}
+
+.stripNote {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-text);
+}
+
+.tiles {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 380px;
+  padding: var(--space-2) var(--space-4);
+  border-left: 8px solid var(--color-accent-2);
+  background: var(--color-surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.tileNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.tileLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+@keyframes hesitate {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-14px, 6px);
+  }
+  50% {
+    transform: translate(4px, -12px);
+  }
+  75% {
+    transform: translate(12px, 4px);
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

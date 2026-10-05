@@ -170,7 +170,7 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
               </div>
               <div className={styles.sideCol}>
                 {tr(scene.takeaway, locale) ? (
-                  <p className={styles.takeaway}>
+                  <p className={styles.mainTakeaway}>
                     <span className={styles.aside}>{t("takeaway")}</span> <Rich text={tr(scene.takeaway, locale)} />
                   </p>
                 ) : null}

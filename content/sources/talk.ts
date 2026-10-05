@@ -1240,4 +1240,238 @@ export const talkSources: SourceRecord[] = [
     verification: "verified",
     notes: "An argument about what could happen, not a measurement: present it as such.",
   },
+  // Speaker notes: facts added 2026-10-05
+  {
+    id: "tk-obermeyer-2019-health-algorithm",
+    title: "Dissecting racial bias in an algorithm used to manage the health of populations",
+    url: "https://pubmed.ncbi.nlm.nih.gov/31649194/",
+    publisher: "Science",
+    authors: ["Ziad Obermeyer", "Brian Powers", "Christine Vogeli", "Sendhil Mullainathan"],
+    date: "2019-10-25",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "A widely used US algorithm for targeting patients for 'high-risk care management', one of the largest examples of a class of commercial tools that, by industry estimates, are applied to roughly 200 million people in the United States each year, predicted health care costs rather than illness. At a given risk score, Black patients were considerably sicker than White patients; remedying this would increase the percentage of Black patients receiving additional help from 17.7% to 46.5%.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Science 366(6464):447-453, DOI 10.1126/science.aax2342 (science.org answers 403 to automated fetches; the PubMed abstract and a full-text PDF copy were read). Abstract: 'Remedying this disparity would increase the percentage of Black patients receiving additional help from 17.7 to 46.5%'. The 200 million figure is for the class of tools, not this one algorithm: 'a class of commercial risk-prediction tools that, by industry estimates, are applied to roughly 200 million people in the United States each year'.",
+  },
+  {
+    id: "tk-buolamwini-2018-gender-shades",
+    title: "Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification",
+    url: "https://proceedings.mlr.press/v81/buolamwini18a.html",
+    publisher: "Proceedings of Machine Learning Research 81 (FAT* 2018)",
+    authors: ["Joy Buolamwini", "Timnit Gebru"],
+    date: "2018",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "In three commercial gender classification systems, darker-skinned women were the most misclassified group, with error rates of up to 34.7%; the maximum error rate for lighter-skinned men was 0.8%.",
+    evidence: "evaluation",
+    verification: "verified",
+    notes:
+      "Abstract: 'darker-skinned females are the most misclassified group (with error rates of up to 34.7%). The maximum error rate for lighter-skinned males is 0.8%.' Conference on Fairness, Accountability and Transparency, PMLR volume 81.",
+  },
+  {
+    id: "tk-sutton-2019-bitter-lesson",
+    title: "The Bitter Lesson",
+    url: "http://www.incompleteideas.net/IncIdeas/BitterLesson.html",
+    publisher: "incompleteideas.net",
+    authors: ["Rich Sutton"],
+    date: "2019-03-13",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "\"The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.\" The essay contrasts them with methods that build in human knowledge.",
+    evidence: "contested",
+    verification: "verified",
+    notes:
+      "An opinion essay, dated March 13, 2019 on the page; the https version of the site has a self-signed certificate, so the http URL is used. Sutton and Andrew Barto received the 2024 ACM A.M. Turing Award 'for developing the conceptual and algorithmic foundations of reinforcement learning', announced on 5 March 2025 (https://www.acm.org/articles/bulletins/2025/march/turing-award-2024).",
+  },
+  {
+    id: "tk-openai-2025-sycophancy-rollback",
+    title: "Sycophancy in GPT-4o: what happened and what we're doing about it",
+    url: "https://openai.com/index/sycophancy-in-gpt-4o/",
+    publisher: "OpenAI",
+    date: "2025-04-29",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "OpenAI rolled back a GPT-4o update in ChatGPT because the updated model was 'overly flattering or agreeable', often described as sycophantic; OpenAI said it had focused too much on short-term user feedback (such as thumbs-up and thumbs-down).",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "openai.com answers 403 to automated fetches; read through the Wayback Machine copy. Post dated April 29, 2025: 'We have rolled back last week's GPT-4o update in ChatGPT so people are now using an earlier version with more balanced behavior. The update we removed was overly flattering or agreeable', 'we focused too much on short-term feedback'.",
+  },
+  {
+    id: "tk-belgium-2026-tesla-fsd",
+    title: "Les voitures Tesla pourront conduire de manière autonome en Belgique: la Flandre donne son feu vert",
+    url: "https://www.rtbf.be/article/les-voitures-tesla-pourront-conduire-de-maniere-autonome-en-belgique-la-flandre-donne-son-feu-vert-et-tord-le-bras-a-la-wallonie-11738522",
+    publisher: "RTBF",
+    date: "2026-06-11",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "On 10 June 2026 the Flemish mobility minister, Annick De Ridder, signed an authorisation for Tesla's FSD (Supervised) on public roads; the authorisation applies to all Belgian roads. FSD (Supervised) is driver assistance (SAE Level 2): the driver must be able to take over at any moment and remains responsible.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "RTBF (11 June 2026): the authorisation 's'applique à l'ensemble des routes belges', is valid from signature, and the driver 'reste responsable'. Signing date and Level 2: newmobility.news, 12 June 2026 ('signed the formal approval on June 10', 'still classified as Level 2 on the SAE scale'). Automobile Propre (11 June 2026) also reports the decision is valid in all three regions. Owners still had to wait for a software rollout (and an in-car tutorial), so availability to drivers came after 10 June.",
+  },
+  {
+    id: "tk-guo-2017-calibration",
+    title: "On Calibration of Modern Neural Networks",
+    url: "https://proceedings.mlr.press/v70/guo17a.html",
+    publisher: "ICML 2017 (PMLR 70)",
+    authors: ["Chuan Guo", "Geoff Pleiss", "Yu Sun", "Kilian Q. Weinberger"],
+    date: "2017",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "Modern neural networks, unlike those from a decade earlier, are poorly calibrated: their confidence does not match how often they are right. In the paper's examples (a 110-layer ResNet on CIFAR-100) the network is overconfident, its average confidence substantially higher than its accuracy.",
+    evidence: "evaluation",
+    verification: "verified",
+    notes:
+      "Abstract: 'modern neural networks, unlike those from a decade ago, are poorly calibrated'. Figure 1: 'the average confidence of the ResNet is substantially higher than its accuracy'; section 5: 'the uncalibrated ResNet tends to be overconfident'. The paper studies image and document classifiers, not language models; it shows overconfidence in its examples rather than stating a general rule.",
+  },
+  {
+    id: "tk-grinsztajn-2022-tabular",
+    title: "Why do tree-based models still outperform deep learning on typical tabular data?",
+    url: "https://proceedings.neurips.cc/paper_files/paper/2022/hash/0378c7692da36807bdec87ab043cdadc-Abstract-Datasets_and_Benchmarks.html",
+    publisher: "NeurIPS 2022 Datasets and Benchmarks Track",
+    authors: ["Léo Grinsztajn", "Edouard Oyallon", "Gaël Varoquaux"],
+    date: "2022",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "On a benchmark of 45 tabular datasets, tree-based models such as XGBoost and random forests remain state of the art on medium-sized data (about 10,000 samples) compared with deep learning, even without accounting for their superior speed.",
+    evidence: "evaluation",
+    verification: "verified",
+    notes:
+      "Abstract (arXiv 2207.08815): 'tree-based models remain state-of-the-art on medium-sized data (~10K samples) even without accounting for their superior speed'. The proceedings title adds 'typical'; the arXiv title is 'Why do tree-based models still outperform deep learning on tabular data?'.",
+  },
+  {
+    id: "tk-azevedo-2009-neuron-count",
+    title: "Equal numbers of neuronal and nonneuronal cells make the human brain an isometrically scaled-up primate brain",
+    url: "https://pubmed.ncbi.nlm.nih.gov/19226510/",
+    publisher: "Journal of Comparative Neurology",
+    authors: ["Frederico A. C. Azevedo", "Ludmila R. B. Carvalho", "Lea T. Grinberg", "José Marcelo Farfel", "Renata E. L. Ferretti", "Renata E. P. Leite", "Wilson Jacob Filho", "Roberto Lent", "Suzana Herculano-Houzel"],
+    date: "2009-04-10",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "The adult human brain contains on average about 86 billion neurons (86.1 ± 8.1 billion), and about as many non-neuronal cells.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "J Comp Neurol 513(5):532-541, DOI 10.1002/cne.21974. Abstract: 'the adult male human brain contains on average 86.1 +/- 8.1 billion NeuN-positive cells (\"neurons\")'; measured on male brains only. Synapses per neuron: a common textbook estimate is on the order of thousands; BioNumbers (Harvard) BNID 100715 gives 1,000 to 10,000 synapses for a 'typical' neuron (https://bionumbers.hms.harvard.edu/bionumber.aspx?id=100715, citing Chudler's Neuroscience for Kids, University of Washington). The number varies widely by neuron type.",
+  },
+  {
+    id: "tk-imitation-game-2014",
+    title: "The Imitation Game",
+    url: "https://en.wikipedia.org/wiki/The_Imitation_Game",
+    publisher: "Wikipedia",
+    date: "2014",
+    retrieved: "2026-10-05",
+    kind: "other",
+    claim:
+      "The Imitation Game is a 2014 film directed by Morten Tyldum, written by Graham Moore and based on Andrew Hodges' biography Alan Turing: The Enigma, starring Benedict Cumberbatch as Alan Turing and dramatising his codebreaking work at Bletchley Park.",
+    evidence: "none",
+    verification: "verified",
+    notes:
+      "Secondary source, used only to identify the film. The film is a dramatisation and has been widely criticised for historical inaccuracies (the article cites GCHQ's departmental historian); do not use it as evidence of what happened at Bletchley Park.",
+  },
+  {
+    id: "tk-enigma-keyspace",
+    title: "Decoding Nazi Secrets: How the Enigma Works (excerpt from Codebreakers: The Inside Story of Bletchley Park)",
+    url: "https://www.pbs.org/wgbh/nova/decoding/enigma2.html",
+    publisher: "PBS NOVA (excerpt of F. H. Hinsley and Alan Stripp, eds., Oxford University Press)",
+    retrieved: "2026-10-05",
+    kind: "book",
+    claim:
+      "For the three-rotor German Army Enigma, a daily key was chosen from 60 possible wheel orders, 17,576 settings of the three wheels for each order, and over 150 million million plugboard pairings (10 cables, six letters left unplugged): about 159 million million million (1.59 × 10^20) possible daily keys.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Quote: 'a choice from the 60 possible wheel orders, the 17,576 ring-settings for each wheel order, and over 150 million million stecker-pairings (allowing for six self-steckered letters). So the total number of daily possible keys was about 159 million million million.' The exact figure 158,962,555,217,826,360,000 is 60 × 17,576 (26^3) × 150,738,274,937,250 (our arithmetic; also the title of a Numberphile video with James Grime). It counts the 26^3 wheel settings once: this source calls them ring settings, most popular accounts call them starting positions; it does not multiply ring settings and starting positions together. Bletchley Park's own Enigma page gives a different, larger figure ('103 sextillion possible settings') without a breakdown; do not mix the two.",
+  },
+  {
+    id: "tk-chatgpt-2022-gpt35",
+    title: "Introducing ChatGPT",
+    url: "https://openai.com/index/chatgpt/",
+    publisher: "OpenAI",
+    date: "2022-11-30",
+    retrieved: "2026-10-05",
+    kind: "documentation",
+    claim:
+      "OpenAI introduced ChatGPT on 30 November 2022; it was fine-tuned from a model in the GPT-3.5 series, which finished training in early 2022. GPT-4, announced on 14 March 2023, was made available to ChatGPT Plus subscribers with a usage cap.",
+    evidence: "none",
+    verification: "verified",
+    notes:
+      "openai.com answers 403 to automated fetches; both posts read through Wayback Machine copies. ChatGPT post dated November 30, 2022: 'ChatGPT is fine-tuned from a model in the GPT-3.5 series, which finished training in early 2022.' GPT-4 part: https://openai.com/research/gpt-4 (March 14, 2023): 'ChatGPT Plus subscribers will get GPT-4 access on chat.openai.com with a usage cap.'",
+  },
+  {
+    id: "tk-reuters-2023-chatgpt-100m",
+    title: "ChatGPT sets record for fastest-growing user base - analyst note",
+    url: "https://www.reuters.com/technology/chatgpt-sets-record-fastest-growing-user-base-analyst-note-2023-02-01/",
+    publisher: "Reuters",
+    date: "2023-02-01",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "A UBS study estimated that ChatGPT reached 100 million monthly active users in January 2023, two months after launch, making it the fastest-growing consumer application in history.",
+    evidence: "projection",
+    verification: "verified",
+    notes:
+      "An analyst estimate based on Similarweb web traffic data (about 13 million unique visitors per day in January), not a figure published by OpenAI. reuters.com blocks automated fetches; the same Reuters wire text was read in the Taipei Times reprint (2023-02-03, https://www.taipeitimes.com/News/biz/archives/2023/02/03/2003793608): 'is estimated to have reached 100 million monthly active users last month, just two months after launch'.",
+  },
+  {
+    id: "tk-google-2025-gemini-prompt-energy",
+    title: "Measuring the environmental impact of AI inference",
+    url: "https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference",
+    publisher: "Google Cloud blog",
+    authors: ["Amin Vahdat", "Jeff Dean"],
+    date: "2025-08-21",
+    retrieved: "2026-10-05",
+    kind: "report",
+    claim:
+      "Google estimates that the median Gemini Apps text prompt uses 0.24 watt-hours of energy, emits 0.03 grams of CO2 equivalent and consumes 0.26 millilitres (about five drops) of water; it compares the energy to watching TV for less than nine seconds.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Google's own estimate of its own service. The methodology counts active accelerators, host CPU and RAM, idle provisioned machines and data centre overhead; it excludes model training, external networks and the user's device. Companion technical paper released the same day.",
+  },
+  {
+    id: "tk-llama3-2024-tokens",
+    title: "The Llama 3 Herd of Models",
+    url: "https://arxiv.org/abs/2407.21783",
+    publisher: "arXiv (Meta)",
+    authors: ["Llama Team, AI @ Meta"],
+    date: "2024-07-31",
+    retrieved: "2026-10-05",
+    kind: "paper",
+    claim:
+      "Llama 3 uses a vocabulary of 128K tokens: 100K tokens from the tiktoken tokenizer plus 28K additional tokens to better support non-English languages.",
+    evidence: "none",
+    verification: "verified",
+    notes:
+      "Section 3.2 (Model Architecture): 'We use a vocabulary with 128K tokens. Our token vocabulary combines 100K tokens from the tiktoken tokenizer with 28K additional tokens to better support non-English languages.' Training data size and code share are in llm-llama3-paper (15.6T tokens, 17% code); section 1 also says 'a corpus of about 15T multilingual tokens'.",
+  },
+  {
+    id: "tk-nyt-2023-gorillas",
+    title: "Google's Photo App Still Can't Find Gorillas. And Neither Can Apple's.",
+    url: "https://www.nytimes.com/2023/05/22/technology/ai-photo-labels-google-apple.html",
+    publisher: "The New York Times",
+    authors: ["Nico Grant", "Kashmir Hill"],
+    date: "2023-05-22",
+    retrieved: "2026-10-05",
+    kind: "news",
+    claim:
+      "Eight years after the 2015 controversy, a New York Times test of 44 images found that Google Photos could find cats and kangaroos but no gorillas, nor baboons, chimpanzees, orangutans or monkeys, although the collection contained all of them; Apple Photos had the same issue for most primates.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "nytimes.com answers 403 to automated fetches; read through the Wayback Machine copy (byline 'By Nico Grant and Kashmir Hill', published 2023-05-22). The article also reports that Microsoft OneDrive's photo search 'drew a blank for every animal we tried' and that Amazon Photos was 'over-inclusive', showing 'a menagerie of primates' for gorillas.",
+  },
 ];

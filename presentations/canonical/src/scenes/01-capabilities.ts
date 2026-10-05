@@ -28,9 +28,9 @@ export const chapter01: SceneDefinition[] = [
     steps: 0,
     interaction: "presenter",
     speakerNotes: {
-      en: `- Check the Ready dot: language demos (Hugging Face status, or Simulation) and the YouTube player script; your screen says which one is still waiting
-- Nothing moves by itself: press Next when you begin
-- Start the timer with T when you begin`,
+      en: `- Just the intro screen while the room fills up; the QR code opens the glossary
+- Check the **Ready** dot: Hugging Face status (or Simulation) and the YouTube player; your screen says what is still waiting
+- Nothing moves by itself: press **Next** to begin, and **T** to start the timer`,
     },
     transitionIn: { en: "The room fills up." },
     transitionOut: { en: "Let's begin with a short video." },
@@ -58,7 +58,7 @@ export const chapter01: SceneDefinition[] = [
       en: "Open the talk with a one-minute video from AI In Context that sets the stakes before the presenter speaks.",
     },
     takeaway: {
-      en: "AI may soon change everything; this talk is about understanding how, and what we can do.",
+      en: "Before any explanation, one minute to feel what is at stake.",
     },
     visual: {
       layout: "component",
@@ -74,9 +74,10 @@ export const chapter01: SceneDefinition[] = [
     steps: 0,
     interaction: "presenter",
     speakerNotes: {
-      en: `- **Do:** press Play on the presenter screen; sound comes from the projector only
-- "Welcome to AI In Context" (YouTube channel AI In Context, by 80,000 Hours), 57 seconds
-- Subtitles ask for the talk's language, but this video has English captions only: a French talk shows English subtitles (checked 2026-10-04). The voice was the English original in tests; YouTube may still pick an automatic dub, no embed setting prevents it: check on the projector before the talk
+      en: `- Just to set the mood: press **Play** on the presenter screen; the sound comes from the projector only
+- "Welcome to AI In Context", 57 seconds, by the YouTube channel **AI In Context** (from 80,000 Hours)
+- Say the channel's name out loud: it is in the resources at the end, and it has a few other very good videos
+- Subtitles: this video has English captions only, so a French talk shows English subtitles; YouTube may pick an automatic dub, check on the projector before the talk
 - Offline, the slide shows the address instead: say it in one sentence and move on`,
     },
     transitionIn: { en: "From the waiting room to a short video." },
@@ -105,7 +106,7 @@ export const chapter01: SceneDefinition[] = [
       en: "Welcome the room and show the five parts of the talk.",
     },
     takeaway: {
-      en: "Five parts: what AI can do, its history and how it works, who builds it, the risks, what we can do.",
+      en: "Five parts: what AI can do, how it works, who builds it, the risks, and what we can do.",
     },
     visual: {
       layout: "component",
@@ -120,9 +121,14 @@ export const chapter01: SceneDefinition[] = [
     interaction: "presenter",
     speakerNotes: {
       en: `- Welcome, who I am, why this talk
-- **Do:** five parts, one per click
-- First what it does, then how, then who builds it
-- Then the risks, and what we can do about them
+- **Scan the QR code**: the glossary on your phone. The talk uses a lot of English terms, even in French: the **terms stay in English**, the definitions are in your language
+- The glossary also has a **Try it** tab: the talk's demos, to play with yourself
+- One part per click:
+  - what **AI can do** today
+  - a bit of **history**, then **how it works** in detail: how a machine manages to write
+  - **who builds it**: a little drama and geopolitics
+  - the **risks**: I will lead you there gently, and you will see it is less science fiction than it sounds
+  - **what we can do** about it
 - Questions at the end`,
     },
     transitionIn: { en: "After the video, the plan." },
@@ -146,7 +152,7 @@ export const chapter01: SceneDefinition[] = [
       en: "Set expectations: no tool tutorial, no environmental assessment, and why today's focus is capabilities and risks.",
     },
     takeaway: {
-      en: "Today is about what AI can do and what is at stake, not how to use a tool.",
+      en: "Today is about what AI can do and what is at stake, not about using a tool or about the environment.",
     },
     visual: {
       layout: "cards",
@@ -178,13 +184,13 @@ export const chapter01: SceneDefinition[] = [
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Not a tutorial: tool setup goes out of date fast, and tools keep adding layers on top
-- What lasts: knowing what is possible; then ask your assistant how
-- Not about the environment: a serious problem, and another talk; for many, today's risks are of another order of magnitude
-- To calibrate, if asked: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)
-- Data centres: about 1.5% of world electricity in 2024 (IEA)
-- 2023: Hinton, Bengio and AI lab leaders signed: extinction risk from AI, a priority alongside pandemics and nuclear war
-- My own view, not a consensus: for many experts, AI risk is an order of magnitude more pressing than the environment`,
+      en: `- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how
+- **Not about the environment**: of course a serious problem, but another talk; for many, today's risks are of another order of magnitude (my view: say it as such)
+- To calibrate: one short chatbot question is about **0.3 Wh** (Epoch AI; Google: 0.24 Wh for a median Gemini prompt), one hour of video streaming about **77 Wh** (IEA): **about 250 questions, one hour of streaming**
+- Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming
+- At world scale: data centres used about **1.5%** of the world's electricity in 2024, and the IEA expects that to more than double by 2030
+- Ideally we would cut both; but if it is for your work, do not feel too guilty about boosting your productivity, or you will fall behind (my opinion)
+- Today's focus, the 2023 statement signed by Hinton, Bengio and AI lab leaders: "Mitigating the risk of **extinction** from AI should be a global priority **alongside other societal-scale risks such as pandemics and nuclear war**"`,
     },
     transitionIn: { en: "From the plan to what is not in it." },
     transitionOut: { en: "So, what can AI do today?" },
@@ -195,6 +201,7 @@ export const chapter01: SceneDefinition[] = [
       "sc-iea-2025-energy-ai",
       "tk-cais-statement-ai-risk",
       "tk-cais-2023-press-release",
+      "tk-google-2025-gemini-prompt-energy",
     ],
     runtimeClass: "A",
     artifacts: [],
@@ -206,9 +213,9 @@ export const chapter01: SceneDefinition[] = [
   // The part opener also frames the chapter (it replaced a separate "Opening" title slide).
   partOpener("01", "pcap", {
     notes: `- Everyone has an opinion on AI, often formed a few years ago
-- **Ask:** who has used a chatbot this week?
-- Let's test your picture with a few trick questions`,
-    transitionOut: "Let's start with a few trick questions.",
+- Question to the room: who has used a chatbot this week?
+- Let's test that picture with a trick question`,
+    transitionOut: "Let's start with a trick question.",
   }),
   {
     id: "01-then-and-now",
@@ -221,21 +228,20 @@ export const chapter01: SceneDefinition[] = [
       en: "Show that trick questions which fooled early language models are now answered correctly.",
     },
     takeaway: {
-      en: "The tricks that used to fool AI mostly no longer work.",
+      en: "In a few years, models went from failing simple riddles to answering them easily: if your picture of AI is two years old, it is out of date.",
     },
     visual: { layout: "component", component: "ThenAndNow", props: { variant: "game" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- A famous riddle: "When ten plus four is two, what is nine plus six?"
-- **Ask:** the room answers first (answer: 3, on a clock)
-- **Do:** click 1, GPT-2 (2019): wrong
-- **Do:** click 2, GPT-3 (2020): wrong
-- **Do:** click 3, GPT-3.5 (2022): still wrong
-- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m
-- **Do:** click 5, today's reasoning model, recorded answer with name and date
-- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive, each shown with its year and size: Qwen2.5 0.5B (2024), a base model never trained to chat; Llama 3.1 8B Instruct (2024); GLM-5.3 (Z.ai, 2026, 753 billion parameters), which thinks first and keeps its thinking hidden. No instruction shortens them: a long answer scrolls inside its column
-- Simulation (no Hugging Face): the field is locked on "How many r's are in the word strawberry?" and shows the three models' real answers, recorded on 4 October 2026 and labelled "recorded answer": 1, then 2, then 3 (correct)
-- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its year and size`,
+      en: `- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date
+- The riddle: "When ten plus four is two, what is nine plus six?" Let the **room answer first** (3, on a clock)
+- Clicks 1 to 4: GPT-2 (2019) wrong, GPT-3 (2020) wrong, GPT-3.5 (2022) still wrong, GPT-4 (2023) gets it
+- The costs on screen are **AI Digest's estimates** (GPT-3 about $690,000, GPT-4 about $50 million); other estimates differ (Epoch AI: GPT-3 about $2.1 million, two slides on). Only the order of magnitude matters
+- Click 5: today's reasoning model, a recorded answer with its name and date
+- Click 6, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)
+- Try other tricks, for example with letters: "How many r's are in the word strawberry?" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**
+- Simulation (no Hugging Face): the field is locked on the strawberry question and shows the answers recorded on 4 October 2026: 1, then 2, then 3 (correct)
+- GPT-2 to GPT-4 cannot be called live (closed, or not served), hence open models on the live step`,
     },
     transitionIn: {
       en: "From the question to a quick test.",
@@ -266,7 +272,7 @@ export const chapter01: SceneDefinition[] = [
       en: "Right after the riddle, show that today's AI is already at work outside the lab: code, driving, robots, mathematics, and this very talk.",
     },
     takeaway: {
-      en: "This is not a lab demo: AI already writes most new code at Google and drives paying passengers.",
+      en: "AI is already at work outside the lab; what holds it back now is mostly software, permissions and habits, not intelligence.",
     },
     visual: {
       layout: "component",
@@ -327,13 +333,15 @@ export const chapter01: SceneDefinition[] = [
     interaction: "presenter",
     speakerNotes: {
       en: `- The riddle was a toy; this is what is already happening outside the lab
-- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours
-- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas
-- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); "next" is my projection
-- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed
-- **Do:** this presentation: beside the flow of the story and a few rounds of iteration, the tool itself, the animations and the live demos were built by several AI agents (Claude Code) running in parallel within a few hours, taking initiative and testing in the browser themselves; I directed it and checked every claim and source
-- My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly
-- **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)`,
+- My conviction, said as mine: even if AI stopped improving today, it would already be close to **expert level** on most intellectual work. What is missing is adaptation: the inertia of big companies, permissions, connectors, software still to build
+- If challenged: on targeted tests, yes (GPQA: PhDs in the field 65%, best model 96%); on long real tasks, not yet reliable (METR: a top model succeeds **half the time** on tasks that take an expert about 17 hours)
+- **Code**: at Google, **75%** of new code is generated by AI, then approved by engineers (April 2026, company figure). Say "three new lines out of four at Google", not "nobody codes by hand any more"
+- **Driving**: Waymo, February 2026: over **400,000 paid rides a week** with nobody at the wheel, in six US metro areas
+- In Belgium: since **June 2026**, Tesla's FSD (Supervised) is allowed. It steers, brakes and changes lanes, but it is level 2: **the driver must watch and remains responsible**. Not a driverless car
+- **Robots**: April 2025, Beijing, the first humanoid robot half-marathon (the winner took about 2 h 41); a Figure robot held one task at BMW for 11 months (company-reported). "Next: anything made for two hands" is my projection. If you show a robot video (flips, kung fu), say where it comes from
+- **Mathematics**: September 2026, OpenAI announced that about 10,000 agents working 88 hours produced a proof on **Navier-Stokes**, one of the $1 million Millennium Prize problems. The Clay Institute says it "has apparently been settled" but has not ruled, and priority is disputed: say AI agents **claim** to have solved it
+- **This presentation**: beside the flow of the story and a few rounds of iteration, the tool itself, the animations and the live demos were built by several AI agents (Claude Code) running in parallel within a few hours, taking initiative and testing in the browser themselves; I directed it and checked every claim and source
+- Open question to the room: five years ago, before ChatGPT, would most people have called any of this science fiction?`,
     },
     transitionIn: { en: "The riddle was a toy. Outside the lab, AI is already at work." },
     transitionOut: { en: "How did we get here so fast? Seven years, in numbers." },
@@ -347,6 +355,7 @@ export const chapter01: SceneDefinition[] = [
       "tk-quanta-2026-navier-stokes",
       "tk-clay-2026-navier-stokes",
       "tk-ai-exhibit-repository",
+      "tk-belgium-2026-tesla-fsd",
     ],
     runtimeClass: "A",
     artifacts: [],
@@ -367,21 +376,23 @@ export const chapter01: SceneDefinition[] = [
       en: "Show on one slide how fast frontier models grew from GPT-2 (2019) to today: cost, electricity, memory, reliability, and the hardest tests, with a labelled one-year projection.",
     },
     takeaway: {
-      en: "In seven years, cost, memory and reliability grew a thousand to tens of thousands of times, training electricity over a hundred times, and the hardest tests went from near zero to near the top.",
+      en: "This is not a small improvement: in seven years, cost, memory, reliability and test scores all exploded.",
     },
     visual: { layout: "component", component: "FrontierProgress", props: {} },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection
-- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)
-- Click 2, training electricity = power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known, so it is not plotted. Patterson et al. estimated GPT-3 lower, 1.3 GWh
-- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages
-- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)
-- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)
-- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)
-- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)
-- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)
-- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year ≈ 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written`,
+      en: `- Not a small improvement: a boom on every axis at once. Top row, what went in and what the models hold; bottom row, the hardest tests. Each label says how we know: estimate, published, measured, projection
+- Click 1, **cost** (Epoch AI estimates): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)
+- Click 2, **electricity**, power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). Electricity is becoming a real bottleneck for AI. GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known
+- Click 3, **memory, the context window** (published by the developers): 1,024 tokens for GPT-2 (about a page and a half), 2,048 for GPT-3 (about three pages), 32,768 for GPT-4's larger version (2023), 1 million for Grok 3 (2025): about **1,500 pages**
+- Why it matters: when a conversation overflowed the window, its start fell out. That is why models seemed to "forget", and why we thought they had a memory problem
+- Nuance: a big window does not mean the model uses page 1,200 as well as page 2; quality often drops on very long contexts
+- Click 4, **reliability** (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (February 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (February 2026), Claude Mythos Preview about 17 hours (April 2026; interval 8 to 55 hours)
+- Click 5, **GPQA Diamond** (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (December 2024), Gemini 3 Pro 93% (November 2025), GPT-6 Astra 96% (September 2026)
+- Click 6, **SWE-bench Verified**: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, November 2024) to 84% (Claude Opus 4.7, April 2026)
+- Click 7, tests built to be too hard. **Humanity's Last Exam** (2,500 expert questions, January 2025): 5% (September 2024) to 55% (GPT-6 Astra). **FrontierMath** (new research problems, hours or days for a mathematician; under 2% at launch, November 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)
+- Click 8, **ARC-AGI-2** (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)
+- Click 9, **projection** for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year, about 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR: doubling every 7 months, or every 131 days since 2023). Memory and test scores are not projected: the tests are near their ceiling and harder ones are being written`,
     },
     transitionIn: { en: "How did we get here so fast? Seven years, in numbers." },
     transitionOut: { en: "So what is all this for? Not just answering: acting." },
@@ -424,17 +435,19 @@ export const chapter01: SceneDefinition[] = [
       en: "Show that today's assistants can be connected to email, calendar, files, the browser, payments and code.",
     },
     takeaway: {
-      en: "An assistant is no longer a chat window: it plugs into the tools of your daily life.",
+      en: "An agent is a model that can call tools: it no longer just answers, it acts in your mail, files, browser and payments.",
     },
     visual: { layout: "component", component: "ConnectedAssistant", props: {} },
     interaction: "presenter",
     speakerNotes: {
-      en: `- The assistant sits in the middle; connectors appear one by one
-- Email and calendar: read, draft, schedule
-- Files: search and summarize your documents
-- Browser: it clicks and fills forms on websites
-- Shopping and payments: protocols now exist for agents to pay
-- Code: it writes and runs programs`,
+      en: `- The difference between a chatbot and an **agent**: an agent can **call tools**
+- The assistant sits in the middle; connectors appear one by one
+- **Email and calendar**: read, draft, schedule
+- **Files**: search and summarise your documents
+- **Browser**: it clicks and fills forms on websites
+- **Shopping and payments**: protocols now exist for agents to pay
+- **Code**: it writes and runs programs
+- Every connector is a permission we choose to give: next slide`,
     },
     transitionIn: { en: "From answering to acting." },
     transitionOut: {
@@ -465,16 +478,18 @@ export const chapter01: SceneDefinition[] = [
       en: "Show that what an assistant can do depends on what we allow it to touch, up to spending money.",
     },
     takeaway: {
-      en: "The same model has very different power depending on what we let it touch.",
+      en: "Because agents look more and more reliable, we keep giving them more permissions, until the day it really matters.",
     },
     visual: { layout: "component", component: "PermissionsBoard", props: { mode: "permissions" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Same model; only its permissions change
-- **Do:** flip the switches: read files, write files, terminal, browser, money
-- Each switch turns advice into action
+      en: `- Same model; only what we allow it to touch changes: read files, write files, terminal, browser, money. Each switch turns advice into action
+- We say some things are risky; in practice, **productivity** and convenience push us to accept more and more risky actions
+- The agent looks more and more reliable, so we feel it will be fine. Because it looks reliable, we give it more permissions, until the day it really matters
+- This has a name: **automation bias**. The more reliable a system looks, the less we check it
+- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me
 - Money is real: published tools already let agents make transfers
-- **Ask:** which switch would make you hesitate on your own computer?`,
+- Question to the room: which switch would make you hesitate on your own computer?`,
     },
     transitionIn: {
       en: "The connections exist; what matters is what we switch on.",
@@ -501,16 +516,16 @@ export const chapter01: SceneDefinition[] = [
       en: "Show a real task the presenter gave an AI assistant, recorded on screen.",
     },
     takeaway: {
-      en: "This is not a lab demo: it is an ordinary person's ordinary use.",
+      en: "This is not a lab demo: it is my everyday use, and it already works.",
     },
     visual: { layout: "component", component: "VideoScene", props: { src: "personal-demo.mp4" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- What I asked, in one sentence
-- Which product and model, and when I recorded it
-- **Do:** play; pause where it acts on its own
-- Point at the moment it asks before acting
-- What it got wrong, if anything`,
+      en: `- What I asked, in one sentence; which product and model, and when I recorded it
+- The point: show what it can do, and that I use it every day
+- Pause where it acts on its own; point at the moment it asks before acting
+- What it got wrong, if anything
+- In many companies permissions are restricted, Copilot does not do all of this, many people are on Windows; but in fact, this is what it is: **it is doable today**`,
     },
     transitionIn: {
       en: "From the switches to a real run.",
@@ -541,18 +556,23 @@ export const chapter01: SceneDefinition[] = [
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
     },
     takeaway: {
-      en: "The model writes a request in a precise format; the software does the action and reports back.",
+      en: "An agent is still a language model: it writes a structured request, and the software around it does the action and hands back the result.",
     },
     visual: { layout: "component", component: "ToolCallDemo", props: { scenario: "search" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Same question on both sides: who won last night's match? (illustrative)
-- **Do:** step 1, the chatbot alone: it cannot know, its knowledge stops at training
-- **Do:** step 2, the agent side: the software tells the model it has a web_search tool
-- **Do:** step 3, the model does not answer: it writes a tool call, in JSON
-- Key point: the model only writes text; the software reads it and runs the search
-- **Do:** steps 4 and 5, the results come back, then an answer that cites them
-- Everything an agent does is this, repeated`,
+      en: `- An agent is still a **language model**. In its context, hidden from you, the application describes the tools it may call
+- Calling a tool just means **writing text**: not free text for you, but **structured text** (JSON) meant for the software
+- Same question on both sides (illustrative): the chatbot alone cannot know, its knowledge stops at training; the agent writes a tool call instead of answering
+- The software reads it and does the work: calls an API, runs a search, runs code. Ordinary computing, as it always existed
+- The result comes back to the model as if **you** were answering the chatbot (a message with its own "tool" role), often dense and complicated
+- Then the model either calls another tool, or, once it has acted and has what it needs, answers you in plain, clear language
+- Switch examples (the umbrella in Bruges, and others): the same pattern every time
+- Why models are good at this: they read a lot of **code** in training, about **17%** of Llama 3's training text, so they write logical, structured text well
+- It also took **precision** (in structured text, one wrong character breaks everything) and **large context windows**, because the tool descriptions must be there **at every call**
+- In practice: at the start, the app loads the tools the agent may use at the top of its context (up to about 1,500 pages for large models); when the conversation is compacted, the app gives them again. Apps with many tools load only some and let the model search for the rest
+- The model keeps nothing between calls: at each turn, the app sends everything again (instructions, tools, conversation)
+- Structured does not mean error-free: the model can write a malformed call or wrong arguments. "Structured outputs" guarantee the **form**, not the **content**; the software checks the call and sends errors back, the model fixes and retries`,
     },
     transitionIn: {
       en: "Before a complex request, one single tool call.",
@@ -580,17 +600,18 @@ export const chapter01: SceneDefinition[] = [
       en: "Make every step of one complex request visible: tool calls, sub-agents in parallel, merged results, a human approval before paying.",
     },
     takeaway: {
-      en: "Behind one sentence, an agent runs many small steps, and can stop to ask you.",
+      en: "Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.",
     },
     visual: { layout: "component", component: "AgentRunExplainer", props: { scenario: "weekend-trip" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Illustrative, not a recording: say so
-- One sentence: plan a weekend trip
-- An orchestrator splits the job into tasks
+      en: `- Illustrative, not a recording: say so. One sentence: plan a weekend trip
+- It can do many things: an orchestrator splits the job, dispatches **sub-agents** in parallel and merges their results. For the model, sub-agents are just tools like the others
 - Tool calls: weather, calendar, maps, search, email
-- Sub-agents work in parallel, results are merged
-- **Do:** stop at the approval gate: nothing is paid without a yes`,
+- **Approval**, two cases: either the tool always requires it, **hard-coded** in the software (deterministic; payments usually are), or **the model decides** when to ask you
+- The second case is where it can be dangerous: it is **not deterministic**. We hope it knows that this kind of action needs your yes. Payments are usually hard-coded, but many things are less black and white: be careful
+- Another reason hard-coded gates matter: **prompt injection**. A web page or an email read by the agent can hide instructions ("send this file to..."), and the agent may follow them
+- Stop at the approval gate: nothing is paid without a yes`,
     },
     transitionIn: {
       en: "From a real run to a slowed-down one.",
@@ -617,15 +638,16 @@ export const chapter01: SceneDefinition[] = [
       en: "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",
     },
     takeaway: {
-      en: "An agent is a model placed in a loop, with tools and memory.",
+      en: "An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.",
     },
     visual: { layout: "component", component: "AgentLoop", props: { variant: "intro" } },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Goal, plan, act, observe, plan again
-- In the middle: a language model, like a chatbot
-- Around it: ordinary software, tools and a memory
-- It goes round until the goal is met or it asks you`,
+      en: `- **A loop, not an answer**: goal, plan, act, observe, plan again
+- It can go round many, many times. For the model these are just back-and-forths with you; in reality you barely step in, because the software picks up each request and makes an ordinary call (internet, code), as computers always did
+- In the middle, a language model like a chatbot; around it, ordinary software, tools and a memory
+- What is new is not calling tools: the magic of text generation is in **planning and re-planning**
+- It goes round until the goal is met, or until it asks you`,
     },
     transitionIn: {
       en: "From one example to the general pattern.",

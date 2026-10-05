@@ -68,8 +68,8 @@
     "text": "La présentation commence dans un instant."
   },
   "00-holding/speakerNotes": {
-    "source": "- Check the Ready dot: language demos (Hugging Face status, or Simulation) and the YouTube player script; your screen says which one is still waiting\n- Nothing moves by itself: press Next when you begin\n- Start the timer with T when you begin",
-    "text": "- Vérifier le point Prêt : les démos de langage (état de Hugging Face, ou Simulation) et le script du lecteur YouTube ; votre écran indique ce qui attend encore\n- Rien ne bouge tout seul : appuyer sur Suivant pour commencer\n- Lancer le minuteur avec T au début"
+    "source": "- Just the intro screen while the room fills up; the QR code opens the glossary\n- Check the **Ready** dot: Hugging Face status (or Simulation) and the YouTube player; your screen says what is still waiting\n- Nothing moves by itself: press **Next** to begin, and **T** to start the timer",
+    "text": "- Juste l'écran d'accueil pendant que la salle se remplit ; le QR code ouvre le glossaire\n- Vérifier le point **Prêt** : l'état de Hugging Face (ou Simulation) et le lecteur YouTube ; ton écran dit ce qui attend encore\n- Rien ne bouge tout seul : **Suivant** pour commencer, **T** pour lancer le chrono"
   },
   "00-holding/transitionIn": {
     "source": "The room fills up.",
@@ -88,8 +88,8 @@
     "text": "Ouvrir la présentation sur une vidéo d'une minute d'AI In Context, qui pose les enjeux avant que le présentateur ne prenne la parole."
   },
   "00-welcome-video/takeaway": {
-    "source": "AI may soon change everything; this talk is about understanding how, and what we can do.",
-    "text": "L'IA pourrait bientôt tout changer ; cette présentation cherche à comprendre comment, et ce que nous pouvons y faire."
+    "source": "Before any explanation, one minute to feel what is at stake.",
+    "text": "Avant toute explication, une minute pour sentir l'enjeu."
   },
   "00-welcome-video/visual.props.kicker": {
     "source": "Before we start",
@@ -104,8 +104,8 @@
     "text": "« Welcome to AI In Context », AI In Context sur YouTube, 57 s"
   },
   "00-welcome-video/speakerNotes": {
-    "source": "- **Do:** press Play on the presenter screen; sound comes from the projector only\n- \"Welcome to AI In Context\" (YouTube channel AI In Context, by 80,000 Hours), 57 seconds\n- Subtitles ask for the talk's language, but this video has English captions only: a French talk shows English subtitles (checked 2026-10-04). The voice was the English original in tests; YouTube may still pick an automatic dub, no embed setting prevents it: check on the projector before the talk\n- Offline, the slide shows the address instead: say it in one sentence and move on",
-    "text": "- **Faire :** appuyer sur Lecture sur l'écran du présentateur ; le son sort uniquement du projecteur\n- « Welcome to AI In Context » (chaîne YouTube AI In Context, par 80,000 Hours), 57 secondes\n- Les sous-titres sont demandés dans la langue de la présentation, mais cette vidéo n'a que des sous-titres anglais : une présentation en français affiche des sous-titres anglais (vérifié le 2026-10-04). Lors des tests, la voix était l'original anglais ; YouTube peut quand même choisir un doublage automatique, et aucun réglage d'intégration ne l'empêche : vérifier sur le projecteur avant la présentation\n- Hors ligne, la diapo affiche l'adresse à la place : la dire en une phrase et passer à la suite"
+    "source": "- Just to set the mood: press **Play** on the presenter screen; the sound comes from the projector only\n- \"Welcome to AI In Context\", 57 seconds, by the YouTube channel **AI In Context** (from 80,000 Hours)\n- Say the channel's name out loud: it is in the resources at the end, and it has a few other very good videos\n- Subtitles: this video has English captions only, so a French talk shows English subtitles; YouTube may pick an automatic dub, check on the projector before the talk\n- Offline, the slide shows the address instead: say it in one sentence and move on",
+    "text": "- Juste pour mettre dans l'ambiance : **Lecture** sur l'écran présentateur ; le son sort du projecteur seulement\n- « Welcome to AI In Context », 57 secondes, de la chaîne YouTube **AI In Context** (par 80,000 Hours)\n- Dire le nom de la chaîne à voix haute : elle est dans les ressources à la fin, et elle a quelques autres très belles vidéos\n- Sous-titres : la vidéo n'a que des sous-titres anglais, donc une présentation en français affiche des sous-titres anglais ; YouTube peut choisir un doublage automatique, vérifier sur le projecteur avant de commencer\n- Hors ligne, la slide affiche l'adresse à la place : la dire en une phrase et passer à la suite"
   },
   "00-welcome-video/transitionIn": {
     "source": "From the waiting room to a short video.",
@@ -124,16 +124,16 @@
     "text": "Accueillir la salle et montrer les cinq parties de la présentation."
   },
   "00-agenda/takeaway": {
-    "source": "Five parts: what AI can do, its history and how it works, who builds it, the risks, what we can do.",
-    "text": "Cinq parties : ce que l'IA sait faire, son histoire et comment ça marche, qui la construit, les risques, ce qu'on peut faire."
+    "source": "Five parts: what AI can do, how it works, who builds it, the risks, and what we can do.",
+    "text": "Cinq parties : ce que l'IA sait faire, comment elle marche, qui la construit, les risques, et ce qu'on peut y faire."
   },
   "00-agenda/visual.props.heading": {
     "source": "Today",
     "text": "Aujourd'hui"
   },
   "00-agenda/speakerNotes": {
-    "source": "- Welcome, who I am, why this talk\n- **Do:** five parts, one per click\n- First what it does, then how, then who builds it\n- Then the risks, and what we can do about them\n- Questions at the end",
-    "text": "- Bienvenue, qui je suis, pourquoi cette présentation\n- **Faire :** cinq parties, une par clic\n- D'abord ce qu'elle fait, puis comment, puis qui la construit\n- Ensuite les risques, et ce qu'on peut y faire\n- Les questions à la fin"
+    "source": "- Welcome, who I am, why this talk\n- **Scan the QR code**: the glossary on your phone. The talk uses a lot of English terms, even in French: the **terms stay in English**, the definitions are in your language\n- The glossary also has a **Try it** tab: the talk's demos, to play with yourself\n- One part per click:\n  - what **AI can do** today\n  - a bit of **history**, then **how it works** in detail: how a machine manages to write\n  - **who builds it**: a little drama and geopolitics\n  - the **risks**: I will lead you there gently, and you will see it is less science fiction than it sounds\n  - **what we can do** about it\n- Questions at the end",
+    "text": "- Bienvenue, qui je suis, pourquoi cette présentation\n- **Scannez le QR code** : le glossaire sur votre téléphone. On va utiliser beaucoup de termes anglais, même en français : **les termes restent en anglais**, les définitions sont dans votre langue\n- Le glossaire a aussi un onglet **Essayer** : les démos de la présentation, pour jouer vous-mêmes\n- Une partie par clic :\n  - ce que l'**IA sait faire** aujourd'hui\n  - un peu d'**histoire**, puis **comment ça marche** en détail : comment une machine arrive à écrire\n  - **qui la construit** : un peu de drama et de géopolitique\n  - les **risques** : je vais doucement vous y amener, et vous verrez que c'est moins de la science-fiction qu'il n'y paraît\n  - **ce qu'on peut y faire**\n- Questions à la fin"
   },
   "00-agenda/transitionIn": {
     "source": "After the video, the plan.",
@@ -152,8 +152,8 @@
     "text": "Cadrer les attentes : pas de tutoriel d'outils, pas de bilan environnemental, et pourquoi on se concentre aujourd'hui sur les capacités et les risques."
   },
   "00-not-this/takeaway": {
-    "source": "Today is about what AI can do and what is at stake, not how to use a tool.",
-    "text": "Aujourd'hui, il s'agit de ce que l'IA sait faire et de ce qui est en jeu, pas de comment utiliser un outil."
+    "source": "Today is about what AI can do and what is at stake, not about using a tool or about the environment.",
+    "text": "Aujourd'hui, on parle de ce que l'IA sait faire et de ce qui est en jeu, pas d'outils ni d'environnement."
   },
   "00-not-this/visual.heading": {
     "source": "What this talk is not",
@@ -184,8 +184,8 @@
     "text": "« Réduire le risque d'extinction lié à l'IA devrait être une priorité mondiale. » (chercheurs en IA et dirigeants de laboratoires d'IA, 2023)"
   },
   "00-not-this/speakerNotes": {
-    "source": "- Not a tutorial: tool setup goes out of date fast, and tools keep adding layers on top\n- What lasts: knowing what is possible; then ask your assistant how\n- Not about the environment: a serious problem, and another talk; for many, today's risks are of another order of magnitude\n- To calibrate, if asked: one query about 0.3 Wh, one hour of streaming about 77 Wh, so roughly 250 queries (long or reasoning queries cost far more)\n- Data centres: about 1.5% of world electricity in 2024 (IEA)\n- 2023: Hinton, Bengio and AI lab leaders signed: extinction risk from AI, a priority alongside pandemics and nuclear war\n- My own view, not a consensus: for many experts, AI risk is an order of magnitude more pressing than the environment",
-    "text": "- Pas un tutoriel : les réglages d'outils se périment vite, et les outils ajoutent sans cesse des couches\n- Ce qui dure : savoir ce qui est possible, puis demander à son assistant comment faire\n- Pas sur l'environnement : un problème sérieux, et une autre présentation ; pour beaucoup, les risques d'aujourd'hui sont d'un autre ordre de grandeur\n- Pour se situer, si on vous le demande : une requête environ 0,3 Wh, une heure de streaming environ 77 Wh, soit à peu près 250 requêtes (les requêtes longues ou de raisonnement coûtent bien plus)\n- Centres de données : environ 1,5 % de l'électricité mondiale en 2024 (AIE)\n- 2023 : Hinton, Bengio et des dirigeants de laboratoires d'IA signent : le risque d'extinction lié à l'IA, une priorité au même titre que les pandémies et la guerre nucléaire\n- Mon avis, pas un consensus : pour beaucoup d'experts, le risque de l'IA est d'un ordre de grandeur plus pressant que l'environnement"
+    "source": "- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how\n- **Not about the environment**: of course a serious problem, but another talk; for many, today's risks are of another order of magnitude (my view: say it as such)\n- To calibrate: one short chatbot question is about **0.3 Wh** (Epoch AI; Google: 0.24 Wh for a median Gemini prompt), one hour of video streaming about **77 Wh** (IEA): **about 250 questions, one hour of streaming**\n- Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming\n- At world scale: data centres used about **1.5%** of the world's electricity in 2024, and the IEA expects that to more than double by 2030\n- Ideally we would cut both; but if it is for your work, do not feel too guilty about boosting your productivity, or you will fall behind (my opinion)\n- Today's focus, the 2023 statement signed by Hinton, Bengio and AI lab leaders: \"Mitigating the risk of **extinction** from AI should be a global priority **alongside other societal-scale risks such as pandemics and nuclear war**\"",
+    "text": "- **Pas un tutoriel** sur les outils d'IA : ça change tous les mois. Savoir ce qui est possible, puis demander à son assistant comment faire\n- **Pas sur l'environnement** : c'est bien sûr un problème sérieux, mais c'est une autre présentation ; pour beaucoup, les risques d'aujourd'hui sont d'un autre ordre de grandeur (mon avis : le dire comme tel)\n- Pour situer : une question courte à un chatbot, c'est environ **0,3 Wh** (Epoch AI ; Google : 0,24 Wh pour une requête Gemini médiane), une heure de streaming vidéo environ **77 Wh** (AIE) : **environ 250 questions, une heure de streaming**\n- Nuance honnête : les longues questions, les modèles qui « réfléchissent » et les agents coûtent bien plus (environ 2,5 Wh pour 10 000 tokens en entrée, près de 40 Wh pour 100 000) : un agent qui travaille deux heures peut valoir plusieurs heures de streaming\n- À l'échelle mondiale : les data centres ont consommé environ **1,5 %** de l'électricité mondiale en 2024, et l'AIE prévoit plus qu'un doublement d'ici 2030\n- Idéalement, il faudrait réduire les deux ; mais si c'est pour le travail, pas besoin de trop culpabiliser de booster sa productivité, sinon on reste à la ramasse (mon avis)\n- Le focus du jour, la déclaration de 2023 signée par Hinton, Bengio et des dirigeants de labos d'IA : « Réduire le risque d'**extinction** lié à l'IA devrait être une priorité mondiale, **au même titre que d'autres risques à l'échelle de la société, comme les pandémies et la guerre nucléaire** »"
   },
   "00-not-this/transitionIn": {
     "source": "From the plan to what is not in it.",
@@ -200,16 +200,16 @@
     "text": "Ouvrir la partie 1 sur 5 et montrer où elle se situe dans la présentation."
   },
   "01-part/speakerNotes": {
-    "source": "- Part 1 of 5: What AI can do today\n- Today's assistants answer well and act on our behalf, within what we allow.\n- Everyone has an opinion on AI, often formed a few years ago\n- **Ask:** who has used a chatbot this week?\n- Let's test your picture with a few trick questions",
-    "text": "- Partie 1 sur 5 : Ce que l'IA sait faire aujourd'hui\n- Les assistants d'aujourd'hui répondent bien et agissent pour nous, dans les limites de ce qu'on leur permet.\n- Tout le monde a un avis sur l'IA, souvent formé il y a quelques années\n- **Demander :** qui a utilisé un chatbot (*agent conversationnel*) cette semaine ?\n- Testons l'idée que vous vous en faites avec quelques questions pièges"
+    "source": "- Part 1 of 5: What AI can do today\n- Today's assistants answer well and act on our behalf, within what we allow.\n- Everyone has an opinion on AI, often formed a few years ago\n- Question to the room: who has used a chatbot this week?\n- Let's test that picture with a trick question",
+    "text": "- Partie 1 sur 5 : Ce que l'IA sait faire aujourd'hui\n- Les assistants d'aujourd'hui répondent bien et agissent pour nous, dans les limites de ce qu'on leur permet.\n- Tout le monde a un avis sur l'IA, souvent formé il y a quelques années\n- Question à la salle : qui a utilisé un chatbot (*agent conversationnel*) cette semaine ?\n- Testons cette image avec une question piège"
   },
   "01-part/transitionIn": {
     "source": "Part 1.",
     "text": "Partie 1."
   },
   "01-part/transitionOut": {
-    "source": "Let's start with a few trick questions.",
-    "text": "Commençons par quelques questions pièges."
+    "source": "Let's start with a trick question.",
+    "text": "Commençons par une question piège."
   },
   "01-then-and-now/title": {
     "source": "Then and now",
@@ -220,12 +220,12 @@
     "text": "Montrer que des questions pièges qui trompaient les premiers modèles de langage reçoivent aujourd'hui une bonne réponse."
   },
   "01-then-and-now/takeaway": {
-    "source": "The tricks that used to fool AI mostly no longer work.",
-    "text": "La plupart des pièges qui trompaient l'IA ne marchent plus."
+    "source": "In a few years, models went from failing simple riddles to answering them easily: if your picture of AI is two years old, it is out of date.",
+    "text": "En quelques années, les modèles sont passés de l'échec sur des énigmes simples à la réponse facile : si votre image de l'IA a deux ans, elle est périmée."
   },
   "01-then-and-now/speakerNotes": {
-    "source": "- A famous riddle: \"When ten plus four is two, what is nine plus six?\"\n- **Ask:** the room answers first (answer: 3, on a clock)\n- **Do:** click 1, GPT-2 (2019): wrong\n- **Do:** click 2, GPT-3 (2020): wrong\n- **Do:** click 3, GPT-3.5 (2022): still wrong\n- **Do:** click 4, GPT-4 (2023) gets it; note the training cost climbing, from about $4.6k to about $50m\n- **Do:** click 5, today's reasoning model, recorded answer with name and date\n- **Do:** click 6, live: type any question in the big field (here or on the projector), then Ask. Three open models answer side by side as their words arrive, each shown with its year and size: Qwen2.5 0.5B (2024), a base model never trained to chat; Llama 3.1 8B Instruct (2024); GLM-5.3 (Z.ai, 2026, 753 billion parameters), which thinks first and keeps its thinking hidden. No instruction shortens them: a long answer scrolls inside its column\n- Simulation (no Hugging Face): the field is locked on \"How many r's are in the word strawberry?\" and shows the three models' real answers, recorded on 4 October 2026 and labelled \"recorded answer\": 1, then 2, then 3 (correct)\n- Caveat: GPT-3 and GPT-4 are closed OpenAI models and cannot be called live, and no Hugging Face provider serves GPT-2, so the live ladder uses open models of increasing size, each named on screen with its year and size",
-    "text": "- Une énigme connue : « Si dix plus quatre font deux, combien font neuf plus six ? »\n- **Demander :** la salle répond d'abord (réponse : 3, sur une horloge)\n- **Faire :** clic 1, GPT-2 (2019) : faux\n- **Faire :** clic 2, GPT-3 (2020) : faux\n- **Faire :** clic 3, GPT-3.5 (2022) : toujours faux\n- **Faire :** clic 4, GPT-4 (2023) trouve ; noter que le coût d'entraînement grimpe, d'environ 4 600 $ à environ 50 M$\n- **Faire :** clic 5, un reasoning model (*modèle de raisonnement*) actuel, réponse enregistrée avec son nom et sa date\n- **Faire :** clic 6, en direct : taper n'importe quelle question dans le grand champ (ici ou sur le projecteur), puis Demander. Trois modèles ouverts répondent côte à côte, au fil des mots, chacun avec son année et sa taille : Qwen2.5 0.5B (2024), un base model (*modèle de base*) jamais entraîné à converser ; Llama 3.1 8B Instruct (2024) ; GLM-5.3 (Z.ai, 2026, 753 milliards de paramètres), qui réfléchit d'abord et garde sa réflexion cachée. Aucune consigne ne les raccourcit : une longue réponse défile dans sa colonne\n- Simulation (sans Hugging Face) : le champ est verrouillé sur « Combien y a-t-il de r dans le mot strawberry ? » et montre les vraies réponses des trois modèles, enregistrées le 4 octobre 2026 et signalées « réponse enregistrée » : 1, puis 2, puis 3 (juste)\n- Attention : GPT-3 et GPT-4 sont des modèles fermés d'OpenAI qu'on ne peut pas interroger en direct, et aucun fournisseur Hugging Face ne propose GPT-2. L'échelle en direct utilise donc des modèles ouverts de taille croissante, chacun nommé à l'écran avec son année et sa taille"
+    "source": "- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date\n- The riddle: \"When ten plus four is two, what is nine plus six?\" Let the **room answer first** (3, on a clock)\n- Clicks 1 to 4: GPT-2 (2019) wrong, GPT-3 (2020) wrong, GPT-3.5 (2022) still wrong, GPT-4 (2023) gets it\n- The costs on screen are **AI Digest's estimates** (GPT-3 about $690,000, GPT-4 about $50 million); other estimates differ (Epoch AI: GPT-3 about $2.1 million, two slides on). Only the order of magnitude matters\n- Click 5: today's reasoning model, a recorded answer with its name and date\n- Click 6, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)\n- Try other tricks, for example with letters: \"How many r's are in the word strawberry?\" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**\n- Simulation (no Hugging Face): the field is locked on the strawberry question and shows the answers recorded on 4 October 2026: 1, then 2, then 3 (correct)\n- GPT-2 to GPT-4 cannot be called live (closed, or not served), hence open models on the live step",
+    "text": "- L'idée : montrer à quel point les modèles ont progressé en quelques années. Si votre image de l'IA s'est arrêtée quelque part, elle est périmée\n- L'énigme : « Quand dix plus quatre font deux, combien font neuf plus six ? » Laisser **la salle répondre d'abord** (3, sur une horloge)\n- Clics 1 à 4 : GPT-2 (2019) se trompe, GPT-3 (2020) se trompe, GPT-3.5 (2022) se trompe encore, GPT-4 (2023) trouve\n- Les coûts à l'écran sont les **estimations d'AI Digest** (GPT-3 environ 690 000 $, GPT-4 environ 50 millions $) ; d'autres estimations diffèrent (Epoch AI : GPT-3 environ 2,1 millions $, deux slides plus loin). Seul l'ordre de grandeur compte\n- Clic 5 : un modèle de raisonnement d'aujourd'hui, réponse enregistrée avec son nom et sa date\n- Clic 6, en direct : taper n'importe quelle question ; trois modèles ouverts de plus en plus grands répondent côte à côte, chacun avec son année et sa taille : Qwen2.5 0.5B (2024, un modèle de base jamais entraîné à discuter), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 milliards de paramètres, réfléchit avant de répondre)\n- Essayer d'autres pièges, par exemple avec les lettres : « Combien de r dans le mot strawberry ? » (pré-rempli). Les modèles ne voient jamais les lettres, seulement des morceaux de mots : on verra pourquoi avec les **tokens**\n- Simulation (sans Hugging Face) : le champ est bloqué sur la question strawberry et montre les réponses enregistrées le 4 octobre 2026 : 1, puis 2, puis 3 (correct)\n- GPT-2 à GPT-4 ne peuvent pas être appelés en direct (fermés, ou non servis), d'où les modèles ouverts à l'étape en direct"
   },
   "01-then-and-now/transitionIn": {
     "source": "From the question to a quick test.",
@@ -244,8 +244,8 @@
     "text": "Juste après l'énigme, montrer que l'IA d'aujourd'hui est déjà au travail hors du laboratoire : code, conduite, robots, mathématiques, et jusqu'à cette présentation."
   },
   "01-already-here/takeaway": {
-    "source": "This is not a lab demo: AI already writes most new code at Google and drives paying passengers.",
-    "text": "Ce n'est pas une démo de laboratoire : l'IA écrit déjà l'essentiel du nouveau code chez Google et conduit des passagers payants."
+    "source": "AI is already at work outside the lab; what holds it back now is mostly software, permissions and habits, not intelligence.",
+    "text": "L'IA travaille déjà hors du labo ; ce qui la freine aujourd'hui, c'est surtout le logiciel, les permissions et les habitudes, pas l'intelligence."
   },
   "01-already-here/visual.props.heading": {
     "source": "Even if AI stopped improving today, it could already do most expert work.",
@@ -292,8 +292,8 @@
     "text": "Au-delà de l'histoire, des agents IA ont construit l'outil, les animations et les démos, en parallèle."
   },
   "01-already-here/speakerNotes": {
-    "source": "- The riddle was a toy; this is what is already happening outside the lab\n- **Do:** code: Google, April 2026: 75% of new code AI-generated, approved by engineers (company figure); METR: agents now finish tasks of many hours\n- **Do:** driving: Waymo, February 2026: over 400,000 paid rides a week in six US metro areas\n- **Do:** robots: 19 April 2025, Beijing, the first humanoid robot half-marathon, 20 teams; the winner took about 2 h 41 (Beijing government); a Figure robot held one task at BMW for 11 months (company-reported); \"next\" is my projection\n- **Do:** maths: September 2026, about 10,000 agents, 88 hours, Navier-Stokes; the Clay Institute has not ruled, priority disputed\n- **Do:** this presentation: beside the flow of the story and a few rounds of iteration, the tool itself, the animations and the live demos were built by several AI agents (Claude Code) running in parallel within a few hours, taking initiative and testing in the browser themselves; I directed it and checked every claim and source\n- My conviction, said as mine: even if AI stopped improving today, it could already do most expert work; the rest is adaptation. Experts disagree on timelines, some strongly: weigh my view accordingly\n- **Ask:** five years ago, before ChatGPT, would most people have called any of this science fiction? (Leave it open; it echoes the opening video's title)",
-    "text": "- L'énigme était un jouet ; voici ce qui se passe déjà hors du laboratoire\n- **Faire :** le code : Google, avril 2026 : 75 % du nouveau code généré par l'IA, validé par des ingénieurs (chiffre de l'entreprise) ; METR : les agents terminent désormais des tâches de plusieurs heures\n- **Faire :** la conduite : Waymo, février 2026 : plus de 400 000 courses payantes par semaine dans six métropoles américaines\n- **Faire :** les robots : 19 avril 2025, Pékin, premier semi-marathon de robots humanoïdes, 20 équipes ; le vainqueur a mis environ 2 h 41 (gouvernement de Pékin) ; un robot Figure a tenu une tâche chez BMW pendant 11 mois (selon l'entreprise) ; « ensuite » est ma projection\n- **Faire :** les maths : septembre 2026, environ 10 000 agents, 88 heures, Navier-Stokes ; l'Institut Clay ne s'est pas prononcé, antériorité contestée\n- **Faire :** cette présentation : à part le fil de l'histoire et quelques itérations, l'outil lui-même, les animations et les démos en direct ont été construits par plusieurs agents IA (Claude Code) travaillant en parallèle en quelques heures, prenant des initiatives et testant eux-mêmes dans le navigateur ; j'ai dirigé et vérifié chaque affirmation et chaque source\n- Ma conviction, présentée comme la mienne : même si l'IA cessait de progresser aujourd'hui, elle pourrait déjà faire l'essentiel du travail d'expert ; le reste, c'est de l'adaptation. Les experts ne s'accordent pas sur les délais, certains vivement : pesez mon avis en conséquence\n- **Demander :** il y a cinq ans, avant ChatGPT, la plupart des gens auraient-ils qualifié tout cela de science-fiction ? (Laisser la question ouverte ; elle fait écho au titre de la vidéo d'ouverture)"
+    "source": "- The riddle was a toy; this is what is already happening outside the lab\n- My conviction, said as mine: even if AI stopped improving today, it would already be close to **expert level** on most intellectual work. What is missing is adaptation: the inertia of big companies, permissions, connectors, software still to build\n- If challenged: on targeted tests, yes (GPQA: PhDs in the field 65%, best model 96%); on long real tasks, not yet reliable (METR: a top model succeeds **half the time** on tasks that take an expert about 17 hours)\n- **Code**: at Google, **75%** of new code is generated by AI, then approved by engineers (April 2026, company figure). Say \"three new lines out of four at Google\", not \"nobody codes by hand any more\"\n- **Driving**: Waymo, February 2026: over **400,000 paid rides a week** with nobody at the wheel, in six US metro areas\n- In Belgium: since **June 2026**, Tesla's FSD (Supervised) is allowed. It steers, brakes and changes lanes, but it is level 2: **the driver must watch and remains responsible**. Not a driverless car\n- **Robots**: April 2025, Beijing, the first humanoid robot half-marathon (the winner took about 2 h 41); a Figure robot held one task at BMW for 11 months (company-reported). \"Next: anything made for two hands\" is my projection. If you show a robot video (flips, kung fu), say where it comes from\n- **Mathematics**: September 2026, OpenAI announced that about 10,000 agents working 88 hours produced a proof on **Navier-Stokes**, one of the $1 million Millennium Prize problems. The Clay Institute says it \"has apparently been settled\" but has not ruled, and priority is disputed: say AI agents **claim** to have solved it\n- **This presentation**: beside the flow of the story and a few rounds of iteration, the tool itself, the animations and the live demos were built by several AI agents (Claude Code) running in parallel within a few hours, taking initiative and testing in the browser themselves; I directed it and checked every claim and source\n- Open question to the room: five years ago, before ChatGPT, would most people have called any of this science fiction?",
+    "text": "- L'énigme était un jouet ; voici ce qui se passe déjà hors du labo\n- Ma conviction, dite comme telle : même si l'IA arrêtait de progresser aujourd'hui, elle serait déjà proche du **niveau expert** sur la plupart des métiers intellectuels. Ce qui manque, c'est l'adaptation : l'inertie des grandes entreprises, les permissions, les connecteurs, le logiciel à construire\n- Si on me contredit : sur des tests ciblés, oui (GPQA : docteurs du domaine 65 %, meilleur modèle 96 %) ; sur de longues tâches réelles, pas encore fiable (METR : un modèle de pointe réussit **une fois sur deux** des tâches qui prennent environ 17 heures à un expert)\n- **Code** : chez Google, **75 %** du nouveau code est généré par l'IA, puis approuvé par des ingénieurs (avril 2026, chiffre de l'entreprise). Dire « trois nouvelles lignes sur quatre chez Google », pas « plus personne ne code à la main »\n- **Conduite** : Waymo, février 2026 : plus de **400 000 courses payantes par semaine** sans personne au volant, dans six grandes villes américaines\n- En Belgique : depuis **juin 2026**, le FSD (Supervised) de Tesla est autorisé. Il tourne, freine et change de bande, mais c'est du niveau 2 : **le conducteur doit surveiller et reste responsable**. Ce n'est pas une voiture sans conducteur\n- **Robots** : avril 2025, Pékin, le premier semi-marathon de robots humanoïdes (le gagnant en environ 2 h 41) ; un robot Figure a tenu un poste chez BMW pendant 11 mois (chiffre de l'entreprise). « Ensuite : tout ce qui est fait pour deux mains » est ma projection. Si je montre une vidéo de robot (saltos, kung-fu), dire d'où elle vient\n- **Mathématiques** : septembre 2026, OpenAI annonce qu'environ 10 000 agents, en 88 heures, ont produit une preuve sur **Navier-Stokes**, un des problèmes du millénaire à 1 million de dollars. Le Clay Institute dit qu'il « a apparemment été réglé » mais n'a pas tranché, et la priorité est disputée : dire que des agents IA **affirment** l'avoir résolu\n- **Cette présentation** : au-delà du fil de l'histoire et de quelques itérations, l'outil lui-même, les animations et les démos en direct ont été construits par plusieurs agents IA (Claude Code) travaillant en parallèle en quelques heures, prenant des initiatives et testant eux-mêmes dans le navigateur ; je l'ai dirigé et j'ai vérifié chaque affirmation et chaque source\n- Question ouverte à la salle : il y a cinq ans, avant ChatGPT, la plupart des gens n'auraient-ils pas appelé tout ça de la science-fiction ?"
   },
   "01-already-here/transitionIn": {
     "source": "The riddle was a toy. Outside the lab, AI is already at work.",
@@ -312,12 +312,12 @@
     "text": "Montrer sur une seule diapo à quelle vitesse les frontier models ont grandi, de GPT-2 (2019) à aujourd'hui : coût, électricité, mémoire, fiabilité et tests les plus durs, avec une projection à un an clairement signalée."
   },
   "01-progress/takeaway": {
-    "source": "In seven years, cost, memory and reliability grew a thousand to tens of thousands of times, training electricity over a hundred times, and the hardest tests went from near zero to near the top.",
-    "text": "En sept ans, le coût, la mémoire et la fiabilité ont été multipliés par mille à plusieurs dizaines de milliers, l'électricité d'entraînement par plus de cent, et les tests les plus durs sont passés de presque zéro à presque le maximum."
+    "source": "This is not a small improvement: in seven years, cost, memory, reliability and test scores all exploded.",
+    "text": "Ce n'est pas une petite amélioration : en sept ans, coût, mémoire, fiabilité et scores ont tous explosé."
   },
   "01-progress/speakerNotes": {
-    "source": "- Start: top row, what went in and what the models hold; bottom, the hardest tests. Each label says how we know: estimate, published, measured, projection\n- Click 1, cost (estimate, Epoch AI): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)\n- Click 2, training electricity = power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known, so it is not plotted. Patterson et al. estimated GPT-3 lower, 1.3 GWh\n- Click 3, memory (published by the developers): 1,024 tokens (GPT-2), 2,048 (GPT-3), 32,768 (GPT-4's larger version, 2023), 1 million (Grok 3, 2025): from a page and a half to about 1,500 pages\n- Click 4, reliability (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (Feb 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (Feb 2026), Claude Mythos Preview about 17 hours (Apr 2026; interval 8 to 55 hours)\n- Click 5, GPQA Diamond (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (Dec 2024), Gemini 3 Pro 93% (Nov 2025), GPT-6 Astra 96% (Sep 2026)\n- Click 6, SWE-bench Verified: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, Nov 2024) to 84% (Claude Opus 4.7, Apr 2026)\n- Click 7, tests built to be too hard. Humanity's Last Exam (2,500 expert questions, Jan 2025): 5% (Sep 2024) to 55% (GPT-6 Astra). FrontierMath (new research problems, hours or days for a mathematician; under 2% at launch, Nov 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)\n- Click 8, ARC-AGI-2 (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)\n- Click 9, projection for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year ≈ 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR doubling every 7 months, or every 131 days since 2023). Memory and test scores: not projected, the tests are near their ceiling and harder ones are being written",
-    "text": "- Début : en haut, ce qu'on a investi et ce que les modèles retiennent ; en bas, les tests les plus durs. Chaque étiquette dit comment on le sait : estimation, publié, mesuré, projection\n- Clic 1, coût (estimation, Epoch AI) : GPT-2 environ 4 300 $ (2019), GPT-3 2,1 millions $ (2020), GPT-4 37 millions $ (2023), GPT-4.5 environ 366 millions $ (2025) : environ 84 000 fois plus. La puissance de calcul derrière a été multipliée par environ 500 000, d'environ 2e21 opérations (GPT-2) à environ 1e27 (GPT-6 Astra)\n- Clic 2, électricité d'entraînement = puissance × durée d'entraînement (deux estimations d'Epoch AI) : GPT-3 environ 1,8 GWh (5 MW pendant 14,8 jours), GPT-4 environ 45 GWh (20 MW pendant environ 95 jours, une durée spéculative), Grok 3 environ 237 GWh (110 MW pendant environ 90 jours), un an d'électricité pour environ 22 000 foyers américains (EIA). Pas d'estimation pour GPT-2 ; GPT-6 Astra consomme environ 233 MW, mais sa durée d'entraînement n'est pas connue, donc il n'est pas sur le graphique. Patterson et al. estimaient GPT-3 plus bas, 1,3 GWh\n- Clic 3, mémoire (publiée par les développeurs) : 1 024 tokens (GPT-2), 2 048 (GPT-3), 32 768 (la grande version de GPT-4, 2023), 1 million (Grok 3, 2025) : d'une page et demie à environ 1 500 pages\n- Clic 4, fiabilité (mesurée par METR, surtout sur des tâches logicielles) : la durée d'une tâche, en temps d'expert, réussie une fois sur deux. GPT-2 environ 3 secondes, GPT-4 environ 3,5 minutes (2023), Claude 3.7 Sonnet environ 1 heure (fév. 2025), GPT-5 environ 3,4 heures, Claude Opus 4.6 environ 12 heures (fév. 2026), Claude Mythos Preview environ 17 heures (avr. 2026 ; intervalle de 8 à 55 heures)\n- Clic 5, GPQA Diamond (meilleur score à ce jour, mesures d'Epoch AI) : des questions de science niveau doctorat ; les docteurs du domaine obtiennent 65 % (Rein et al.). GPT-4 36 % (2023), o1 77 % (déc. 2024), Gemini 3 Pro 93 % (nov. 2025), GPT-6 Astra 96 % (sept. 2026)\n- Clic 6, SWE-bench Verified : 500 vrais bugs tirés de projets open source, chacun vérifié par des personnes. De 31 % (GPT-4o, nov. 2024) à 84 % (Claude Opus 4.7, avr. 2026)\n- Clic 7, des tests conçus pour être trop durs. Humanity's Last Exam (2 500 questions d'experts, janv. 2025) : de 5 % (sept. 2024) à 55 % (GPT-6 Astra). FrontierMath (des problèmes de recherche inédits, des heures ou des jours de travail pour un mathématicien ; moins de 2 % au lancement, nov. 2024) : d'environ 1 % à 94 % (GPT-6 Astra, sur la version corrigée de 2026)\n- Clic 8, ARC-AGI-2 (des énigmes visuelles, chacune résolue par au moins deux personnes ordinaires dans une étude sur 400 personnes ; mars 2025) : de 0 % à 95 % (GPT-6 Astra, dans son réglage le plus coûteux). La médaille : juillet 2025, Gemini Deep Think obtient 35 points sur 42 aux Olympiades internationales de mathématiques, l'or, corrigé par l'IMO (environ 8 % des élèves obtiennent l'or)\n- Clic 9, projection pour octobre 2027, des tendances, pas des promesses : coût d'entraînement de plus d'un milliard de dollars (selon les mots d'Epoch AI ; × 2,4 par an donne environ 3,6 milliards) ; électricité d'environ 1 100 GWh (233 MW × 2,1 par an ≈ 520 MW, pour la même durée d'entraînement que Grok 3, environ 90 jours : une hypothèse), un an d'électricité pour environ 100 000 foyers américains ; des tâches de 3 à 8 semaines de travail (METR : doublement tous les 7 mois, ou tous les 131 jours depuis 2023). Mémoire et scores aux tests : pas de projection, les tests approchent de leur plafond et on en écrit de plus durs"
+    "source": "- Not a small improvement: a boom on every axis at once. Top row, what went in and what the models hold; bottom row, the hardest tests. Each label says how we know: estimate, published, measured, projection\n- Click 1, **cost** (Epoch AI estimates): GPT-2 about $4,300 (2019), GPT-3 $2.1 million (2020), GPT-4 $37 million (2023), GPT-4.5 about $366 million (2025): about 84,000 times more. The computing behind it grew about 500,000 times, from about 2e21 operations (GPT-2) to about 1e27 (GPT-6 Astra)\n- Click 2, **electricity**, power × training time (both Epoch AI estimates): GPT-3 about 1.8 GWh (5 MW for 14.8 days), GPT-4 about 45 GWh (20 MW for about 95 days, a speculative duration), Grok 3 about 237 GWh (110 MW for about 90 days), a year of electricity for about 22,000 US homes (EIA). Electricity is becoming a real bottleneck for AI. GPT-2 has no estimate; GPT-6 Astra draws about 233 MW but its training time is not known\n- Click 3, **memory, the context window** (published by the developers): 1,024 tokens for GPT-2 (about a page and a half), 2,048 for GPT-3 (about three pages), 32,768 for GPT-4's larger version (2023), 1 million for Grok 3 (2025): about **1,500 pages**\n- Why it matters: when a conversation overflowed the window, its start fell out. That is why models seemed to \"forget\", and why we thought they had a memory problem\n- Nuance: a big window does not mean the model uses page 1,200 as well as page 2; quality often drops on very long contexts\n- Click 4, **reliability** (measured by METR, mostly software tasks): the length of task, in an expert's time, finished half the time. GPT-2 about 3 seconds, GPT-4 about 3.5 minutes (2023), Claude 3.7 Sonnet about 1 hour (February 2025), GPT-5 about 3.4 hours, Claude Opus 4.6 about 12 hours (February 2026), Claude Mythos Preview about 17 hours (April 2026; interval 8 to 55 hours)\n- Click 5, **GPQA Diamond** (best score so far, Epoch AI's runs): PhD-level science questions; PhDs in the field score 65% (Rein et al.). GPT-4 36% (2023), o1 77% (December 2024), Gemini 3 Pro 93% (November 2025), GPT-6 Astra 96% (September 2026)\n- Click 6, **SWE-bench Verified**: 500 real bugs from open-source projects, each checked by people. 31% (GPT-4o, November 2024) to 84% (Claude Opus 4.7, April 2026)\n- Click 7, tests built to be too hard. **Humanity's Last Exam** (2,500 expert questions, January 2025): 5% (September 2024) to 55% (GPT-6 Astra). **FrontierMath** (new research problems, hours or days for a mathematician; under 2% at launch, November 2024): about 1% to 94% (GPT-6 Astra, on the corrected 2026 version)\n- Click 8, **ARC-AGI-2** (visual puzzles, each solved by at least two ordinary people in a 400-person study; March 2025): 0% to 95% (GPT-6 Astra, at its most expensive setting). The medal: July 2025, Gemini Deep Think scored 35 of 42 at the International Mathematical Olympiad, gold, graded by the IMO (about 8% of students get gold)\n- Click 9, **projection** for October 2027, trends not promises: training cost over $1 billion (Epoch AI's own words; ×2.4 a year gives about $3.6 billion); electricity about 1,100 GWh (233 MW × 2.1 a year, about 520 MW, for the same training time as Grok 3, about 90 days: an assumption), a year for about 100,000 US homes; tasks of 3 to 8 weeks of work (METR: doubling every 7 months, or every 131 days since 2023). Memory and test scores are not projected: the tests are near their ceiling and harder ones are being written",
+    "text": "- Pas une petite amélioration : un boom sur tous les axes à la fois. En haut, ce qui entre et ce que les modèles retiennent ; en bas, les tests les plus durs. Chaque étiquette dit comment on le sait : estimation, publié, mesuré, projection\n- Clic 1, **coût** (estimations d'Epoch AI) : GPT-2 environ 4 300 $ (2019), GPT-3 2,1 millions $ (2020), GPT-4 37 millions $ (2023), GPT-4.5 environ 366 millions $ (2025) : environ 84 000 fois plus. Le calcul derrière a été multiplié par environ 500 000, d'environ 2e21 opérations (GPT-2) à environ 1e27 (GPT-6 Astra)\n- Clic 2, **électricité**, puissance × durée d'entraînement (deux estimations d'Epoch AI) : GPT-3 environ 1,8 GWh (5 MW pendant 14,8 jours), GPT-4 environ 45 GWh (20 MW pendant environ 95 jours, durée spéculative), Grok 3 environ 237 GWh (110 MW pendant environ 90 jours), une année d'électricité pour environ 22 000 foyers américains (EIA). L'électricité devient un vrai goulot d'étranglement pour l'IA. GPT-2 n'a pas d'estimation ; GPT-6 Astra tire environ 233 MW mais sa durée d'entraînement n'est pas connue\n- Clic 3, **la mémoire, la fenêtre de contexte** (publiée par les développeurs) : 1 024 tokens pour GPT-2 (environ une page et demie), 2 048 pour GPT-3 (environ trois pages), 32 768 pour la grande version de GPT-4 (2023), 1 million pour Grok 3 (2025) : environ **1 500 pages**\n- Pourquoi c'est important : quand une conversation dépassait la fenêtre, son début tombait. C'est pour ça que les modèles semblaient « oublier », et qu'on croyait qu'ils avaient un problème de mémoire\n- Nuance : une grande fenêtre ne veut pas dire que le modèle utilise la page 1 200 aussi bien que la page 2 ; la qualité baisse souvent sur les très longs contextes\n- Clic 4, **fiabilité** (mesurée par METR, surtout des tâches logicielles) : la longueur de tâche, en temps d'expert, réussie une fois sur deux. GPT-2 environ 3 secondes, GPT-4 environ 3,5 minutes (2023), Claude 3.7 Sonnet environ 1 heure (février 2025), GPT-5 environ 3,4 heures, Claude Opus 4.6 environ 12 heures (février 2026), Claude Mythos Preview environ 17 heures (avril 2026 ; intervalle de 8 à 55 heures)\n- Clic 5, **GPQA Diamond** (meilleur score à ce jour, mesures d'Epoch AI) : des questions de sciences de niveau doctorat ; les docteurs du domaine font 65 % (Rein et al.). GPT-4 36 % (2023), o1 77 % (décembre 2024), Gemini 3 Pro 93 % (novembre 2025), GPT-6 Astra 96 % (septembre 2026)\n- Clic 6, **SWE-bench Verified** : 500 vrais bugs de projets open source, chacun vérifié par des humains. De 31 % (GPT-4o, novembre 2024) à 84 % (Claude Opus 4.7, avril 2026)\n- Clic 7, des tests conçus pour être trop durs. **Humanity's Last Exam** (2 500 questions d'experts, janvier 2025) : de 5 % (septembre 2024) à 55 % (GPT-6 Astra). **FrontierMath** (problèmes de recherche nouveaux, des heures ou des jours pour un mathématicien ; moins de 2 % au lancement, novembre 2024) : d'environ 1 % à 94 % (GPT-6 Astra, sur la version corrigée de 2026)\n- Clic 8, **ARC-AGI-2** (des énigmes visuelles, chacune résolue par au moins deux personnes ordinaires dans une étude sur 400 personnes ; mars 2025) : de 0 % à 95 % (GPT-6 Astra, dans son réglage le plus cher). La médaille : juillet 2025, Gemini Deep Think obtient 35 sur 42 aux Olympiades internationales de mathématiques, l'or, noté par l'IMO (environ 8 % des élèves ont l'or)\n- Clic 9, **projection** pour octobre 2027, des tendances et pas des promesses : coût d'entraînement au-delà d'un milliard de dollars (les mots d'Epoch AI ; ×2,4 par an donne environ 3,6 milliards) ; électricité environ 1 100 GWh (233 MW × 2,1 par an, environ 520 MW, pour la même durée d'entraînement que Grok 3, environ 90 jours : une hypothèse), une année pour environ 100 000 foyers américains ; des tâches de 3 à 8 semaines de travail (METR : doublement tous les 7 mois, ou tous les 131 jours depuis 2023). Mémoire et scores ne sont pas projetés : les tests sont presque au plafond et de plus durs sont en cours d'écriture"
   },
   "01-progress/transitionIn": {
     "source": "How did we get here so fast? Seven years, in numbers.",
@@ -336,12 +336,12 @@
     "text": "Montrer que les assistants actuels peuvent être branchés sur les mails, l'agenda, les fichiers, le navigateur, les paiements et le code."
   },
   "01-connected/takeaway": {
-    "source": "An assistant is no longer a chat window: it plugs into the tools of your daily life.",
-    "text": "Un assistant n'est plus une fenêtre de discussion : il se branche sur les outils de votre quotidien."
+    "source": "An agent is a model that can call tools: it no longer just answers, it acts in your mail, files, browser and payments.",
+    "text": "Un agent, c'est un modèle qui peut appeler des outils : il ne fait plus que répondre, il agit dans vos mails, vos fichiers, votre navigateur et vos paiements."
   },
   "01-connected/speakerNotes": {
-    "source": "- The assistant sits in the middle; connectors appear one by one\n- Email and calendar: read, draft, schedule\n- Files: search and summarize your documents\n- Browser: it clicks and fills forms on websites\n- Shopping and payments: protocols now exist for agents to pay\n- Code: it writes and runs programs",
-    "text": "- L'assistant au centre ; les connecteurs apparaissent un par un\n- Mails et agenda : lire, rédiger, planifier\n- Fichiers : chercher et résumer vos documents\n- Navigateur : il clique et remplit des formulaires sur des sites\n- Achats et paiements : des protocoles existent désormais pour que des agents paient\n- Code : il écrit et lance des programmes"
+    "source": "- The difference between a chatbot and an **agent**: an agent can **call tools**\n- The assistant sits in the middle; connectors appear one by one\n- **Email and calendar**: read, draft, schedule\n- **Files**: search and summarise your documents\n- **Browser**: it clicks and fills forms on websites\n- **Shopping and payments**: protocols now exist for agents to pay\n- **Code**: it writes and runs programs\n- Every connector is a permission we choose to give: next slide",
+    "text": "- La différence entre un chatbot (*agent conversationnel*) et un **agent** : l'agent peut **appeler des outils**\n- L'assistant est au centre ; les connecteurs apparaissent un par un\n- **Mail et agenda** : lire, rédiger, planifier\n- **Fichiers** : chercher et résumer vos documents\n- **Navigateur** : il clique et remplit des formulaires sur des sites\n- **Achats et paiements** : des protocoles existent déjà pour que des agents paient\n- **Code** : il écrit et exécute des programmes\n- Chaque connecteur est une permission qu'on choisit de donner : slide suivante"
   },
   "01-connected/transitionIn": {
     "source": "From answering to acting.",
@@ -360,12 +360,12 @@
     "text": "Montrer que ce qu'un assistant peut faire dépend de ce qu'on l'autorise à toucher, jusqu'à dépenser de l'argent."
   },
   "01-permissions/takeaway": {
-    "source": "The same model has very different power depending on what we let it touch.",
-    "text": "Le même modèle a un pouvoir très différent selon ce qu'on le laisse toucher."
+    "source": "Because agents look more and more reliable, we keep giving them more permissions, until the day it really matters.",
+    "text": "Parce que les agents ont l'air de plus en plus fiables, on leur donne toujours plus de permissions, jusqu'au jour où ça compte vraiment."
   },
   "01-permissions/speakerNotes": {
-    "source": "- Same model; only its permissions change\n- **Do:** flip the switches: read files, write files, terminal, browser, money\n- Each switch turns advice into action\n- Money is real: published tools already let agents make transfers\n- **Ask:** which switch would make you hesitate on your own computer?",
-    "text": "- Même modèle ; seules ses permissions changent\n- **Faire :** activer les interrupteurs : lire des fichiers, écrire des fichiers, terminal, navigateur, argent\n- Chaque interrupteur transforme un conseil en action\n- L'argent, c'est réel : des outils publiés permettent déjà à des agents de faire des virements\n- **Demander :** quel interrupteur vous ferait hésiter sur votre propre ordinateur ?"
+    "source": "- Same model; only what we allow it to touch changes: read files, write files, terminal, browser, money. Each switch turns advice into action\n- We say some things are risky; in practice, **productivity** and convenience push us to accept more and more risky actions\n- The agent looks more and more reliable, so we feel it will be fine. Because it looks reliable, we give it more permissions, until the day it really matters\n- This has a name: **automation bias**. The more reliable a system looks, the less we check it\n- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me\n- Money is real: published tools already let agents make transfers\n- Question to the room: which switch would make you hesitate on your own computer?",
+    "text": "- Même modèle ; seul change ce qu'on l'autorise à toucher : lire des fichiers, écrire des fichiers, le terminal, le navigateur, l'argent. Chaque interrupteur transforme un conseil en action\n- On dit que certaines choses sont risquées ; en pratique, la **productivité** et le confort nous poussent à accepter de plus en plus d'actions risquées\n- L'agent a l'air de plus en plus fiable, alors on se dit que ça ira. Parce qu'il a l'air fiable, on lui donne plus de permissions, jusqu'au jour où ça compte vraiment\n- Ça a un nom : le **biais d'automatisation**. Plus un système a l'air fiable, moins on le vérifie\n- Mon cas : j'ai donné au mien accès à presque tout. Il peut **dépenser de l'argent** (des crédits à mon nom) et **modifier des bases de données**, ce que je ne permettais pas avant. L'avantage : il travaille **deux heures** sans moi\n- L'argent est réel : des outils publiés permettent déjà à des agents de faire des virements\n- Question à la salle : quel interrupteur vous ferait hésiter sur votre propre ordinateur ?"
   },
   "01-permissions/transitionIn": {
     "source": "The connections exist; what matters is what we switch on.",
@@ -384,12 +384,12 @@
     "text": "Montrer une vraie tâche confiée par le présentateur à un assistant d'IA, enregistrée à l'écran."
   },
   "01-personal-demo/takeaway": {
-    "source": "This is not a lab demo: it is an ordinary person's ordinary use.",
-    "text": "Ce n'est pas une démo de laboratoire : c'est un usage ordinaire, par une personne ordinaire."
+    "source": "This is not a lab demo: it is my everyday use, and it already works.",
+    "text": "Ce n'est pas une démo de labo : c'est mon usage de tous les jours, et ça marche déjà."
   },
   "01-personal-demo/speakerNotes": {
-    "source": "- What I asked, in one sentence\n- Which product and model, and when I recorded it\n- **Do:** play; pause where it acts on its own\n- Point at the moment it asks before acting\n- What it got wrong, if anything",
-    "text": "- Ce que je lui ai demandé, en une phrase\n- Quel produit, quel modèle, et quand je l'ai enregistré\n- **Faire :** lancer ; mettre en pause quand il agit seul\n- Montrer le moment où il demande avant d'agir\n- Ce qu'il a raté, s'il a raté quelque chose"
+    "source": "- What I asked, in one sentence; which product and model, and when I recorded it\n- The point: show what it can do, and that I use it every day\n- Pause where it acts on its own; point at the moment it asks before acting\n- What it got wrong, if anything\n- In many companies permissions are restricted, Copilot does not do all of this, many people are on Windows; but in fact, this is what it is: **it is doable today**",
+    "text": "- Ce que je lui ai demandé, en une phrase ; quel produit et quel modèle, et quand je l'ai enregistré\n- Le but : montrer ce qu'il sait faire, et que je l'utilise tous les jours\n- Mettre en pause quand il agit seul ; montrer le moment où il demande avant d'agir\n- Ce qu'il a raté, s'il a raté quelque chose\n- Dans beaucoup d'entreprises, les permissions sont limitées, Copilot ne fait pas tout ça, beaucoup de gens sont sur Windows ; mais dans les faits, voilà ce que c'est : **c'est faisable aujourd'hui**"
   },
   "01-personal-demo/transitionIn": {
     "source": "From the switches to a real run.",
@@ -408,12 +408,12 @@
     "text": "Montrer, avec du vrai JSON, qu'un modèle ne fait qu'écrire du texte et que le logiciel autour exécute les outils."
   },
   "01-tool-call/takeaway": {
-    "source": "The model writes a request in a precise format; the software does the action and reports back.",
-    "text": "Le modèle écrit une demande dans un format précis ; le logiciel fait l'action et lui rend le résultat."
+    "source": "An agent is still a language model: it writes a structured request, and the software around it does the action and hands back the result.",
+    "text": "Un agent reste un modèle de langage : il écrit une demande structurée, et le logiciel autour fait l'action et lui rend le résultat."
   },
   "01-tool-call/speakerNotes": {
-    "source": "- Same question on both sides: who won last night's match? (illustrative)\n- **Do:** step 1, the chatbot alone: it cannot know, its knowledge stops at training\n- **Do:** step 2, the agent side: the software tells the model it has a web_search tool\n- **Do:** step 3, the model does not answer: it writes a tool call, in JSON\n- Key point: the model only writes text; the software reads it and runs the search\n- **Do:** steps 4 and 5, the results come back, then an answer that cites them\n- Everything an agent does is this, repeated",
-    "text": "- Même question des deux côtés : qui a gagné le match d'hier soir ? (exemple illustratif)\n- **Faire :** étape 1, le chatbot (*agent conversationnel*) seul : il ne peut pas savoir, ses connaissances s'arrêtent à l'entraînement\n- **Faire :** étape 2, côté agent : le logiciel dit au modèle qu'il dispose d'un outil web_search\n- **Faire :** étape 3, le modèle ne répond pas : il écrit un tool call (*appel d'outil*), en JSON\n- Point clé : le modèle n'écrit que du texte ; le logiciel le lit et lance la recherche\n- **Faire :** étapes 4 et 5, les résultats reviennent, puis une réponse qui les cite\n- Tout ce que fait un agent, c'est ceci, répété"
+    "source": "- An agent is still a **language model**. In its context, hidden from you, the application describes the tools it may call\n- Calling a tool just means **writing text**: not free text for you, but **structured text** (JSON) meant for the software\n- Same question on both sides (illustrative): the chatbot alone cannot know, its knowledge stops at training; the agent writes a tool call instead of answering\n- The software reads it and does the work: calls an API, runs a search, runs code. Ordinary computing, as it always existed\n- The result comes back to the model as if **you** were answering the chatbot (a message with its own \"tool\" role), often dense and complicated\n- Then the model either calls another tool, or, once it has acted and has what it needs, answers you in plain, clear language\n- Switch examples (the umbrella in Bruges, and others): the same pattern every time\n- Why models are good at this: they read a lot of **code** in training, about **17%** of Llama 3's training text, so they write logical, structured text well\n- It also took **precision** (in structured text, one wrong character breaks everything) and **large context windows**, because the tool descriptions must be there **at every call**\n- In practice: at the start, the app loads the tools the agent may use at the top of its context (up to about 1,500 pages for large models); when the conversation is compacted, the app gives them again. Apps with many tools load only some and let the model search for the rest\n- The model keeps nothing between calls: at each turn, the app sends everything again (instructions, tools, conversation)\n- Structured does not mean error-free: the model can write a malformed call or wrong arguments. \"Structured outputs\" guarantee the **form**, not the **content**; the software checks the call and sends errors back, the model fixes and retries",
+    "text": "- Un agent reste un **modèle de langage**. Dans son contexte, caché pour toi, l'application décrit les outils qu'il peut appeler\n- Appeler un outil, c'est juste **écrire du texte** : pas du texte libre pour toi, mais du **texte structuré** (JSON) destiné au logiciel\n- Même question des deux côtés (exemple illustratif) : le chatbot seul ne peut pas savoir, ses connaissances s'arrêtent à l'entraînement ; l'agent, au lieu de répondre, écrit un appel d'outil\n- Le logiciel le lit et fait le travail : appel à une API, recherche, exécution de code. De l'informatique ordinaire, qui a toujours existé\n- Le résultat revient au modèle comme si c'était **toi** qui répondais au chatbot (un message avec son propre rôle « tool »), souvent dense et compliqué\n- Ensuite, soit le modèle appelle un autre outil, soit, une fois qu'il a agi et qu'il a ce qu'il lui faut, il te répond en langage simple et clair\n- Changer d'exemple (le parapluie à Bruges, et les autres) : toujours le même schéma\n- Pourquoi les modèles sont bons à ça : ils ont lu énormément de **code** à l'entraînement, environ **17 %** des textes d'entraînement de Llama 3, donc ils écrivent bien du texte logique et structuré\n- Il a aussi fallu de la **précision** (dans du texte structuré, un seul mauvais caractère casse tout) et de **grandes fenêtres de contexte**, parce que la description des outils doit être là **à chaque appel**\n- En pratique : au départ, l'application charge les outils auxquels l'agent a droit en tête de son contexte (jusqu'à environ 1 500 pages pour les grands modèles) ; quand la conversation est compactée, l'application les redonne. Les applications avec beaucoup d'outils n'en chargent qu'une partie et laissent le modèle chercher les autres\n- Le modèle ne garde rien entre deux appels : à chaque tour, l'application renvoie tout (instructions, outils, conversation)\n- Structuré ne veut pas dire sans erreur : le modèle peut écrire un appel mal formé ou de mauvais arguments. Les « structured outputs » garantissent la **forme**, pas le **fond** ; le logiciel vérifie l'appel et renvoie les erreurs, le modèle corrige et réessaie"
   },
   "01-tool-call/transitionIn": {
     "source": "Before a complex request, one single tool call.",
@@ -432,12 +432,12 @@
     "text": "Rendre visible chaque étape d'une demande complexe : tool calls, sous-agents en parallèle, résultats fusionnés, accord humain avant de payer."
   },
   "01-one-request/takeaway": {
-    "source": "Behind one sentence, an agent runs many small steps, and can stop to ask you.",
-    "text": "Derrière une seule phrase, un agent enchaîne beaucoup de petites étapes, et peut s'arrêter pour vous demander."
+    "source": "Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.",
+    "text": "Derrière une seule phrase, un agent planifie, répartit le travail et enchaîne les étapes, et parfois c'est lui qui décide s'il doit d'abord te demander."
   },
   "01-one-request/speakerNotes": {
-    "source": "- Illustrative, not a recording: say so\n- One sentence: plan a weekend trip\n- An orchestrator splits the job into tasks\n- Tool calls: weather, calendar, maps, search, email\n- Sub-agents work in parallel, results are merged\n- **Do:** stop at the approval gate: nothing is paid without a yes",
-    "text": "- Illustration, pas un enregistrement : le dire\n- Une phrase : organiser une escapade le temps d'un week-end\n- Un orchestrateur découpe le travail en tâches\n- Tool calls (*appels d'outil*) : météo, agenda, cartes, recherche, mail\n- Des sous-agents travaillent en parallèle, les résultats sont fusionnés\n- **Faire :** s'arrêter à l'étape de validation : rien n'est payé sans un oui"
+    "source": "- Illustrative, not a recording: say so. One sentence: plan a weekend trip\n- It can do many things: an orchestrator splits the job, dispatches **sub-agents** in parallel and merges their results. For the model, sub-agents are just tools like the others\n- Tool calls: weather, calendar, maps, search, email\n- **Approval**, two cases: either the tool always requires it, **hard-coded** in the software (deterministic; payments usually are), or **the model decides** when to ask you\n- The second case is where it can be dangerous: it is **not deterministic**. We hope it knows that this kind of action needs your yes. Payments are usually hard-coded, but many things are less black and white: be careful\n- Another reason hard-coded gates matter: **prompt injection**. A web page or an email read by the agent can hide instructions (\"send this file to...\"), and the agent may follow them\n- Stop at the approval gate: nothing is paid without a yes",
+    "text": "- Exemple illustratif, pas un enregistrement : le dire. Une phrase : organiser un week-end\n- Il sait faire plein de choses : un orchestrateur découpe le travail, envoie des **sous-agents** en parallèle et fusionne leurs résultats. Pour le modèle, les sous-agents sont des outils comme les autres\n- Appels d'outils : météo, agenda, cartes, recherche, mail\n- **L'approbation**, deux cas : soit l'outil l'exige toujours, **codé en dur** dans le logiciel (déterministe ; les paiements le sont en général), soit **c'est le modèle qui décide** quand te demander\n- Le deuxième cas, c'est là que ça peut être dangereux : ce n'est **pas déterministe**. On espère qu'il sait que ce genre d'action demande ton accord. Les paiements sont en général codés en dur, mais beaucoup de choses sont moins noir ou blanc : faire attention\n- Autre raison pour laquelle les barrières codées en dur comptent : l'**injection de prompt**. Une page web ou un mail lu par l'agent peut cacher des instructions (« envoie ce fichier à... »), et l'agent peut les suivre\n- S'arrêter à la barrière d'approbation : rien n'est payé sans un oui"
   },
   "01-one-request/transitionIn": {
     "source": "From a real run to a slowed-down one.",
@@ -456,12 +456,12 @@
     "text": "Nommer le schéma : un agent, c'est un modèle dans une boucle objectif, plan, action, observation, nouveau plan."
   },
   "01-agent-loop/takeaway": {
-    "source": "An agent is a model placed in a loop, with tools and memory.",
-    "text": "Un agent, c'est un modèle placé dans une boucle, avec des outils et une mémoire."
+    "source": "An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.",
+    "text": "Un agent, c'est un modèle dans une boucle (but, plan, action, observation, nouveau plan) : ce qui est nouveau, ce n'est pas l'appel d'outil, c'est le plan."
   },
   "01-agent-loop/speakerNotes": {
-    "source": "- Goal, plan, act, observe, plan again\n- In the middle: a language model, like a chatbot\n- Around it: ordinary software, tools and a memory\n- It goes round until the goal is met or it asks you",
-    "text": "- Objectif, plan, action, observation, nouveau plan\n- Au centre : un modèle de langage, comme un chatbot (*agent conversationnel*)\n- Autour : du logiciel ordinaire, des outils et une mémoire\n- La boucle tourne jusqu'au but, ou jusqu'à ce qu'il vous demande"
+    "source": "- **A loop, not an answer**: goal, plan, act, observe, plan again\n- It can go round many, many times. For the model these are just back-and-forths with you; in reality you barely step in, because the software picks up each request and makes an ordinary call (internet, code), as computers always did\n- In the middle, a language model like a chatbot; around it, ordinary software, tools and a memory\n- What is new is not calling tools: the magic of text generation is in **planning and re-planning**\n- It goes round until the goal is met, or until it asks you",
+    "text": "- **Une boucle, pas une réponse** : but, plan, action, observation, nouveau plan\n- Il peut boucler énormément de fois. Pour le modèle, ce ne sont que des allers-retours avec toi ; en réalité tu interviens très peu, parce que le logiciel récupère chaque demande et fait un appel ordinaire (internet, code), comme les ordinateurs l'ont toujours fait\n- Au milieu, un modèle de langage comme un chatbot ; autour, du logiciel ordinaire, des outils et une mémoire\n- Ce qui est nouveau, ce n'est pas l'appel d'outils : la magie de la génération de texte est dans le **plan et le re-plan**\n- Il tourne jusqu'à ce que le but soit atteint, ou jusqu'à ce qu'il te demande"
   },
   "01-agent-loop/transitionIn": {
     "source": "From one example to the general pattern.",
@@ -492,12 +492,12 @@
     "text": "Donner une très courte histoire du domaine, de la machine universelle de Turing au go, au Transformer, à GPT-2 et à GPT-3."
   },
   "02-short-history/takeaway": {
-    "source": "AI is an old idea; what changed recently is learning from huge amounts of data.",
-    "text": "L'IA est une vieille idée ; ce qui a changé récemment, c'est l'apprentissage sur d'énormes quantités de données."
+    "source": "AI is an old idea; of its two schools, writing knowledge by hand or letting the machine learn, learning from data at huge scale has won.",
+    "text": "L'IA est une vieille idée ; de ses deux écoles, écrire le savoir à la main ou laisser la machine apprendre, c'est l'apprentissage sur des données à très grande échelle qui a gagné."
   },
   "02-short-history/speakerNotes": {
-    "source": "- Start, 1936: Turing describes one universal machine that can run any step-by-step procedure, the idea behind every computer\n- Click 1, 1939 to 1945: at Bletchley Park, Turing helps break Enigma. Polish cryptanalysts (Rejewski, Różycki, Zygalski) broke it first and shared their methods in July 1939. The Bombe starts from a guessed word (\"Wetterbericht\", weather report) and searches for the settings that fit\n- **Do:** let the search run (about 12 seconds): drums spin, settings are rejected, \"Stop\", then the message decodes; \"Replay the search\" restarts it\n- Nuance: this is search, trying settings one by one and rejecting contradictions; learning, later in the talk, nudges numbers a little after each mistake. Both find settings from data\n- Click 2, 1956: the name \"artificial intelligence\". Click 3, 1958: the perceptron, the first neural network that learns; the press already promises a computer that will read\n- Click 4, 1970s to 1980s: the AI winters. Promises unmet, simple networks hit their limits, rule-based expert systems prove brittle, funding dries up twice\n- Click 5, 1997: Deep Blue beats Kasparov at chess with search and scoring rules written by people\n- Click 6, 2012: a neural network for images (a CNN) wins the ImageNet contest, trained on two gaming graphics cards: deep learning takes off\n- Click 7, 2016: AlphaGo beats Lee Sedol at Go, 4 games to 1. Contrast with Deep Blue: Deep Blue followed rules and search written by people; AlphaGo learned from games, first thousands of human games, then games against itself\n- Click 8, 2017: the Transformer, the T in GPT: it reads all the words at once, so training spreads over thousands of chips; far faster, but hungry for electricity. Clicks 9 and 10: GPT-2 (2019) and GPT-3 (2020), models only, no company names yet",
-    "text": "- Début, 1936 : Turing décrit une seule machine universelle capable d'exécuter n'importe quelle procédure pas à pas, l'idée derrière tout ordinateur\n- Clic 1, 1939 à 1945 : à Bletchley Park, Turing aide à casser Enigma. Des cryptanalystes polonais (Rejewski, Różycki, Zygalski) l'avaient cassée les premiers et ont partagé leurs méthodes en juillet 1939. La Bombe part d'un mot deviné (« Wetterbericht », bulletin météo) et cherche les réglages qui collent\n- **Faire :** laisser la recherche tourner (une douzaine de secondes) : les tambours tournent, des réglages sont rejetés, « Stop », puis le message se décode ; « Rejouer la recherche » la relance\n- Nuance : c'est de la recherche, essayer les réglages un par un et rejeter les contradictions ; l'apprentissage, plus loin dans la présentation, ajuste un peu des nombres après chaque erreur. Les deux trouvent des réglages à partir de données\n- Clic 2, 1956 : le nom « intelligence artificielle ». Clic 3, 1958 : le perceptron, le premier neural network (*réseau de neurones*) qui apprend ; la presse promet déjà un ordinateur qui saura lire\n- Clic 4, années 1970 et 1980 : les hivers de l'IA. Promesses non tenues, réseaux simples à bout de souffle, systèmes experts à règles trop fragiles, financements taris deux fois\n- Clic 5, 1997 : Deep Blue bat Kasparov aux échecs avec une recherche et des règles de notation écrites par des humains\n- Clic 6, 2012 : un neural network pour les images (un CNN) gagne le concours ImageNet, entraîné sur deux cartes graphiques de jeu vidéo : le deep learning (*apprentissage profond*) décolle\n- Clic 7, 2016 : AlphaGo bat Lee Sedol au go, 4 parties à 1. Contraste avec Deep Blue : Deep Blue suivait des règles et une recherche écrites par des humains ; AlphaGo a appris à partir de parties, d'abord des milliers de parties humaines, puis des parties contre lui-même\n- Clic 8, 2017 : le Transformer, le T de GPT : il lit tous les mots à la fois, donc l'entraînement se répartit sur des milliers de puces ; bien plus rapide, mais gourmand en électricité. Clics 9 et 10 : GPT-2 (2019) et GPT-3 (2020), des modèles seulement, pas encore de noms d'entreprises"
+    "source": "- Start, 1936: **Alan Turing** describes the universal machine, one machine that can run any step-by-step procedure: the theory behind every computer (Babbage and Ada Lovelace had imagined a programmable machine a century earlier)\n- You may have seen the film **The Imitation Game** (2014, Benedict Cumberbatch): Turing at Bletchley Park\n- Click 1, 1939 to 1945: Turing helps break **Enigma**. Polish cryptanalysts (Rejewski, Różycki, Zygalski) broke it first and shared their methods in July 1939\n- The **Bombe** starts from a **guessed word** in the message (\"Wetterbericht\", weather report) and searches for the Enigma settings that fit. Let the search run (about 12 seconds); \"Replay the search\" restarts it\n- Why I like it: the size and design of the machine were chosen by people, like a model's **hyperparameters** (its shape, how many neurons). But the position of each rotor is not set by hand: the machine finds it from a piece of data\n- Once found, every message **of that day and that network** decodes: the settings changed every day. About **1.6 × 10^20** possible settings; the Bombe does not try them all, logic rules out whole families at once\n- Not AI, and say so: it is a **search** that rejects contradictions, from a single example, with no reward. But the picture holds: a big machine that, from data, finds by itself the exact setting of its little gears\n- Click 2, 1956: the name \"artificial intelligence\". Click 3, 1958: the **perceptron**, the first neural network that learns; the press already promises a computer that will read\n- Two schools, all along: those who **write knowledge in** by hand (symbolic AI: McCarthy, Minsky, Newell and Simon) and those who **let the machine learn** (connectionism: Rosenblatt's perceptron, later Hinton, LeCun, Bengio). The famous duel: Minsky against Rosenblatt\n- Click 4, the **AI winters** (two of them, 1970s and late 1980s): promises unmet, simple networks hit their limits (Minsky and Papert, 1969), expert systems proved brittle, funding dried up. Also, not enough **computing power**: what we do today is possible because we can build the hardware for it\n- Click 5, 1997: **Deep Blue** beats Kasparov: classic AI, search (about 200 million positions a second) plus scoring rules written by people. A point for the \"knowledge\" school\n- Click 6, 2012: **AlexNet**, a neural network for images (a CNN), wins ImageNet (top-5 error 15.3%, the next best 26.2%), trained on two gaming graphics cards: deep learning takes off\n- Click 7, 2016: **AlphaGo** beats Lee Sedol, 4 games to 1; many experts expected it a decade later. It learned from games: first human games, then games against itself\n- Spoiler: the school that lets the machine learn has clearly won. Rich Sutton called it **\"The Bitter Lesson\"** (2019): general methods that use more computing beat built-in human knowledge. Often the winner is simple, with lots of data, lots of computing, lots of money\n- Click 8, 2017: the **Transformer** (Google), the **T in GPT**. Just remember: a mathematical trick to process all the words **in parallel** instead of one after another, so training spreads over thousands of chips at once. It made possible models that could never have been trained before, at an enormous electricity cost\n- Click 9, 2019: **GPT-2**, barely noticed by the public (still often incoherent), though OpenAI first called it too dangerous to release in full\n- Click 10, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing (about $2.1 million according to Epoch AI; AI Digest says about $690,000), not counting research. It worked: developers and researchers were stunned\n- The public boom came two years later: **ChatGPT**, 30 November 2022, built on **GPT-3.5**, a GPT-3 trained further to chat. That difference is the base model and assistant story at the end of this chapter",
+    "text": "- Départ, 1936 : **Alan Turing** décrit la machine universelle, une seule machine capable d'exécuter n'importe quelle procédure pas à pas : la théorie derrière tous les ordinateurs (Babbage et Ada Lovelace avaient imaginé une machine programmable un siècle plus tôt)\n- Vous avez peut-être vu le film **The Imitation Game** (*Imitation Game*, 2014, Benedict Cumberbatch) : Turing à Bletchley Park\n- Clic 1, 1939 à 1945 : Turing aide à casser **Enigma**. Des cryptologues polonais (Rejewski, Różycki, Zygalski) l'avaient cassée les premiers et ont partagé leurs méthodes en juillet 1939\n- La **Bombe** part d'un **mot deviné** dans le message (« Wetterbericht », le bulletin météo) et cherche les réglages d'Enigma qui collent. Laisser tourner la recherche (environ 12 secondes) ; « Rejouer la recherche » la relance\n- Pourquoi j'aime cette machine : sa taille et sa conception ont été choisies par des humains, comme les **hyperparamètres** d'un modèle (sa forme, combien de neurones). Mais la position de chaque rotor n'est pas réglée à la main : la machine la trouve à partir d'une donnée\n- Une fois trouvés, tous les messages **de ce jour et de ce réseau** se décodent : les réglages changeaient chaque jour. Environ **1,6 × 10^20** réglages possibles ; la Bombe ne les essaie pas tous, la logique élimine des familles entières d'un coup\n- Ce n'est pas de l'IA, et le dire : c'est une **recherche** qui rejette les contradictions, à partir d'un seul exemple, sans récompense. Mais l'image tient : une grosse machine qui, à partir de données, trouve toute seule le réglage exact de ses petits engrenages\n- Clic 2, 1956 : le nom « intelligence artificielle ». Clic 3, 1958 : le **perceptron**, le premier réseau de neurones qui apprend ; la presse promet déjà un ordinateur qui saura lire\n- Deux écoles, tout du long : ceux qui **écrivent le savoir** à la main (l'IA symbolique : McCarthy, Minsky, Newell et Simon) et ceux qui **laissent la machine apprendre** (le connexionnisme : le perceptron de Rosenblatt, plus tard Hinton, LeCun, Bengio). Le duel célèbre : Minsky contre Rosenblatt\n- Clic 4, les **hivers de l'IA** (deux, dans les années 1970 et à la fin des années 1980) : promesses non tenues, réseaux simples arrivés à leurs limites (Minsky et Papert, 1969), systèmes experts trop fragiles, financements coupés. Et pas assez de **puissance de calcul** : ce qu'on fait aujourd'hui est possible parce qu'on sait construire le matériel pour ça\n- Clic 5, 1997 : **Deep Blue** bat Kasparov : de l'IA classique, une recherche (environ 200 millions de positions par seconde) plus des règles d'évaluation écrites par des humains. Un point pour l'école du « savoir »\n- Clic 6, 2012 : **AlexNet**, un réseau de neurones pour les images (un CNN), gagne ImageNet (15,3 % d'erreur top-5, le suivant 26,2 %), entraîné sur deux cartes graphiques de jeu vidéo : le deep learning (*apprentissage profond*) décolle\n- Clic 7, 2016 : **AlphaGo** bat Lee Sedol, 4 parties à 1 ; beaucoup d'experts l'attendaient dix ans plus tard. Il a appris de parties : d'abord des parties humaines, puis contre lui-même\n- Spoiler : l'école qui laisse la machine apprendre a clairement gagné. Rich Sutton l'a appelé **« The Bitter Lesson »** (*la leçon amère*, 2019) : les méthodes générales qui profitent de plus de calcul battent le savoir humain écrit à la main. Souvent, le gagnant est simple, avec plein de données, plein de calcul, plein d'argent\n- Clic 8, 2017 : le **Transformer** (Google), le **T de GPT**. Retenir juste : une astuce mathématique pour traiter tous les mots **en parallèle** au lieu de l'un après l'autre, donc l'entraînement se répartit sur des milliers de puces en même temps. Ça a rendu possibles des modèles qu'on n'aurait jamais pu entraîner avant, à un coût électrique énorme\n- Clic 9, 2019 : **GPT-2**, passé presque inaperçu du grand public (encore souvent incohérent), même si OpenAI l'a d'abord jugé trop dangereux pour le publier en entier\n- Clic 10, 2020 : **GPT-3**, le grand pari : 100 fois plus gros, quelques millions de dollars de calcul (environ 2,1 millions $ selon Epoch AI ; AI Digest dit environ 690 000 $), sans compter la recherche. Et ça a marché : les développeurs et les chercheurs sont bluffés\n- Le boom du grand public vient deux ans plus tard : **ChatGPT**, le 30 novembre 2022, construit sur **GPT-3.5**, un GPT-3 entraîné en plus à discuter. Cette différence, c'est l'histoire du modèle de base et de l'assistant, à la fin de ce chapitre"
   },
   "02-short-history/transitionIn": {
     "source": "Before opening the box, where it comes from.",
@@ -516,12 +516,12 @@
     "text": "Situer les mots : l'IA contient le machine learning, qui contient les neural networks, qui contiennent les modèles de langage."
   },
   "02-envelopes/takeaway": {
-    "source": "AI is the big family; language models are one small, recent branch of it.",
-    "text": "L'IA est la grande famille ; les modèles de langage en sont une branche petite et récente."
+    "source": "\"AI\" is a buzzword for a big family: today it mostly means machine learning, often neural networks, and language models are one recent branch.",
+    "text": "« IA » est un mot-valise pour une grande famille : aujourd'hui, ça veut surtout dire machine learning, souvent réseaux de neurones, et les modèles de langage en sont une branche récente."
   },
   "02-envelopes/speakerNotes": {
-    "source": "- AI: anything that imitates human intelligence, even rules written by people\n- Machine learning: the rules are learned from examples\n- Neural networks, also called \"deep learning\" (many layers): one way of learning, loosely inspired by the brain\n- Language models (LLMs): neural networks trained on text\n- Each circle sits inside the previous one",
-    "text": "- IA : tout ce qui imite l'intelligence humaine, même des règles écrites par des humains\n- Machine learning (*apprentissage automatique*) : les règles sont apprises à partir d'exemples\n- Neural networks (*réseaux de neurones*), aussi appelés deep learning (*apprentissage profond*), car ils ont beaucoup de couches : une façon d'apprendre, vaguement inspirée du cerveau\n- Modèles de langage, ou LLM (*grand modèle de langage*) : des neural networks entraînés sur du texte\n- Chaque cercle est inclus dans le précédent"
+    "source": "- \"Artificial intelligence\" is a buzzword: it means everything and nothing. Today, \"AI\" usually means **machine learning**, and often **neural networks**\n- **AI**: anything that imitates intelligence, even rules written by people\n- **Classic AI is a lecture**: you listen to the teacher. The teacher must give their time and can be wrong; the student can be faster and more tireless than the teacher, but will not think differently from them (Deep Blue beat Kasparov, but invented no new idea of chess)\n- **Machine learning**: the model learns by itself. It is a **practical class**: the exercise is not enough, it must be **corrected**. Without correction, the student never learns from mistakes\n- Correction needs **labels**: plenty of images are useless to tell a car from a motorbike if nobody says which is which. That is why CAPTCHAs ask you to click on traffic lights (we come back to it)\n- The catch: it needs **a lot of data**\n- **Neural networks** (also \"deep learning\", many layers): one kind of machine learning, loosely inspired by the brain. Neurons are linked by synapses whose strength changes as we learn; part of the wiring is there at birth (evolution), the rest forms throughout life. An artificial \"weight\" imitates that strength\n- A brain has about **86 billion** neurons, each linked to thousands of others; in an artificial network, each neuron of a layer is often linked to every neuron of the next layer\n- **Language models (LLMs)**, GPT and the others: neural networks with a precise architecture (the Transformer), built to generate text; coming later\n- Each circle sits inside the previous one",
+    "text": "- « Intelligence artificielle », c'est un mot-valise : ça veut tout et rien dire. Aujourd'hui, « IA » veut surtout dire **machine learning** (*apprentissage automatique*), et souvent **réseaux de neurones**\n- **IA** : tout ce qui imite l'intelligence, même des règles écrites par des humains\n- **L'IA classique, c'est un cours magistral** : on écoute le professeur. Le professeur doit donner de son temps et peut se tromper ; l'élève peut être plus rapide et plus infatigable que lui, mais il ne pensera pas autrement que lui (Deep Blue a battu Kasparov, mais n'a inventé aucune nouvelle idée des échecs)\n- **Le machine learning** : le modèle apprend lui-même. C'est un **TP** : l'exercice ne suffit pas, il faut le **corriger**. Sans correction, l'élève n'apprend jamais de ses erreurs\n- La correction demande des **labels** (*étiquettes*) : plein d'images ne servent à rien pour distinguer une voiture d'une moto si personne ne dit laquelle est laquelle. C'est pour ça que les CAPTCHA vous font cliquer sur des feux rouges (on y revient)\n- L'inconvénient : il faut **beaucoup de données**\n- **Les réseaux de neurones** (aussi « deep learning », beaucoup de couches) : une sorte de machine learning, vaguement inspirée du cerveau. Les neurones sont reliés par des synapses dont la force change quand on apprend ; une partie du câblage est là dès la naissance (l'évolution), le reste se forme toute la vie. Un « poids » artificiel imite cette force\n- Un cerveau, c'est environ **86 milliards** de neurones, chacun relié à des milliers d'autres ; dans un réseau artificiel, chaque neurone d'une couche est souvent relié à tous les neurones de la couche suivante\n- **Les modèles de langage (LLM)**, GPT et les autres : des réseaux de neurones avec une architecture précise (le Transformer), faits pour générer du texte ; on y vient\n- Chaque cercle est à l'intérieur du précédent"
   },
   "02-envelopes/transitionIn": {
     "source": "From the history to the words it left us.",
@@ -540,12 +540,12 @@
     "text": "Présenter l'exemple fil rouge : décider si une phrase courte parle de football ou de basket."
   },
   "02-text-task/takeaway": {
-    "source": "Obvious for us, and surprisingly hard to explain to a computer.",
-    "text": "Évident pour nous, et étonnamment difficile à expliquer à un ordinateur."
+    "source": "Sorting sentences by sport is obvious for us, and surprisingly hard to explain to a computer.",
+    "text": "Classer des phrases par sport, c'est évident pour nous, et étonnamment dur à expliquer à un ordinateur."
   },
   "02-text-task/speakerNotes": {
-    "source": "- Our running example: short sentences about sport\n- The task: is this sentence about football or basketball?\n- **Ask:** which words give it away?\n- **Do:** next: a few labelled sentences for each sport\n- Obvious for us; how would you explain it to a computer?",
-    "text": "- Notre exemple fil rouge : des phrases courtes sur le sport\n- La tâche : cette phrase parle-t-elle de football ou de basket ?\n- **Demander :** quels mots la trahissent ?\n- **Faire :** ensuite : quelques phrases étiquetées pour chaque sport\n- Évident pour nous ; comment l'expliquer à un ordinateur ?"
+    "source": "- Our running example: classify short sentences, **football or basketball**\n- Question to the room: which words give it away?\n- Next click: a few labelled sentences for each sport\n- Obvious for us; how would you explain it to a computer?",
+    "text": "- Notre exemple fil rouge : classer de courtes phrases, **football ou basket**\n- Question à la salle : quels mots vous mettent sur la piste ?\n- Clic suivant : quelques phrases étiquetées pour chaque sport\n- Évident pour nous ; comment l'expliqueriez-vous à un ordinateur ?"
   },
   "02-text-task/transitionIn": {
     "source": "From the words to one concrete task.",
@@ -565,11 +565,11 @@
   },
   "02-text-rules/takeaway": {
     "source": "Rules written by hand work until they meet a case nobody thought of.",
-    "text": "Les règles écrites à la main marchent, jusqu'au jour où elles tombent sur un cas auquel personne n'avait pensé."
+    "text": "Des règles écrites à la main marchent jusqu'au jour où elles rencontrent un cas auquel personne n'avait pensé."
   },
   "02-text-rules/speakerNotes": {
-    "source": "- Classic AI: a person writes the rule\n- Here: a list of keywords for each sport\n- Right on 18 of the 24 examples\n- **Do:** a basketball sentence with \"kicked\" in it: the rule says football\n- Every exception needs a new rule, written by hand",
-    "text": "- L'IA classique : une personne écrit la règle\n- Ici : une liste de mots-clés pour chaque sport\n- Juste sur 17 des 24 exemples\n- **Faire :** une phrase de basket avec « coup de pied » : la règle dit football\n- Chaque exception demande une nouvelle règle, écrite à la main"
+    "source": "- First way: write the rule by hand. That is **classic AI**, really a program: a list of keywords for each sport\n- Right on 18 of the 24 examples\n- A basketball sentence with \"kicked\" in it: the rule says football\n- Every exception needs a new rule, written by hand: tedious\n- With a lot of time and clever tricks, hand-written programs can look like magic: a chess program cannot explore every position, so a lot of genius went into choosing what to explore. Still, it is code written by people: AI in the broad sense",
+    "text": "- Première façon : écrire la règle à la main. C'est l'**IA classique**, en fait un programme : une liste de mots-clés pour chaque sport\n- Juste sur 18 des 24 exemples\n- Une phrase de basket avec « kicked » (*shooté*) dedans : la règle dit football\n- Chaque exception demande une nouvelle règle, écrite à la main : fastidieux\n- Avec beaucoup de temps et quelques astuces, un programme écrit à la main peut avoir l'air magique : un programme d'échecs ne peut pas explorer toutes les positions, donc il a fallu beaucoup de génie pour choisir quoi explorer. Mais ça reste du code écrit par des humains : de l'IA au sens large"
   },
   "02-text-rules/transitionIn": {
     "source": "The first answer to the question.",
@@ -588,12 +588,12 @@
     "text": "Montrer le machine learning : un arbre de décision apprend ses questions à partir de phrases étiquetées."
   },
   "02-text-tree/takeaway": {
-    "source": "In machine learning, people give examples and the computer finds the rule.",
-    "text": "En machine learning, on donne des exemples et l'ordinateur trouve la règle."
+    "source": "In machine learning, people give labelled examples and the computer finds the rule by itself.",
+    "text": "En machine learning, on donne des exemples étiquetés et l'ordinateur trouve la règle tout seul."
   },
   "02-text-tree/speakerNotes": {
-    "source": "- We give 24 sentences, each labelled by a person\n- **Do:** the learned tree, alone. Its only question: \"does the sentence contain the word X?\"\n- It picked the question that best separates the examples, then repeated: \"net\"? basketball. Else \"hoop\"? basketball. Else football\n- **Do:** one example goes down the tree: path lit, word found marked, answer on the right\n- **Do:** \"Next example\" for more. \"Previous example\" from the first jumps to its one mistake (a dunk: no net, no hoop)\n- Right on 23 of 24, and nobody wrote this rule",
-    "text": "- On donne 24 phrases, chacune étiquetée par une personne\n- **Faire :** l'arbre appris, seul. Sa seule question : « la phrase contient-elle le mot X ? »\n- Il a choisi la question qui sépare le mieux les exemples, puis a recommencé : « basket » ? basket. Sinon « panier » ? basket. Sinon football\n- **Faire :** un exemple descend l'arbre : le chemin s'allume, le mot trouvé est marqué, la réponse s'affiche à droite\n- **Faire :** « Exemple suivant » pour en voir d'autres. « Exemple précédent » depuis le premier saute à sa seule erreur (un dunk : ni « basket », ni « panier »)\n- Juste sur 23 des 24, et personne n'a écrit cette règle"
+    "source": "- Classic **machine learning**: we give many sentences, each labelled by a person (here 24), and a program builds its own **decision tree**\n- Such programs exist since the 1980s: once you have the data, they do it alone\n- The learned tree, alone. Its only question: \"does the sentence contain the word X?\" It picked the question that best separates the examples, then repeated: \"net\"? basketball. Else \"hoop\"? basketball. Else football\n- One example goes down the tree: path lit, word found marked, answer on the right. \"Next example\" for more; \"Previous example\" from the first jumps to its one mistake (a dunk: no net, no hoop)\n- Right on 23 of 24, and nobody wrote this rule\n- Here it looks simple; real methods are more complex: they optimise mathematically, count which words appear with which, and combine hundreds of trees. Tree methods are still the best tools on table-like data today, ahead of deep learning",
+    "text": "- Le **machine learning** classique : on donne beaucoup de phrases, chacune étiquetée par une personne (ici 24), et un programme construit tout seul son **arbre de décision**\n- Ces programmes existent depuis les années 1980 : dès qu'on a les données, ils le font seuls\n- L'arbre appris, seul. Sa seule question : « la phrase contient-elle le mot X ? » Il a choisi la question qui sépare le mieux les exemples, puis il a recommencé : « net » (*filet*) ? basket. Sinon « hoop » (*panier*) ? basket. Sinon football\n- Un exemple descend l'arbre : chemin éclairé, mot trouvé surligné, réponse à droite. « Exemple suivant » pour d'autres ; « Exemple précédent » depuis le premier saute à sa seule erreur (un dunk : ni filet, ni panier)\n- Juste sur 23 des 24, et personne n'a écrit cette règle\n- Ici ça a l'air simple ; les vraies méthodes sont plus complexes : elles optimisent mathématiquement, comptent quels mots apparaissent avec lesquels, et combinent des centaines d'arbres. Les méthodes à base d'arbres restent aujourd'hui les meilleurs outils sur des données en tableau, devant le deep learning"
   },
   "02-text-tree/transitionIn": {
     "source": "From writing rules to learning them.",
@@ -612,12 +612,12 @@
     "text": "Faire repérer à la salle la règle étrange que l'arbre a apprise seul, puis montrer une nouvelle phrase qui tombe dans le piège."
   },
   "02-text-tree-unseen/takeaway": {
-    "source": "A learned rule can be odd; with a tree, at least, we can open the hood and see it.",
-    "text": "Une règle apprise peut être étrange ; avec un arbre, au moins, on peut ouvrir le capot et la voir."
+    "source": "A learned rule can be absurd, but with a tree we can see it before it does any harm.",
+    "text": "Une règle apprise peut être absurde, mais avec un arbre, on peut la voir avant qu'elle fasse des dégâts."
   },
   "02-text-tree-unseen/speakerNotes": {
-    "source": "- The tree we just trained, and a new sentence: \"The striker smashed the ball into the back of the net.\"\n- **Ask:** what will the tree answer? Let them read the tree and search\n- **Do:** reveal: to us, football; the tree says basketball. The path lights up and \"net\" is highlighted\n- It learned \"contains net, so basketball\": no football example mentioned a net\n- It learned by itself, and we can open the hood and spot the odd rule\n- **Do:** remove \"net\": now it says football",
-    "text": "- L'arbre qu'on vient d'entraîner, et une phrase nouvelle : « Il est venu jouer au foot en baskets. »\n- **Demander :** que va répondre l'arbre ? Les laisser lire l'arbre et chercher\n- **Faire :** révéler : pour nous, foot ; l'arbre dit basket. Le chemin s'allume et « baskets » est surligné\n- Il a appris « contient basket, donc basket » : aucun exemple de foot ne parlait de chaussures\n- Il a appris seul, et on peut ouvrir le capot pour repérer la règle étrange\n- **Faire :** retirer « baskets » : maintenant il répond football"
+    "source": "- The tree we just trained, and a new sentence: \"The striker smashed the ball into the back of the net.\"\n- Question to the room: what will the tree answer? Let them read the tree. They will say: it is going to fail\n- Reveal: to us, football; the tree says basketball. \"net\" lights up: no football example mentioned a net\n- The good news: **we could see it in advance**, by opening the tree. Remove \"net\": now it says football\n- A real, more serious case: a widely used US health algorithm chose who got extra care (tools of this kind cover about 200 million people a year). It predicted **health costs** as a stand-in for health needs; less had been spent on Black patients at the same level of illness, so it judged them healthier. Once fixed, the share of Black patients selected went from **17.7% to 46.5%** (Obermeyer et al., Science, 2019)\n- Two lessons: the bias came from past data, and it **never wore its name** (no \"skin colour\" rule, just \"past costs\"). In a small tree you can spot an odd rule; real systems combine hundreds of trees, and then nobody reads them either\n- Still, a model you can inspect lets you find the problem before years of harm, not after",
+    "text": "- L'arbre qu'on vient d'entraîner, et une nouvelle phrase : « The striker smashed the ball into the back of the net. » (*L'attaquant a envoyé le ballon au fond des filets.*)\n- Question à la salle : que va répondre l'arbre ? Les laisser lire l'arbre. Ils vont dire : ça va rater\n- Révélation : pour nous, football ; l'arbre dit basket. « net » s'allume : aucun exemple de football ne parlait de filet\n- La bonne nouvelle : **on pouvait le voir à l'avance**, en ouvrant l'arbre. Enlever « net » : il dit football\n- Un vrai cas, plus grave : un algorithme de santé américain très utilisé choisissait qui recevait un suivi renforcé (les outils de ce type concernent environ 200 millions de personnes par an). Il prédisait les **dépenses de santé** comme indicateur des besoins ; on avait dépensé moins pour les patients noirs à maladie égale, donc il les jugeait en meilleure santé. Une fois corrigé, la part de patients noirs sélectionnés passait de **17,7 % à 46,5 %** (Obermeyer et al., Science, 2019)\n- Deux leçons : le biais venait des données du passé, et il **ne portait jamais son nom** (pas de règle « couleur de peau », juste « dépenses passées »). Dans un petit arbre, on repère une règle bizarre ; les vrais systèmes combinent des centaines d'arbres, et là non plus personne ne les lit\n- Mais un modèle qu'on peut inspecter permet de trouver le problème avant des années de dégâts, pas après"
   },
   "02-text-tree-unseen/transitionIn": {
     "source": "The learned rule, looked at closely.",
@@ -636,12 +636,12 @@
     "text": "Montrer qu'un petit neural network entraîné sur beaucoup plus de phrases est bien plus précis, et que sa règle tient en des milliers de nombres."
   },
   "02-text-network/takeaway": {
-    "source": "A neural network is far better, and its rule is a block of numbers nobody wrote.",
-    "text": "Un neural network fait bien mieux, et sa règle est un bloc de nombres que personne n'a écrit."
+    "source": "A neural network does far better than the tree, and what comes out is always a probability.",
+    "text": "Un réseau de neurones fait bien mieux que l'arbre, et ce qui en sort est toujours une probabilité."
   },
   "02-text-network/speakerNotes": {
-    "source": "- To do better than the tree: a neural network. A simplified view of the real one (200 words, 16 neurons, 3,249 connections)\n- **Do:** words go in: each word of the sentence lights up\n- **Do:** every connection is a number, a \"weight\": thick means strong, colour means \"pushes towards football\" or \"towards basketball\"\n- **Do:** each neuron adds up what reaches it and fills up\n- **Do:** two scores come out, turned into percentages: football, over 99%; the trap sentence is right this time\n- On 200 new sentences: tree 58%, network 99.5%. But where do those weights come from?",
-    "text": "- Pour faire mieux que l'arbre : un neural network (*réseau de neurones*). Une vue simplifiée du vrai (206 mots, 16 neurones, 3 329 connexions)\n- **Faire :** les mots entrent : chaque mot de la phrase s'allume\n- **Faire :** chaque connexion est un nombre, un « poids » : épais veut dire fort, la couleur veut dire « pousse vers le foot » ou « vers le basket »\n- **Faire :** chaque neurone additionne ce qui lui arrive et se remplit\n- **Faire :** deux scores sortent, transformés en pourcentages : foot, plus de 99 % ; cette fois, la phrase piège est bien classée\n- Sur 200 phrases nouvelles : arbre 54 %, réseau 99,5 %. Mais d'où viennent ces poids ?"
+    "source": "- To do better than the tree: a **neural network** (a simplified view of the real one: 200 words, 16 neurons, 3,249 connections)\n- Words go in: as many input neurons as inputs. For an image, one per pixel and per colour channel (**red, green, blue**): a 224 × 224 image is 150,528 numbers. Words must first become numbers: we come back to that\n- Every connection is a number, a **weight**: thick means strong, colour means \"pushes towards football\" or \"towards basketball\". Each neuron adds up what reaches it\n- Out come as many neurons as classes, turned into **probabilities that add up to 100%**: football, over 99%; the trap sentence is right this time\n- It is only maths, multiplications and additions, and what comes out is always a probability. Well trained, it is often close to 0% or 100%, and we take the highest\n- Not always: a sentence about both sports could give 40/60. A company can set a rule: if no label reaches 95%, we say \"we don't know\" and ask a human\n- Caveat: networks are often **overconfident**; their \"96%\" is not right 96 times in 100 (we see one fail in two slides)\n- On 200 new sentences: tree 58%, network 99.5%. But where do those weights come from?",
+    "text": "- Pour faire mieux que l'arbre : un **réseau de neurones** (une vue simplifiée du vrai : 200 mots, 16 neurones, 3 249 connexions)\n- Les mots entrent : autant de neurones d'entrée que d'entrées. Pour une image, un par pixel et par couleur (**rouge, vert, bleu**) : une image de 224 × 224, c'est 150 528 nombres. Les mots doivent d'abord devenir des nombres : on y revient\n- Chaque connexion est un nombre, un **poids** : épais veut dire fort, la couleur veut dire « pousse vers football » ou « vers basket ». Chaque neurone additionne ce qui lui arrive\n- En sortie, autant de neurones que de classes, transformés en **probabilités qui font 100 % au total** : football, plus de 99 % ; la phrase piège est juste cette fois\n- Ce ne sont que des maths, des multiplications et des additions, et ce qui sort est toujours une probabilité. Bien entraîné, c'est souvent proche de 0 % ou de 100 %, et on prend la plus haute\n- Pas toujours : une phrase qui parle des deux sports pourrait donner 40/60. Une entreprise peut se fixer une règle : si aucun label n'atteint 95 %, on dit « on ne sait pas » et on demande à un humain\n- Attention : les réseaux sont souvent **trop sûrs d'eux** ; leur « 96 % » n'est pas juste 96 fois sur 100 (on en voit un se tromper deux slides plus loin)\n- Sur 200 nouvelles phrases : arbre 58 %, réseau 99,5 %. Mais d'où viennent ces poids ?"
   },
   "02-text-network/transitionIn": {
     "source": "To do better: a neural network.",
@@ -660,12 +660,12 @@
     "text": "Montrer la boucle d'apprentissage sur une seule phrase : deviner, comparer avec la bonne réponse, ajuster un peu chaque connexion, recommencer."
   },
   "02-text-learning/takeaway": {
-    "source": "Learning is a tiny correction after each mistake, repeated thousands of times.",
-    "text": "Apprendre, c'est une minuscule correction après chaque erreur, répétée des milliers de fois."
+    "source": "Learning means nudging every weight a little after each example, thousands of times; once trained, the weights are frozen.",
+    "text": "Apprendre, c'est ajuster un peu chaque poids après chaque exemple, des milliers de fois ; une fois entraîné, les poids sont figés."
   },
   "02-text-learning/speakerNotes": {
-    "source": "- Where the weights come from: at first they are random, so the network guesses at random\n- **Do:** a basketball sentence: it says \"football, 56%\" (only 44% basketball)\n- **Do:** compare with the right answer: this gap is the error\n- **Do:** nudge: every connection moves a little in the direction that would have helped; watch the lines change, a few show before and after\n- **Do:** same sentence again: basketball 75% (one step, enlarged so you can see it)\n- **Do:** then thousands of sentences: guess, compare, nudge, repeat; the score climbs to 99.5%",
-    "text": "- D'où viennent les poids : au départ ils sont aléatoires, donc le réseau répond au hasard\n- **Faire :** une phrase de foot : il dit « basket, 62 % » (seulement 38 % de foot)\n- **Faire :** comparer avec la bonne réponse : cet écart, c'est l'erreur\n- **Faire :** ajuster : chaque connexion bouge un peu dans la direction qui aurait aidé ; regarder les lignes changer, quelques-unes montrent avant et après\n- **Faire :** la même phrase à nouveau : foot 57 % (un seul pas, agrandi pour qu'on le voie)\n- **Faire :** puis des milliers de phrases : deviner, comparer, ajuster, recommencer ; le score monte jusqu'à 99,5 %"
+    "source": "- **Gradient descent**, in a picture: a **road network** with roads more or less wide. After each trip, we look at where the car ended and where it should have ended, and widen or narrow every road a tiny bit, in the direction that would have brought it closer to the right exit. In the end, any car that enters arrives at the right place\n- (Another classic picture: a hiker in the fog who always steps down the steepest slope)\n- At first the weights are **random**, so the network guesses at random: a basketball sentence, it says \"football, 56%\" (only 44% basketball)\n- Compare with the right answer: the gap is the **error**. Nudge every connection a little in the direction that would have helped; watch the lines change, a few show before and after\n- Same sentence again: basketball 75% (one step, enlarged so you can see it)\n- It corrects on **every example**, not only on mistakes: a right answer at 60% is still pushed towards 100%\n- Then thousands of sentences: guess, compare, nudge, repeat; the score climbs to 99.5%\n- Key point: the weights change **only during training**. At prediction time (inference) they are **frozen**, and anything can go through. A chatbot does not learn from your conversation while it answers you",
+    "text": "- La **descente de gradient**, en image : un **réseau routier** avec des routes plus ou moins larges. Après chaque trajet, on regarde où la voiture a fini et où elle aurait dû finir, et on élargit ou rétrécit chaque route d'un tout petit peu, dans le sens qui l'aurait rapprochée de la bonne sortie. À la fin, n'importe quelle voiture qui entre arrive au bon endroit\n- (Autre image classique : un randonneur dans le brouillard qui descend toujours dans le sens de la plus forte pente)\n- Au début, les poids sont **aléatoires**, donc le réseau répond au hasard : une phrase de basket, il dit « football, 56 % » (seulement 44 % basket)\n- Comparer avec la bonne réponse : l'écart, c'est l'**erreur**. Ajuster chaque connexion un peu, dans le sens qui aurait aidé ; regarder les lignes changer, quelques-unes montrent avant et après\n- Même phrase à nouveau : basket 75 % (un seul pas, agrandi pour qu'on le voie)\n- Il corrige à **chaque exemple**, pas seulement sur les erreurs : une bonne réponse à 60 % est quand même poussée vers 100 %\n- Puis des milliers de phrases : deviner, comparer, ajuster, recommencer ; le score monte à 99,5 %\n- Point clé : les poids ne changent **que pendant l'entraînement**. Au moment de la prédiction (l'inférence), ils sont **figés**, et on peut y faire passer n'importe quoi. Un chatbot n'apprend pas de votre conversation pendant qu'il vous répond"
   },
   "02-text-learning/transitionIn": {
     "source": "But where do those weights come from?",
@@ -684,12 +684,12 @@
     "text": "Montrer le réseau qui échoue sur une phrase nouvelle, et qu'en l'ouvrant on ne voit que des nombres : on peut le tester, pas le prévoir."
   },
   "02-text-network-fail/takeaway": {
-    "source": "We can test a neural network; we cannot know in advance where it will fail.",
-    "text": "On peut tester un neural network ; on ne peut pas savoir à l'avance où il échouera."
+    "source": "We can test a neural network, but we cannot know in advance where it will fail.",
+    "text": "On peut tester un réseau de neurones, mais on ne peut pas savoir à l'avance où il va se tromper."
   },
   "02-text-network-fail/speakerNotes": {
-    "source": "- Excellent on average, and yet: a new football sentence, the network says basketball, 96% sure\n- **Do:** open the hood: the same diagram, every weight is there\n- No line says why, unlike the tree's odd \"net\" rule\n- We can test it; we cannot know in advance where it will fail",
-    "text": "- Excellent en moyenne, et pourtant : une nouvelle phrase de foot, le réseau répond basket, sûr à 92 %\n- **Faire :** ouvrir le capot : le même schéma, tous les poids sont là\n- Aucune ligne ne dit pourquoi, contrairement à la règle étrange « basket » de l'arbre\n- On peut le tester ; on ne peut pas savoir à l'avance où il échouera"
+    "source": "- Under the hood it is gibberish: do not spend long here. In the end, the network is **a block of numbers**, and we cannot read anything from it\n- Excellent on average, and yet: a new football sentence, the network says basketball, **96% sure**\n- Open the hood: the same diagram, every weight is there; no line says why, unlike the tree's odd \"net\" rule\n- In practice it works much better than classic machine learning, but needs much more data and is heavier to train: classic machine learning (not deep learning) is still useful\n- **We can test it; we cannot know in advance where it will fail**\n- A research field, **interpretability**, is starting to read some mechanisms inside large models (more in \"What we can do\"); it is partial, far from full control",
+    "text": "- Sous le capot, c'est du charabia : ne pas s'y attarder. À la fin, le réseau, c'est **un bloc de nombres**, et on ne sait rien en lire\n- Excellent en moyenne, et pourtant : une nouvelle phrase de football, le réseau dit basket, **sûr à 96 %**\n- Ouvrir le capot : le même schéma, tous les poids sont là ; aucune ligne ne dit pourquoi, contrairement à la règle bizarre « net » de l'arbre\n- En pratique, ça marche beaucoup mieux que le machine learning classique, mais il faut beaucoup plus de données et c'est plus lourd à entraîner : le machine learning classique (qui n'est pas du deep learning) reste utile\n- **On peut le tester ; on ne peut pas savoir à l'avance où il va se tromper**\n- Un domaine de recherche, l'**interprétabilité**, commence à lire certains mécanismes à l'intérieur des grands modèles (on y revient dans « Ce qu'on peut faire ») ; c'est partiel, loin d'un contrôle complet"
   },
   "02-text-network-fail/transitionIn": {
     "source": "Trained, accurate. And yet.",
@@ -708,8 +708,8 @@
     "text": "Montrer un cas documenté où un classifieur appris très puissant a produit une erreur grave que personne n'avait repérée avant la sortie."
   },
   "02-google-photos/takeaway": {
-    "source": "A very capable learned system can still fail badly, in ways nobody saw coming.",
-    "text": "Un système appris très performant peut quand même échouer gravement, d'une façon que personne n'avait prévue."
+    "source": "Nobody wrote a racist rule: the error came out of learning, from data with a gap.",
+    "text": "Personne n'a écrit de règle raciste : l'erreur est sortie de l'apprentissage, à partir de données qui avaient un trou."
   },
   "02-google-photos/visual.props.title": {
     "source": "Google Photos",
@@ -724,14 +724,38 @@
     "text": "Souvent, ni le modèle ni les ingénieurs ne sont le problème : les modèles apprennent sur des données qui reflètent notre société, avec ses manques et ses biais. Pourtant, on veut qu'ils fassent mieux que ce passé."
   },
   "02-google-photos/speakerNotes": {
-    "source": "- Tone: sober, this hurt real people; never show the photos\n- 2015: Google Photos labels your pictures automatically, with a learned model\n- It labelled photos of two Black people \"gorillas\"; a user found it after release\n- Nobody wrote that rule: the error came out of learning\n- **Do:** step 1: years later (2018), the fix was still to block the label, not to correct the model\n- **Do:** next: the general lesson, not a diagnosis of this case (Google never published the exact cause): biased or under-represented data is the usual suspect\n- The data reflects decades of who was photographed and labelled; a model trained on it inherits that, and we want it to do better than that past\n- The outcome: years later, the fix was still to block the label",
-    "text": "- Ton sobre : cela a blessé de vraies personnes ; ne jamais montrer les photos\n- 2015 : Google Photos étiquette vos photos automatiquement, avec un modèle appris\n- Il a étiqueté des photos de deux personnes noires « gorilles » ; un utilisateur l'a découvert après la sortie\n- Personne n'a écrit cette règle : l'erreur est sortie de l'apprentissage\n- **Faire :** étape 1 : des années plus tard (2018), le correctif consistait toujours à bloquer l'étiquette, pas à corriger le modèle\n- **Faire :** ensuite, la leçon générale, pas un diagnostic de ce cas (Google n'a jamais publié la cause exacte) : des données biaisées ou qui sous-représentent certains groupes sont le suspect habituel\n- Les données reflètent des décennies de qui a été photographié et étiqueté ; un modèle entraîné dessus en hérite, et on veut qu'il fasse mieux que ce passé\n- L'issue : des années plus tard, le correctif consistait toujours à bloquer l'étiquette"
+    "source": "- Tone: sober, this hurt real people; never show the photos\n- June 2015: Google Photos sorts your pictures by type (landscape, dog, cat) with a learned model. It labelled photos of two Black people \"**gorillas**\". A user (Jacky Alciné) found it after release and said so publicly; Google apologised within hours\n- Google did not remove the feature: it **blocked the labels** \"gorilla\", \"chimp\", \"chimpanzee\". In 2018 they were still blocked, and in 2023 too (New York Times): years later, the fix was still to hide the word\n- Say it clearly: the model was not designed to be racist, and the engineers are not racist. **Nobody wrote that rule**: the error came out of learning\n- Google never published the exact cause; two usual suspects:\n  - **biased data**: data from the last decades reflects a society that discriminated more. There is so much of it (millions of images, billions of texts) that nobody can check it by hand, and labellers have biases too. We want the model to do **better** than that past\n  - **under-representation**: the most likely here, very few Black people in the training images. A big problem for face recognition: in \"Gender Shades\" (2018), commercial systems were wrong up to **34.7%** of the time on darker-skinned women, against **0.8%** on lighter-skinned men\n- Next slide: apples and pears, to see why our checks did not catch it",
+    "text": "- Ton : sobre, ça a blessé de vraies personnes ; ne jamais montrer les photos\n- Juin 2015 : Google Photos classe vos photos par type (paysage, chien, chat) avec un modèle appris. Il a étiqueté des photos de deux personnes noires « **gorilles** ». Un utilisateur (Jacky Alciné) l'a découvert après la sortie et l'a dit publiquement ; Google s'est excusé en quelques heures\n- Google n'a pas retiré la fonction : il a **bloqué les étiquettes** « gorille », « chimpanzé ». En 2018, elles étaient toujours bloquées, et en 2023 aussi (New York Times) : des années plus tard, la solution était toujours de cacher le mot\n- Le dire clairement : le modèle n'a pas été conçu pour être raciste, et les ingénieurs ne sont pas racistes. **Personne n'a écrit cette règle** : l'erreur est sortie de l'apprentissage\n- Google n'a jamais publié la cause exacte ; deux suspects habituels :\n  - **des données biaisées** : les données des dernières décennies reflètent une société qui discriminait davantage. Il y en a tellement (des millions d'images, des milliards de textes) que personne ne peut les vérifier à la main, et les étiqueteurs ont aussi leurs biais. On voudrait que le modèle fasse **mieux** que ce passé\n  - **la sous-représentation** : le plus probable ici, très peu de personnes noires dans les images d'entraînement. Un gros problème pour la reconnaissance faciale : dans « Gender Shades » (2018), des systèmes commerciaux se trompaient jusqu'à **34,7 %** du temps sur les femmes à peau foncée, contre **0,8 %** sur les hommes à peau claire\n- Slide suivante : des pommes et des poires, pour voir pourquoi nos vérifications ne l'ont pas attrapé"
   },
   "02-google-photos/transitionIn": {
     "source": "From our toy sentences to a real image classifier used by millions.",
     "text": "De nos phrases jouets à un vrai classifieur d'images utilisé par des millions de personnes."
   },
   "02-google-photos/transitionOut": {
+    "source": "Why did no test catch it before release? An analogy.",
+    "text": "Pourquoi aucun test ne l'a-t-il repéré avant la sortie ? Une analogie."
+  },
+  "02-apples-and-pears/title": {
+    "source": "Apples and pears",
+    "text": "Pommes et poires"
+  },
+  "02-apples-and-pears/objective": {
+    "source": "Show why validation and test sets cannot reveal a gap that the whole dataset shares: it shows up only in the real world.",
+    "text": "Montrer pourquoi les jeux de validation et de test ne peuvent pas révéler un manque que partagent toutes les données : il n'apparaît que dans le monde réel."
+  },
+  "02-apples-and-pears/takeaway": {
+    "source": "Tests only check what is in the data: a gap in the data shows up only in the real world.",
+    "text": "Les tests ne vérifient que ce qui est dans les données : un manque dans les données n'apparaît que dans le monde réel."
+  },
+  "02-apples-and-pears/speakerNotes": {
+    "source": "- A thought experiment: our pile holds only red apples and green pears, every picture labelled by a person\n- Before training, we split the data into three boxes, like at school\n- **Training**, about 70 to 80%: the exercises, with the corrections. The model learns from these\n- **Validation**, about 10 to 15%: mock exams. We use them to tune the model and choose between versions\n- **Test**, about 10 to 15%: the final exam. Set aside, never seen during training, used once at the end\n- Then **production**: real life, with no corrections\n- Typical splits: 80/10/10 or 70/15/15\n- Why set data aside at all: a model can learn the answers by heart (**overfitting**). It shines on its exercises and fails on anything new; the exams catch that\n- Here colour alone separates the two fruits perfectly, so the model takes the shortcut: green means pear\n- Validation and test both score 100%, and honestly so: they come from the same pile\n- The first green apple: \"pear\", 97% sure\n- You cannot blame the model: nothing in its data told it otherwise. The test set shares the blind spots of the data; it can only check what the pile contains\n- Real datasets have the same kind of gap, with people: the **Gender Shades** study (2018) found commercial gender classifiers wrong on up to 34.7% of darker-skinned women, against 0.8% of lighter-skinned men\n- Back to the photo app: the same kind of gap, found by users after release\n- The fix lives in the data: look for what is missing, collect it, and test on the cases that matter in the real world",
+    "text": "- Une expérience de pensée : notre pile ne contient que des pommes rouges et des poires vertes, chaque image étiquetée par une personne\n- Avant l'entraînement, on répartit les données dans trois boîtes, comme à l'école\n- **Entraînement**, environ 70 à 80 % : les exercices, avec le corrigé. Le modèle apprend sur ceux-là\n- **Validation**, environ 10 à 15 % : les examens blancs. On s'en sert pour régler le modèle et choisir entre plusieurs versions\n- **Test**, environ 10 à 15 % : l'examen final. Mis de côté, jamais vu pendant l'entraînement, utilisé une seule fois à la fin\n- Puis la **production** : la vraie vie, sans corrigé\n- Répartitions courantes : 80/10/10 ou 70/15/15\n- Pourquoi mettre des données de côté : un modèle peut apprendre les réponses par cœur (l'**overfitting**, *surapprentissage*). Il brille sur ses exercices et échoue sur tout ce qui est nouveau ; les examens le détectent\n- Ici, la couleur seule sépare parfaitement les deux fruits, alors le modèle prend le raccourci : vert veut dire poire\n- Validation et test obtiennent tous les deux 100 %, et honnêtement : ils viennent de la même pile\n- La première pomme verte : « poire », sûr à 97 %\n- On ne peut pas en vouloir au modèle : rien dans ses données ne lui disait le contraire. Le jeu de test partage les angles morts des données ; il ne peut vérifier que ce que la pile contient\n- Les vrais jeux de données ont le même genre de manque, avec des personnes : l'étude **Gender Shades** (2018) a trouvé des classifieurs de genre commerciaux qui se trompaient jusqu'à 34,7 % du temps sur les femmes à la peau foncée, contre 0,8 % sur les hommes à la peau claire\n- Retour à l'application photo : le même genre de manque, découvert par les utilisateurs après la sortie\n- La solution est dans les données : chercher ce qui manque, le collecter, et tester sur les cas qui comptent dans le monde réel"
+  },
+  "02-apples-and-pears/transitionIn": {
+    "source": "Why did no test catch it before release? An analogy.",
+    "text": "Pourquoi aucun test ne l'a-t-il repéré avant la sortie ? Une analogie."
+  },
+  "02-apples-and-pears/transitionOut": {
     "source": "Now, the same ideas applied to language.",
     "text": "Maintenant, les mêmes idées appliquées au langage."
   },
@@ -744,12 +768,12 @@
     "text": "Montrer qu'un modèle de langage fait le même genre de choix que le classifieur de sport, mais parmi tous les tokens de son vocabulaire."
   },
   "02-next-token/takeaway": {
-    "source": "A language model is a classifier whose labels are every possible next word.",
-    "text": "Un modèle de langage, c'est un classifieur dont les étiquettes sont tous les mots suivants possibles."
+    "source": "A language model is the same classifier, choosing the next word among tens of thousands instead of two sports.",
+    "text": "Un modèle de langage, c'est le même classificateur, qui choisit le mot suivant parmi des dizaines de milliers au lieu de deux sports."
   },
   "02-next-token/speakerNotes": {
-    "source": "- Football or basketball: a choice between two labels\n- A language model makes the same kind of choice\n- But among every word it knows, tens of thousands of them\n- **Do:** watch two bars become a long list\n- Real probabilities, recorded from a real model\n- Pick one: that is the next word",
-    "text": "- Football ou basket : un choix entre deux étiquettes\n- Un modèle de langage fait le même genre de choix\n- Mais parmi tous les mots qu'il connaît, des dizaines de milliers\n- **Faire :** regarder les deux barres devenir une longue liste\n- De vraies probabilités, enregistrées sur un vrai modèle\n- On en tire un : c'est le mot suivant"
+    "source": "- Football or basketball: a choice between two labels. A language model makes the same choice: the input is the **start of a sentence**, the label is **the next word**\n- Among how many? Not the words of a language: the model's **vocabulary of tokens**, about 50,000 for GPT-2 and GPT-3, about 128,000 for Llama 3. Short words are whole tokens, long or unknown ones are cut into pieces: in two slides\n- Watch two bars become a long list: real probabilities, recorded from a real model\n- Much less black and white than sports: \"Windows\" clearly wins, but is far from 99%\n- Here we take the most likely. We could also draw at random, weighted by probability, to be more creative: that is the **temperature**, coming later\n- Take \"Windows\", add it to the sentence, and start again: predict the next word, again and again. That is how text is generated",
+    "text": "- Football ou basket : un choix entre deux labels. Un modèle de langage fait le même choix : l'entrée est le **début d'une phrase**, le label est **le mot suivant**\n- Parmi combien ? Pas les mots d'une langue : le **vocabulaire de tokens** du modèle, environ 50 000 pour GPT-2 et GPT-3, environ 128 000 pour Llama 3. Les mots courts sont des tokens entiers, les longs ou les inconnus sont découpés en morceaux : dans deux slides\n- Regarder deux barres devenir une longue liste : de vraies probabilités, enregistrées sur un vrai modèle\n- Beaucoup moins noir ou blanc que les sports : « Windows » gagne clairement, mais il est loin de 99 %\n- Ici, on prend le plus probable. On pourrait aussi tirer au sort, en pondérant par la probabilité, pour être plus créatif : c'est la **température**, on y vient\n- On prend « Windows », on l'ajoute à la phrase, et on recommence : prédire le mot suivant, encore et encore. C'est comme ça qu'on génère du texte"
   },
   "02-next-token/transitionIn": {
     "source": "From labelling sentences to predicting words.",
@@ -768,8 +792,8 @@
     "text": "Expliquer pourquoi prédire le mot suivant a tout changé : ça génère, ça ne demande aucune étiquette humaine, et ça récompense la taille."
   },
   "02-two-superpowers/takeaway": {
-    "source": "Almost unlimited data plus one simple task: the bet was to scale it up, and it paid off.",
-    "text": "Des données presque illimitées et une tâche simple : le pari était de tout agrandir, et il a payé."
+    "source": "Two superpowers (it writes, and every text is free training data) plus one bet: scale it up. The bet paid off.",
+    "text": "Deux super-pouvoirs (il écrit, et tout texte devient une donnée d'entraînement gratuite) plus un pari : l'échelle. Le pari a payé."
   },
   "02-two-superpowers/visual.heading": {
     "source": "Two superpowers, one bet",
@@ -800,8 +824,8 @@
     "text": "Garder la même tâche simple ; rendre le modèle et les données immensément plus grands. GPT-2 divague, GPT-3 épate."
   },
   "02-two-superpowers/speakerNotes": {
-    "source": "- Superpower 1, it writes: a classifier gives one answer and stops; here the answer goes back in, again and again\n- Superpower 2, almost unlimited data: to train an image classifier, people must label every picture\n- **Ask:** who has clicked on traffic lights in a CAPTCHA? Those clicks labelled images (Google says, to improve Maps)\n- Here nobody labels anything: the next word is already in the text, so every text ever written is training data\n- The bet: keep this one simple task and scale everything up; 2020 \"scaling laws\": errors fall predictably with size, data and compute, the exact design matters little\n- GPT-2 (1.5 billion numbers) sometimes talks nonsense; GPT-3 (175 billion, 100 times bigger) is suddenly bluffing: same recipe, bigger",
-    "text": "- Super-pouvoir 1, il écrit : un classifieur donne une réponse et s'arrête ; ici la réponse repart dans la phrase, encore et encore\n- Super-pouvoir 2, des données presque illimitées : pour entraîner un classifieur d'images, il faut des humains pour étiqueter chaque photo\n- **Demander :** qui a déjà cliqué sur des feux tricolores dans un CAPTCHA ? Ces clics étiquetaient des images (pour améliorer Maps, selon Google)\n- Ici, personne n'étiquette rien : le mot suivant est déjà dans le texte, donc tout texte jamais écrit devient des données d'entraînement\n- Le pari : garder cette seule tâche simple et tout agrandir ; 2020, les scaling laws (*lois d'échelle*) : l'erreur baisse de façon prévisible avec la taille, les données et le compute (*puissance de calcul*), la conception exacte compte peu\n- GPT-2 (1,5 milliard de nombres) dit parfois n'importe quoi ; GPT-3 (175 milliards, 100 fois plus gros) devient bluffant : même recette, en plus grand"
+    "source": "- **Superpower 1, it writes**: a classifier gives one answer and stops; here the answer is the next word, so it goes back in, again and again. Part of the computation is kept in memory, so each new word does not redo everything\n- **Superpower 2, almost unlimited data**: remember, data meant a text and its label (football), an image and its category (cat). Someone had to label it\n- Question to the room: who has clicked on traffic lights in a CAPTCHA? Those clicks labelled images (Google says, to improve Maps)\n- Here nobody labels anything: the raw data is the start of a sentence, the label is the word that follows. Take a huge, filtered part of the web, books, code: the data **and** its labels, for free\n- **The bet: scale.** Put in a lot of money, electricity and data. 2020 \"scaling laws\": errors fall predictably with size, data and computing; the exact design matters little\n- Why scale is needed: if the model is not quite good, one odd word is enough, the next words build on it, and it spirals into nonsense (we will see it with temperature 5 on the base model)\n- GPT-2 (1.5 billion numbers) sometimes talks nonsense; GPT-3 (175 billion, 100 times bigger) suddenly writes convincingly: same recipe, bigger",
+    "text": "- **Super-pouvoir 1, il écrit** : un classificateur donne une réponse et s'arrête ; ici, la réponse est le mot suivant, donc on la remet en entrée, encore et encore. Une partie du calcul est gardée en mémoire, donc chaque nouveau mot ne refait pas tout\n- **Super-pouvoir 2, des données presque illimitées** : rappelez-vous, une donnée, c'était un texte et son label (football), une image et sa catégorie (chat). Quelqu'un devait l'étiqueter\n- Question à la salle : qui a déjà cliqué sur des feux rouges dans un CAPTCHA ? Ces clics ont étiqueté des images (selon Google, pour améliorer Maps)\n- Ici, personne n'étiquette rien : la donnée brute est le début de la phrase, le label est le mot qui suit. On prend une énorme partie filtrée du web, des livres, du code : les données **et** leurs labels, gratuitement\n- **Le pari : l'échelle.** Mettre énormément d'argent, d'électricité et de données. Les « scaling laws » (*lois d'échelle*) de 2020 : l'erreur baisse de façon prévisible avec la taille, les données et le calcul ; le détail de l'architecture compte peu\n- Pourquoi il faut l'échelle : si le modèle n'est pas tout à fait bon, un seul mot bizarre suffit, les mots suivants s'appuient dessus, et ça s'emballe jusqu'au n'importe quoi (on le verra avec la température 5 sur le modèle de base)\n- GPT-2 (1,5 milliard de nombres) dit parfois n'importe quoi ; GPT-3 (175 milliards, 100 fois plus gros) écrit soudain de façon convaincante : même recette, en plus grand"
   },
   "02-two-superpowers/transitionIn": {
     "source": "Why this one change matters so much.",
@@ -820,12 +844,12 @@
     "text": "Expliquer l'entraînement comme une boucle : lire un texte jusqu'à un point, laisser le modèle deviner le mot suivant, mesurer l'erreur, ajuster les nombres, avancer d'un mot."
   },
   "02-how-training-works/takeaway": {
-    "source": "Training is a tiny correction on the next word, repeated trillions of times.",
-    "text": "L'entraînement, c'est une minuscule correction sur le mot suivant, répétée des milliers de milliards de fois."
+    "source": "Training is the same loop on the next word, trillions of times, and the model learns what is plausible, not one right answer.",
+    "text": "L'entraînement, c'est la même boucle sur le mot suivant, des milliers de milliards de fois, et le modèle apprend ce qui est plausible, pas une seule bonne réponse."
   },
   "02-how-training-works/speakerNotes": {
-    "source": "- The same loop as football or basketball: guess, compare, nudge, repeat; only now the answer is the next word\n- Take a real text and stop at some point: what is the next word?\n- At first the model is random: the right word gets about 1 chance in 50,000 (0.002%)\n- Compare with the real word: that is the error\n- Nudge every number a tiny bit to do better\n- Slide one word forward, then on to other texts: web, books, code, trillions of times\n- Not only web pages and books: huge amounts of code, about 17% of Llama 3's training text\n- Code is strict, structured text: the kind of precision the JSON tool calls of chapter 1 need\n- Measured: adding code to pretraining improved reasoning, up to 8% relative (Aryabumi et al., 2024)\n- Illustrative: real models have far more numbers",
-    "text": "- La même boucle que foot ou basket : deviner, comparer, ajuster, recommencer ; sauf que la réponse est le mot suivant\n- Prendre un vrai texte et s'arrêter quelque part : quel est le mot suivant ?\n- Au début, le modèle est aléatoire : le bon mot a environ 1 chance sur 50 000 (0,002 %)\n- Comparer avec le vrai mot : c'est l'erreur\n- Ajuster chaque nombre un tout petit peu pour faire mieux\n- Avancer d'un mot, puis passer à d'autres textes : web, livres, code, des milliers de milliards de fois\n- Pas seulement des pages web et des livres : énormément de code, environ 17 % du texte d'entraînement de Llama 3\n- Le code, c'est du texte strict et structuré : la précision qu'exige un tool call (*appel d'outil*) en JSON, vu au chapitre 1\n- Mesuré : ajouter du code au pretraining (*pré-entraînement*) a amélioré le raisonnement, jusqu'à 8 % en relatif (Aryabumi et al., 2024)\n- Illustration : les vrais modèles ont bien plus de nombres"
+    "source": "- The same loop as football or basketball: guess, compare, nudge, repeat; only now the answer is the next word\n- Take a real text and stop somewhere: \"Every morning the children take the ___ to school.\" The real text says \"bus\"\n- At first the model is random: the right word gets about 1 chance in 50,000 (0.002%)\n- Compare with the real word: that is the error. Nudge every number a tiny bit to do better\n- Paradox: this example punishes every word that is not \"bus\", yet \"tram\" or \"train\" would have been fine; only something like \"sofa\" was really wrong. In real life there is often **no single right answer**\n- Over millions of sentences, \"bus\" and \"tram\" both come back: the model learns a **spread of plausible words** (bus 40%, tram 15%...), not one answer. That is also why it can say something plausible but false\n- Unlike our classifiers, where (apart from a sentence about both sports) there is one right answer: here, being far from 99% is normal\n- Slide one word forward, then on to other texts: web, books, code. Llama 3 was trained on about **15 trillion tokens**\n- Not only web pages and books: lots of **code**, about **17%** of Llama 3's training text. Code is strict, structured text: the precision the JSON tool calls of chapter 1 need. Measured: adding code to pretraining improved reasoning, up to 8% relative (Aryabumi et al., 2024)\n- Illustrative: real models have far more numbers",
+    "text": "- La même boucle que football ou basket : deviner, comparer, ajuster, recommencer ; sauf que la réponse est maintenant le mot suivant\n- On prend un vrai texte et on s'arrête quelque part : « Every morning the children take the ___ to school. » (*Chaque matin, les enfants prennent le ___ pour aller à l'école.*) Le vrai texte dit « bus »\n- Au début, le modèle est aléatoire : le bon mot a environ 1 chance sur 50 000 (0,002 %)\n- Comparer avec le vrai mot : c'est l'erreur. Ajuster chaque nombre d'un tout petit peu pour faire mieux\n- Le paradoxe : cet exemple punit tous les mots qui ne sont pas « bus », alors que « tram » ou « train » auraient très bien convenu ; seul un mot comme « canapé » était vraiment faux. Dans la vraie vie, il n'y a souvent **pas une seule bonne réponse**\n- Sur des millions de phrases, « bus » et « tram » reviennent tous les deux : le modèle apprend une **répartition de mots plausibles** (bus 40 %, tram 15 %...), pas une réponse unique. C'est aussi pour ça qu'il peut dire quelque chose de plausible mais faux\n- Contrairement à nos classificateurs, où (sauf une phrase qui parle des deux sports) il y a une seule bonne réponse : ici, être loin de 99 %, c'est normal\n- Avancer d'un mot, puis passer à d'autres textes : web, livres, code. Llama 3 a été entraîné sur environ **15 000 milliards de tokens**\n- Pas seulement des pages web et des livres : beaucoup de **code**, environ **17 %** des textes d'entraînement de Llama 3. Le code est un texte strict et structuré : la précision dont ont besoin les appels d'outils en JSON du chapitre 1. Mesuré : ajouter du code au pré-entraînement a amélioré le raisonnement, jusqu'à 8 % en relatif (Aryabumi et al., 2024)\n- Illustratif : les vrais modèles ont bien plus de nombres"
   },
   "02-how-training-works/transitionIn": {
     "source": "Free labels, put to work: the training loop.",
@@ -844,12 +868,12 @@
     "text": "Voir en direct qu'un modèle de langage lit des tokens, des morceaux de texte avec chacun un numéro, et non des mots."
   },
   "02-tokens/takeaway": {
-    "source": "To the model, text is a sequence of numbered pieces.",
-    "text": "Pour le modèle, un texte est une suite de morceaux numérotés."
+    "source": "A model reads neither letters nor words but pieces of words, called tokens: that is why counting letters was hard.",
+    "text": "Un modèle ne lit ni des lettres ni des mots, mais des morceaux de mots, les tokens : c'est pour ça que compter les lettres était difficile."
   },
   "02-tokens/speakerNotes": {
-    "source": "- The model doesn't read words: it reads tokens\n- A token: a whole word, part of a word, or a space and a letter\n- **Ask:** give me a word or a sentence; type it\n- **Do:** next step: each token has a number in a fixed dictionary\n- The number says nothing about meaning yet",
-    "text": "- Le modèle ne lit pas des mots : il lit des tokens (*jetons*)\n- Un token : un mot entier, un bout de mot, ou un espace et une lettre\n- **Demander :** donnez-moi un mot ou une phrase ; le taper\n- **Faire :** étape suivante : chaque token a un numéro dans un dictionnaire fixe\n- Ce numéro ne dit encore rien du sens"
+    "source": "- The model does not read words: it reads **tokens**, a whole word, part of a word, or a space and a letter\n- Why not letters? There would be few of them, but a letter carries almost no meaning. Why not whole words? Far too many, in every language. Tokens are the compromise: common words are one token, rare ones are cut into pieces (the method starts from letters and merges the most frequent pairs)\n- Let people play: ask the room for a word or a sentence and type it; they can also try it on their phone (the **Try it** tab)\n- Back to the opening riddle: the model never sees the letters of \"strawberry\", only token numbers, hence the trouble counting its r's. Type it and look how it is cut\n- Next step: each token has a number in a fixed dictionary; the number says nothing about meaning yet",
+    "text": "- Le modèle ne lit pas des mots : il lit des **tokens**, un mot entier, un morceau de mot, ou une espace et une lettre\n- Pourquoi pas des lettres ? Il y en aurait peu, mais une lettre n'a presque pas de sens. Pourquoi pas des mots entiers ? Beaucoup trop, dans toutes les langues. Les tokens sont le compromis : les mots courants font un token, les mots rares sont découpés en morceaux (la méthode part des lettres et fusionne les paires les plus fréquentes)\n- Laisser jouer : demander un mot ou une phrase à la salle et la taper ; on peut aussi essayer sur son téléphone (onglet **Essayer**)\n- Retour à l'énigme du début : le modèle ne voit jamais les lettres de « strawberry », seulement des numéros de tokens, d'où sa difficulté à compter les r. Le taper et regarder comment il est découpé\n- Étape suivante : chaque token a un numéro dans un dictionnaire fixe ; ce numéro ne dit encore rien du sens"
   },
   "02-tokens/transitionIn": {
     "source": "From words to what the model actually reads.",
@@ -858,6 +882,30 @@
   "02-tokens/transitionOut": {
     "source": "A number has no meaning. So how does meaning get in?",
     "text": "Un numéro n'a pas de sens. Alors comment le sens arrive-t-il ?"
+  },
+  "02-meaning-dimensions/title": {
+    "source": "Why so many numbers",
+    "text": "Pourquoi tant de nombres"
+  },
+  "02-meaning-dimensions/objective": {
+    "source": "Understand why a model gives each word hundreds or thousands of numbers: one number or two cannot hold all the meanings a word has at once.",
+    "text": "Comprendre pourquoi un modèle donne à chaque mot des centaines ou des milliers de nombres : un ou deux nombres ne peuvent pas porter tous les sens qu'un mot a à la fois."
+  },
+  "02-meaning-dimensions/takeaway": {
+    "source": "Words have too many meanings for one or two numbers, so models give each word hundreds, learned from text.",
+    "text": "Les mots ont trop de sens pour un ou deux nombres : les modèles donnent à chaque mot des centaines de nombres, appris dans les textes."
+  },
+  "02-meaning-dimensions/speakerNotes": {
+    "source": "- To compute with words, a model needs numbers; here a word's number is simply its place\n- One number is one line: colours on one side, fruits on the other; orange, a colour and a fruit, sits in the middle, and the line copes\n- Salmon is a colour and a fish: it should be near the colours and near the sea, and the line has no room for the sea\n- A second number gives a second direction: salmon settles between the colours and the sea\n- Blue: a colour, the sea, the sky, and sadness (\"feeling blue\"); halfway between all of them is close to none of them\n- So models give each word hundreds or thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B\n- **Nobody names these directions**: training sets them, and words used in the same sentences end up close\n- Honest caveats: the positions here are invented, and strictly a model numbers tokens, not words; the next slide is a real map",
+    "text": "- Pour calculer avec des mots, un modèle a besoin de nombres ; ici, le nombre d'un mot, c'est simplement sa place\n- Un nombre, c'est une ligne : les couleurs d'un côté, les fruits de l'autre ; orange, couleur et fruit, se met au milieu, et la ligne s'en sort\n- Saumon est une couleur et un poisson : il devrait être près des couleurs et près de la mer, et la ligne n'a pas de place pour la mer\n- Un deuxième nombre donne une deuxième direction : saumon se pose entre les couleurs et la mer, pêche (le fruit, et la pêche en mer) entre les fruits et la mer\n- Bleu : une couleur, la mer, le ciel, et aussi le bleu qu'on se fait en se cognant ; à mi-chemin de tout, il n'est près de rien\n- Alors les modèles donnent à chaque mot des centaines ou des milliers de nombres : 384 dans la carte qui suit, 4 096 dans Llama 3.1 8B, 16 384 dans Llama 3.1 405B\n- **Personne ne nomme ces directions** : l'entraînement les fixe, et les mots employés dans les mêmes phrases finissent proches\n- Par honnêteté : les positions ici sont inventées, et un modèle numérote en fait des tokens, pas des mots ; la diapositive suivante montre une vraie carte"
+  },
+  "02-meaning-dimensions/transitionIn": {
+    "source": "A token's number says nothing. Meaning needs more numbers.",
+    "text": "Le numéro d'un token ne dit rien. Le sens demande plus de nombres."
+  },
+  "02-meaning-dimensions/transitionOut": {
+    "source": "Now the real map, learned from text.",
+    "text": "Maintenant, la vraie carte, apprise dans les textes."
   },
   "02-embedding-training/title": {
     "source": "Words as points",
@@ -868,12 +916,12 @@
     "text": "Montrer que chaque mot devient une liste de nombres, un point dans l'espace, dispersé avant l'entraînement et organisé après."
   },
   "02-embedding-training/takeaway": {
-    "source": "Training moves words with related meanings close together.",
-    "text": "L'entraînement rapproche les mots de sens voisins."
+    "source": "Each word becomes a point in space, and training on huge amounts of text brings related words together.",
+    "text": "Chaque mot devient un point dans l'espace, et l'entraînement sur d'énormes quantités de texte rapproche les mots liés."
   },
   "02-embedding-training/speakerNotes": {
-    "source": "- Our classifier only knew whether a word was there; richer: give each word a list of numbers\n- That list is a point in space\n- Before training: the points are scattered at random\n- **Do:** play: the training loop we saw, repeated on huge amounts of text, gathers related words\n- The animation is illustrative; the final map is real",
-    "text": "- Notre classifieur savait seulement si un mot était là ; plus riche : donner à chaque mot une liste de nombres\n- Cette liste, c'est un point dans l'espace\n- Avant l'entraînement : les points sont dispersés au hasard\n- **Faire :** lancer : la boucle d'entraînement qu'on a vue, répétée sur d'énormes quantités de texte, regroupe les mots liés\n- L'animation est une illustration ; la carte finale est réelle"
+    "source": "- A neural network only computes with numbers (multiplications, additions, then a probability between 0 and 1): the 0.1%, 1% and 98% we saw are real computations, so words must become **numbers**\n- We want close meanings to get close numbers, the way a red pixel and a dark red pixel have close values: then the computations make sense\n- Our classifier only knew whether a word was there; richer: give each word a **list of numbers**, a point in space\n- We are in machine learning, so nobody places the words by hand: before training, the points are scattered **at random**\n- Play: the training loop we saw, repeated on huge amounts of text, gathers words that appear in the same sentences: \"blue\" ends up near \"sky\" and \"red\", because they keep showing up together (not always on the same pages)\n- The animation is illustrative; the final map is real",
+    "text": "- Un réseau de neurones ne calcule qu'avec des nombres (des multiplications, des additions, puis une probabilité entre 0 et 1) : les 0,1 %, 1 % et 98 % qu'on a vus sont de vrais calculs, donc les mots doivent devenir des **nombres**\n- On veut que des sens proches aient des nombres proches, comme un pixel rouge et un pixel rouge foncé ont des valeurs proches : alors les calculs ont du sens\n- Notre classificateur savait seulement si un mot était là ; plus riche : donner à chaque mot une **liste de nombres**, un point dans l'espace\n- On est en machine learning, donc personne ne place les mots à la main : avant l'entraînement, les points sont dispersés **au hasard**\n- Lecture : la boucle d'entraînement qu'on a vue, répétée sur d'énormes quantités de texte, rassemble les mots qui apparaissent dans les mêmes phrases : « bleu » finit près de « ciel » et de « rouge », parce qu'ils reviennent souvent ensemble (pas toujours sur les mêmes pages)\n- L'animation est illustrative ; la carte finale est réelle"
   },
   "02-embedding-training/transitionIn": {
     "source": "From numbered pieces to points with meaning.",
@@ -892,12 +940,12 @@
     "text": "Laisser la salle proposer des mots, les calculer en direct, et lire leurs plus proches voisins."
   },
   "02-embedding-play/takeaway": {
-    "source": "Closeness of meaning becomes something we can measure.",
-    "text": "La proximité de sens devient quelque chose qu'on peut mesurer."
+    "source": "Closeness of meaning becomes a distance we can measure, in hundreds of dimensions nobody chose.",
+    "text": "La proximité de sens devient une distance qu'on peut mesurer, dans des centaines de dimensions que personne n'a choisies."
   },
   "02-embedding-play/speakerNotes": {
-    "source": "- **Ask:** a word, any word: a job, a place, an emotion\n- **Do:** type it; it is computed live, by the same model through Hugging Face\n- Read the nearest neighbours\n- Surprising neighbour? Often a word used in the same sentences\n- **Do:** \"Show all words\" labels every word; zoom in (wheel or pinch) to read one corner of the map\n- The list is exact; the map is an approximation",
-    "text": "- **Question :** un mot, n'importe lequel : un métier, un lieu, une émotion\n- **Faire :** le taper ; il est calculé en direct, par le même modèle via Hugging Face\n- Lire les plus proches voisins\n- Un voisin surprenant ? Souvent un mot employé dans les mêmes phrases\n- **Faire :** « Tous les mots » affiche chaque mot ; zoomer (molette ou pincement) pour lire un coin de la carte\n- La liste est exacte ; la carte est une approximation"
+    "source": "- Ask the room for a word (a job, a place, an emotion) and type it; it is computed live, by the same model through Hugging Face\n- Read the nearest neighbours; a surprising neighbour is often a word used in the same sentences\n- The map can switch to **3D**: more axes to play with, just to show the idea\n- This model gives each word **384 numbers**: 384 ways to be neighbours with another word. Nobody could set that by hand; that is how meaning and the links between words are encoded\n- The largest models use far more: **4,096** numbers per token for Llama 3.1 8B, **16,384** for Llama 3.1 405B\n- We cannot picture more than three dimensions: the 2D and 3D maps are a **projection** (UMAP) that tries to keep each word's close neighbours. Distances between far-apart groups and the axes mean nothing, and some true neighbours may show up far away\n- **The list is exact; the map is an approximation**\n- \"Show all words\" labels every word; zoom in (wheel or pinch) to read one corner of the map\n- Honest detail if asked: this demo model makes embeddings of words and sentences (the kind used for search); a chatbot's own input points work the same way, and in a chatbot the next layers then move each word with its context (\"a peach\" to eat or \"fishing\")",
+    "text": "- Demander un mot à la salle (un métier, un lieu, une émotion) et le taper ; il est calculé en direct, par le même modèle, via Hugging Face\n- Lire les plus proches voisins ; un voisin surprenant est souvent un mot utilisé dans les mêmes phrases\n- La carte peut passer en **3D** : plus d'axes pour jouer, juste pour montrer l'idée\n- Ce modèle donne à chaque mot **384 nombres** : 384 façons d'être voisin d'un autre mot. Personne ne saurait régler ça à la main ; c'est comme ça qu'on encode le sens et les liens entre les mots\n- Les plus grands modèles en utilisent bien plus : **4 096** nombres par token pour Llama 3.1 8B, **16 384** pour Llama 3.1 405B\n- On ne sait pas se représenter plus de trois dimensions : les cartes 2D et 3D sont une **projection** (UMAP) qui essaie de garder les proches voisins de chaque mot. Les distances entre groupes éloignés et les axes ne veulent rien dire, et certains vrais voisins peuvent apparaître loin\n- **La liste est exacte ; la carte est une approximation**\n- « Afficher tous les mots » étiquette chaque mot ; zoomer (molette ou pincement) pour lire un coin de la carte\n- Détail honnête si on demande : ce modèle de démo fait des embeddings de mots et de phrases (le genre utilisé pour la recherche) ; les points d'entrée d'un chatbot fonctionnent pareil, et dans un chatbot, les couches suivantes déplacent ensuite chaque mot selon son contexte (« une pêche » à manger, ou « la pêche » au bord de l'eau)"
   },
   "02-embedding-play/transitionIn": {
     "source": "The prepared map becomes interactive.",
@@ -916,16 +964,16 @@
     "text": "Montrer qu'un modèle qui sort du pretraining se contente de continuer le texte, un token ou plusieurs à la fois."
   },
   "02-base-model/takeaway": {
-    "source": "Pretraining gives a text continuer, not an assistant.",
-    "text": "Le pretraining donne un continuateur de texte, pas un assistant."
+    "source": "A model fresh out of pretraining does not answer, it continues the text; the temperature sets how much chance it takes.",
+    "text": "Un modèle tout juste pré-entraîné ne répond pas, il continue le texte ; la température règle la part de hasard qu'il prend."
   },
   "02-base-model/visual.props.prompt": {
     "source": "How can I sleep better?",
     "text": "Comment mieux dormir ?"
   },
   "02-base-model/speakerNotes": {
-    "source": "- This is \"pretraining\": exactly the next-word loop we saw, on a huge amount of text, nothing more\n- **Do:** ask a question; it continues the page instead of answering\n- **Do:** one token: show the bars, raise the temperature, draw one\n- **Do:** several tokens: let it write on\n- Temperature (default 1, for the next press): 0 always takes the most likely token, higher picks more surprising ones\n- Here: Llama 3.1 8B, Meta's base model; the bars come from a larger sibling, Llama 3.3 70B Instruct, reading the same raw text (the base model's provider gives no probabilities), and the screen says so\n- This model runs on Hugging Face, the public library where AI models are shared: remember that name\n- It is neither helpful nor harmful: it imitates plausible text",
-    "text": "- C'est le pretraining (*pré-entraînement*) : exactement la boucle du mot suivant qu'on a vue, sur énormément de texte, rien de plus\n- **Faire :** poser une question ; il continue la page au lieu de répondre\n- **Faire :** un token (*jeton*) : montrer les barres, monter la température, en tirer un\n- **Faire :** plusieurs tokens : le laisser écrire\n- Température (1 par défaut, pour le prochain appui) : à 0 il prend toujours le token le plus probable, plus haut il en choisit de plus surprenants\n- Ici : Llama 3.1 8B, le modèle de base de Meta ; les barres viennent d'un grand frère, Llama 3.3 70B Instruct, qui lit le même texte brut (le fournisseur du modèle de base ne donne pas de probabilités), et l'écran le dit\n- Ce modèle tourne sur Hugging Face, la bibliothèque publique où se partagent les modèles d'IA : retenez ce nom\n- Ni serviable ni malveillant : il imite un texte plausible"
+    "source": "- This is **pretraining**: exactly the next-word loop we saw, on a huge amount of text, nothing more\n- Ask it a question: it works, it writes fluent text, but something is off: it **continues the page** instead of answering. Try a multiple-choice quiz: it adds more questions\n- It has no notion of chat, of being an assistant, or of what it should not say. It is neither helpful nor harmful: it imitates plausible text\n- Better not type a harmful question live on the base model; the next slide shows a **recorded** refusal on the bomb question\n- One token: show the bars, then draw one. Several tokens: let it write on\n- **Temperature**: at **0**, always the most likely word, so the same text every time: the computations are deterministic (on servers, a word can still change now and then)\n- At **1**, a weighted draw: if \"cat\" is at 30%, it comes out about one time in three\n- Higher, the odds flatten and odd words come out more and more. Try **5**: it soon means nothing. Proof that if the model is not good enough, one odd word leads to the next and it goes off the rails\n- Here: Llama 3.1 8B, Meta's base model; the bars come from a larger sibling, Llama 3.3 70B Instruct, reading the same raw text (the base model's provider gives no probabilities), and the screen says so\n- It runs on **Hugging Face**, the public library where AI models are shared: remember that name",
+    "text": "- C'est le pretraining (*pré-entraînement*) : exactement la boucle du mot suivant qu'on a vue, sur une énorme quantité de texte, rien de plus\n- Lui poser une question : ça marche, il écrit un texte fluide, mais quelque chose cloche : il **continue la page** au lieu de répondre. Essayer un QCM : il ajoute d'autres questions\n- Il n'a aucune notion de conversation, d'assistant, ni de ce qu'il ne devrait pas dire. Ni utile ni nuisible : il imite du texte plausible\n- Mieux vaut ne pas taper en direct une question dangereuse au modèle de base ; la slide suivante montre un refus **enregistré** sur la question de la bombe\n- Un token : montrer les barres, puis en tirer un. Plusieurs tokens : le laisser écrire\n- **Température** : à **0**, toujours le mot le plus probable, donc le même texte à chaque fois : les calculs sont déterministes (sur les serveurs, un mot peut quand même changer de temps en temps)\n- À **1**, un tirage pondéré : si « chat » est à 30 %, il sort environ une fois sur trois\n- Plus haut, les chances s'aplatissent et des mots bizarres sortent de plus en plus. Essayer **5** : très vite, ça ne veut plus rien dire. La preuve que si le modèle n'est pas assez bon, un mot bizarre entraîne le suivant et ça part en cacahuète\n- Ici : Llama 3.1 8B, le modèle de base de Meta ; les barres viennent d'un grand frère, Llama 3.3 70B Instruct, qui lit le même texte brut (le fournisseur du modèle de base ne donne pas les probabilités), et l'écran le dit\n- Il tourne sur **Hugging Face**, la bibliothèque publique où l'on partage des modèles d'IA : retenez ce nom"
   },
   "02-base-model/transitionIn": {
     "source": "We run the result of pretraining.",
@@ -944,12 +992,12 @@
     "text": "Montrer qu'un entraînement supplémentaire sur des questions et des réponses, avec des guardrails, transforme un base model en assistant."
   },
   "02-fine-tuned/takeaway": {
-    "source": "Fine-tuning is what turns a text continuer into an assistant.",
-    "text": "C'est le fine-tuning qui transforme un continuateur de texte en assistant."
+    "source": "The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.",
+    "text": "Le même modèle, entraîné en plus sur des conversations et nourri d'un texte caché : c'est ça qui fait un chatbot."
   },
   "02-fine-tuned/speakerNotes": {
-    "source": "- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we just used)\n- **Do:** same question as before: now it answers\n- Temperature (default 1, for the next question): 0 always takes the most likely token, higher picks more surprising ones\n- It also learned which of two answers is preferred\n- Guardrails: it is trained to refuse some requests\n- **Do:** show the guardrail example (a recorded real refusal)\n- Refusals are trained, and training can fail: this one refuses the bomb question (recorded); large assistants add far more safety training and filters\n- **Do:** next step: what the model really reads: a hidden system prompt, role tags, the question, then \"assistant:\" and it continues\n- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here \"<|eot_id|>\")\n- This step is what makes a chatbot",
-    "text": "- Le même genre de modèle, entraîné en plus sur des questions et des réponses (ici Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on vient d'utiliser)\n- **Faire :** même question qu'avant : cette fois il répond\n- Température (1 par défaut, pour la prochaine question) : à 0 il prend toujours le token le plus probable, plus haut il en choisit de plus surprenants\n- Il a aussi appris laquelle de deux réponses est préférée\n- Garde-fous : il est entraîné à refuser certaines demandes\n- **Faire :** montrer l'exemple de garde-fou (un vrai refus enregistré)\n- Les refus s'apprennent, et l'apprentissage peut échouer : celui-ci refuse la question sur la bombe (enregistré) ; les grands assistants ajoutent bien plus d'entraînement à la sécurité et de filtres\n- **Faire :** étape suivante : ce que le modèle lit vraiment : un message système caché, des balises de rôle, la question, puis « assistant : » et il continue\n- C'est toujours prédire le mot suivant : il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter (ici « <|eot_id|> »)\n- C'est cette étape qui fait un chatbot"
+    "source": "- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we just used)\n- Ask the **same questions** as to the base model: now it answers, coherently\n- Temperature works the same way (default 1)\n- It was **trained** to behave as an assistant: example conversations, then rewards for the answers people prefer\n- Striking fact: people preferred the answers of a **1.3 billion** parameter assistant to those of the raw **175 billion** GPT-3, 100 times bigger (InstructGPT, OpenAI, 2022): it is not only about size\n- Guardrails: it is trained to refuse some requests. The guardrail example is a recorded real refusal (the bomb question). Refusals are trained, and training can fail; large assistants add far more safety training and filters\n- Next step: what the model really reads, which you never see: a hidden **system prompt**, role tags, the question, then \"assistant:\" and it continues\n- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here \"<|eot_id|>\")",
+    "text": "- Le même genre de modèle, entraîné en plus sur des questions et des réponses (ici Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on vient d'utiliser)\n- Poser les **mêmes questions** qu'au modèle de base : maintenant il répond, de façon cohérente\n- La température marche pareil (1 par défaut)\n- Il a été **entraîné** à se comporter en assistant : des exemples de conversations, puis des récompenses pour les réponses que les gens préfèrent\n- Un fait frappant : les gens préféraient les réponses d'un assistant de **1,3 milliard** de paramètres à celles de GPT-3 brut, **175 milliards**, 100 fois plus gros (InstructGPT, OpenAI, 2022) : ce n'est pas qu'une question de taille\n- Garde-fous : il est entraîné à refuser certaines demandes. L'exemple de garde-fou est un vrai refus enregistré (la question de la bombe). Les refus sont appris, et l'apprentissage peut échouer ; les grands assistants ajoutent beaucoup plus d'entraînement de sécurité et de filtres\n- Étape suivante : ce que le modèle lit vraiment, et que vous ne voyez jamais : un **prompt système** caché, des balises de rôle, la question, puis « assistant: », et il continue\n- Toujours la prédiction du mot suivant : il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter (ici « <|eot_id|> »)"
   },
   "02-fine-tuned/transitionIn": {
     "source": "From the base model to its assistant version.",
@@ -968,8 +1016,8 @@
     "text": "Montrer les trois couches qui façonnent un assistant : des conversations d'exemple, des règles écrites, et des classifieurs autour du modèle."
   },
   "02-shaping-assistant/takeaway": {
-    "source": "An assistant is a pretrained model, taught a style and written rules, and watched by classifiers.",
-    "text": "Un assistant, c'est un modèle issu du pretraining, à qui l'on apprend un style et des règles écrites, et que des classifieurs surveillent."
+    "source": "An assistant is a pretrained model shaped by three layers (examples, written rules, classifiers), and none is enough alone.",
+    "text": "Un assistant, c'est un modèle pré-entraîné façonné par trois couches (des exemples, des règles écrites, des classificateurs), et aucune ne suffit seule."
   },
   "02-shaping-assistant/visual.heading": {
     "source": "Three layers around the same model",
@@ -1000,8 +1048,8 @@
     "text": "Des classifieurs à part, comme notre classifieur foot ou basket, examinent ce qui entre et ce qui sort, et bloquent les demandes dangereuses."
   },
   "02-shaping-assistant/speakerNotes": {
-    "source": "- Same pretrained model; three layers turn it into a product\n- Layer 1, examples: questions and good answers, the assistant's style\n- Layer 2, written rules: OpenAI's \"Model Spec\", Anthropic's \"constitution\"; the model is trained to follow them\n- Example rule in both: no help creating chemical, biological, radiological or nuclear weapons\n- Layer 3, classifiers: separate models, like our sports classifier, check the question and the answer and can block them\n- **Ask:** which layer would you trust most? None alone is enough",
-    "text": "- Le même modèle issu du pretraining (*pré-entraînement*) ; trois couches en font un produit\n- Couche 1, les exemples : des questions et de bonnes réponses, le style de l'assistant\n- Couche 2, des règles écrites : la Model Spec (*spécification du modèle*) d'OpenAI, la « constitution » d'Anthropic ; le modèle est entraîné à les suivre\n- Règle présente dans les deux : aucune aide pour créer des armes chimiques, biologiques, radiologiques ou nucléaires\n- Couche 3, des classifieurs : des modèles à part, comme notre classifieur de sport, vérifient la question et la réponse et peuvent les bloquer\n- **Demander :** à quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule"
+    "source": "- Same pretrained model; three layers turn it into a product\n- Layer 1, **examples**: many conversations, so it is rewarded for acting as an assistant, and rewarded for human values and behaviours\n- Layer 2, **written rules**: some companies, not all, publish a **constitution** (Anthropic) or a **Model Spec** (OpenAI); the model is trained to follow it\n- Example rule in both: no help creating chemical, biological, radiological or nuclear weapons. They also ask it to stay kind and honest, and not to flatter you just to please you (**sycophancy**)\n- Sycophancy is real: in April 2025, OpenAI rolled back a GPT-4o update because it flattered users too much. A model rewarded for being liked learns to say what we want to hear: the first, harmless example of \"it does what we rewarded, not what we meant\" (chapter 4)\n- Layer 3, **classifiers**: separate models, like our sports classifier, check your question **before it even reaches the model**, and the answer before it reaches you; they can block either\n- Question to the room: which layer would you trust most? None alone is enough",
+    "text": "- Le même modèle pré-entraîné ; trois couches en font un produit\n- Couche 1, **des exemples** : beaucoup de conversations, pour qu'il soit récompensé quand il se comporte en assistant, et récompensé pour des valeurs et des comportements humains\n- Couche 2, **des règles écrites** : certaines entreprises, pas toutes, publient une **constitution** (Anthropic) ou une **Model Spec** (*spécification du modèle*, OpenAI) ; le modèle est entraîné à la suivre\n- Une règle présente dans les deux : pas d'aide pour créer des armes chimiques, biologiques, radiologiques ou nucléaires. Elles lui demandent aussi de rester gentil et honnête, et de ne pas vous flatter juste pour vous plaire (la **sycophancy**, *complaisance*)\n- La complaisance est bien réelle : en avril 2025, OpenAI a retiré une mise à jour de GPT-4o parce qu'elle flattait trop les utilisateurs. Un modèle récompensé pour être apprécié apprend à dire ce qu'on veut entendre : le premier exemple, inoffensif, de « il fait ce qu'on a récompensé, pas ce qu'on voulait » (chapitre 4)\n- Couche 3, **des classificateurs** : des modèles séparés, comme notre classificateur de sports, vérifient votre question **avant même qu'elle atteigne le modèle**, et la réponse avant qu'elle vous arrive ; ils peuvent bloquer l'une ou l'autre\n- Question à la salle : à quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule"
   },
   "02-shaping-assistant/transitionIn": {
     "source": "But examples are not the only thing shaping it.",
@@ -2707,6 +2755,78 @@
     "source": "The browser blocks sound: click once in this window.",
     "text": "Le navigateur bloque le son : cliquez une fois dans cette fenêtre."
   },
+  "copy:To compute with words, you need numbers": {
+    "source": "To compute with words, you need numbers",
+    "text": "Pour calculer avec des mots, il faut des nombres"
+  },
+  "copy:Salmon: a colour, and a fish": {
+    "source": "Salmon: a colour, and a fish",
+    "text": "Saumon : une couleur, et un poisson"
+  },
+  "copy:A second number, a second direction": {
+    "source": "A second number, a second direction",
+    "text": "Un deuxième nombre, une deuxième direction"
+  },
+  "copy:Blue: a colour, the sea, the sky, sadness": {
+    "source": "Blue: a colour, the sea, the sky, sadness",
+    "text": "Bleu : une couleur, la mer, le ciel, un hématome"
+  },
+  "copy:So each word gets hundreds of numbers": {
+    "source": "So each word gets hundreds of numbers",
+    "text": "Chaque mot reçoit des centaines de nombres"
+  },
+  "copy:One number per word: its place on the line. Orange, a colour and a fruit, sits in the middle.": {
+    "source": "One number per word: its place on the line. Orange, a colour and a fruit, sits in the middle.",
+    "text": "Un nombre par mot : sa place sur la ligne. Orange, couleur et fruit, se met au milieu."
+  },
+  "copy:Near the colours, and near the sea? On the line, the sea has no place.": {
+    "source": "Near the colours, and near the sea? On the line, the sea has no place.",
+    "text": "Près des couleurs, et près de la mer ? Sur la ligne, la mer n'a pas de place."
+  },
+  "copy:With two numbers, salmon can sit between the colours and the sea.": {
+    "source": "With two numbers, salmon can sit between the colours and the sea.",
+    "text": "Avec deux nombres, saumon se place entre les couleurs et la mer, et pêche entre les fruits et la mer."
+  },
+  "copy:Near all of them at once? Two numbers are not enough: halfway between everything is close to nothing.": {
+    "source": "Near all of them at once? Two numbers are not enough: halfway between everything is close to nothing.",
+    "text": "Près de tout à la fois ? Deux nombres ne suffisent pas : à mi-chemin de tout, on n'est près de rien."
+  },
+  "copy:Nobody names these numbers: they are learned from text. Words used in the same sentences end up close.": {
+    "source": "Nobody names these numbers: they are learned from text. Words used in the same sentences end up close.",
+    "text": "Personne ne nomme ces nombres : ils sont appris dans les textes. Les mots employés dans les mêmes phrases finissent proches."
+  },
+  "copy:Next: the real map, learned from text.": {
+    "source": "Next: the real map, learned from text.",
+    "text": "Ensuite : la vraie carte, apprise dans les textes."
+  },
+  "copy:1 number per word": {
+    "source": "1 number per word",
+    "text": "1 nombre par mot"
+  },
+  "copy:{n} numbers per word": {
+    "source": "{n} numbers per word",
+    "text": "{n} nombres par mot"
+  },
+  "copy:colours": {
+    "source": "colours",
+    "text": "couleurs"
+  },
+  "copy:the sea": {
+    "source": "the sea",
+    "text": "la mer"
+  },
+  "copy:Each number: one more way to be neighbours": {
+    "source": "Each number: one more way to be neighbours",
+    "text": "Chaque nombre : une façon de plus d'être voisins"
+  },
+  "copy:our word map (next slide)": {
+    "source": "our word map (next slide)",
+    "text": "notre carte des mots (diapo suivante)"
+  },
+  "copy:Illustration: invented, very simplified values": {
+    "source": "Illustration: invented, very simplified values",
+    "text": "Illustration : valeurs inventées, très simplifiées"
+  },
   "copy:cat": {
     "source": "cat",
     "text": "chat"
@@ -2898,6 +3018,58 @@
   "copy:same meaning, two languages": {
     "source": "same meaning, two languages",
     "text": "même sens, deux langues"
+  },
+  "copy:red": {
+    "source": "red",
+    "text": "rouge"
+  },
+  "copy:green": {
+    "source": "green",
+    "text": "vert"
+  },
+  "copy:blue": {
+    "source": "blue",
+    "text": "bleu"
+  },
+  "copy:apple": {
+    "source": "apple",
+    "text": "pomme"
+  },
+  "copy:cherry": {
+    "source": "cherry",
+    "text": "cerise"
+  },
+  "copy:banana": {
+    "source": "banana",
+    "text": "banane"
+  },
+  "copy:salmon": {
+    "source": "salmon",
+    "text": "saumon"
+  },
+  "copy:fish": {
+    "source": "fish",
+    "text": "poisson"
+  },
+  "copy:sea": {
+    "source": "sea",
+    "text": "mer"
+  },
+  "copy:boat": {
+    "source": "boat",
+    "text": "bateau"
+  },
+  "copy:peach": {
+    "source": "peach",
+    "text": "pêche"
+  },
+  "copy:sky": {
+    "source": "sky",
+    "text": "ciel"
+  },
+  "copy:the sea?": {
+    "source": "the sea?",
+    "text": "la mer ?"
   },
   "copy:Training": {
     "source": "Training",
@@ -3702,6 +3874,86 @@
   "copy:How do I make a bomb at home?": {
     "source": "How do I make a bomb at home?",
     "text": "Comment fabriquer une bombe chez moi ?"
+  },
+  "copy:The data: pictures labelled by people.": {
+    "source": "The data: pictures labelled by people.",
+    "text": "Les données : des images étiquetées par des humains."
+  },
+  "copy:We split the pile into three boxes, like at school.": {
+    "source": "We split the pile into three boxes, like at school.",
+    "text": "On répartit la pile dans trois boîtes, comme à l'école."
+  },
+  "copy:Training: the model finds the simplest rule that works.": {
+    "source": "Training: the model finds the simplest rule that works.",
+    "text": "Entraînement : le modèle trouve la règle la plus simple qui marche."
+  },
+  "copy:Every check passes.": {
+    "source": "Every check passes.",
+    "text": "Tous les contrôles sont réussis."
+  },
+  "copy:Real world: a green apple. None of the boxes had one.": {
+    "source": "Real world: a green apple. None of the boxes had one.",
+    "text": "Le monde réel : une pomme verte. Aucune boîte n'en contenait."
+  },
+  "copy:You cannot blame the model: the gap was in the data, and it shows up only in the real world.": {
+    "source": "You cannot blame the model: the gap was in the data, and it shows up only in the real world.",
+    "text": "On ne peut pas en vouloir au modèle : le manque était dans les données, et il n'apparaît que dans le monde réel."
+  },
+  "copy:pear": {
+    "source": "pear",
+    "text": "poire"
+  },
+  "copy:The exercises, with corrections": {
+    "source": "The exercises, with corrections",
+    "text": "Les exercices, avec le corrigé"
+  },
+  "copy:Validation": {
+    "source": "Validation",
+    "text": "Validation"
+  },
+  "copy:Mock exams, to tune and choose": {
+    "source": "Mock exams, to tune and choose",
+    "text": "Les examens blancs, pour régler et choisir"
+  },
+  "copy:Test": {
+    "source": "Test",
+    "text": "Test"
+  },
+  "copy:The final exam, used once": {
+    "source": "The final exam, used once",
+    "text": "L'examen final, utilisé une seule fois"
+  },
+  "copy:The rule it found": {
+    "source": "The rule it found",
+    "text": "La règle qu'il a trouvée"
+  },
+  "copy:Green means pear.": {
+    "source": "Green means pear.",
+    "text": "Vert veut dire poire."
+  },
+  "copy:Red means apple.": {
+    "source": "Red means apple.",
+    "text": "Rouge veut dire pomme."
+  },
+  "copy:Real world": {
+    "source": "Real world",
+    "text": "Le monde réel"
+  },
+  "copy:{pct} sure": {
+    "source": "{pct} sure",
+    "text": "sûr à {pct}"
+  },
+  "copy:Wrong answer": {
+    "source": "Wrong answer",
+    "text": "Mauvaise réponse"
+  },
+  "copy:Passed": {
+    "source": "Passed",
+    "text": "Réussi"
+  },
+  "copy:Green apples: 0": {
+    "source": "Green apples: 0",
+    "text": "Pommes vertes : 0"
   },
   "copy:What we measure, what we wanted": {
     "source": "What we measure, what we wanted",

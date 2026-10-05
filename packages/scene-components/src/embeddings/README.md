@@ -117,6 +117,27 @@ souris (lands near joie, perhaps read as a form of "sourire"), orage violent (ne
             neighbours: { index, similarity }[], position, position3d, ms? } | null }
 ```
 
+## `MeaningDimensions`
+
+Props: none. Set `steps: 5`. A scripted illustration that comes before the
+map: why a word needs many numbers. Positions and values are invented and
+labelled as such on screen; everything is a pure function of the step
+(`dimensions.ts`), so previous and next work both ways, every screen draws the
+same picture, and there is no state, model call or network. Motion is CSS
+transitions between step states, off with reduced motion and in previews.
+
+| Step | What appears |
+| --- | --- |
+| 0 | One line, one number per word (written under each dot): colours on the left, fruits on the right, "orange" in the middle. Badge: "1 number per word" |
+| 1 | "salmon" floats above the line, wobbling, with a "?" and two dashed arrows: toward the colours and toward a dashed "the sea?" that has no place |
+| 2 | A vertical axis, "the sea", grows from the line; fish, sea and boat appear at the top; salmon settles between the colours and the sea, with its two numbers. French only: "pêche" (peach and fishing) between the fruits and the sea. Badge: "2 numbers per word" |
+| 3 | "blue" lifts off the line, wobbling, pulled by four arrows (colours, sea, sky, and "sad" in English or "hématome" in French, for "un bleu"); sky and sad/hématome land on other words (dashed, colliding labels) |
+| 4 | The map fades; "blue" becomes a row of 384 invented numbers (the first six written, then 384 thin bars), and three tiles: 384 (our word map), 4,096 (Llama 3.1 8B), 16,384 (Llama 3.1 405B), with sources. Badge: "384 numbers per word" |
+| 5 | The caption becomes the bridge: "Next: the real map, learned from text." |
+
+Words are copy (`{ en }`, translated in the catalog); a word can be limited to
+some locales (`locales` in `WORDS`). Positions are shared between locales.
+
 ## How the data was built
 
 The map is frozen: it was built by a script that ran the model locally (8-bit

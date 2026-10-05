@@ -1,6 +1,7 @@
 # Learning components
 
-Scene components for chapter 1 (learned systems) and 8.2 (goal vs outcome).
+Scene components for chapter 1 (learned systems), the apples and pears
+analogy in chapter 2, and 8.2 (goal vs outcome).
 All of them are deterministic: `mode: "fallback"` renders exactly like `live`,
 so scenes can use `fallback: { kind: "deterministic" }`.
 
@@ -17,6 +18,26 @@ Shared pieces:
   Sizes `[2, 1]` is logistic regression.
 
 Every component accepts an optional `heading: L10n` that replaces its default title.
+
+## ApplesAndPears
+
+No props. Used by 02-apples-and-pears. The presenter's analogy for training,
+validation and test sets, as a scripted animation: no model, no state. Every
+window draws the frame of `ctx.revealStep` (`fruit/fruit.ts`, tested), so
+previous and next work both ways; reduced motion and the preview change
+states at once, and the preview shows the last frame. The thought-experiment
+badge stays on screen.
+
+| Step | Caption | On stage |
+| --- | --- | --- |
+| 0 | The data: pictures labelled by people | A pile of 20 labelled fruits: only red apples and green pears |
+| 1 | We split the pile into three boxes, like at school | The fruits fly into Training (70%, the exercises), Validation (15%, mock exams) and Test (15%, the final exam) |
+| 2 | Training: the model finds the simplest rule that works | Training is highlighted; the model and its rule: "Green means pear. Red means apple." |
+| 3 | Every check passes | Validation, then Test, get a 100% stamp |
+| 4 | Real world: a green apple. None of the boxes had one | A green apple arrives; the model answers "pear, 97% sure", with a cross |
+| 5 | You cannot blame the model: the gap was in the data, and it shows up only in the real world | Each box shows "Green apples: 0"; the model dims |
+
+`scene.steps`: 5.
 
 ## GoalVsOutcome
 
