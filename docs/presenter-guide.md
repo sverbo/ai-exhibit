@@ -100,6 +100,12 @@ The audience's phones get the glossary (`/glossary`): its QR code is on the
 home page and on the agenda scene. On a deployment, turn off Vercel's
 Deployment Protection so it opens without a login.
 
+Where the server has a working Hugging Face key, the glossary also has a
+"Try it" tab: people run the talk's demos live on their phone. Each phone
+counts its own asks, 10 per demo per hour, which guides honest use but can be
+reset by clearing the browser; keep a spending limit on the Hugging Face
+account. Audience calls never use the presenter's budget.
+
 There is no phone remote and no audience voting: the projector and presenter
 windows are driven by the keyboard or a clicker.
 

@@ -46,55 +46,51 @@ recordings (`language/runtime.ts`), the token tiles (`TokenizedText`), the map
 and, for the cloud, tap to pick a word, also useful on touch screens in the
 talk; `MapView` gains a label cap), the vocabulary search
 (`embeddings/search.ts`) and the ladder logic (`language/thenAndNow.ts`). They
-take a small `SoloEnv` (locale, live or recorded, cloud options), not a
+take a small `SoloEnv` (locale, live or recorded, cloud options, asks left), not a
 `SceneContext`: no session, no state publishing, no roles.
 
-## Audience budget
+## Audience quota
 
 Phones on the venue's Wi-Fi often share one public address, the presenter's
-laptop included. Audience calls therefore get their own budgets:
+laptop included, so audience calls stay apart from the presenter's budget,
+and each phone counts its own asks.
 
-- Each phone makes a random **device id** once (`crypto.randomUUID`, kept in
-  localStorage, never personal data) and sends it in `x-ai-exhibit-audience`
-  on every call of the tab. The header moves the call to the audience budgets.
-- **Per device and demo**: 5 asks per hour for each demo that calls a model:
-  words (embedding a new word), base model (+10 tokens), assistant, and the
-  three-model ladder. One ask counts 1 whatever the number of models behind
-  it, so a ladder question is one ask. A device makes at most 3 asks a minute,
-  all demos together. Tokenizing is free (30 per minute, no hourly count), and
-  so is a word already on the map (no call).
-- **No cap per address by default** (presenter's decision, 2026-10-04): phones
-  on one venue Wi-Fi share an address, and the budget is per phone only. An
-  optional room cap (`roomPerHour`, `roomPerMinute` in `AudienceLimits`, in
-  model requests, a ladder question counting 3) remains available.
-- **Smaller answers**: at most 60 output tokens (the base model asks for 10),
-  2 chat messages, 1 text to embed; the 300-character input cap stays.
-- The presenter's budgets (per-minute, 100 per hour per address) never see
-  audience calls, so the presenter's demos keep working.
+- **Counted on the phone.** localStorage key `ai-exhibit:asks` holds, per
+  demo, the times of its live asks: `{ words: [t, ...], base: [...],
+  assistant: [...], ladder: [...] }`, nothing else. On every read and before
+  every write, times older than an hour are dropped and the pruned log is
+  written back. Asks left = 10 minus the demo's count. One ask counts 1
+  whatever the number of models behind it, so a ladder question is one ask;
+  an ask counts once its answer arrives. Tokenizing, and a word already on
+  the map, are free. If storage fails (private mode, full, disabled), the
+  counts live in memory for the page (`apps/presenter-web/src/views/glossary/play/asks.ts`).
+- **Shown per demo.** Each demo shows its own asks left, discreetly. At 0 it
+  shows its recorded examples with a short note, until its oldest ask is an
+  hour old; the other demos keep answering live.
+- **The quota guides honest use; it is not a lock.** Clearing the browser's
+  storage, or a private window, resets it. The Hugging Face spending limit is
+  the real safeguard.
+- **Server: no hourly count for the audience.** Each phone makes a random
+  **device id** once (`crypto.randomUUID`, kept in localStorage, never
+  personal data) and sends it in `x-ai-exhibit-audience` on every call of the
+  tab. The header keeps the call out of the presenter's budget (per minute,
+  100 per hour per address), so the presenter's demos keep working. The
+  server only applies an anti-burst cap per device id: 3 model requests a
+  minute (a ladder question counts one), 30 free ones (tokenizing, status),
+  in memory per server instance, best effort. A refusal is a `429`
+  `rate-limited`; the demo says "busy, try again in a few seconds".
+- **Same caps as everyone**: the 300-character input cap, the output ceiling,
+  2 chat messages, 1 text to embed.
 - Endpoints: status, complete, chat, embed, tokenize, ladder. `next` and
   anything else are refused for audience calls. On the local runtime, LAN
   clients reach these endpoints only with the header; everything else stays
-  for the presenter's machine.
-- A demo's answers carry `x-ai-exhibit-remaining`: that demo's asks left this
-  hour (an optional room cap included). The audience status returns
-  `audience: { perHour, games: { words, base, assistant, ladder } }` and, of
-  the key, only whether it is valid. Each demo shows its own asks left,
-  discreetly.
-- Refusals are `429` with `window: "minute" | "hour"`, the demo (field `game`) and the
-  `scope` (`"device"` or `"room"`). "minute" says "busy, try again in a few
-  seconds". A device's demo spent switches that demo to its recorded
-  examples and says the other demos still answer live; the room spent (or
-  every demo spent) switches the whole tab to recordings. The wire names
-  (`game`, `games`) predate the wording and stay for compatibility.
-
-Limits: a determined user can reset the device id (clear storage); with no
-room cap, the Hugging Face spending limit is the real safeguard. Counters live in memory per server instance (several Vercel
-instances each count on their own): best effort, as for the presenter.
+  for the presenter's machine. The audience status says whether the server
+  has a working key and nothing else about it.
 
 ## Recorded fallback
 
 When live calls are not possible (no token on the server, an access code
-required, the server unreachable, or the demo's asks used up), each demo
+required, the server unreachable, or this phone's asks for the demo used up), each demo
 shows recorded real examples with a short note: tokenizations of the
 prepared sentences, the vocabulary's precomputed neighbours, the base model's
 and the assistant's recorded answers to the prepared prompts, and the
@@ -105,4 +101,5 @@ written by hand.
 
 - Access codes: phones do not know the presenter's code, so a deployment that
   requires one shows the recordings only.
-- No per-device counter survives a server restart.
+- The quota is per browser, not per person: a second browser on the same
+  phone counts on its own.

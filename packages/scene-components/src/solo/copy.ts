@@ -36,6 +36,6 @@ export const SOLO = {
   // Asks: each demo has a few per phone and hour
   asksLeft: { en: "{n} of {m} asks left for this demo this hour." },
   demoUsedUp: {
-    en: "You have used this demo's asks for this hour: recorded examples here. The other demos still answer live.",
+    en: "You have used this demo's asks for the last hour: recorded examples here until one frees up. The other demos still answer live.",
   },
 } satisfies Record<string, L10n>;

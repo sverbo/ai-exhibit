@@ -2,14 +2,15 @@
  * The "Try it" tab of the audience page: the talk's interactive demos, solo, on
  * the phone (docs/specs/2026-10-04-audience-play.md). This module is its own
  * chunk, and each demo is another one, loaded when opened. Live calls carry
- * this phone's device id and count in the audience budget (a few asks per
- * demo), never in the presenter's; when they cannot run, the demos show
- * recorded examples.
+ * this phone's device id, so they never count in the presenter's budget; the
+ * phone counts its own asks per demo (asks.ts). When a demo's asks are spent,
+ * or live calls cannot run, the demos show recorded examples.
  */
 import { type ComponentType, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { installCatalogs, tr, type Locale } from "@ai-exhibit/presentation-core";
-import { type AudienceDemo, cloudStatus, type CloudStatus, CloudLlmError } from "@ai-exhibit/ml-runtime/lm";
+import { cloudStatus, type CloudStatus } from "@ai-exhibit/ml-runtime/lm";
 import { type SoloEnv, troubleOf } from "@ai-exhibit/scene-components/solo/env.ts";
+import { ASKS_PER_HOUR, createAskQuota } from "./asks.ts";
 import { decidePlay, deviceId, type RecordedWhy } from "./play.ts";
 import styles from "./Play.module.css";
 
@@ -20,16 +21,12 @@ const COPY = {
   },
   checking: { en: "Checking the live models…", fr: "Vérification des modèles en direct…" },
   asks: {
-    en: "Each demo answers live a few times per phone and hour; tokenizing is free.",
-    fr: "Chaque démo répond en direct quelques fois par téléphone et par heure ; le découpage en tokens est gratuit.",
+    en: "Each demo answers live {n} times per phone and hour; tokenizing is free.",
+    fr: "Chaque démo répond en direct {n} fois par téléphone et par heure ; le découpage en tokens est gratuit.",
   },
   off: {
     en: "Live models are off right now: these are recorded real examples.",
     fr: "Les modèles en direct ne sont pas disponibles pour l'instant : voici des exemples réels enregistrés.",
-  },
-  usedUp: {
-    en: "The live answers for this hour are used up. Here are recorded real examples; try again later.",
-    fr: "Les réponses en direct de cette heure sont épuisées. Voici des exemples réels enregistrés ; réessayez plus tard.",
   },
   failed: {
     en: "The live models did not answer. Here are recorded real examples.",
@@ -44,7 +41,6 @@ const WHY: Record<RecordedWhy, keyof typeof COPY> = {
   code: "off",
   offline: "off",
   failed: "failed",
-  "used-up": "usedUp",
 };
 
 type Demo = ComponentType<{ env: SoloEnv }>;
@@ -110,8 +106,10 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
   const device = useMemo(() => deviceId(), []);
   const [ready, setReady] = useState(false);
   const [status, setStatus] = useState<CloudStatus | null | "error">(null);
-  const [left, setLeft] = useState<Partial<Record<AudienceDemo, number>>>({});
-  const [stopped, setStopped] = useState<"used-up" | "failed" | null>(null);
+  const quota = useMemo(() => createAskQuota(), []);
+  // Bumped when the asks change (one spent, or one freed by time), so demos show the new count.
+  const [asksVersion, setAsksVersion] = useState(0);
+  const [stopped, setStopped] = useState<"failed" | null>(null);
   const [open, setOpen] = useState<string | null>(initialOpen);
   const reducedMotion = useReducedMotion();
   const openRef = useRef<HTMLLIElement | null>(null);
@@ -126,7 +124,6 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
       (s) => {
         if (!alive) return;
         setStatus(s);
-        if (s.audience) setLeft(s.audience.games);
       },
       () => alive && setStatus("error"),
     );
@@ -136,34 +133,36 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
   }, [device]);
 
   const play = decidePlay(status, stopped);
-  const perHour = (status && status !== "error" ? status.audience?.perHour : undefined) ?? null;
+
+  // A spent demo comes back live when its oldest ask is an hour old.
+  useEffect(() => {
+    const at = quota.nextFree();
+    if (at === null) return;
+    const timer = setTimeout(() => setAsksVersion((v) => v + 1), Math.max(1000, at - Date.now() + 500));
+    return () => clearTimeout(timer);
+  }, [quota, asksVersion]);
 
   const env: SoloEnv = useMemo(
     () => ({
       locale,
       live: play.mode === "live",
-      cloud: (game) => ({
-        audience: device,
-        accessCode: null,
-        ...(game ? { onRemaining: (n: number) => setLeft((l) => ({ ...l, [game]: n })) } : {}),
-      }),
-      left: (game) => left[game] ?? null,
-      perHour,
+      cloud: { audience: device, accessCode: null },
+      left: (demo) => quota.left(demo),
+      perHour: ASKS_PER_HOUR,
+      spend: (demo) => {
+        quota.spend(demo);
+        setAsksVersion((v) => v + 1);
+      },
       report: (err) => {
         const trouble = troubleOf(err);
-        const budget = err instanceof CloudLlmError ? err.budget : undefined;
-        if (budget?.game) {
-          const game = budget.game;
-          setLeft((l) => ({ ...l, [game]: budget.remaining }));
-        }
-        // A demo's own asks spent: that demo shows recordings. The room's: every demo does.
-        if (trouble === "used-up" && budget?.scope === "room") setStopped("used-up");
         if (trouble === "failed") setStopped("failed");
         return trouble;
       },
       reducedMotion,
     }),
-    [locale, play.mode, device, reducedMotion, left, perHour],
+    // asksVersion: a new env object makes the demos read the asks again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [locale, play.mode, device, reducedMotion, quota, asksVersion],
   );
 
   useEffect(() => {
@@ -174,7 +173,7 @@ export default function Play({ locale, initialOpen = null }: { locale: Locale; i
     <section className={styles.play} aria-label={tr(COPY.demos, locale)}>
       <p className={styles.intro}>{tr(COPY.intro, locale)}</p>
       {play.mode === "checking" ? <p className={styles.status}>{tr(COPY.checking, locale)}</p> : null}
-      {play.mode === "live" ? <p className={styles.status}>{tr(COPY.asks, locale)}</p> : null}
+      {play.mode === "live" ? <p className={styles.status}>{tr(COPY.asks, locale).replace("{n}", String(ASKS_PER_HOUR))}</p> : null}
       {play.mode === "recorded" ? (
         <p className={styles.notice} role="status">
           {tr(COPY[WHY[play.why]], locale)}

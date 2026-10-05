@@ -70,7 +70,8 @@ function Words({ space, env }: { space: EmbeddingSpace; env: SoloEnv }) {
     setPending(true);
     try {
       const t0 = performance.now();
-      const r = await cloudEmbed([queryText(space, text)], env.cloud("words"));
+      const r = await cloudEmbed([queryText(space, text)], env.cloud);
+      env.spend("words");
       const raw = r.vectors[0] ? Float32Array.from(r.vectors[0]) : undefined;
       if (id !== request.current || !raw) return;
       setQuery(fromLocated(text, locateQuery(space, raw), "model", { ms: Math.round(performance.now() - t0) }));

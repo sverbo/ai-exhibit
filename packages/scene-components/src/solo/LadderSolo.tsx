@@ -50,8 +50,10 @@ export default function LadderSolo({ env }: { env: SoloEnv }) {
           run = applyLadderEvent(run, ev);
           setLive(run);
         },
-        { ...env.cloud("ladder"), signal: ac.signal },
+        { ...env.cloud, signal: ac.signal },
       );
+      // One question, one ask, whatever the number of models that answered.
+      env.spend("ladder");
       if (run.running) run = failLive(run, tr(COPY.liveStreamCut, locale));
       setLive(run);
     } catch (err) {

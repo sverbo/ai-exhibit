@@ -12,9 +12,10 @@ let space: EmbeddingSpace;
 const env = (locale: "en" | "fr"): SoloEnv => ({
   locale,
   live: true,
-  cloud: () => ({}),
-  left: () => 5,
-  perHour: 5,
+  cloud: {},
+  left: () => 10,
+  perHour: 10,
+  spend: () => {},
   report: () => "failed",
   reducedMotion: true,
 });

@@ -1,6 +1,6 @@
 /**
  * The "Try it" tab's decisions (docs/specs/2026-10-04-audience-play.md): this
- * phone's device id for the audience budget, and whether the demos call the
+ * phone's device id for audience requests, and whether the demos call the
  * live models or show recorded examples.
  */
 import type { CloudStatus } from "@ai-exhibit/ml-runtime/lm";
@@ -20,7 +20,8 @@ function randomId(): string {
 
 /**
  * A random id for this phone, made once and kept in localStorage: it only
- * lets the server give each phone its own small budget. Never personal data;
+ * keeps the phone's calls out of the presenter's budget, under a small
+ * anti-burst cap of its own. Never personal data;
  * clearing the browser's storage makes a new one.
  */
 export function deviceId(storage: Pick<Storage, "getItem" | "setItem"> | null = safeStorage()): string {
@@ -61,22 +62,19 @@ function safeStorage(): Storage | null {
  * "no-token": the server has no Hugging Face token (Simulation);
  * "code": the server requires an access code, which phones do not have;
  * "offline": the server or Hugging Face cannot be reached;
- * "used-up": every demo's asks on this phone (or the room's requests) for this hour are spent;
  * "failed": a live call failed.
  */
-export type RecordedWhy = "no-token" | "code" | "offline" | "used-up" | "failed";
+export type RecordedWhy = "no-token" | "code" | "offline" | "failed";
 
 export type PlayMode = { mode: "checking" } | { mode: "live" } | { mode: "recorded"; why: RecordedWhy };
 
 /** Live or recorded, from the audience status (null while asking, "error" when it failed) and what happened since. */
-export function decidePlay(status: CloudStatus | null | "error", stopped: "used-up" | "failed" | null): PlayMode {
+export function decidePlay(status: CloudStatus | null | "error", stopped: "failed" | null): PlayMode {
   if (stopped) return { mode: "recorded", why: stopped };
   if (status === null) return { mode: "checking" };
   if (status === "error") return { mode: "recorded", why: "offline" };
   if (!status.configured) return { mode: "recorded", why: "no-token" };
   if (status.reachable === false) return { mode: "recorded", why: "offline" };
   if (status.codeRequired) return { mode: "recorded", why: "code" };
-  // Every demo's asks spent (or the room's requests): nothing can answer live this hour.
-  if (status.audience && Object.values(status.audience.games).every((n) => n <= 0)) return { mode: "recorded", why: "used-up" };
   return { mode: "live" };
 }

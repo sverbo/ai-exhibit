@@ -2,8 +2,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it } from "vitest";
 import type { Locale } from "@ai-exhibit/presentation-core";
-import { type AudienceDemo, CloudLlmError, type CloudStatus } from "@ai-exhibit/ml-runtime/lm";
-import { type SoloEnv, troubleOf } from "@ai-exhibit/scene-components/solo/env.ts";
+import { CloudLlmError, type CloudStatus } from "@ai-exhibit/ml-runtime/lm";
+import { type SoloDemo, type SoloEnv, troubleOf } from "@ai-exhibit/scene-components/solo/env.ts";
 import LadderSolo from "@ai-exhibit/scene-components/solo/LadderSolo.tsx";
 import ModelsSolo from "@ai-exhibit/scene-components/solo/ModelsSolo.tsx";
 import TokensSolo from "@ai-exhibit/scene-components/solo/TokensSolo.tsx";
@@ -12,7 +12,7 @@ import { Glossary } from "../Glossary.tsx";
 import Play, { DEMOS } from "./Play.tsx";
 import { decidePlay, deviceId, forgetDeviceId } from "./play.ts";
 
-const LIVE: CloudStatus = { configured: true, reachable: true, codeRequired: false, audience: { perHour: 5, games: { words: 5, base: 2, assistant: 0, ladder: 5 } } };
+const LIVE: CloudStatus = { configured: true, reachable: true, codeRequired: false };
 
 function clean(html: string) {
   expect(html).not.toMatch(/[–—]/);
@@ -59,17 +59,12 @@ describe("live or recorded", () => {
     expect(decidePlay({ configured: false, reachable: null }, null)).toEqual({ mode: "recorded", why: "no-token" });
     expect(decidePlay({ ...LIVE, reachable: false }, null)).toEqual({ mode: "recorded", why: "offline" });
     expect(decidePlay({ ...LIVE, codeRequired: true }, null)).toEqual({ mode: "recorded", why: "code" });
-    // One game spent: the others still play live. Every game spent: recordings.
-    expect(decidePlay(LIVE, null)).toEqual({ mode: "live" });
-    const spent = { perHour: 5, games: { words: 0, base: 0, assistant: 0, ladder: 0 } };
-    expect(decidePlay({ ...LIVE, audience: spent }, null)).toEqual({ mode: "recorded", why: "used-up" });
     expect(decidePlay("error", null)).toEqual({ mode: "recorded", why: "offline" });
-    expect(decidePlay(LIVE, "used-up")).toEqual({ mode: "recorded", why: "used-up" });
+    expect(decidePlay(LIVE, "failed")).toEqual({ mode: "recorded", why: "failed" });
   });
 
-  it("tells a busy minute from a spent hour", () => {
-    expect(troubleOf(new CloudLlmError("rate-limited", "x", { window: "minute", remaining: 4 }))).toBe("busy");
-    expect(troubleOf(new CloudLlmError("rate-limited", "x", { window: "hour", remaining: 0 }))).toBe("used-up");
+  it("tells a busy minute from a failure", () => {
+    expect(troubleOf(new CloudLlmError("rate-limited", "x"))).toBe("busy");
     expect(troubleOf(new CloudLlmError("offline", "x"))).toBe("failed");
     expect(troubleOf(new CloudLlmError("timeout", "Cancelled"))).toBeNull();
   });
@@ -92,12 +87,13 @@ describe("device id", () => {
 });
 
 describe("solo demos", () => {
-  const env = (locale: Locale, live: boolean, left: Partial<Record<AudienceDemo, number>> = {}): SoloEnv => ({
+  const env = (locale: Locale, live: boolean, left: Partial<Record<SoloDemo, number>> = {}): SoloEnv => ({
     locale,
     live,
-    cloud: () => ({}),
-    left: (game) => left[game] ?? null,
-    perHour: 5,
+    cloud: {},
+    left: (demo) => left[demo] ?? 10,
+    perHour: 10,
+    spend: () => {},
     report: () => "failed",
     reducedMotion: true,
   });
@@ -118,13 +114,13 @@ describe("solo demos", () => {
     expect(fr).toContain("Exemple enregistré");
     // Live: the base model offers 10 more tokens; the ladder warns it costs three answers.
     expect(renderToStaticMarkup(createElement(ModelsSolo, { env: env("en", true) }))).toContain("+10 tokens");
-    // Each game shows its own asks left, and says so once they are spent.
-    expect(renderToStaticMarkup(createElement(LadderSolo, { env: env("en", true, { ladder: 2 }) }))).toContain("2 of 5 asks left for this demo this hour.");
+    // Each demo shows its own asks left, and says so once they are spent.
+    expect(renderToStaticMarkup(createElement(LadderSolo, { env: env("en", true, { ladder: 2 }) }))).toContain("2 of 10 asks left for this demo this hour.");
     const spentLadder = renderToStaticMarkup(createElement(LadderSolo, { env: env("fr", true, { ladder: 0 }) }));
     expect(spentLadder).toContain("Exemple enregistré");
     expect(spentLadder).toContain("Les autres démos répondent");
     const models = renderToStaticMarkup(createElement(ModelsSolo, { env: env("en", true, { base: 0, assistant: 4 }) }));
     expect(models).toContain("Show the recorded continuation");
-    expect(models).toContain("4 of 5 asks left");
+    expect(models).toContain("4 of 10 asks left");
   });
 });

@@ -80,7 +80,7 @@ describe("cloud LLM module", () => {
     const phone = { host: "192.168.1.20:5173", forwarded: "192.168.1.31", audience: "phone-1234abcd" };
     const status = await call(h, request("GET", "/api/llm/status", undefined, phone));
     expect(status.status).toBe(200);
-    expect(status.json().audience).toMatchObject({ perHour: 5 });
+    expect(status.json()).not.toHaveProperty("audience");
     expect(status.raw).not.toContain(FAKE);
     expect((await call(h, request("POST", "/api/llm/complete", { prompt: "Hi" }, phone))).status).toBe(200);
     // Not an audience endpoint, and no header at all: still this machine only.

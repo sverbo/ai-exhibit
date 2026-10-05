@@ -16,8 +16,6 @@ export interface CloudStatus {
   codeAccepted?: boolean;
   /** The server's Hugging Face key: valid, plan, inference permission, credits refused lately. Absent from older servers. */
   key?: { valid: boolean | null; plan: "free" | "pro" | null; inference: boolean | null; creditsExhausted: boolean };
-  /** Audience requests only: this device's asks left this hour per demo (field `games`), of `perHour` each. */
-  audience?: { perHour: number; games: Record<AudienceDemo, number> };
 }
 
 /** Header the server reads the access code from (packages/cloud-api ACCESS_CODE_HEADER). */
@@ -25,28 +23,10 @@ export const ACCESS_CODE_HEADER = "x-ai-exhibit-code";
 const ACCESS_CODE_KEY = "ai-exhibit:access-code";
 /**
  * Header that marks an audience request (the "Try it" tab of /glossary) with a
- * random device id: the server counts it in the audience budgets, never in the
- * presenter's (packages/cloud-api AUDIENCE_HEADER).
+ * random device id: the server keeps it out of the presenter's budget, under
+ * an anti-burst cap per device (packages/cloud-api AUDIENCE_HEADER).
  */
 export const AUDIENCE_HEADER = "x-ai-exhibit-audience";
-/** On audience answers: the demo's asks left this hour (packages/cloud-api REMAINING_HEADER). */
-export const REMAINING_HEADER = "x-ai-exhibit-remaining";
-
-/** The "Try it" tab's demos that call a model, each with its own asks per device (packages/cloud-api AUDIENCE_DEMOS). */
-export const AUDIENCE_DEMOS = ["words", "base", "assistant", "ladder"] as const;
-export type AudienceDemo = (typeof AUDIENCE_DEMOS)[number];
-
-/** A refusal of the audience budgets. */
-export interface AudienceBudget {
-  /** "minute": try again soon; "hour": used up for now. */
-  window: "minute" | "hour";
-  /** The demo's asks left this hour. */
-  remaining: number;
-  /** The demo refused (wire name `game`). */
-  game?: AudienceDemo;
-  /** "device": this demo on this phone; "room": every phone at this address. */
-  scope?: "device" | "room";
-}
 
 /** The access code this browser remembers, or null. */
 export function getAccessCode(): string | null {
@@ -100,8 +80,6 @@ export class CloudLlmError extends Error {
   constructor(
     readonly code: CloudErrorCode,
     message: string,
-    /** Audience refusals: the full window ("minute": try again soon; "hour": used up) and the requests left. */
-    readonly budget?: AudienceBudget,
   ) {
     super(message);
     this.name = "CloudLlmError";
@@ -116,10 +94,8 @@ export interface CloudOptions {
   baseUrl?: string;
   /** Overrides the stored access code (to check a code before saving it). */
   accessCode?: string | null;
-  /** Audience device id: the call goes to the audience budgets (AUDIENCE_HEADER). */
+  /** Audience device id: the call stays out of the presenter's budget (AUDIENCE_HEADER). */
   audience?: string;
-  /** Audience calls: told the demo's asks left this hour after each answer. */
-  onRemaining?: (remaining: number) => void;
 }
 
 /** Headers every call carries: the access code, the audience device id. */
@@ -130,22 +106,12 @@ function callHeaders(opts: CloudOptions, code: string | null, base?: HeadersInit
   return headers;
 }
 
-function reportRemaining(res: Response, opts: CloudOptions): void {
-  const v = res.headers.get(REMAINING_HEADER);
-  if (v !== null && opts.onRemaining && Number.isFinite(Number(v))) opts.onRemaining(Number(v));
-}
-
-/** The error a refused call reports, with the audience budget when the server sent one. */
+/** The error a refused call reports. */
 function refusal(res: Response, body: Record<string, unknown> | null, opts: CloudOptions, code: string | null): CloudLlmError {
   const error = (typeof body?.error === "string" ? body.error : "upstream") as CloudErrorCode;
   // A stored code the server refuses is stale: forget it, so the presenter is asked again.
   if (error === "access-code" && opts.accessCode === undefined && code) setAccessCode(null);
-  const window: "minute" | "hour" | null = body?.window === "minute" || body?.window === "hour" ? body.window : null;
-  const game = (AUDIENCE_DEMOS as readonly unknown[]).includes(body?.game) ? (body!.game as AudienceDemo) : undefined;
-  const scope = body?.scope === "device" || body?.scope === "room" ? body.scope : undefined;
-  const budget: AudienceBudget | undefined =
-    window && typeof body?.remaining === "number" ? { window, remaining: body.remaining, ...(game ? { game } : {}), ...(scope ? { scope } : {}) } : undefined;
-  return new CloudLlmError(error, typeof body?.message === "string" ? body.message : `HTTP ${res.status}`, budget);
+  return new CloudLlmError(error, typeof body?.message === "string" ? body.message : `HTTP ${res.status}`);
 }
 
 async function request<T>(path: string, init: RequestInit, opts: CloudOptions): Promise<T> {
@@ -158,7 +124,6 @@ async function request<T>(path: string, init: RequestInit, opts: CloudOptions): 
     const code = opts.accessCode !== undefined ? opts.accessCode : getAccessCode();
     const headers = callHeaders(opts, code, init.headers);
     const res = await doFetch(`${opts.baseUrl ?? ""}${path}`, { ...init, headers, signal: ac.signal });
-    reportRemaining(res, opts);
     const body = (await res.json().catch(() => null)) as Record<string, unknown> | null;
     if (!res.ok) throw refusal(res, body, opts, code);
     if (!body) throw new CloudLlmError("upstream", "Empty answer");
@@ -338,7 +303,6 @@ export async function cloudLadder(question: string, onEvent: (e: CloudLadderEven
       body: JSON.stringify({ question: keepStart(question) }),
       signal: ac.signal,
     });
-    reportRemaining(res, opts);
     if (!res.ok || !res.body) {
       const body = (await res.json().catch(() => null)) as Record<string, unknown> | null;
       throw refusal(res, body, opts, code);

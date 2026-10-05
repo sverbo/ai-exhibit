@@ -3,7 +3,7 @@
 // functions in api/); this adapter adds what is specific to the presenter's
 // machine: the token from the environment or the repo-root .env, one budget
 // for the whole machine, and loopback clients only, except audience requests
-// from phones on the LAN (their own budgets, docs/specs/2026-10-04-audience-play.md).
+// from phones on the LAN (docs/specs/2026-10-04-audience-play.md).
 import type { IncomingMessage } from "node:http";
 import {
   AUDIENCE_HEADER,
@@ -71,14 +71,13 @@ export function createCloudLlmModule(
     if (!isCloudPath(url.pathname)) return false;
     const local = isLocalClient(req);
     // Phones on the LAN (the audience's "Try it" tab) get the audience endpoints only,
-    // counted in the audience budgets, never in the presenter's.
+    // under the audience's anti-burst cap, never in the presenter's budget.
     const audience = req.headers[AUDIENCE_HEADER] !== undefined;
     if (!local && !(audience && AUDIENCE_PATHS.has(url.pathname))) {
       await sendWebResponse(res, jsonResponse(403, { error: "forbidden", message: "Cloud models are only available on the presenter's machine" }));
       return true;
     }
     const request = await toWebRequest(req, new URL(url.pathname + url.search, "http://localhost"), LOCAL_LIMITS.bodyBytes);
-    // Every LAN phone shares one room budget here: the room cap bounds the whole audience.
     const response = await api.handle(request, { ip: local ? "local" : "lan" });
     await sendWebResponse(res, response ?? jsonResponse(404, { error: "not-found" }));
     return true;

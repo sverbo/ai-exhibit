@@ -30,7 +30,23 @@ const CHAT_LABEL = "Llama 3.1 8B Instruct";
  * Temperature for the next generation, the same choices as on the slides.
  * With recorded answers it is off, with the usual short note.
  */
-function Temperature({ locale, value, onChange, live, disabled }: { locale: Locale; value: number; onChange: (v: number) => void; live: boolean; disabled?: boolean }) {
+function Temperature({
+  locale,
+  value,
+  onChange,
+  live,
+  serverLive,
+  disabled,
+}: {
+  locale: Locale;
+  value: number;
+  onChange: (v: number) => void;
+  /** This demo can ask now. */
+  live: boolean;
+  /** The server runs live models (false: Simulation); a demo out of asks is live server-side. */
+  serverLive: boolean;
+  disabled?: boolean;
+}) {
   const items = TEMPERATURES.map((t) => formatTemperature(t, locale));
   return (
     <div className={styles.form}>
@@ -42,7 +58,8 @@ function Temperature({ locale, value, onChange, live, disabled }: { locale: Loca
         disabled={!live || disabled}
         onPick={(item) => onChange(TEMPERATURES[items.indexOf(item)] ?? DEFAULT_TEMPERATURE)}
       />
-      <p className={styles.note}>{tr(live ? COPY.temperatureHint : COPY.simulationPresetsOnly, locale)}</p>
+      {/* Out of asks, the demo already says so above: no Simulation note here. */}
+      {live || !serverLive ? <p className={styles.note}>{tr(live ? COPY.temperatureHint : COPY.simulationPresetsOnly, locale)}</p> : null}
     </div>
   );
 }
@@ -91,7 +108,8 @@ function BaseModel({ env }: { env: SoloEnv }) {
     setPending(true);
     try {
       const full = prompt + added.join("");
-      const r = await cloudComplete({ prompt: full, maxTokens: ADD_TOKENS, temperature }, env.cloud("base"));
+      const r = await cloudComplete({ prompt: full, maxTokens: ADD_TOKENS, temperature }, env.cloud);
+      env.spend("base");
       if (id !== run.current) return;
       setAdded((a) => [...a, r.text]);
       setSource("live");
@@ -136,7 +154,7 @@ function BaseModel({ env }: { env: SoloEnv }) {
         {pending ? <span className={styles.pending}> …</span> : null}
       </p>
       {busy ? <BusyNotice locale={locale} /> : null}
-      <Temperature locale={locale} value={temperature} onChange={setTemperature} live={live} disabled={pending} />
+      <Temperature locale={locale} value={temperature} onChange={setTemperature} live={live} serverLive={env.live} disabled={pending} />
       <div className={styles.buttons}>
         <button
           type="button"
@@ -190,7 +208,8 @@ function Assistant({ env }: { env: SoloEnv }) {
     setPending(true);
     setAnswer(null);
     try {
-      const r = await cloudChat({ messages: assistantMessages(locale, question), maxTokens: ANSWER_TOKENS, temperature }, env.cloud("assistant"));
+      const r = await cloudChat({ messages: assistantMessages(locale, question), maxTokens: ANSWER_TOKENS, temperature }, env.cloud);
+      env.spend("assistant");
       if (id !== run.current) return;
       setAnswer({ question, text: r.text, cut: r.finishReason === "length", source: "live" });
     } catch (err) {
@@ -240,7 +259,7 @@ function Assistant({ env }: { env: SoloEnv }) {
       ) : (
         <p className={styles.note}>{tr(SOLO.pickQuestion, locale)}</p>
       )}
-      <Temperature locale={locale} value={temperature} onChange={setTemperature} live={live} disabled={pending} />
+      <Temperature locale={locale} value={temperature} onChange={setTemperature} live={live} serverLive={env.live} disabled={pending} />
       {/* Live, visitors ask their own question; the examples only serve the recorded fallback. */}
       {!env.live ? (
       <Chips

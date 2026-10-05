@@ -2,9 +2,8 @@
 import type { ReactNode } from "react";
 import { tr, type Locale } from "@ai-exhibit/presentation-core";
 import { COPY } from "../language/copy.ts";
-import type { AudienceDemo } from "@ai-exhibit/ml-runtime/lm";
 import { SOLO } from "./copy.ts";
-import type { SoloEnv } from "./env.ts";
+import type { SoloDemo, SoloEnv } from "./env.ts";
 import styles from "./Solo.module.css";
 
 export { styles as soloStyles };
@@ -37,17 +36,16 @@ export function BusyNotice({ locale }: { locale: Locale }) {
 }
 
 /** A demo's own asks left this hour, discreet; or, once spent, why it shows recordings. */
-export function AsksLeft({ env, demo }: { env: SoloEnv; demo: AudienceDemo }) {
+export function AsksLeft({ env, demo }: { env: SoloEnv; demo: SoloDemo }) {
   if (!env.live) return null;
   const left = env.left(demo);
-  if (left === 0) {
+  if (left <= 0) {
     return (
       <p className={styles.notice} role="status">
         {tr(SOLO.demoUsedUp, env.locale)}
       </p>
     );
   }
-  if (left === null || env.perHour === null) return null;
   return (
     <p className={styles.note} role="status">
       {tr(SOLO.asksLeft, env.locale).replace("{n}", String(left)).replace("{m}", String(env.perHour))}
