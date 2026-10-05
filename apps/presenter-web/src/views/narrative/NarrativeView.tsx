@@ -1,43 +1,65 @@
 /**
  * The talk's narrative: the general flow of the talk, slide by slide, as a
- * text to read (content/script/narrative.fr.md). Not the full script: the
- * technical explanations and the demos live in the slides and their notes.
- * Written in French for now; it can be downloaded as Markdown.
+ * text to read (content/script/narrative.<locale>.md). Not the full script:
+ * the text's own first paragraph says so. English and French, each
+ * downloadable as Markdown; `?lang=` picks one.
  */
-import narrative from "../../../../../content/script/narrative.fr.md?raw";
+import { useState } from "react";
+import { tr, type Locale } from "@ai-exhibit/presentation-core";
+import narrativeEn from "../../../../../content/script/narrative.en.md?raw";
+import narrativeFr from "../../../../../content/script/narrative.fr.md?raw";
+import { LocalePicker } from "../../ui/LocalePicker.tsx";
 import { Markdown } from "../../ui/Markdown.tsx";
 import chrome from "../../ui/chrome.module.css";
 import styles from "./NarrativeView.module.css";
 
-const FILE_NAME = "ai-exhibit-narrative.fr.md";
+const TEXTS: Partial<Record<Locale, string>> = { en: narrativeEn, fr: narrativeFr };
+const LOCALES = Object.keys(TEXTS) as Locale[];
 
-function download() {
-  const url = URL.createObjectURL(new Blob([narrative], { type: "text/markdown;charset=utf-8" }));
+const COPY = {
+  home: { en: "← Home", fr: "← Accueil" },
+  download: { en: "Download (Markdown)", fr: "Télécharger (Markdown)" },
+  language: { en: "Language", fr: "Langue" },
+};
+
+function initialLocale(): Locale {
+  const asked = new URLSearchParams(window.location.search).get("lang");
+  return LOCALES.find((l) => l === asked) ?? "en";
+}
+
+function download(text: string, locale: Locale) {
+  const url = URL.createObjectURL(new Blob([text], { type: "text/markdown;charset=utf-8" }));
   const a = document.createElement("a");
   a.href = url;
-  a.download = FILE_NAME;
+  a.download = `ai-exhibit-narrative.${locale}.md`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function NarrativeView() {
+  const [locale, setLocale] = useState<Locale>(initialLocale);
+  const text = TEXTS[locale] ?? narrativeEn;
+  const choose = (l: Locale) => {
+    setLocale(l);
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", l);
+    window.history.replaceState(null, "", url);
+  };
   return (
-    <div className={styles.page}>
+    <div className={styles.page} lang={locale}>
       <nav className={styles.bar}>
         <a className={chrome.btn} href="/">
-          ← Home
+          {tr(COPY.home, locale)}
         </a>
-        <button type="button" className={chrome.btn} onClick={download}>
-          Download (Markdown)
-        </button>
+        <span className={styles.barEnd}>
+          <LocalePicker value={locale} onChange={choose} locales={LOCALES} label={tr(COPY.language, locale)} compact />
+          <button type="button" className={chrome.btn} onClick={() => download(text, locale)}>
+            {tr(COPY.download, locale)}
+          </button>
+        </span>
       </nav>
-      <p className={styles.note}>
-        The general flow of the talk: its structure, its ideas and how they follow each other, slide by slide. It is not the
-        full script: much of what is said on stage, especially the technical explanations and the demos, lives in the slides
-        and their notes. Written in French for now.
-      </p>
-      <article lang="fr">
-        <Markdown className={styles.text} text={narrative} />
+      <article>
+        <Markdown className={styles.text} text={text} />
       </article>
     </div>
   );

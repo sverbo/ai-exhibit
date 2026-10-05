@@ -67,15 +67,17 @@ export default function LauncherView() {
       </header>
 
       <div className={styles.language}>
+        <a className={chrome.btn} href={`/narrative?lang=${lang}`}>
+          Narrative
+        </a>
+        <span className={styles.settingHint}>The talk's general flow as a text to read or download (English or French).</span>
+      </div>
+
+      <div className={styles.language}>
         <a className={chrome.btn} href="/presenter?config">
           Config
         </a>
         <span className={styles.settingHint}>Reorder, hide or annotate scenes for your own talk (saved in this browser).</span>
-        <span className={styles.sep} aria-hidden="true" />
-        <a className={chrome.btn} href="/narrative">
-          Narrative
-        </a>
-        <span className={styles.settingHint}>The talk's general flow as a text to read or download (French).</span>
         <span className={styles.sep} aria-hidden="true" />
         <span className={styles.languageLabel} id="talk-language">
           Language of the talk

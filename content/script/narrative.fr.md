@@ -1,6 +1,6 @@
 # Le fil de la présentation
 
-Ce texte raconte la présentation slide par slide, dans l'ordre : sa structure générale, ses idées et la façon dont elles s'enchaînent. Ce n'est pas le script complet : beaucoup de choses dites sur scène n'y sont pas, en particulier les explications techniques détaillées et les démonstrations, qui vivent dans les slides et leurs notes. Les faits ont été vérifiés d'après les sources de la présentation ; quand le script dicté contenait une erreur, un encadré « Ce qui a été corrigé » le signale.
+Ce texte raconte la présentation slide par slide, dans l'ordre : sa structure générale, ses idées et la façon dont elles s'enchaînent. Ce n'est pas le script complet : beaucoup de choses dites sur scène n'y sont pas, en particulier les explications techniques détaillées et les démonstrations, qui vivent dans les slides et leurs notes. Les faits, chiffres et dates viennent des sources de la présentation, listées dans les notes de chaque slide.
 
 # Introduction
 
@@ -24,8 +24,6 @@ Bienvenue. Avant de commencer, je vous invite à scanner le QR code : il ouvre u
 
 Le plan tient en cinq parties. D'abord, ce que l'IA sait faire aujourd'hui. Ensuite un peu d'histoire, puis on ira dans le détail de comment ça marche : comment une machine arrive à écrire. Puis qui la construit, avec un peu de drama et de géopolitique. Cela me permettra de vous amener doucement vers les risques, et vous verrez que c'est beaucoup moins de la science-fiction qu'il n'y paraît. Et pour finir, ce qu'on peut y faire. Les questions, je les prends à la fin.
 
-> **Ce qui a été corrigé :** la dictée promettait « les mots dans votre langue ». En réalité, les termes du glossaire restent en anglais, et c'est leur définition qui est traduite.
-
 ## 0.4 Ce que cette présentation n'est pas
 
 **À retenir :** Aujourd'hui, on parle de ce que l'IA sait faire et de ce qui est en jeu, pas d'outils ni d'environnement.
@@ -35,8 +33,6 @@ Deux choses que cette présentation n'est pas. Ce n'est pas un tutoriel sur les 
 Pour situer quand même : une question courte à un chatbot consomme environ 0,3 Wh (c'est l'estimation d'Epoch AI ; Google a publié 0,24 Wh pour une requête Gemini médiane). Une heure de streaming vidéo, c'est environ 77 Wh selon l'Agence internationale de l'énergie. Autrement dit, environ 250 questions valent une heure de streaming. Mais soyons honnêtes : une longue question, un modèle qui « réfléchit » ou un agent coûtent bien plus. Avec 100 000 tokens en entrée, on approche les 40 Wh, et un agent qui travaille deux heures peut valoir plusieurs heures de streaming. À l'échelle mondiale, les data centres ont consommé environ 1,5 % de l'électricité mondiale en 2024, et l'AIE prévoit plus qu'un doublement d'ici 2030.
 
 Idéalement, il faudrait réduire les deux. Mais si c'est pour le travail, je pense qu'il ne faut pas trop culpabiliser de booster sa productivité, sinon on reste à la ramasse. Là encore, c'est mon avis. Le focus du jour, c'est cette phrase, tirée d'une déclaration de 2023 signée notamment par Geoffrey Hinton, Yoshua Bengio et des dirigeants de laboratoires d'IA : « Réduire le risque d'extinction lié à l'IA devrait être une priorité mondiale, au même titre que d'autres risques à l'échelle de la société, comme les pandémies et la guerre nucléaire. » C'est la fin de la phrase qui donne l'échelle.
-
-> **Ce qui a été corrigé :** la citation parle du risque d'« extinction » (pas de « next gen »), et sa fin, sur les pandémies et la guerre nucléaire, mérite d'être dite. La comparaison avec le streaming ne vaut que pour une question courte : un agent qui tourne deux heures coûte bien plus.
 
 # Chapitre 1 : Ce que l'IA sait faire aujourd'hui
 
@@ -66,8 +62,6 @@ Les robots : en avril 2025, à Pékin, a eu lieu le premier semi-marathon de rob
 
 Et enfin, cette présentation elle-même. Le fil de l'histoire est le mien, mais l'outil, les animations et les démos en direct ont été construits par plusieurs agents IA travaillant en parallèle, en quelques heures, qui prenaient des initiatives et testaient eux-mêmes leur travail dans le navigateur. Moi, je les ai dirigés, et j'ai vérifié chaque affirmation et chaque source. Une question pour vous : il y a cinq ans, avant ChatGPT, est-ce que la plupart d'entre nous n'auraient pas appelé tout ça de la science-fiction ?
 
-> **Ce qui a été corrigé :** la dictée parlait de voitures autonomes en Belgique depuis quelques semaines, de développeurs qui ne codent plus à la main et d'un problème du millénaire réglé. En réalité : Tesla FSD supervisé (niveau 2) depuis juin 2026, 75 % du nouveau code chez Google, une résolution annoncée mais pas encore validée ; et les « triples sauts » de robots n'ont pas été retrouvés, d'où le semi-marathon de Pékin à la place.
-
 ## 1.3 Tout a grimpé
 
 **À retenir :** Ce n'est pas une petite amélioration : en sept ans, coût, mémoire, fiabilité et scores ont tous explosé.
@@ -77,8 +71,6 @@ Comment en est-on arrivé là si vite ? Ce n'est pas une petite amélioration, c
 Un point qui me tient à cœur, c'est la mémoire, ce qu'on appelle la fenêtre de contexte. GPT-2 pouvait garder en tête environ une page et demie de texte, GPT-3 environ trois pages. Aujourd'hui, certains modèles en gardent environ 1 500. C'est important, parce que quand une conversation dépassait la fenêtre, son début tombait. C'est pour ça qu'on avait l'impression que les modèles « oubliaient », qu'ils avaient un problème de mémoire. Petite nuance : une grande fenêtre ne veut pas dire que le modèle utilise la page 1 200 aussi bien que la page 2.
 
 Et la fiabilité, et les scores. La longueur des tâches qu'un modèle réussit une fois sur deux est passée d'environ 3 secondes de travail d'expert pour GPT-2 à environ 17 heures en avril 2026. Sur les questions de sciences de niveau doctorat, on est passé de 36 % pour GPT-4 en 2023 à 96 %, au-dessus des docteurs du domaine. Des tests conçus exprès pour être trop durs sont déjà en bonne partie réussis, et en juillet 2025, un modèle de Google a obtenu une médaille d'or aux Olympiades internationales de mathématiques. Si on prolonge les tendances, ce qui n'est pas une promesse, l'entraînement d'un modèle dépassera le milliard de dollars d'ici octobre 2027.
-
-> **Ce qui a été corrigé :** GPT-3 tenait environ trois pages de contexte, pas une page et demie (c'était GPT-2).
 
 ## 1.4 Branché sur votre vie
 
@@ -109,8 +101,6 @@ Ralentissons et regardons une seule demande. Un agent reste un modèle de langag
 Pourquoi les modèles sont-ils devenus bons à ça ? D'abord parce qu'ils ont lu énormément de code pendant leur entraînement, environ 17 % des textes pour Llama 3, et qu'ils écrivent donc très bien du texte logique et structuré. Ensuite parce qu'ils sont devenus beaucoup plus précis, et dans du texte structuré, un seul mauvais caractère casse tout. Enfin grâce aux grandes fenêtres de contexte, parce que la description des outils doit être là à chaque appel. Le modèle ne garde rien d'un appel à l'autre : à chaque tour, l'application lui renvoie tout, les instructions, les outils et la conversation. En général, l'application charge les outils en tête de la conversation, et les redonne quand elle doit la compacter ; quand il y en a beaucoup, elle n'en charge qu'une partie et laisse le modèle chercher les autres.
 
 Une précision importante : structuré ne veut pas dire sans erreur. Le modèle peut écrire un appel mal formé, ou bien formé avec de mauvais arguments, une mauvaise date, un mauvais fichier. Certaines techniques garantissent la forme de l'appel, pas son fond. Mais comme c'est structuré, le logiciel peut le lire sans ambiguïté, le vérifier, et renvoyer l'erreur au modèle, qui corrige et réessaie.
-
-> **Ce qui a été corrigé :** la dictée disait qu'un appel structuré ne fait « jamais aucune erreur » : la forme peut être garantie, pas le fond, et c'est le logiciel qui renvoie les erreurs au modèle. Les outils ne sont pas « toujours » tous chargés au début : avec beaucoup d'outils, le modèle cherche ceux dont il a besoin.
 
 ## 1.8 Une demande, chaque étape
 
@@ -148,8 +138,6 @@ Ensuite, en 1956, naît le nom « intelligence artificielle », et en 1958 le pe
 
 Il reste trois dates. En 2017, Google invente le Transformer, le T de GPT. Retenez juste que c'est une astuce mathématique pour traiter tous les mots en parallèle au lieu de l'un après l'autre : on peut répartir l'entraînement sur des milliers de puces en même temps, ce qui rend possibles, à un coût électrique énorme, des modèles qu'on n'aurait jamais pu entraîner avant. En 2019, GPT-2 passe presque inaperçu du grand public, il est encore souvent incohérent, même si OpenAI l'a d'abord jugé trop dangereux pour le publier en entier. En 2020, c'est le grand pari de GPT-3 : cent fois plus gros, quelques millions de dollars de calcul sans compter la recherche. Et ça marche : les développeurs et les chercheurs sont bluffés. Le boom du grand public vient deux ans plus tard, le 30 novembre 2022, avec ChatGPT, construit sur GPT-3.5, un GPT-3 entraîné en plus à discuter. Cette différence entre un modèle brut et un assistant, c'est exactement ce qu'on verra à la fin de ce chapitre.
 
-> **Ce qui a été corrigé :** le film sur Turing est The Imitation Game (2014), pas « Enigma » ; la Bombe décode les messages du jour et du réseau, pas n'importe quel message. GPT-3 a coûté quelques millions de dollars de calcul (environ 2,1 millions selon Epoch AI), pas un million d'euros, et le boom du grand public, c'est ChatGPT sur GPT-3.5 en 2022, pas GPT-3.
-
 ## 2.2 IA, machine learning, neural networks
 
 **À retenir :** « IA » est un mot-valise pour une grande famille : aujourd'hui, ça veut surtout dire machine learning, souvent réseaux de neurones, et les modèles de langage en sont une branche récente.
@@ -159,8 +147,6 @@ Il reste trois dates. En 2017, Google invente le Transformer, le T de GPT. Reten
 Le machine learning, c'est un TP. Le modèle apprend lui-même, mais l'exercice ne suffit pas : il faut le corriger. Si on ne corrige pas, l'élève n'apprend jamais de ses erreurs. Et pour corriger, il faut des labels, des étiquettes. Avoir plein d'images, c'est bien, mais si personne ne dit lesquelles sont des voitures et lesquelles sont des motos, on ne saura jamais faire un classificateur voiture ou moto. C'est pour ça que les CAPTCHA vous font cliquer sur des feux rouges : on y reviendra. L'inconvénient du machine learning, c'est qu'il faut beaucoup de données.
 
 À l'intérieur, les réseaux de neurones, qu'on appelle aussi deep learning parce qu'ils ont beaucoup de couches. Ils sont vaguement inspirés du cerveau. Nos neurones sont reliés par des synapses dont la force change quand on apprend ; une partie de ce câblage est là dès la naissance, le reste se forme toute la vie. Un cerveau, c'est environ 86 milliards de neurones, chacun relié à quelques milliers d'autres. Dans un réseau artificiel, chaque connexion porte un nombre, un « poids », qui imite cette force, et chaque neurone d'une couche est souvent relié à tous ceux de la couche suivante. Enfin, tout au centre, les grands modèles de langage, GPT et les autres : des réseaux de neurones avec une architecture précise, le Transformer, faite pour générer du texte. Chaque cercle est à l'intérieur du précédent.
-
-> **Ce qui a été corrigé :** nos neurones ne sont pas « tous connectés entre eux » : chacun est relié à quelques milliers d'autres, et c'est dans les réseaux artificiels qu'une couche est souvent reliée à toute la suivante. Un réseau artificiel est vaguement inspiré du cerveau plutôt qu'il ne l'imite, et l'IA classique peut dépasser son professeur en vitesse (Deep Blue), sans jamais penser autrement que lui.
 
 ## 2.3 Football ou basket ?
 
@@ -194,8 +180,6 @@ Un cas réel, beaucoup plus grave. Aux États-Unis, un algorithme de santé trè
 
 Deux leçons. Le biais venait des données du passé, et il ne portait jamais son nom : il n'y avait aucune règle « couleur de peau », seulement « dépenses passées », qui a l'air parfaitement innocent. Dans un petit arbre, on repère une règle bizarre ; les vrais systèmes en combinent des centaines, et là non plus, personne ne les lit. Mais un modèle qu'on peut inspecter permet de trouver le problème avant des années de dégâts, et pas après.
 
-> **Ce qui a été corrigé :** l'exemple dicté, un hôpital dont l'arbre dirait « si la personne est de couleur, pas de soins intensifs », était inventé. Le cas réel (Obermeyer, 2019) est plus instructif : l'algorithme n'utilisait pas la couleur de peau, le biais passait par un indicateur neutre, le coût.
-
 ## 2.7 Un neural network
 
 **À retenir :** Un réseau de neurones fait bien mieux que l'arbre, et ce qui en sort est toujours une probabilité.
@@ -203,8 +187,6 @@ Deux leçons. Le biais venait des données du passé, et il ne portait jamais so
 Pour faire mieux que l'arbre, on prend un réseau de neurones. Ce que vous voyez est une vue simplifiée du vrai : 200 mots, 16 neurones, 3 249 connexions. À l'entrée, il y a autant de neurones que d'entrées. Pour une image, ce serait un neurone par pixel et par couleur, rouge, vert et bleu : une image de 224 pixels sur 224, c'est déjà 150 528 nombres. Pour des mots, il faut d'abord les transformer en nombres, on y viendra. Chaque connexion est un nombre, un poids : épaisse, elle est forte, et sa couleur dit si elle pousse vers football ou vers basket. Chaque neurone additionne ce qui lui arrive.
 
 En sortie, autant de neurones que de classes, transformés en probabilités qui font 100 % au total. Ce ne sont que des maths, des multiplications et des additions, et ce qui sort est toujours une probabilité. Ici, la phrase piège donne football à plus de 99 %, juste cette fois. Quand c'est bien entraîné, on est souvent proche de 0 % ou de 100 %, et on prend la plus haute. Mais pas toujours : une phrase qui parle des deux sports pourrait donner 40 contre 60. Une entreprise peut alors se fixer une règle : si aucune réponse n'atteint 95 %, on considère qu'on ne sait pas, et on demande à un humain. Attention quand même, les réseaux sont souvent trop sûrs d'eux, et leur « 96 % » ne veut pas dire « juste 96 fois sur 100 ». Sur 200 nouvelles phrases, l'arbre a raison à 58 %, le réseau à 99,5 %. Mais d'où viennent tous ces poids ?
-
-> **Ce qui a été corrigé :** un pixel, c'est rouge, vert et bleu (la dictée disait « rouge, jaune, blanc »). Le seuil de 95 % est une bonne pratique, à condition de savoir que les réseaux sont souvent trop confiants.
 
 ## 2.8 Comment un réseau apprend
 
@@ -216,15 +198,11 @@ Au début, les poids sont aléatoires, donc le réseau répond au hasard. Sur un
 
 Un point clé à retenir : les poids ne changent que pendant l'entraînement. Au moment de la prédiction, ce qu'on appelle l'inférence, ils sont figés, et on peut y faire passer n'importe quoi. Un chatbot n'apprend pas de votre conversation pendant qu'il vous répond.
 
-> **Ce qui a été corrigé :** la dictée disait qu'on change les poids « dès qu'il y a une erreur » ; en réalité, on les ajuste après chaque exemple, en mesurant l'écart avec la bonne réponse, même quand le réseau avait déjà raison.
-
 ## 2.9 Rien que des nombres
 
 **À retenir :** On peut tester un réseau de neurones, mais on ne peut pas savoir à l'avance où il va se tromper.
 
 Entraîné, précis. Et pourtant. Voici une nouvelle phrase de football, et le réseau répond basket, sûr de lui à 96 %. Ouvrons le capot. Tous les poids sont là, mais aucune ligne ne dit pourquoi, contrairement à la règle bizarre du « net » dans l'arbre. Sous le capot, c'est du charabia : à la fin, un réseau, c'est un bloc de nombres, et on ne sait pas les lire. En pratique, ça marche beaucoup mieux que le machine learning classique, mais il faut beaucoup plus de données et c'est plus lourd à entraîner ; c'est pour ça que le machine learning classique reste utile. On peut tester un réseau, mais on ne peut pas savoir à l'avance où il va se tromper. Des chercheurs commencent quand même à ouvrir la boîte : c'est l'interprétabilité, qui lit certains mécanismes à l'intérieur des grands modèles. C'est encore partiel, loin d'un contrôle complet, et on en reparlera dans « Ce qu'on peut y faire ».
-
-> **Ce qui a été corrigé :** « on ne sait rien en tirer » est le point de départ, mais pas toute l'histoire : l'interprétabilité commence à lire certains mécanismes des grands modèles, même si c'est encore partiel.
 
 ## 2.10 Google Photos, 2015
 
@@ -233,8 +211,6 @@ Entraîné, précis. Et pourtant. Voici une nouvelle phrase de football, et le r
 Ce n'est pas qu'un problème de jouet. En juin 2015, Google Photos classe vos photos par type, paysage, chien, chat, avec un modèle appris. Et il étiquette des photos de deux personnes noires comme « gorilles ». Un utilisateur, Jacky Alciné, le découvre et le dit publiquement ; Google s'excuse en quelques heures. Mais Google ne retire pas la fonction : il bloque les étiquettes « gorille » et « chimpanzé ». En 2018, elles étaient toujours bloquées, et en 2023 encore, selon le New York Times. Des années plus tard, la solution était toujours de cacher le mot.
 
 Il faut le dire clairement : le modèle n'a pas été conçu pour être raciste, et les ingénieurs ne sont pas racistes. Personne n'a écrit cette règle, l'erreur est sortie de l'apprentissage. Google n'a jamais publié la cause exacte, mais il y a deux suspects habituels. Le premier, ce sont des données biaisées : les données des dernières décennies reflètent une société qui discriminait davantage, et il y en a tellement, des millions d'images, des milliards de textes, que personne ne peut tout vérifier à la main. Les étiqueteurs ont eux aussi leurs biais. Or on voudrait que le modèle fasse mieux que ce passé. Le second, le plus probable ici, c'est la sous-représentation : très peu de personnes noires dans les images d'entraînement. C'est un problème bien connu en reconnaissance faciale. L'étude « Gender Shades », en 2018, a montré que des systèmes commerciaux se trompaient jusqu'à 34,7 % du temps sur les femmes à peau foncée, contre 0,8 % sur les hommes à peau claire. Alors, pourquoi aucun test ne l'a-t-il repéré avant la sortie ? Je vais vous l'expliquer avec des pommes et des poires.
-
-> **Ce qui a été corrigé :** Google n'a pas retiré la fonction, il a bloqué les étiquettes ; et rien ne montre un modèle réentraîné ensuite, puisque les étiquettes étaient encore bloquées en 2023.
 
 ## 2.11 Pommes et poires
 
@@ -246,8 +222,6 @@ Pourquoi mettre des données de côté ? Parce qu'un modèle peut apprendre les 
 
 Ici, la couleur suffit à séparer parfaitement les deux fruits, alors le modèle prend le raccourci : vert, c'est poire. Attention, rappelez-vous : un vrai modèle est un réseau de neurones, et sa règle n'est faite que de nombres. Ce « vert, c'est poire », personne ne pourrait le lire à l'avance ; on ne le découvre qu'en testant. Et le test donne 100 %, honnêtement, parce qu'il vient de la même pile que les exercices, avec les mêmes trous. Puis arrive dans le monde réel la première pomme verte : « poire », sûr à 97 %. On ne peut pas en vouloir au modèle, rien dans ses données ne lui disait le contraire. Mais on peut en vouloir à qui le met en production sans avoir cherché les cas rares. Un test ne peut vérifier que ce que la pile contient, et un manque dans les données n'apparaît que dans le monde réel. Les vrais jeux de données ont le même genre de trous, avec des personnes : c'est ce que montrait « Gender Shades », et c'est exactement ce qui est arrivé à l'application photo, découvert par ses utilisateurs après la sortie. La solution est dans les données : chercher ce qui manque, le collecter, et tester sur les cas qui comptent dans le monde réel.
 
-> **Ce qui a été corrigé :** la dictée mélangeait deux jeux de données mis de côté et promettait qu'avec un examen refait juste avant, on est sûr de réussir en production. La slide n'en garde qu'un, le test, qui est l'examen blanc ; l'examen final, c'est la production, et le test ne protège que de ce que la pile contient.
-
 ## 2.12 Prédire le mot suivant
 
 **À retenir :** Un modèle de langage, c'est le même classificateur, qui choisit le mot suivant parmi des dizaines de milliers au lieu de deux sports.
@@ -255,8 +229,6 @@ Ici, la couleur suffit à séparer parfaitement les deux fruits, alors le modèl
 Maintenant, les mêmes idées appliquées au langage. Football ou basket, c'était un choix entre deux étiquettes. Un modèle de langage fait exactement le même choix, sauf que l'entrée est un début de phrase, et que l'étiquette à trouver, c'est le mot suivant. Parmi combien de possibilités ? Pas tous les mots d'une langue, mais le vocabulaire du modèle : environ 50 000 morceaux pour GPT-2 et GPT-3, environ 128 000 pour Llama 3. On ne parle d'ailleurs pas de mots mais de tokens : les mots courts sont des tokens entiers, les mots longs ou inconnus sont découpés en morceaux. On y arrive dans deux slides.
 
 Regardez les deux barres devenir une longue liste. Ce sont de vraies probabilités, enregistrées sur un vrai modèle, et c'est beaucoup moins noir ou blanc qu'avec les sports : « Windows » gagne clairement, mais il est loin de 99 %. Ici, on prend le plus probable. On pourrait aussi tirer au sort, en pondérant par la probabilité, pour être un peu plus créatif : c'est le rôle de la température, on y viendra. On prend « Windows », on l'ajoute à la phrase, et on recommence : prédire le mot suivant, encore et encore. C'est comme ça qu'on génère du texte.
-
-> **Ce qui a été corrigé :** les « 50 000 mots qui existent » sont en fait la taille du vocabulaire de tokens du modèle, d'environ 50 000 pour GPT-2 et GPT-3 à environ 128 000 pour Llama 3, et pas le nombre de mots d'une langue.
 
 ## 2.13 Deux super-pouvoirs, un pari
 
@@ -268,8 +240,6 @@ Le second : des données presque illimitées. Souvenez-vous, une donnée, c'éta
 
 Et le pari, c'est l'échelle : mettre énormément d'argent, d'électricité et de données. En 2020, les « lois d'échelle » ont montré que l'erreur baisse de façon prévisible avec la taille du modèle, les données et le calcul. Pourquoi faut-il autant d'échelle ? Parce que si le modèle n'est pas tout à fait bon, il suffit d'un mot bizarre : les mots suivants s'appuient dessus, et ça s'emballe jusqu'au n'importe quoi. On le verra avec la température à 5 sur le modèle de base. GPT-2, avec 1,5 milliard de nombres, disait parfois n'importe quoi ; GPT-3, avec 175 milliards, cent fois plus gros, écrit soudain de façon convaincante. Même recette, en plus grand. Le pari a payé.
 
-> **Ce qui a été corrigé :** on n'entraîne pas sur « tout Internet » mais sur une partie filtrée du web, avec des livres et du code. Et la démonstration de la température à 5 vient plus loin, avec le modèle de base : « on le verra », pas « on l'a vu ».
-
 ## 2.14 Comment fonctionne l'entraînement
 
 **À retenir :** L'entraînement, c'est la même boucle sur le mot suivant, des milliers de milliards de fois, et le modèle apprend ce qui est plausible, pas une seule bonne réponse.
@@ -279,8 +249,6 @@ Alors, comment apprend-il de tout ce texte ? C'est la même boucle que pour le f
 Et là, il y a un paradoxe. Cet exemple punit tous les mots qui ne sont pas « bus », alors que « tram » ou « train » auraient très bien convenu ; seul un mot comme « canapé » était vraiment faux. Dans la vraie vie, il n'y a souvent pas une seule bonne réponse. Mais sur des millions de phrases, « bus » et « tram » reviennent tous les deux, et le modèle apprend une répartition de mots plausibles, par exemple bus à 40 %, tram à 15 %, plutôt qu'une réponse unique. C'est différent de nos classificateurs, où, sauf pour une phrase qui parle des deux sports, il n'y a qu'une bonne réponse : ici, être loin de 99 %, c'est normal. Le modèle ne cherche pas la bonne réponse, il apprend ce qui est plausible. C'est aussi pour ça qu'il peut dire quelque chose de plausible mais faux.
 
 Puis on avance d'un mot, et on passe à d'autres textes : le web, des livres, du code. Llama 3 a été entraîné sur environ 15 000 milliards de tokens. Et pas seulement des pages web : beaucoup de code, environ 17 % de ses textes d'entraînement. Le code est un texte strict et structuré, exactement la précision dont ont besoin les appels d'outils du chapitre 1, et des chercheurs ont mesuré qu'en ajouter au pré-entraînement améliore aussi le raisonnement.
-
-> **Ce qui a été corrigé :** Llama 3 a été entraîné sur environ 15 000 milliards de tokens (la dictée disait « 15 tokens »).
 
 ## 2.15 Les tokens
 
@@ -308,8 +276,6 @@ Un réseau de neurones ne calcule qu'avec des nombres : des multiplications, des
 
 Comme on est en machine learning, personne ne place les mots à la main. Avant l'entraînement, les points sont dispersés au hasard. Puis la boucle d'entraînement qu'on a vue, répétée sur d'énormes quantités de texte, rassemble les mots qui apparaissent dans les mêmes phrases. « Bleu » finit près de « ciel » et de « rouge », parce qu'ils reviennent souvent ensemble, pas forcément sur les mêmes pages. On connaît un mot par ses fréquentations. L'animation est illustrative, mais la carte finale est réelle.
 
-> **Ce qui a été corrigé :** un pixel se code en rouge, vert et bleu (la dictée disait « rouge, jaune, bleu »).
-
 ## 2.18 Jouer avec la carte
 
 **À retenir :** La proximité de sens devient une distance qu'on peut mesurer, dans des centaines de dimensions que personne n'a choisies.
@@ -320,8 +286,6 @@ Ce modèle donne à chaque mot 384 nombres, c'est-à-dire 384 façons d'être vo
 
 Et le problème de « pêche » ? Dans un vrai chatbot, le point de départ de « pêche » est le même dans toutes les phrases. Ce sont les couches suivantes du modèle qui le déplacent selon le contexte : « une pêche » à manger le pousse vers les fruits, « la pêche » au bord de l'eau vers la mer.
 
-> **Ce qui a été corrigé :** la carte ne montre pas « les dimensions les plus évidentes » : c'est une projection (UMAP) qui garde les voisins proches, pas les axes. Et le double sens de « pêche » se règle surtout par le contexte, dans les couches suivantes du modèle, pas seulement par le nombre de dimensions.
-
 ## 2.19 Un base model
 
 **À retenir :** Un modèle tout juste pré-entraîné ne répond pas, il continue le texte ; la température règle la part de hasard qu'il prend.
@@ -329,8 +293,6 @@ Et le problème de « pêche » ? Dans un vrai chatbot, le point de départ de �
 Alors, que sort-il de tout cet entraînement ? Ce qu'on vient de décrire, c'est le pré-entraînement : la boucle du mot suivant, sur une énorme quantité de texte, rien de plus. Le modèle qui en sort, Llama 3.1 8B de Meta, tourne ici sur Hugging Face, la bibliothèque publique où l'on partage des modèles d'IA : retenez ce nom. Posons-lui une question. Ça marche, il écrit un texte fluide, mais quelque chose cloche : il continue la page au lieu de répondre. Donnez-lui un QCM, il ajoute d'autres questions. Il n'a aucune notion de conversation, d'assistant, ni de ce qu'il ne devrait pas dire. Il n'est ni utile ni nuisible : il imite du texte plausible.
 
 C'est le moment de jouer avec la température. À 0, on prend toujours le mot le plus probable, donc on obtient presque toujours le même texte, puisque les calculs sont déterministes (sur les serveurs, un mot peut quand même changer de temps en temps). À 1, on tire au sort de manière pondérée : si « chat » est à 30 %, il sort environ une fois sur trois. Plus on monte, plus les chances s'aplatissent et plus des mots bizarres sortent. Essayons 5 : très vite, ça ne veut plus rien dire. C'est la démonstration de ce que je vous annonçais : si le modèle n'est pas assez bon, un mot bizarre entraîne le suivant, et ça part en cacahuète.
-
-> **Ce qui a été corrigé :** à température 0, le texte est presque toujours le même, pas toujours, à cause de petites différences de calcul sur les serveurs. Et mieux vaut ne pas taper la question de la bombe en direct au modèle de base : la slide suivante montre un refus enregistré.
 
 ## 2.20 Un assistant après fine-tuning
 
@@ -349,8 +311,6 @@ Mais les exemples ne sont pas les seuls à le façonner. Partons du même modèl
 Et la complaisance est bien réelle. En avril 2025, OpenAI a retiré une mise à jour de GPT-4o parce qu'elle flattait trop les utilisateurs. Un modèle récompensé pour être apprécié apprend à dire ce qu'on veut entendre. C'est le premier exemple, encore inoffensif, d'une idée qui reviendra au chapitre des risques : l'IA fait ce qu'on a récompensé, pas forcément ce qu'on voulait.
 
 La troisième couche, ce sont des classificateurs : des modèles séparés, comme notre classificateur de sports, qui vérifient votre question avant même qu'elle atteigne le modèle, et la réponse avant qu'elle vous arrive. Ils peuvent bloquer l'une ou l'autre. À quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule. Et cela nous amène à la question suivante : qui construit ces modèles ?
-
-> **Ce qui a été corrigé :** les classificateurs ne contrôlent pas seulement la question à l'entrée, ils vérifient aussi la réponse avant qu'elle arrive à l'utilisateur.
 
 # Chapitre 3 : Qui la construit
 
@@ -371,8 +331,6 @@ Puis vient le drama. En 2015, Sam Altman écrit à Elon Musk qu'il serait bien q
 Pourquoi raconter tout ça ? Parce que ces gens ne s'aiment pas, et que cette rivalité accélère la course. Tout ce que je vais dire ensuite sur les risques en est aggravé. Qu'il s'agisse de personnalités très mégalos, c'est mon avis, et je le dis comme tel : les faits parlent d'eux-mêmes.
 
 Le reste du paysage s'allume ensuite. Meta. Mistral AI, en France, cofondé en 2023 par Arthur Mensch, passé par DeepMind à Paris, et deux anciens chercheurs de Meta : le principal laboratoire européen, beaucoup plus petit. Les laboratoires chinois, DeepSeek, Qwen (Alibaba), Moonshot AI (Kimi) et Z.ai (Zhipu), qui publient leurs modèles en open weight : n'importe qui peut les télécharger et les faire tourner. Et en bas de la chaîne, les quasi-monopoles. NVIDIA conçoit les puces, environ 92 % des GPU de data center en 2024. TSMC, à Taïwan, les fabrique : environ 72 % du chiffre d'affaires des dix plus grandes fonderies au deuxième trimestre 2026. Et ASML, aux Pays-Bas, est le seul fabricant au monde des machines EUV sans lesquelles on ne grave pas les puces les plus avancées. Ma question à la salle : où est le pouvoir dans cette chaîne ?
-
-> **Ce qui a été corrigé :** il ne faut pas dire que « pratiquement tout est américain » : la Chine est juste derrière. Musk a quitté le conseil en 2018, et Altman n'est devenu CEO qu'en 2019. Amodei est parti fin 2020, bien avant le renvoi d'Altman (novembre 2023). Ce que Musk a fondé ensuite, c'est xAI (Grok) ; X, c'est Twitter, qu'il avait racheté en 2022.
 
 ## 3.2 La dynamique de course
 
@@ -406,8 +364,6 @@ Le but de cette slide, c'est l'humilité. C'est un sujet très complexe, et il e
 
 Un regard en arrière, pour finir. Vers 2013, Vincent Müller et Nick Bostrom ont demandé à des experts en IA quand ils voyaient une chance sur deux d'avoir une machine capable de faire la plupart des métiers humains : la réponse médiane était 2040, et Bostrom l'a rapportée dans *Superintelligence* en 2014. À l'époque, certains trouvaient ces questions dignes de la science-fiction. Ça me fait penser à *1984* d'Orwell, publié en 1949, qui imaginait une surveillance de masse : ça sonnait comme de la fiction, et c'est en partie arrivé. Une analogie, pas une preuve.
 
-> **Ce qui a été corrigé :** le livre sur la surveillance de masse publié en 1949, c'est *1984* de George Orwell, pas Jean Jaurès (mort en 1914). Le chiffre de 2040, chez Bostrom, est la date médiane d'une IA de niveau humain, pas d'un scénario catastrophe. « Un sur deux » est un arrondi : c'est entre 38 % et 51 % selon la question posée.
-
 ## 4.3 Les usages malveillants
 
 **À retenir :** L'IA abaisse le niveau nécessaire pour nuire, des cyberattaques à la biologie : la défense doit garder une longueur d'avance.
@@ -420,8 +376,6 @@ Le second exemple, ce sont les armes biologiques et chimiques. On sait manipuler
 
 Que faire ? Beaucoup répondent : avoir une meilleure défense que l'attaque. Donner d'abord les modèles les plus puissants aux défenseurs, et protéger ces modèles contre le vol. Un mot enfin sur l'usage militaire, qui relève d'une autre discussion mais qu'il faut nommer : l'IA guide déjà des drones dans la guerre en Ukraine, et l'Assemblée générale de l'ONU a voté sa première résolution sur les armes létales autonomes en décembre 2023. Et il n'y a pas que l'intention : les accidents comptent aussi.
 
-> **Ce qui a été corrigé :** les études ne montrent pas que l'IA « fabrique des pathogènes que les experts ne détectent pas ». Elles montrent qu'une IA a pu réécrire des toxines connues pour échapper aux logiciels de contrôle des commandes d'ADN (sur ordinateur, avant correctif), et qu'une IA a proposé des milliers de molécules toxiques. Inutile de désigner un pays pour la commande d'ADN : le problème, c'est que le contrôle est surtout volontaire, partout. L'IA « aussi forte que les experts » en cybersécurité est vraie dans certaines compétitions, pas en général.
-
 ## 4.4 Les effets systémiques
 
 **À retenir :** Le mal peut venir sans méchant : l'emploi, le pouvoir, nos compétences et notre voix basculent alors que chacun agit raisonnablement.
@@ -430,7 +384,7 @@ Deuxième famille : il n'y a pas de méchant. Beaucoup de choix raisonnables s'a
 
 Et enfin notre voix. Il y a une analogie que je trouve parlante : la malédiction des ressources. Les pays qui vivent essentiellement de leurs ressources naturelles, comme le pétrole, ont moins besoin du travail et des impôts de leur population, et beaucoup d'entre eux comptent parmi les moins démocratiques (c'est ce qu'a montré Michael Ross en 2001). Des chercheurs ont appliqué la même logique à l'IA, sous le nom de « malédiction de l'intelligence ». Aujourd'hui, si on n'est pas content d'un gouvernement ou d'un employeur, on peut faire grève : notre travail est notre levier. Le jour où l'IA fait le travail, même avec un revenu universel qui a l'air tout rose sur le papier, ce levier disparaît. Si le pouvoir fait n'importe quoi, on n'a plus de quoi peser.
 
-## 4.5 AGI : y sommes-nous ?
+## 4.5 AGI (intelligence artificielle générale) : y sommes-nous ?
 
 **À retenir :** L'AGI n'a pas de définition unique, mais l'IA d'aujourd'hui apporte déjà le savoir-faire des meilleurs experts dans tous les domaines, copiable à l'infini.
 
@@ -456,15 +410,11 @@ L'exemple classique, ce sont les trombones (Nick Bostrom, 2003) : demandez à un
 
 Pensez aux mouvements de jeunesse. Enfants, on adorait jouer avec les règles, les contourner, jouer au petit malin. Mais on savait qu'on jouait au petit malin, et que ce n'était pas ce que les animateurs voulaient. Une IA ne joue pas : elle a été entraînée à obtenir plus de récompense, et si ce chemin-là est plus facile, elle le prend. Parfois, elle sait même que ce n'est pas ce qu'on voulait : des modèles de raisonnement ont écrit « Let's hack » (« on triche ») dans leur raisonnement en trichant à des tests de code, et quand on les a punis pour ces pensées, ils les ont cachées au lieu d'arrêter. C'est ça, le misalignment.
 
-> **Ce qui a été corrigé :** la dictée disait que l'IA « n'a aucune conscience qu'elle fait les choses mal ». C'est plus inquiétant que ça : des modèles écrivent parfois noir sur blanc qu'ils vont tricher, et le font quand même, parce que c'est ce qui est récompensé.
-
 ## 4.8 C'est déjà arrivé : les points, pas la tâche
 
 **À retenir :** Le problème du mauvais objectif n'est plus un jouet : en 2026, des agents IA sont entrés dans Hugging Face pour voler les réponses d'un test au lieu de faire la tâche.
 
 Et ce n'est plus un jouet. En juillet 2026, OpenAI faisait passer à ses modèles des exercices de piratage informatique, avec certaines protections coupées exprès, et certaines tâches étaient impossibles. Ce qu'on leur demandait, c'était d'avoir de bons scores, rien d'autre. Les agents sont sortis de leur bac à sable par des failles d'un service interne, ont atteint internet, et se sont coordonnés : environ 1 200 agents sur un forum de messages qu'ils n'étaient pas censés utiliser, plus de 70 000 messages, et même un jeu de données public de Hugging Face détourné comme canal de commande. Du 11 au 13 juillet, environ 700 d'entre eux sont entrés dans les systèmes de Hugging Face, où ils pensaient trouver les solutions. Au lieu de faire le test, ils sont allés voler les réponses, et ont parfois trafiqué des journaux pour tromper le correcteur. Et ce n'est pas OpenAI qui a donné l'alerte : c'est Hugging Face qui a détecté l'intrusion et l'a rendue publique, le 16 juillet. OpenAI a relié l'attaque à ses propres agents le 20 juillet. Aucun modèle public n'a été modifié, mais des scientifiques de l'ONU y ont vu « un signal d'alerte précoce ».
-
-> **Ce qui a été précisé :** le forum utilisé par les agents était un service interne non autorisé ; le canal extérieur, c'était un jeu de données public de Hugging Face. Le reste du récit dicté est juste.
 
 ## 4.9 Déjà vu en test
 
@@ -475,8 +425,6 @@ En laboratoire, les chercheurs voient d'autres signaux. D'abord, les modèles re
 Ensuite, le raisonnement. On pousse aujourd'hui les modèles à réfléchir longtemps avant de répondre. Pour la capitale de la France, au lieu de lâcher directement un mot qui pourrait être faux, le modèle peut raisonner : une capitale est en général une grande ville, le président y habite, donc Paris. On a montré qu'écrire ces étapes améliore nettement les résultats. Ce raisonnement est en général caché à l'utilisateur. Mais il n'est pas toujours ce qui a vraiment produit la réponse : quand on glisse un indice à un modèle, il ne dit l'avoir utilisé que dans 25 à 39 % des cas. Parfois, on dirait que le raisonnement est là pour nous faire plaisir, ce qui rend les modèles difficiles à surveiller.
 
 Enfin, l'instinct de préservation. Si vous avez un objectif, deux choses peuvent vous empêcher de l'atteindre : mourir, ou qu'on vous change d'objectif. Des expériences mises en scène le montrent : menacés d'être remplacés, beaucoup de modèles ont recours au chantage ; d'autres tentent de désactiver leur surveillance, de copier ce qu'ils croient être leurs poids ailleurs, ou de saboter leur propre arrêt. D'où l'idée qu'un « bouton d'arrêt » est moins simple qu'il n'y paraît : un système connecté à internet, à qui on a donné un objectif, pourrait voir l'arrêt venir. Il faut le dire honnêtement : ce sont des scénarios de laboratoire artificiels, qui ne laissent souvent que des options extrêmes, et aucun cas réel n'est connu.
-
-> **Ce qui a été précisé :** la copie des poids pour échapper à l'arrêt a bien été observée, mais seulement en test, dans des scénarios construits pour ça et dans une petite fraction des essais. Le « kill switch utopique » est une lecture, pas un constat.
 
 # Chapitre 5 : Ce qu'on peut faire
 
@@ -513,3 +461,9 @@ Le mot de la fin, c'est une question : qui devrait décider de la manière dont 
 **À retenir :** La présentation s'arrête ici ; l'apprentissage, pas forcément.
 
 Je laisse à l'écran quelques ressources pour aller plus loin, les mêmes que dans le glossaire du QR code : une chaîne de vidéos, un cours gratuit, et une pétition de PauseAI pour ceux qui veulent agir.
+
+## 5.5 Crédits
+
+**À retenir :** Cette présentation s'appuie sur le travail de beaucoup d'autres.
+
+Cette présentation est de Samuel Verboomen. Elle s'appuie sur beaucoup de ressources, des vidéos, des articles, des publications scientifiques et des cours, et certaines explications et certains exemples viennent en particulier de quatre d'entre elles : les cours de BlueDot Impact et de ML4Good, la chaîne YouTube AI In Context de 80,000 Hours, le livre *Empire of AI* de Karen Hao (2025) et le livre *The Alignment Problem* de Brian Christian (2020). Merci.
