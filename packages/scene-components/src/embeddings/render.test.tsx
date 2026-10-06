@@ -137,27 +137,43 @@ describe("embedding components render in every role, step and locale", () => {
     }
   });
 
-  it("plays the training in the 3D cloud too, from the view buttons", () => {
-    for (const role of ["controller", "display"] as const) {
+  it("plays the training in the 3D cloud at every step, with no 2D/3D switch", () => {
+    for (const role of ["controller", "display", "preview"] as const) {
       for (const locale of ["fr", "en"] as const) {
         for (const step of [0, 1, 2]) {
-          const html = render(EmbeddingExplorer, { mode: "training" }, ctx(role, step, locale, { view: "3d", showAll: true }));
-          expect(html).toContain(locale === "fr" ? "Nuage de mots en 3D" : "3D cloud of words");
-          expect(html).not.toMatch(/NaN|undefined/);
+          // An old published `view: "2d"` changes nothing.
+          for (const state of [{}, { view: "2d", showAll: true }]) {
+            const html = render(EmbeddingExplorer, { mode: "training" }, ctx(role, step, locale, state));
+            expect(html).toContain(locale === "fr" ? "Nuage de mots en 3D" : "3D cloud of words");
+            expect(html).not.toContain(locale === "fr" ? "Carte des mots" : "Map of words");
+            expect(html).not.toMatch(/NaN|undefined/);
+          }
         }
       }
     }
-    // Default and previews: the 2D map, so the steps read as before.
-    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", 1, "en"))).not.toContain("3D cloud of words");
-    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("preview", 1, "en", { view: "3d" }))).not.toContain("3D cloud of words");
-    // The presenter switches views at any step; the projector gets no buttons.
-    const controller = render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 0, "en"));
-    expect(controller).toContain("2D map");
-    expect(controller).toContain("3D cloud");
-    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", 0, "en"))).not.toContain("2D map");
-    // Last step in 3D: the cloud's own Show all words button, as on the 2D map.
-    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 2, "en", { view: "3d" }))).toContain("Show all words");
-    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 1, "en", { view: "3d" }))).not.toContain("Show all words");
+    for (const step of [0, 1, 2]) {
+      const controller = render(EmbeddingExplorer, { mode: "training" }, ctx("controller", step, "en"));
+      expect(controller).not.toContain("2D map");
+      expect(controller).not.toContain("3D cloud<");
+      // Zoom buttons at every step, on the presenter's screen only.
+      expect(controller).toContain("Reset view");
+      expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", step, "en"))).not.toContain("Reset view");
+    }
+    // Replay from step 1; Show all words in the cloud's corner at the last step only.
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 0, "en"))).not.toContain("Replay");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 1, "en"))).toContain("Replay");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 2, "en"))).toContain("Show all words");
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("controller", 1, "en"))).not.toContain("Show all words");
+    // Step 0 labels only the showcase word; the last step shows chat and cat as a pair, with its note.
+    const step0 = render(EmbeddingExplorer, { mode: "training" }, ctx("display", 0, "fr"));
+    expect(step0).toMatch(/>chat<\/text>/);
+    expect(step0).not.toMatch(/>cat<\/text>/);
+    const step2 = render(EmbeddingExplorer, { mode: "training" }, ctx("display", 2, "fr"));
+    expect(step2).toMatch(/>chat<\/text>/);
+    expect(step2).toMatch(/>cat<\/text>/);
+    expect(step2).toContain("même sens, deux langues");
+    // A clicked word replaces the pair with its neighbours.
+    expect(render(EmbeddingExplorer, { mode: "training" }, ctx("display", 2, "en", { selected: 0 }))).not.toContain("same meaning, two languages");
   });
 
   it("MeaningDimensions renders every step, and pêche only in French", () => {

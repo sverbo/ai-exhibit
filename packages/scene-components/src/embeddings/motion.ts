@@ -1,20 +1,15 @@
 /**
- * The illustrative training animation, as pure functions shared by the 2D map
- * (Training.tsx) and the 3D cloud (Cloud3D.tsx): a seeded start, so every
- * screen draws the same "random" cloud, and a position that depends only on
- * the point and the progress, so any window can draw any moment of it.
+ * The illustrative training animation in the 3D cloud (Training.tsx drives it,
+ * Cloud3D.tsx draws it), as pure functions: a seeded start, so every screen
+ * draws the same "random" cloud, and a position that depends only on the point
+ * and the progress, so any window can draw any moment of it.
  */
 
 /** Total length of the illustrative training animation. */
 export const TRAINING_MS = 5200;
-/** Spread of the 2D starting cloud, in map pixels (standard deviation). */
-export const START_SPREAD = 46;
-/**
- * Spread of the 3D starting cloud as a share of the cloud's radius, so it
- * looks as tight as the 2D one (46 px on a 345 px half-height).
- */
+/** Spread of the starting cloud as a share of the cloud's radius (standard deviation): tight around the centre. */
 export const START_SPREAD_3D = 0.13;
-/** Wander of a moving 3D point, as a share of the cloud's radius (26 px in 2D). */
+/** Wander of a moving point, as a share of the cloud's radius. */
 export const WOBBLE_3D = 0.075;
 
 /** mulberry32, so every screen draws the same "random" start. */
@@ -34,15 +29,9 @@ function gaussian(r: () => number): () => number {
 }
 
 /**
- * Deterministic start positions in map pixels: a tight random cloud around the
- * centre, because embeddings start as small random values near zero.
+ * Deterministic start positions in the cloud's own units: a tight seeded cloud
+ * around `centre`, because embeddings start as small random values near zero.
  */
-export function randomStart(count: number, width: number, height: number): [number, number][] {
-  const g = gaussian(rng(20261002));
-  return Array.from({ length: count }, () => [width / 2 + g() * START_SPREAD, height / 2 + g() * START_SPREAD]);
-}
-
-/** The same idea in 3D, in the cloud's own units: a tight seeded cloud around `centre`. */
 export function randomStart3d(count: number, centre: readonly number[], radius: number): [number, number, number][] {
   const g = gaussian(rng(20261005));
   const s = radius * START_SPREAD_3D;
@@ -69,22 +58,7 @@ function journey(i: number, t: number) {
   return { local, e: easeOut(local), wander: Math.sin(local * Math.PI) * (1 - local), phase: i * 2.39996 };
 }
 
-/** Position of point `i` (map pixels) at global progress `t` in [0, 1]. */
-export function trainingPosition(
-  start: readonly [number, number],
-  end: readonly [number, number],
-  i: number,
-  t: number,
-): [number, number] {
-  const { local, e, wander, phase } = journey(i, t);
-  const wobble = wander * 26;
-  return [
-    start[0] + (end[0] - start[0]) * e + Math.cos(phase + local * 9) * wobble,
-    start[1] + (end[1] - start[1]) * e + Math.sin(phase + local * 7) * wobble,
-  ];
-}
-
-/** Position of point `i` in the 3D cloud at progress `t`; `wobble` is the wander in cloud units. */
+/** Position of point `i` in the 3D cloud at global progress `t` in [0, 1]; `wobble` is the wander in cloud units. */
 export function trainingPosition3d(
   start: readonly number[],
   end: readonly number[],

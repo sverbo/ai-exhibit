@@ -49,7 +49,6 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const step = Math.max(0, Math.min(ctx.revealStep, TRAINING.captions.length - 1));
   const preview = role === "preview";
   const still = ctx.reducedMotion || preview;
-  const view = preview ? "2d" : (state.view ?? "2d");
   const { patch, interactive } = useExplorer(ctx);
   return (
     <div className={`${styles.root} ${still ? styles.still : ""}`}>
@@ -66,14 +65,11 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
           step={step}
           replay={state.replay ?? 0}
           still={still}
-          view={view}
           explore={
             preview
               ? undefined
               : {
                   interactive,
-                  camera: state.camera,
-                  onCamera: (c) => patch({ camera: c }),
                   camera3d: state.camera3d ?? null,
                   onCamera3d: (c) => patch({ camera3d: c }),
                   selected: state.selected ?? null,
@@ -94,14 +90,11 @@ function TrainingMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
             <Rich text={tr(TRAINING.illustrative, locale)} />
           </p>
         </div>
-        {interactive && (
+        {interactive && step >= 1 && (
           <div className={styles.controllerBar} onKeyDown={stopKeys}>
-            {step >= 1 && (
-              <button type="button" className={styles.button} onClick={() => patch({ replay: (state.replay ?? 0) + 1 })}>
-                {tr(TRAINING.replay, locale)}
-              </button>
-            )}
-            <ViewToggle ctx={ctx} state={state} patch={patch} />
+            <button type="button" className={styles.button} onClick={() => patch({ replay: (state.replay ?? 0) + 1 })}>
+              {tr(TRAINING.replay, locale)}
+            </button>
           </div>
         )}
       </footer>

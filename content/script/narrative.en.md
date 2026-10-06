@@ -276,7 +276,7 @@ So models give each word hundreds, even thousands of numbers: 384 in the map we 
 
 A neural network only computes with numbers: multiplications, additions, then a probability between 0 and 1. The 0.1%, 1% and 98% we saw earlier are the result of real computations, so words have to become numbers. And we want close meanings to have close numbers, the way a red pixel and a dark red pixel have close values: then the computations make sense. Our sports classifier only knew whether a word was there or not. Here, we give each word a list of numbers, in other words a point in space.
 
-Since we are in machine learning, nobody places the words by hand. Before training, the points are scattered at random. Then the training loop we saw, repeated on huge amounts of text, gathers the words that appear in the same sentences. "Blue" ends up near "sky" and "red", because they keep showing up together, not necessarily on the same pages. You know a word by the company it keeps. The animation is illustrative, but the final map is real.
+Since we are in machine learning, nobody places the words by hand. Before training, the points are scattered at random, in a small cloud in 3D. Then the training loop we saw, repeated on huge amounts of text, gathers the words that appear in the same sentences, and the cloud slowly turns while the groups form. "Blue" ends up near "sky" and "red", because they keep showing up together, not necessarily on the same pages. You know a word by the company it keeps. Groups form on their own, even across languages: "chat" and "cat" end up side by side. The animation is illustrative, but the final positions are the real model's.
 
 ## 2.18 Play with the map
 

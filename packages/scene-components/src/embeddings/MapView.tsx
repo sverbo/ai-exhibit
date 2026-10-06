@@ -30,10 +30,6 @@ export interface MapViewProps {
   focus?: number | readonly number[] | null;
   /** Screen areas (map pixels) that labels must avoid, e.g. a card drawn over the map. */
   avoid?: readonly { x0: number; y0: number; x1: number; y1: number }[];
-  /** Whether highlighted words dim every other dot (default true). */
-  dimOthers?: boolean;
-  /** Word and group labels fade in (used when the training animation lands). */
-  labelsFadeIn?: boolean;
   /** Items to emphasise (labelled, full opacity). */
   highlight?: readonly number[];
   query?: MapQuery | null;
@@ -48,8 +44,6 @@ export interface MapViewProps {
   maxLabels?: number;
   /** Pan and zoom; omitted means the whole map (zoom 1). */
   camera?: Camera;
-  /** Optional extra marks drawn on top, in map pixels. */
-  overlay?: (toPx: (p: readonly number[]) => [number, number]) => React.ReactNode;
 }
 
 /**
@@ -150,7 +144,7 @@ export function MapView(props: MapViewProps) {
   const dimmed = (i: number) => {
     if (query) return !highlightSet.has(i);
     if (focusSet) return !inFocus(space.items[i]!.cluster);
-    if (highlightSet.size && props.dimOthers !== false) return !highlightSet.has(i);
+    if (highlightSet.size) return !highlightSet.has(i);
     return false;
   };
 
@@ -231,7 +225,7 @@ export function MapView(props: MapViewProps) {
 
   return (
     <svg
-      className={`${styles.map} ${zoom > 1.0001 ? styles.clip : ""} ${props.entrance ? styles.entrance : ""} ${props.labelsFadeIn ? styles.labelsIn : ""}`}
+      className={`${styles.map} ${zoom > 1.0001 ? styles.clip : ""} ${props.entrance ? styles.entrance : ""}`}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -330,7 +324,6 @@ export function MapView(props: MapViewProps) {
           );
         })}
       </g>
-      {props.overlay?.(px)}
     </svg>
   );
 }

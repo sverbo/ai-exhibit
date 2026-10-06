@@ -87,7 +87,7 @@ export const TRAINING = {
     },
   ] satisfies L10n[],
   illustrative: {
-    en: "Illustration. Training adjusts the model's numbers; it does not move dots on a map. The final map is the real model's; the colours are ours.",
+    en: "Illustration. Training adjusts the model's numbers; it does not move dots in space. The final cloud is the real model's; the colours are ours.",
   },
   progress: {  en: "Text read" },
   replay: {  en: "Replay" },

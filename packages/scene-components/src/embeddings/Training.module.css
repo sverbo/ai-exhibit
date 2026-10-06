@@ -1,28 +1,6 @@
 .wrap {
   position: relative;
 }
-.svg {
-  display: block;
-  overflow: visible;
-}
-.dot {
-  opacity: 0.9;
-}
-.showcaseDot {
-  stroke-width: 3;
-  filter: drop-shadow(0 0 6px var(--color-accent));
-}
-.showcaseLabel text {
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 600;
-  fill: var(--color-text);
-  dominant-baseline: middle;
-  paint-order: stroke;
-  stroke: var(--color-bg);
-  stroke-width: 10px;
-  stroke-linejoin: round;
-}
 
 /* "cat" as a list of numbers */
 .vector {
@@ -74,26 +52,4 @@
   width: 0;
   height: 100%;
   background: var(--color-accent);
-}
-
-.pair line {
-  stroke: var(--color-accent-2);
-  stroke-width: 5;
-  stroke-linecap: round;
-}
-.pair circle {
-  fill: none;
-  stroke: var(--color-text);
-  stroke-width: 2.5;
-  stroke-dasharray: 4 6;
-}
-.pair text {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 28px;
-  fill: var(--color-text);
-  paint-order: stroke;
-  stroke: var(--color-bg);
-  stroke-width: 8px;
-  stroke-linejoin: round;
 }

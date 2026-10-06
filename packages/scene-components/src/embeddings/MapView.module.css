@@ -112,6 +112,31 @@
   fill: var(--color-accent);
   stroke-width: 10px;
 }
+/* Two words shown as a pair in the 3D cloud ("chat" and "cat"). */
+.pair {
+  animation: labelIn 900ms var(--ease) both;
+}
+.pair line {
+  stroke: var(--color-accent-2);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.pair circle {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 6;
+}
+.pairNote {
+  font-family: var(--font-display);
+  font-style: italic;
+  fill: var(--color-text);
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 8px;
+  stroke-linejoin: round;
+}
 .clickable {
   cursor: pointer;
 }
@@ -123,10 +148,6 @@
   outline-offset: 4px;
 }
 
-/* Labels arriving after the training animation. */
-.labelsIn text {
-  animation: labelIn 900ms var(--ease) both;
-}
 @keyframes labelIn {
   from {
     opacity: 0;

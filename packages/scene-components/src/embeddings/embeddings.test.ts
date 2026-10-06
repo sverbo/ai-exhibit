@@ -3,8 +3,8 @@ import { estimateWidth, keepFree, placeLabels } from "./labels.ts";
 import { loadEmbeddingSpace } from "./data.ts";
 import { fromLocated, searchVocabulary, SHOWN_NEIGHBOURS } from "./search.ts";
 import { clusterMedoids, fitBox } from "./MapView.tsx";
-import { cloudFrame, labelOrder, project3d } from "./Cloud3D.tsx";
-import { randomStart, randomStart3d, randomVector, START_SPREAD, START_SPREAD_3D, trainingPosition, trainingPosition3d } from "./motion.ts";
+import { cloudFrame, labelOrder, pairPlaces, pairRing, project3d } from "./Cloud3D.tsx";
+import { randomStart3d, randomVector, START_SPREAD_3D, trainingPosition3d } from "./motion.ts";
 import { clusterColor } from "./data.ts";
 
 describe("placeLabels", () => {
@@ -72,30 +72,13 @@ describe("map geometry", () => {
 });
 
 describe("training animation", () => {
-  it("starts at the random point and lands exactly on the map", () => {
-    const a: [number, number] = [10, 20];
-    const b: [number, number] = [300, 400];
-    for (const i of [0, 7, 432]) {
-      expect(trainingPosition(a, b, i, 0)).toEqual(a);
-      const end = trainingPosition(a, b, i, 1);
-      expect(end[0]).toBeCloseTo(300, 6);
-      expect(end[1]).toBeCloseTo(400, 6);
-    }
-  });
-
-  it("starts every screen from the same tight random cloud around the centre", () => {
-    const s1 = randomStart(433, 1728, 720);
-    expect(randomStart(433, 1728, 720)).toEqual(s1);
-    const mean = s1.reduce((a, p) => [a[0] + p[0] / s1.length, a[1] + p[1] / s1.length], [0, 0]);
-    expect(Math.abs(mean[0] - 864)).toBeLessThan(10);
-    expect(Math.abs(mean[1] - 360)).toBeLessThan(10);
-    for (const [x, y] of s1) expect(Math.hypot(x - 864, y - 360)).toBeLessThan(START_SPREAD * 5);
+  it("gives the showcase word the same small random numbers on every screen", () => {
     const v = randomVector(6);
     expect(v).toEqual(randomVector(6));
     for (const x of v) expect(Math.abs(x)).toBeLessThanOrEqual(0.02);
   });
 
-  it("in 3D, starts from a seeded tight cloud and lands exactly on the real layout", () => {
+  it("starts every screen from the same tight 3D cloud and lands exactly on the real layout", () => {
     const centre = [0.5, -1, 2];
     const s = randomStart3d(433, centre, 4);
     expect(randomStart3d(433, centre, 4)).toEqual(s);
@@ -113,11 +96,9 @@ describe("training animation", () => {
       mid.forEach((x, d) => expect(x).toBeGreaterThanOrEqual(Math.min(a[d]!, b[d]!) - 1e-9));
       mid.forEach((x, d) => expect(x).toBeLessThanOrEqual(Math.max(a[d]!, b[d]!) + 1e-9));
     }
-    // Without wobble, the 3D path matches the 2D one on x and y.
-    const p2 = trainingPosition([1, 2], [-4, 5], 3, 0.4);
-    const p3 = trainingPosition3d([1, 2, 3], [-4, 5, 0.5], 3, 0.4, 26);
-    expect(p3[0]).toBeCloseTo(p2[0], 9);
-    expect(p3[1]).toBeCloseTo(p2[1], 9);
+    // Big moves first: halfway through, most points have covered more than half their path.
+    const halfway = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => trainingPosition3d([0, 0, 0], [1, 0, 0], i, 0.5, 0)[0]);
+    expect(halfway.filter((x) => x > 0.5).length).toBeGreaterThan(4);
   });
 
   it("frames the 3D cloud on its centroid and farthest point", () => {
@@ -131,6 +112,25 @@ describe("3D cloud labels", () => {
   it("keeps highlighted words, then group names, then other words, nearest first", () => {
     const order = labelOrder(["word", "cluster", "strong", "word", "cluster"], [0.5, 0.9, 1, -0.5, -0.2]);
     expect(order).toEqual([2, 4, 1, 3, 0]);
+  });
+
+  it("puts the pair's note after group names and before other words", () => {
+    expect(labelOrder(["word", "note", "cluster", "strong"], [0, 0, 0, 0])).toEqual([3, 2, 1, 0]);
+  });
+
+  it("sets a pair's names side by side, each on its outer side, inside a ring around both dots", () => {
+    // "chat" left of "cat": its name goes further left, cat's further right, on the same line.
+    const [ldx, ldy] = pairPlaces(100, 130, true, 60)[0]!;
+    const [rdx, rdy] = pairPlaces(130, 100, false, 50)[0]!;
+    expect(ldx).toBeLessThan(-30);
+    expect(rdx).toBeGreaterThan(25);
+    expect([ldy, rdy]).toEqual([0, 0]);
+    // On the same spot: still opposite sides.
+    expect(Math.sign(pairPlaces(100, 100, true, 40)[0]![0])).toBe(-Math.sign(pairPlaces(100, 100, false, 40)[0]![0]));
+    const ring = pairRing(100, 200, 160, 200);
+    expect(ring).toMatchObject({ x: 130, y: 200 });
+    expect(ring.r).toBeGreaterThan(30);
+    expect(pairRing(0, 0, 0, 0).r).toBeGreaterThan(20);
   });
 
   it("hides any label that overlaps one kept before it, an obstacle, or has no place", () => {

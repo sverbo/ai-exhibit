@@ -35,6 +35,12 @@ export interface Cloud3DProps {
    */
   morph?: { from: readonly (readonly number[])[]; progress: () => number };
   query?: { text: string; position: [number, number, number] } | null;
+  /**
+   * Two words (both in `highlight`) shown as a pair: a dashed ring around them,
+   * a line between them, a note above or below the ring, and their names side
+   * by side (each on its outer side). Keep the object stable between renders.
+   */
+  pair?: { a: number; b: number; note: string } | null;
   /** Rotation stops (and stays at a fixed angle) when false. */
   spinning: boolean;
   /** Snap instead of easing toward the camera. */
@@ -48,6 +54,13 @@ export interface Cloud3DProps {
   onSelect?: (index: number | null) => void;
   /** Fill the parent's width, keeping the width:height ratio (phones). */
   fluid?: boolean;
+  /**
+   * Framing: the cloud's radius as a share of the box's smaller side (default
+   * 0.5), and how far below the middle its centre sits (map units, default 0).
+   * Seen from above, the near side of the cloud reaches higher than the far
+   * side reaches low: a short box gives it a little less size and more room on top.
+   */
+  fit?: { size: number; down: number };
 }
 
 /** Pointer travel (map units) under which a press is a tap, not a drag. */
@@ -59,11 +72,18 @@ export const TILT_RANGE: [number, number] = [-0.4, 1.3];
 export const ZOOM_RANGE: [number, number] = [0.6, 5];
 const HOME: Camera3D = { angle: 0.6, tilt: 0.35, zoom: 1 };
 
-/** Label sizes (map units) and how far above its dot each kind sits. */
-const LABEL_SIZE = { strong: 26, cluster: 32, word: 22 } as const;
-const LABEL_LIFT = { strong: 18, cluster: 0, word: 15 } as const;
+/** Label sizes (map units) and how far above its dot each kind sits (the pair's note sits off its ring). */
+const LABEL_SIZE = { strong: 26, cluster: 32, note: 28, word: 22 } as const;
+const LABEL_LIFT = { strong: 18, cluster: 0, note: 0, word: 15 } as const;
 /** A highlighted word's second place, below its dot. */
 const LABEL_BELOW = 26;
+/** A paired word's name beside its dot: the gap between the dot and the name. */
+const PAIR_SIDE_GAP = 16;
+/** The pair's ring: at least this radius, else this much beyond the two dots. */
+const RING_MIN = 34;
+const RING_PAD = 24;
+/** Gap between the ring and its note. */
+const NOTE_GAP = 22;
 /** The searched text, above its star. */
 const QUERY_SIZE = 40;
 const QUERY_LIFT = 34;
@@ -76,8 +96,8 @@ export const NAMES_MAX_ZOOM = 2;
 interface Label {
   index: number;
   text: string;
-  /** "strong": a highlighted word; "word": any other word ("show all"). */
-  kind: "strong" | "cluster" | "word";
+  /** "strong": a highlighted word; "note": the pair's note; "word": any other word ("show all"). */
+  kind: "strong" | "cluster" | "note" | "word";
   cluster: number;
   size: number;
   /** Estimated width, measured once. */
@@ -95,10 +115,10 @@ export function cloudFrame(coords: readonly (readonly number[])[]): { c: number[
 
 /**
  * Label draw order for one frame: highlighted words, then group names, then
- * the other words, nearest first within each kind.
+ * the pair's note, then the other words, nearest first within each kind.
  */
 export function labelOrder(kinds: readonly Label["kind"][], depths: ArrayLike<number>): number[] {
-  const rank = (k: Label["kind"]) => (k === "strong" ? 0 : k === "cluster" ? 1 : 2);
+  const rank = (k: Label["kind"]) => (k === "strong" ? 0 : k === "cluster" ? 1 : k === "note" ? 2 : 3);
   return kinds.map((_, i) => i).sort((u, v) => rank(kinds[u]!) - rank(kinds[v]!) || depths[u]! - depths[v]!);
 }
 
@@ -109,6 +129,27 @@ export function moveCamera3d(c: Camera3D, dx: number, dy: number, zoomFactor = 1
     tilt: Math.min(TILT_RANGE[1], Math.max(TILT_RANGE[0], c.tilt + dy * 0.006)),
     zoom: Math.min(ZOOM_RANGE[1], Math.max(ZOOM_RANGE[0], c.zoom * zoomFactor)),
   };
+}
+
+/**
+ * Where a paired word's name goes, best first: on its outer side (left for the
+ * dot on the left, right for the other), so the two names read side by side,
+ * then above, below, and the inner side. Offsets of the label's centre from the dot.
+ */
+export function pairPlaces(x: number, otherX: number, first: boolean, w: number): [number, number][] {
+  const side = x < otherX || (x === otherX && first) ? -1 : 1;
+  const dx = w / 2 + PAIR_SIDE_GAP;
+  return [
+    [side * dx, 0],
+    [0, -LABEL_LIFT.strong],
+    [0, LABEL_BELOW],
+    [-side * dx, 0],
+  ];
+}
+
+/** The pair's ring around two dots (map units): centred between them, never smaller than RING_MIN. */
+export function pairRing(ax: number, ay: number, bx: number, by: number): { x: number; y: number; r: number } {
+  return { x: (ax + bx) / 2, y: (ay + by) / 2, r: Math.max(RING_MIN, Math.hypot(bx - ax, by - ay) / 2 + RING_PAD) };
 }
 
 /** Perspective projection of a point after rotating the cloud by `angle` around the vertical axis. */
@@ -133,7 +174,7 @@ export function project3d(p: readonly number[], angle: number, tilt = 0.35) {
  * a tap picks the nearest word.
  */
 export function Cloud3D(props: Cloud3DProps) {
-  const { space, width, height, colored, clusterNames, focus = null, highlight = NONE, query = null, locale } = props;
+  const { space, width, height, colored, clusterNames, focus = null, highlight = NONE, query = null, pair = null, locale } = props;
   const interactive = Boolean(props.interactive);
   // Where the camera is heading: the controller's own moves, or the published camera.
   const [local, setLocal] = useState<Camera3D | null>(null);
@@ -288,6 +329,8 @@ export function Cloud3D(props: Cloud3DProps) {
   const pointRefs = useRef<(SVGCircleElement | null)[]>([]);
   const labelRefs = useRef<(SVGTextElement | null)[]>([]);
   const queryRef = useRef<SVGGElement | null>(null);
+  const ringRef = useRef<SVGCircleElement | null>(null);
+  const pairLineRef = useRef<SVGLineElement | null>(null);
   const angleRef = useRef(0.6);
   const highlightSet = useMemo(() => new Set(highlight), [highlight]);
   const focusKey = focus === null ? "" : typeof focus === "number" ? String(focus) : focus.join(",");
@@ -296,7 +339,8 @@ export function Cloud3D(props: Cloud3DProps) {
   const n = space.json.clusters.length;
   // Centre on the centroid and fit the farthest point, whatever the layout.
   const frame = useMemo(() => cloudFrame(coords), [coords]);
-  const scale = (Math.min(width, height) * 0.5) / frame.r;
+  const scale = (Math.min(width, height) * (props.fit?.size ?? 0.5)) / frame.r;
+  const down = props.fit?.down ?? 0;
   // Read by the frame loop, so a new value never restarts it.
   const morphRef = useRef(props.morph);
   morphRef.current = props.morph;
@@ -323,12 +367,13 @@ export function Cloud3D(props: Cloud3DProps) {
         if (!focusSet || focusSet.has(c)) add(m, tr(space.json.clusters[c]!.label, locale), "cluster", c);
       });
     }
+    if (pair) add(pair.a, pair.note, "note", space.items[pair.a]!.cluster);
     if (showAll) {
       const skip = new Set(strong);
       for (const it of space.items) if (!skip.has(it.index)) add(it.index, it.text, "word", it.cluster);
     }
     return out;
-  }, [clusterNames, medoids, focusSet, highlight, space, locale, showAll]);
+  }, [clusterNames, medoids, focusSet, highlight, space, locale, showAll, pair]);
 
   useEffect(() => {
     let raf = 0;
@@ -347,7 +392,9 @@ export function Cloud3D(props: Cloud3DProps) {
     for (let k = 0; k < L; k++) shown[k] = labelRefs.current[k]?.style.opacity === "1" ? 1 : 0;
     const rects: (Rect | Rect[] | null)[] = new Array(L).fill(null);
     const free = new Uint8Array(L);
-    // Where each label sits relative to its dot (above, or below for a highlighted word).
+    // Where each label sits relative to its dot (above, below or beside it), or
+    // to the pair's ring for the note.
+    const offsetX = new Float32Array(L);
     const offset = Float32Array.from(labelled, (l) => -LABEL_LIFT[l.kind]);
     const draw = (now: number) => {
       const a = angleRef.current;
@@ -360,7 +407,7 @@ export function Cloud3D(props: Cloud3DProps) {
       drawn = [a, tilt, k, t];
       const place = (p: readonly number[]) => {
         const q = project3d([p[0]! - frame.c[0]!, p[1]! - frame.c[1]!, p[2]! - frame.c[2]!], a, tilt);
-        return { x: width / 2 + q.x * k, y: height / 2 - q.y * k, depth: q.depth, persp: q.persp };
+        return { x: width / 2 + q.x * k, y: height / 2 + down - q.y * k, depth: q.depth, persp: q.persp };
       };
       const wobble = frame.r * WOBBLE_3D;
       for (let i = 0; i < count; i++) {
@@ -380,23 +427,47 @@ export function Cloud3D(props: Cloud3DProps) {
       // hidden for this frame, so names never pile up as the cloud turns, and
       // more words appear as it is zoomed in.
       const namesOff = showAll && zoomRef.current >= NAMES_MAX_ZOOM;
+      const sx = (i: number) => screen.current[i * 2]!;
+      const sy = (i: number) => screen.current[i * 2 + 1]!;
+      const ring = pair ? pairRing(sx(pair.a), sy(pair.a), sx(pair.b), sy(pair.b)) : null;
+      // Where each label is anchored: its dot, or the ring's centre for the note.
+      const anchorX = (l: Label) => (l.kind === "note" && ring ? ring.x : sx(l.index));
+      const anchorY = (l: Label) => (l.kind === "note" && ring ? ring.y : sy(l.index));
       for (let j = 0; j < L; j++) labelDepth[j] = depth[labelled[j]!.index]!;
       const order = labelOrder(kinds, labelDepth);
       for (let j = 0; j < L; j++) {
         const l = labelled[order[j]!]!;
-        const x = screen.current[l.index * 2]!;
-        const y = screen.current[l.index * 2 + 1]!;
+        const x = anchorX(l);
+        const y = anchorY(l);
         const h = l.size * 0.6;
-        const at = (dy: number): Rect | null => {
+        const at = (dx: number, dy: number): Rect | null => {
           // A label that would be cut by the edge waits until it fits.
-          const r = { x0: x - l.w / 2, y0: y + dy - h, x1: x + l.w / 2, y1: y + dy + h };
+          const r = { x0: x + dx - l.w / 2, y0: y + dy - h, x1: x + dx + l.w / 2, y1: y + dy + h };
           return r.x0 < 0 || r.x1 > width || r.y0 < 0 || r.y1 > height ? null : r;
         };
+        const places = (offsets: [number, number][]) => offsets.map(([dx, dy]) => at(dx, dy)).filter((r): r is Rect => r !== null);
         if (namesOff && l.kind === "cluster") rects[j] = null;
+        else if (l.kind === "note") {
+          // Above the ring, else below, either one slid sideways, else beside it.
+          const up = ring ? -ring.r - NOTE_GAP : 0;
+          const side = ring ? ring.r + NOTE_GAP + l.w / 2 : 0;
+          const slide = l.w / 2;
+          rects[j] = ring
+            ? places([[0, up], [0, -up], [-slide, up], [slide, up], [-slide, -up], [slide, -up], [side, 0], [-side, 0]])
+            : null;
+        }
+        // The pair's names sit side by side, each on its outer side.
+        else if (l.kind === "strong" && pair && (l.index === pair.a || l.index === pair.b)) {
+          const other = l.index === pair.a ? pair.b : pair.a;
+          rects[j] = places(pairPlaces(x, sx(other), l.index === pair.a, l.w));
+        }
         // A highlighted word may also sit below its dot, so a translation
         // landing on the same spot ("chat" and "cat") keeps both names.
-        else if (l.kind === "strong") rects[j] = [at(-LABEL_LIFT.strong), at(LABEL_BELOW)].filter((r): r is Rect => r !== null);
-        else rects[j] = at(-LABEL_LIFT[l.kind]);
+        else if (l.kind === "strong") rects[j] = places([[0, -LABEL_LIFT.strong], [0, LABEL_BELOW]]);
+        // A group name may slide a line up or down (as on the 2D map), so two
+        // groups side by side (countries and capitals) keep both names.
+        else if (l.kind === "cluster") rects[j] = places([[0, 0], [0, -l.size * 1.1], [0, l.size * 1.1]]);
+        else rects[j] = at(0, -LABEL_LIFT[l.kind]);
       }
       // The query's star and its name are drawn over everything: words keep clear of them.
       const q = query ? place(query.position) : null;
@@ -418,7 +489,8 @@ export function Cloud3D(props: Cloud3DProps) {
         if (on) {
           const r = rects[j]!;
           const placed = Array.isArray(r) ? r[free[j]! - 1]! : (r as Rect);
-          offset[kk] = (placed.y0 + placed.y1) / 2 - screen.current[l.index * 2 + 1]!;
+          offsetX[kk] = (placed.x0 + placed.x1) / 2 - anchorX(l);
+          offset[kk] = (placed.y0 + placed.y1) / 2 - anchorY(l);
         }
         if (on !== (shown[kk] === 1)) {
           shown[kk] = on ? 1 : 0;
@@ -427,10 +499,20 @@ export function Cloud3D(props: Cloud3DProps) {
         }
         // Faded-out labels are not moved: most of them, with every word labelled.
         if (!on && now - hiddenAt[kk]! > LABEL_FADE_MS) continue;
-        el.setAttribute("x", screen.current[l.index * 2]!.toFixed(1));
-        el.setAttribute("y", (screen.current[l.index * 2 + 1]! + offset[kk]!).toFixed(1));
+        el.setAttribute("x", (anchorX(l) + offsetX[kk]!).toFixed(1));
+        el.setAttribute("y", (anchorY(l) + offset[kk]!).toFixed(1));
       }
       if (queryRef.current && q) queryRef.current.setAttribute("transform", `translate(${q.x.toFixed(1)},${q.y.toFixed(1)})`);
+      if (ring && pair && ringRef.current && pairLineRef.current) {
+        ringRef.current.setAttribute("cx", ring.x.toFixed(1));
+        ringRef.current.setAttribute("cy", ring.y.toFixed(1));
+        ringRef.current.setAttribute("r", ring.r.toFixed(1));
+        const line = pairLineRef.current;
+        line.setAttribute("x1", sx(pair.a).toFixed(1));
+        line.setAttribute("y1", sy(pair.a).toFixed(1));
+        line.setAttribute("x2", sx(pair.b).toFixed(1));
+        line.setAttribute("y2", sy(pair.b).toFixed(1));
+      }
     };
     const tick = (t: number) => {
       const goal = targetRef.current;
@@ -452,7 +534,7 @@ export function Cloud3D(props: Cloud3DProps) {
     draw(performance.now());
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [coords, frame, width, height, scale, spinning, labelled, highlightSet, query, props.reducedMotion, showAll]);
+  }, [coords, frame, width, height, scale, down, spinning, labelled, highlightSet, query, pair, props.reducedMotion, showAll]);
 
   const dim = (i: number) => {
     if (query) return !highlightSet.has(i);
@@ -483,6 +565,13 @@ export function Cloud3D(props: Cloud3DProps) {
       }}
       style={{ touchAction: "none", overflow: "hidden" }}
     >
+      {pair && (
+        // Behind the dots, so the two words stay on top of their own ring.
+        <g className={styles.pair}>
+          <line ref={pairLineRef} />
+          <circle ref={ringRef} />
+        </g>
+      )}
       <g>
         {space.items.map((it) => {
           const c = colored ? clusterColor(it.cluster, n) : "var(--color-text)";
@@ -516,7 +605,9 @@ export function Cloud3D(props: Cloud3DProps) {
             }}
             textAnchor="middle"
             fontSize={l.size}
-            className={l.kind === "cluster" ? styles.clusterLabel : l.kind === "strong" ? styles.wordStrong : styles.word}
+            className={
+              l.kind === "cluster" ? styles.clusterLabel : l.kind === "strong" ? styles.wordStrong : l.kind === "note" ? styles.pairNote : styles.word
+            }
             style={{
               // The frame loop shows each label once it has a place: nothing flashes in a corner.
               opacity: 0,

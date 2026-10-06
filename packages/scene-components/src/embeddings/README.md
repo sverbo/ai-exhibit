@@ -16,32 +16,29 @@ Props: `{ mode: "cloud" | "search" | "training" }`.
 ### `mode: "training"` (storyboard 3.4 and 3.5), set `steps: 2`
 
 Labelled on screen as an illustration at every step: training adjusts the
-model's numbers, it does not move dots on a map. The end positions are the real
-model's 2D map; the colours are ours.
+model's numbers, it does not move dots in space. The end positions are the real
+model's 3D layout (`space.coords.umap3d`); the colours are ours.
+
+Every step is the same turning 3D cloud (`Training.tsx` on `Cloud3D`), so it
+keeps turning from one step to the next; there is no 2D/3D switch on this
+slide. The cloud is framed a little smaller and lower than elsewhere
+(`fit`), so as it turns it stays inside the short box and clear of the card.
 
 | Step | What appears |
 | --- | --- |
-| 0 | Every word starts as a dot in a tight random cloud around the centre (seeded, identical on every screen), coloured by group so the mix is visible: embeddings are initialised as small random values near zero. "cat" ("chat" in French) is labelled, and a card in the top right corner shows its first four numbers (small random values near zero), "384 numbers in all". The caption bridges from the text classifier of chapter 02, where a word was only present or absent: to capture meaning, each word becomes a list of numbers, a point in space. This step alone serves scene 3.4. |
-| 1 | The cloud expands and organises into the real map over about 5 s (fast moves first, then small refinements, like a learning curve), with a "Text read" bar. On landing, group names and word labels fade in and the card switches to the first four real numbers of "cat". |
-| 2 | Animals, Emotions, Countries and Capitals stay lit, the rest dims; chat and cat are circled with "same meaning, two languages". |
+| 0 | Every word starts as a dot in a tight random cloud around the centre (`randomStart3d`, seeded, identical on every screen), coloured by group so the mix is visible: embeddings are initialised as small random values near zero. "cat" ("chat" in French) is labelled, and a card in the top right corner shows its first four numbers (small random values near zero), "384 numbers in all". The caption bridges from the text classifier of chapter 02, where a word was only present or absent: to capture meaning, each word becomes a list of numbers, a point in space. This step alone serves scene 3.4. |
+| 1 | The words glide to their real 3D positions over about 5 s (`trainingPosition3d`: fast moves first, then small refinements, like a learning curve) while the cloud turns slowly, with a "Text read" bar. On landing, group names fade in, cat and chat are labelled and the card switches to the first four real numbers of "cat". |
+| 2 | Animals, Emotions, Countries and Capitals stay lit, the rest dims; chat and cat are labelled side by side (each name on its outer side), joined by a line inside a dashed ring, with "same meaning, two languages" above or below the ring (`pair`). A click on a word stars it and lists its neighbours. |
 
 The animation plays when the presenter moves from step 0 to step 1 while the
 scene is on screen; arriving later (or with reduced motion or paused motion, or
-in the preview) shows the end state at once. The controller has a `Replay`
-button (state `replay`, a counter) that replays it on every screen. Controller
-and projector each run the same deterministic animation locally.
+in the preview) shows the end state at once, and the cloud does not turn. The
+controller has a `Replay` button (state `replay`, a counter) that replays it on
+every screen. Controller and projector each run the same deterministic
+animation locally. The cloud can be dragged and zoomed at any step
+(`camera3d`); at step 2 its corner has a `Show all words` button.
 
-The controller also has `2D map` / `3D cloud` buttons at every step (state
-`view`, default `2d`, so the steps above are unchanged). In 3D the same story
-plays in the turning cloud: the words start as a tight seeded cloud near the
-centre (`randomStart3d`) and glide to their real 3D positions
-(`space.coords.umap3d`) with the same easing and length (`trainingPosition3d`,
-in `motion.ts` beside the 2D helpers). The cloud keeps turning from step to
-step and can be dragged at any step (`camera3d`); the steps, `Replay`, reduced
-motion and previews (always 2D) behave as in 2D. At step 2 the cloud's corner
-has its own `Show all words` button, like the 2D map.
-
-### Exploring the map (training last step, search, cloud)
+### Exploring the map (search, cloud)
 
 On the controller the 2D map pans and zooms (`InteractiveMap.tsx`, maths in
 `view.ts`):
@@ -70,8 +67,9 @@ On the controller the 2D map pans and zooms (`InteractiveMap.tsx`, maths in
   `camera3d` is published the same way.
 - `Show all words` (state `showAll`) labels words in whichever view is shown.
   In 3D every word gets a label (433 of them), checked on every frame:
-  highlighted words first, then group names (dropped from 2x zoom), then the
-  other words, nearest first within each; a label that would overlap one kept
+  highlighted words first, then group names (dropped from 2x zoom; each may
+  slide a line up or down), then a pair's note, then the other words, nearest
+  first within each; a label that would overlap one kept
   before it, the query, or the buttons' corner is hidden for that frame, so
   more words appear as the cloud is zoomed in. Hidden labels stop being moved
   once faded out, and a still cloud is not redrawn.

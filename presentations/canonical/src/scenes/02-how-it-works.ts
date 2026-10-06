@@ -705,9 +705,11 @@ export const chapter02: SceneDefinition[] = [
 - We want close meanings to get close numbers, the way a red pixel and a dark red pixel have close values: then the computations make sense
 - Our classifier only knew whether a word was there; richer: give each word a **list of numbers**, a point in space
 - We are in machine learning, so nobody places the words by hand: before training, the points are scattered **at random**
-- Play: the training loop we saw, repeated on huge amounts of text, gathers words that appear in the same sentences: "blue" ends up near "sky" and "red", because they keep showing up together (not always on the same pages)
-- The animation is illustrative; the final map is real
-- **3D cloud** button (any step, default 2D): the same story in 3D, a tight random cloud that grows into the real 3D layout while it turns; drag to turn it, Replay plays it again`,
+- Step 0: every word is a dot in a tight random cloud, in 3D; "cat" and its first numbers (small random values near zero) in the corner card
+- Step 1 plays the training: the training loop we saw, repeated on huge amounts of text, gathers words that appear in the same sentences, and the cloud turns slowly while the groups form: "blue" ends up near "sky" and "red", because they keep showing up together (not always on the same pages)
+- The animation is illustrative; the final positions are the real model's
+- Step 2: animals, emotions, countries and capitals stay lit; "chat" and "cat" sit side by side, same meaning in two languages
+- Drag to turn the cloud and use the zoom buttons, at any step; Replay plays the training again; at the last step, Show all words labels every word and a click on a word lists its neighbours`,
     },
     transitionIn: { en: "From numbered pieces to points with meaning." },
     transitionOut: { en: "Let's explore the map with your words." },
