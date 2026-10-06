@@ -13,4 +13,5 @@ export { DEFAULT_THEME, isThemeName, themeOf, useThemeName, type ThemeName } fro
 export { resetCloudStatus } from "./language/source.ts";
 export { canInteract, useSceneActions } from "./primitives/interaction.ts";
 export { LinkedInIcon } from "./capabilities/credits/Byline.tsx";
+export { NeuronMark } from "./primitives/NeuronMark.tsx";
 export { ControlBar, ControlButton, ControlChoice, ControlField } from "./primitives/Controls.tsx";

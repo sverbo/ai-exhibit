@@ -16,6 +16,10 @@
   flex-direction: column;
   gap: var(--space-4);
 }
+.mark {
+  flex: none;
+  display: block;
+}
 .title {
   margin: 0;
   font-family: var(--font-display);

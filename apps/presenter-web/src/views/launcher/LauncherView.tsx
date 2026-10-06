@@ -7,7 +7,7 @@ import {
   rememberTalkLocale,
   resolveTalk,
 } from "../../talk/presentation.ts";
-import { LinkedInIcon } from "@ai-exhibit/scene-components";
+import { LinkedInIcon, NeuronMark } from "@ai-exhibit/scene-components";
 import { cloudHealthText, lanOrigin, useCloudHealth, useRuntime } from "../../talk/runtime.ts";
 import chrome from "../../ui/chrome.module.css";
 import { LocalePicker } from "../../ui/LocalePicker.tsx";
@@ -55,6 +55,7 @@ export default function LauncherView() {
   return (
     <div className={styles.launcher} lang="en">
       <header className={styles.header}>
+        <NeuronMark size={56} className={styles.mark} />
         <p className={styles.brand}>ai-exhibit</p>
         <h1 className={styles.title}>{talk.presentation.title.en}</h1>
         <p className={styles.welcome}>

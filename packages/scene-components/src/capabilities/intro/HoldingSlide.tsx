@@ -5,6 +5,7 @@ import { cx } from "../../learning/shared/ui.tsx";
 import { GlossaryQr } from "../agenda/GlossaryQr.tsx";
 import { Byline, type TalkCredits } from "../credits/Byline.tsx";
 import { isReady, useReadiness, type Check } from "./readiness.ts";
+import { NeuronMark } from "../../primitives/NeuronMark.tsx";
 import styles from "./HoldingSlide.module.css";
 
 export interface HoldingSlideProps {
@@ -46,6 +47,7 @@ export function HoldingSlide({ props, ctx }: SceneComponentProps<HoldingSlidePro
   return (
     <div className={styles.root}>
       <div className={styles.main}>
+        <NeuronMark size={88} className={styles.mark} />
         <h1 className={styles.title}>
           <Rich text={t(props.title)} />
         </h1>
