@@ -156,13 +156,16 @@ export default function LauncherView() {
           <b>Feedback, corrections or a new language:</b> contact me on Signal, <b>{SIGNAL}</b>, or open a pull request on
           GitHub. To add your own notes, move or hide scenes, no need for any of that: use <b>Config</b> above.
         </p>
+        <p className={styles.copyPrompt}>
+          <CopyPrompt />
+        </p>
         <p>
-          <b>Make your own version</b> (another audience, length or angle): paste this prompt into Claude Code <CopyPrompt />: it checks your tools, forks{" "}
+          <b>Make your own version</b> (another audience, length or angle): paste this prompt into Claude Code (button above): it checks your tools, forks{" "}
           <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
             {REPO_URL.replace("https://", "")}
           </a>
           , installs it and guides you to host it. Live models need a Hugging Face token in <code>.env</code>, the only
-          setting; without one, every demo runs on recorded simulation. Run it locally with <code>pnpm dev</code>, or host it
+          required setting; without one, every demo runs on recorded simulation. Run it locally with <code>pnpm dev</code>, or host it
           (easy on Vercel). Big changes such as a new language use many tokens: a generous Claude plan helps. If you host a
           version, send me the link and a short description (for example: kid friendly, 60 minutes) and I will add it to the
           list below. <b>Hosting or Hugging Face credits a hassle?</b> I am happy to host your fork myself and cover the credits: just

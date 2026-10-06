@@ -171,6 +171,9 @@ a.primary:hover {
 .about p {
   margin: 0 0 8px;
 }
+.about .copyPrompt {
+  margin-top: 16px;
+}
 .about b {
   color: var(--color-text);
   font-weight: 600;
