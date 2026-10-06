@@ -98,6 +98,9 @@ export function useCloudHealth(intervalMs = 60_000, retryMs = 3_000): CloudStatu
   return status;
 }
 
+/** Below this estimated credit (US dollars), "ready" comes with a warning and the amount left. */
+export const LOW_CREDIT_USD = 10;
+
 /** One line for the presenter: can the live demos use Hugging Face here? */
 export function cloudHealthText(s: CloudStatus | null | "unreachable"): { state: "ok" | "warn" | "bad" | "none"; text: string } {
   if (s === null) return { state: "none", text: "Hugging Face: checking…" };
@@ -107,7 +110,11 @@ export function cloudHealthText(s: CloudStatus | null | "unreachable"): { state:
   if (s.key?.valid === false) return { state: "bad", text: "Hugging Face: the key is refused (Simulation only)" };
   if (s.key?.inference === false) return { state: "bad", text: "Hugging Face: the key may not call models (Simulation only)" };
   if (s.key?.creditsExhausted) return { state: "bad", text: "Hugging Face: credits used up, payment refused (Simulation only)" };
-  // The remaining balance cannot be read through the API: a refused payment (above) is the signal.
   const details = [s.key?.valid ? "key OK" : null, s.codeRequired ? "access code required" : null].filter(Boolean);
+  // The credit left is known only when the key may read billing and the server knows the credit bought (HF_CREDIT_USD).
+  const left = s.key?.creditLeftUsd;
+  if (typeof left === "number" && left < LOW_CREDIT_USD) {
+    return { state: "warn", text: `Hugging Face ready, but careful: about $${Math.max(0, left).toFixed(2)} of credit left` };
+  }
   return { state: "ok", text: details.length ? `Hugging Face ready (${details.join(", ")})` : "Hugging Face ready" };
 }

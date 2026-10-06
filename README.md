@@ -57,8 +57,16 @@ echo 'HF_TOKEN=hf_...' > .env    # optional: live demos through Hugging Face (gi
 pnpm dev                         # web app on http://localhost:5173 (local runtime on :4317)
 ```
 
-The token needs only the "Make calls to Inference Providers" permission. Set a
-spending limit on the Hugging Face account that owns it.
+Create a fine-grained token and give it, ideally, these user permissions and
+nothing else:
+
+- Inference: "Make calls to Inference Providers" (needed for the live demos)
+  and "Make calls to your Inference Endpoints";
+- Billing: "Read billing usage and payment method status", so the presenter's
+  first screen can show what is left of the Hugging Face credit and warn when
+  it runs low (with `HF_CREDIT_USD` set, see below).
+
+Set a spending limit on the Hugging Face account that owns it.
 
 ## Presenting
 
@@ -89,15 +97,17 @@ model, chat model, next-token probabilities, embeddings).
 | Environment variable | Required | What it does |
 | --- | --- | --- |
 | `HF_TOKEN` | no | Hugging Face token for the live demos. It stays on the server: never sent to the browser, never logged. Without it, the demos play Simulation |
+| `HF_CREDIT_USD` | no | The prepaid credit bought on the Hugging Face account, in US dollars (e.g. `10`). With the token's "Read billing usage" permission, the home page and the presenter show "ready, but careful" with an estimate of what is left once it falls under $10. Hugging Face does not let a token read the prepaid balance itself: the estimate is this amount minus what each month spent beyond its included credit. The warning, with the amount, shows on the home page, which anyone with the URL can open |
+| `HF_CREDIT_SINCE` | no | When that credit was bought (ISO date, e.g. `2026-10-01`); without it, the last twelve months are counted |
 | `AI_EXHIBIT_ACCESS_CODE` | no | When set, every model call must carry this code: the presenter view asks for it once and the browser remembers it. When unset, anyone with the URL can call the endpoints |
 
 In the project's Settings, Deployment Protection, turn off Vercel
 Authentication so the audience can open the glossary from the QR code. Every
 endpoint refuses texts over 300 characters; answers are free (models stop on
 their own, under a 1024-token safety ceiling, and anything still running after
-25 s is cut and says so, inside Vercel's 30 s). Each address gets at most 100
+25 s is cut and says so, inside Vercel's 30 s). Each address gets at most 500
 model requests an hour, all endpoints together (tokenizing does not count),
-plus a per-minute cap: 20 model requests a minute, and a separate, larger one
+plus a per-minute cap: 50 model requests a minute, and a separate, larger one
 for tokenizing, which calls no model and is sent at every pause in typing
 (`PUBLIC_LIMITS` in `packages/cloud-api/src/core.ts`).
 These counters live in memory, per serverless instance: best effort only, so

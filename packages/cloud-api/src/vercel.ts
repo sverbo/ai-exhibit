@@ -3,10 +3,13 @@
 //
 //   HF_TOKEN                 fine-grained token with the Inference Providers permission
 //   AI_EXHIBIT_ACCESS_CODE   optional; when set, model calls must carry it
+//   HF_CREDIT_USD            optional; the prepaid credit bought on the account, so
+//                            the presenter sees an estimate of what is left
+//   HF_CREDIT_SINCE          optional; when it was bought (ISO date)
 //
 // The rate limit lives in the instance's memory: best effort, since Vercel may
 // run several instances and recycles them.
-import { type CloudApi, createCloudApi, PUBLIC_LIMITS } from "./core.js";
+import { type CloudApi, createCloudApi, parseCreditSetting, PUBLIC_LIMITS } from "./core.js";
 import { loadCloudTokenizer } from "./tokenize.js";
 
 let api: CloudApi | null = null;
@@ -26,6 +29,7 @@ export function cloudApiForVercel(): CloudApi {
   api ??= createCloudApi({
     token: () => env("HF_TOKEN"),
     accessCode: () => env("AI_EXHIBIT_ACCESS_CODE"),
+    credit: () => parseCreditSetting(env("HF_CREDIT_USD"), env("HF_CREDIT_SINCE"), Date.now()),
     limits: PUBLIC_LIMITS,
     rateLimit: "per-client",
   });

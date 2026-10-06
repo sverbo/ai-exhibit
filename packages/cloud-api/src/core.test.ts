@@ -14,7 +14,9 @@ import {
   ACCESS_CODE_HEADER,
   AUDIENCE_HEADER,
   AUDIENCE_LIMITS,
+  billingMonths,
   createCloudApi,
+  creditLeftUsd,
   isBusy,
   LADDER,
   LADDER_BASE_TOKENS,
@@ -26,6 +28,7 @@ import {
   MAX_INPUT_CHARS,
   MAX_OUTPUT_TOKENS,
   NEXT_MODEL,
+  parseCreditSetting,
   parseLadderBody,
   parseStreamData,
   PUBLIC_LIMITS,
@@ -168,7 +171,7 @@ describe("cloud API", () => {
     const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, now: () => t });
     const keyOf = async () => (await call(api, req("GET", "/api/llm/status"))).json?.key as Record<string, unknown>;
     const first = await call(api, req("GET", "/api/llm/status"));
-    expect(first.json?.key).toEqual({ valid: true, plan: "free", inference: true, creditsExhausted: false });
+    expect(first.json?.key).toEqual({ valid: true, plan: "free", inference: true, billing: false, creditsExhausted: false });
     expect(first.raw).not.toContain("someone");
     expect(first.raw).not.toContain(FAKE);
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }))).status).toBe(502);
@@ -176,6 +179,60 @@ describe("cloud API", () => {
     expect((await keyOf()).creditsExhausted).toBe(true);
     t = 16 * 60_000;
     expect((await keyOf()).creditsExhausted).toBe(false);
+  });
+
+  it("estimates the credit left when the key may read billing and the credit bought is set, never otherwise", async () => {
+    const perms = (p: string[]) => ({ isPro: false, auth: { accessToken: { role: "fineGrained", fineGrained: { scoped: [{ permissions: p }] } } } });
+    let whoami = perms(["inference.serverless.write", "user.billing.read"]);
+    const usage: Record<string, { usedNanoUsd: number; includedNanoUsd: number }> = {
+      // September: 0.30 spent, 0.10 included, so 0.20 taken from the credit. October: 0.04 of 0.10.
+      [String(Date.UTC(2026, 8, 1) / 1000)]: { usedNanoUsd: 300_000_000, includedNanoUsd: 100_000_000 },
+      [String(Date.UTC(2026, 9, 1) / 1000)]: { usedNanoUsd: 40_000_000, includedNanoUsd: 100_000_000 },
+    };
+    const urls: string[] = [];
+    const f = vi.fn(async (u: string | URL | Request) => {
+      const url = String(u);
+      urls.push(url);
+      if (url.includes("whoami")) return okJson(whoami);
+      if (url.includes("/v1/models")) return okJson({ data: [] });
+      const start = new URL(url).searchParams.get("startDate")!;
+      return okJson({ usage: { inferenceProviders: usage[start] ?? { usedNanoUsd: 0, includedNanoUsd: 100_000_000 } } });
+    });
+    let t = Date.UTC(2026, 9, 6);
+    const credit = () => parseCreditSetting("10", "2026-09-15", t);
+    const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, now: () => t, credit });
+    const key = async () => (await call(api, req("GET", "/api/llm/status"))).json?.key as Record<string, unknown>;
+    // 10 - 0.20 + (0.10 - 0.04) = 9.86
+    expect(await key()).toMatchObject({ billing: true, creditLeftUsd: 9.86 });
+    expect(urls.filter((u) => u.includes("usage-v2"))).toHaveLength(2);
+    // Cached ten minutes.
+    await key();
+    expect(urls.filter((u) => u.includes("usage-v2"))).toHaveLength(2);
+    // Without the billing permission, nothing is read.
+    whoami = perms(["inference.serverless.write"]);
+    t += 6 * 60_000;
+    urls.length = 0;
+    expect((await key()).creditLeftUsd).toBeUndefined();
+    expect(urls.some((u) => u.includes("usage-v2"))).toBe(false);
+    // Without HF_CREDIT_USD, nothing either.
+    const none = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, now: () => t, credit: () => parseCreditSetting(null, null, t) });
+    whoami = perms(["inference.serverless.write", "user.billing.read"]);
+    expect(((await call(none, req("GET", "/api/llm/status"))).json?.key as Record<string, unknown>).creditLeftUsd).toBeUndefined();
+  });
+
+  it("counts calendar months for the credit, and reads its settings", () => {
+    expect(billingMonths(Date.UTC(2026, 10, 20), Date.UTC(2027, 1, 3, 12))).toEqual([
+      [Date.UTC(2026, 10, 1) / 1000, Date.UTC(2026, 11, 1) / 1000],
+      [Date.UTC(2026, 11, 1) / 1000, Date.UTC(2027, 0, 1) / 1000],
+      [Date.UTC(2027, 0, 1) / 1000, Date.UTC(2027, 1, 1) / 1000],
+      [Date.UTC(2027, 1, 1) / 1000, Date.UTC(2027, 1, 3, 12) / 1000],
+    ]);
+    expect(creditLeftUsd({ usd: 10, since: 0 }, [{ usedNanoUsd: 50_000_000, includedNanoUsd: 100_000_000 }])).toBe(10.05);
+    const now = Date.UTC(2026, 9, 6);
+    expect(parseCreditSetting("10,5", "2026-10-01", now)).toEqual({ usd: 10.5, since: Date.UTC(2026, 9, 1) });
+    expect(parseCreditSetting("10", null, now)?.since).toBe(Date.UTC(2025, 10, 1));
+    expect(parseCreditSetting("abc", null, now)).toBeNull();
+    expect(parseCreditSetting(null, "2026-10-01", now)).toBeNull();
   });
 
   it("says when Hugging Face refuses the key", async () => {
