@@ -9,7 +9,7 @@
 }
 .header {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   padding-bottom: 8px;
   background: radial-gradient(ellipse 50% 120% at 15% -40%, var(--stage-light), transparent 70%);
 }
@@ -55,6 +55,7 @@
 /* The three entries --------------------------------------------------------- */
 
 .entries {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
@@ -247,7 +248,7 @@ a.primary:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .settingHint {
   color: var(--color-text-muted);
