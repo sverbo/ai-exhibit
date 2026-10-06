@@ -26,13 +26,17 @@
   font-weight: 600;
 }
 .mark {
+  flex: none;
   display: block;
-  margin-bottom: 16px;
 }
+/* The mark, with the name to its right. */
 .brand {
-  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 16px;
   font-family: var(--font-mono);
-  font-size: var(--ui-text-sm);
+  font-size: var(--ui-text-md, 17px);
   color: var(--color-accent);
 }
 .title {

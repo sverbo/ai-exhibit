@@ -55,8 +55,10 @@ export default function LauncherView() {
   return (
     <div className={styles.launcher} lang="en">
       <header className={styles.header}>
-        <NeuronMark size={56} className={styles.mark} />
-        <p className={styles.brand}>ai-exhibit</p>
+        <p className={styles.brand}>
+          <NeuronMark size={56} className={styles.mark} />
+          ai-exhibit
+        </p>
         <h1 className={styles.title}>{talk.presentation.title.en}</h1>
         <p className={styles.welcome}>
           Giving this talk? I would love to hear how it went: which version, how many people, what worked and what did not.
