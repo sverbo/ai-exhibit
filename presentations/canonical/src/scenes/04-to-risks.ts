@@ -160,7 +160,7 @@ export const chapter04: SceneDefinition[] = [
   {
     id: "04-misuse",
     code: "abuse",
-    steps: 2,
+    steps: 3,
     chapter: "04",
     number: "4.3",
     title: { en: "Misuse" },
@@ -184,6 +184,7 @@ export const chapter04: SceneDefinition[] = [
             },
             evidence: "observed",
             sourceIds: ["fm-iasr-2026-cyber", "tk-anthropic-2025-ai-espionage", "fm-aisi-trends-2025-cyber"],
+            tip: { en: "Always accept updates!" },
           },
           {
             picture: "bio",
@@ -204,7 +205,9 @@ export const chapter04: SceneDefinition[] = [
 - AI has become very good at finding software flaws, in some contests on par with top human hunters: Google's AI found an unknown flaw in SQLite (2024); in June 2025, an autonomous AI, XBOW, reached number 1 on HackerOne's US leaderboard of bug hunters (the company's claim); at DARPA's AI Cyber Challenge (August 2025), AI systems found 54 of 63 planted flaws, and 18 real, previously unknown ones. UK AISI tests: top models went from under 9% to about half of apprentice-level tasks (2023 to 2025)
 - And it can be **copied**: thousands of tireless copies can comb through old, forgotten code and dig up flaws buried too deep for any human team to look for
 - Attackers already use it: Anthropic's own account (November 2025): a group it assessed as Chinese state-sponsored ran 80 to 90% of a spying campaign with its AI, about 30 targets, at a speed no human team could match
-- Practical advice: **when you are offered an update, install it**. Vendors cannot write "serious security flaw" in black and white before everyone has patched, and the delay between a flaw being disclosed and being exploited fell to about **5 days** in 2023, from 32 days in 2021 to 2022 (Mandiant)
+- Click: the sticker "Always accept updates!" appears on the cyber card. Practical advice for everyone: **when you are offered an update, install it**
+- Why: vendors now use AI to hunt for flaws in their own software, and it finds serious ones (Google's Big Sleep, 2024: an exploitable flaw in SQLite, fixed the same day, before any release). They patch quietly: they cannot write "serious security flaw" in black and white before everyone has updated, or they would point attackers at the target
+- And time is short: the delay between a flaw being disclosed and being exploited fell to about **5 days** in 2023, from 32 days in 2021 to 2022 (Mandiant)
 - **Biology and chemistry**: AISI (2025): models beat PhD experts on biology questions, though knowledge alone is far from enough
 - Research shows the dual use: a drug-discovery AI, flipped to reward toxicity, proposed about **40,000** potentially toxic molecules in under 6 hours (2022); AI protein-design tools rewrote known toxins so that DNA-order screening software missed them, until patches were made (Microsoft, Science, 2025). Computer studies: nothing was made
 - Why it matters: DNA sequences can be ordered online, and screening those orders is still largely voluntary

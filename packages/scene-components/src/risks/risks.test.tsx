@@ -135,12 +135,13 @@ describe("PictureCards", () => {
       // Five is the most a row holds on the 1920 x 1080 stage with a readable line under each picture.
       expect(p.cards.length).toBeLessThanOrEqual(5);
       // One card per step (or a single card shown at once).
-      expect(scene.steps, `${scene.id} steps`).toBe(p.cards.length === 1 ? 0 : p.cards.length);
+      expect(scene.steps, `${scene.id} steps`).toBe(p.cards.length === 1 ? 0 : pictureCardsSteps(p));
       for (const [i, c] of p.cards.entries()) {
         const where = `${scene.id} card ${i}`;
         expect(isPictureId(c.picture), `${where} picture ${c.picture}`).toBe(true);
         expectL10n(c.line, where);
         if (c.title) expectL10n(c.title, `${where} title`);
+        if (c.tip) expectL10n(c.tip, `${where} tip`);
         expect(c.line.en.length, `${where} line is too long`).toBeLessThanOrEqual(100);
         expect(/\d/.test(c.line.en), `${where} shows a figure`).toBe(false);
         expectSources(c.sourceIds, where);
@@ -158,6 +159,22 @@ describe("PictureCards", () => {
             const expected = role === "preview" ? scene.visual.props.cards.length : visiblePictureCards(scene.visual.props.cards.length, scene.steps ?? 0, step, false);
             expect(html.match(/data-shown=""/g)?.length ?? 0, `${scene.id} ${role} ${step}`).toBe(expected);
           }
+  });
+});
+
+describe("PictureCards tips", () => {
+  const scene = chapter04.find((s) => s.id === "04-misuse")!;
+  const props = (scene.visual as unknown as { props: PictureCardsProps }).props;
+
+  it("misuse sticks the update tip on the cyber card after both cards", () => {
+    expect(props.cards[0]!.tip?.en).toBe("Always accept updates!");
+    expect(scene.steps).toBe(pictureCardsSteps(props));
+    const at = (step: number) => render(PictureCards, props, ctx("display", step, "en", scene.steps));
+    expect(at(2)).not.toContain('data-tip=""');
+    expect(at(2).match(/data-shown=""/g)?.length).toBe(2);
+    expect(at(3)).toContain('data-tip=""');
+    expect(at(3)).toContain('data-picture="update"');
+    expect(render(PictureCards, props, ctx("preview", 0, "en", scene.steps))).toContain('data-tip=""');
   });
 });
 

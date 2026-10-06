@@ -20,6 +20,8 @@ export interface PictureCard {
   sourceIds?: string[];
   /** Small bundled flags under the picture (the countries the card is about). */
   flags?: CountryCode[];
+  /** A sticker beside the picture with the update pictogram and a short call, revealed on the step after the last card. */
+  tip?: L10n;
 }
 
 /** A row of organisation names, set as quiet monochrome wordmarks. */
@@ -45,9 +47,13 @@ export interface PictureCardsProps {
   takeaway?: PictureCardsTakeaway;
 }
 
-/** Steps a PictureCards scene declares when it has orgs or a takeaway: one per card, then one each. */
+function hasTips(props: PictureCardsProps): boolean {
+  return (props.cards ?? []).some((c) => c.tip);
+}
+
+/** Steps a PictureCards scene declares when it has tips, orgs or a takeaway: one per card, then one each. */
 export function pictureCardsSteps(props: PictureCardsProps): number {
-  return props.cards.length + (props.orgs ? 1 : 0) + (props.takeaway ? 1 : 0);
+  return props.cards.length + (hasTips(props) ? 1 : 0) + (props.orgs ? 1 : 0) + (props.takeaway ? 1 : 0);
 }
 
 export type PictureCardsLayout = "hero" | "versus" | "row";
@@ -75,10 +81,14 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
   const layout = pictureCardsLayout(props);
   const preview = role === "preview";
   const steps = ctx.scene?.steps ?? 0;
-  // With a footer, cards come one per step and the footer parts follow.
-  const visible = props.orgs || props.takeaway ? (preview ? cards.length : Math.min(cards.length, ctx.revealStep)) : visiblePictureCards(cards.length, steps, ctx.revealStep, preview);
-  const orgsStep = cards.length + 1;
-  const takeawayStep = cards.length + (props.orgs ? 1 : 0) + 1;
+  // With tips or a footer, cards come one per step and the extras follow: tips, orgs, takeaway.
+  const tips = hasTips(props);
+  const stepped = tips || props.orgs || props.takeaway;
+  const visible = stepped ? (preview ? cards.length : Math.min(cards.length, ctx.revealStep)) : visiblePictureCards(cards.length, steps, ctx.revealStep, preview);
+  const tipStep = cards.length + 1;
+  const showTips = tips && (preview || ctx.revealStep >= tipStep);
+  const orgsStep = tipStep + (tips ? 1 : 0);
+  const takeawayStep = orgsStep + (props.orgs ? 1 : 0);
   const showOrgs = Boolean(props.orgs) && (preview || ctx.revealStep >= orgsStep);
   const showTakeaway = Boolean(props.takeaway) && (preview || ctx.revealStep >= takeawayStep);
   const still = preview || ctx.reducedMotion;
@@ -101,6 +111,16 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
                 const image = getStoryImage(flagImageId(f));
                 return image ? <img key={f} className={styles.flag} src={image.url} alt="" draggable={false} /> : null;
               })}
+            </span>
+          ) : null}
+          {c.tip ? (
+            <span className={`${styles.tip} ${showTips ? styles.tipShown : styles.tipHidden}`} data-tip={showTips ? "" : undefined} aria-hidden={!showTips}>
+              <span className={styles.tipPicture}>
+                <Picture id="update" />
+              </span>
+              <span className={styles.tipLine}>
+                <Rich text={tr(c.tip, locale)} />
+              </span>
             </span>
           ) : null}
         </div>

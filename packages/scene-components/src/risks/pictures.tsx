@@ -34,6 +34,7 @@ export const PICTURE_IDS = [
   // Misuse
   "cyber",
   "bio",
+  "update",
   // Systemic
   "jobs",
   "power",
@@ -489,6 +490,18 @@ const DRAW: Record<PictureId, () => ReactNode> = {
         </g>
       ))}
       <Ground />
+    </>
+  ),
+  update: () => (
+    <>
+      <path d="M58 92 A68 68 0 0 1 178 76" className={styles.strokeAi} style={{ strokeWidth: 16 }} />
+      <path d="M182 148 A68 68 0 0 1 62 164" className={styles.strokeAi} style={{ strokeWidth: 16 }} />
+      <path d="M160 52 L192 72 L164 98 Z" className={styles.ai} />
+      <path d="M80 188 L48 168 L76 142 Z" className={styles.ai} />
+      <path d="M120 84 V146 M96 124 L120 148 L144 124" className={styles.strokeInk} style={{ strokeWidth: 12 }} />
+      <path d="M190 150 L226 212 H154 Z" className={styles.warnShape} />
+      <path d="M190 172 V192" className={styles.strokeCut} style={{ strokeWidth: 9 }} />
+      <circle cx="190" cy="204" r="5" className={styles.cut} />
     </>
   ),
   bio: () => (
