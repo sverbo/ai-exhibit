@@ -64,11 +64,13 @@ If someone asks you to set up their own copy of the talk, follow
 ## Credits and forks
 
 Authorship lives in one place, `presentations/canonical/src/credits.ts`: the
-original author (Samuel Verboomen, https://ai-exhibit.samverbo.com) and a
-`fork` field, null in the original. The first slide (`00-holding`) and the
-credits slide (`05-credits`) read it. A fork is welcome to present under its own
-name by setting `fork`; the author asks that it keep the line "Original
-presentation by Samuel Verboomen" with its link to ai-exhibit.samverbo.com on
+original author (Samuel Verboomen, https://ai-exhibit.samverbo.com, and his
+LinkedIn, https://www.linkedin.com/in/verboomensamuel, shown as a small "in"
+mark after his name) and a `fork` field, null in the original. The first slide
+(`00-holding`), the credits slide (`05-credits`) and the home page's exhibit
+list read it. A fork is welcome to present under its own name by setting
+`fork`; the author asks that it keep the line "Original presentation by Samuel
+Verboomen" with its link to ai-exhibit.samverbo.com and its LinkedIn link on
 both slides (they show it on their own when `fork` is set). The content license,
 CC BY 4.0, asks for attribution anyway.
 

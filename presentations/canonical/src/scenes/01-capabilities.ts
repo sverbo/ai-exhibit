@@ -49,7 +49,7 @@ export const chapter01: SceneDefinition[] = [
       why: "Checks that the YouTube player script loads, for the opening video.",
     },
     localizationNotes:
-      "The title is the presentation title (talkTitle in chapters.ts). The byline comes from credits.ts: a fork may present under its own name (set credits.fork), and is asked to keep the line \"Original presentation by Samuel Verboomen\" with its link to ai-exhibit.samverbo.com, shown here and on 05-credits.",
+      "The title is the presentation title (talkTitle in chapters.ts). The byline comes from credits.ts: a fork may present under its own name (set credits.fork), and is asked to keep the line \"Original presentation by Samuel Verboomen\" with its link to ai-exhibit.samverbo.com and its LinkedIn mark, shown here and on 05-credits.",
   },
   {
     id: "00-welcome-video",

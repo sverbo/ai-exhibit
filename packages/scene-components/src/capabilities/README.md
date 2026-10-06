@@ -176,7 +176,7 @@ YouTube player script loaded. The presenter's own screen also says which check
 is still waiting. `scene.steps`: 0. Under the title, the byline from
 `credits` (see CreditsSlide): "by Samuel Verboomen", or in a fork the fork's
 own byline and, below it, "Original presentation by Samuel Verboomen" with
-its link.
+its link. A name with a LinkedIn profile is followed by its "in" mark.
 
 ## CreditsSlide
 
@@ -188,7 +188,10 @@ Scene `05-credits` (5.5), the last slide. `scene.steps`: 0, no state.
 the original talk). `credits/Byline.tsx` renders it for this slide and the
 holding slide: the presenter's line ("Presentation by {name}"), then, when
 `fork` is set, "Original presentation by Samuel Verboomen" with the link to
-ai-exhibit.samverbo.com. In French, "de" is elided before a name starting with
+ai-exhibit.samverbo.com. A person with a `linkedin` profile (the author always,
+a fork if it sets one) gets a small "in" mark after the name (`LinkedInMark`,
+inline SVG in the link color, labelled "{name} on LinkedIn", a decoration in
+the preview). In French, "de" is elided before a name starting with
 a vowel. Then `intro` and the `items`, two by two: a title (a plain string for
 a proper title, or an `L10n`), a "by" line, optional `links`
 (`{ url, label? }`, shown as the domain) and the `sourceIds` behind the line.

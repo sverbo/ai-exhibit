@@ -2463,6 +2463,10 @@
     "source": "Original presentation by {name}",
     "text": "Présentation originale de {name}"
   },
+  "copy:{name} on LinkedIn": {
+    "source": "{name} on LinkedIn",
+    "text": "{name} sur LinkedIn"
+  },
   "copy:Credits": {
     "source": "Credits",
     "text": "Crédits"

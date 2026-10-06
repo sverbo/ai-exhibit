@@ -401,6 +401,6 @@ export const chapter05: SceneDefinition[] = [
     durationSec: 20,
     optional: false,
     localizationNotes:
-      "Book and channel titles stay as their publishers write them. The bylines come from credits.ts: a fork may present under its own name (set credits.fork), and is asked to keep the line \"Original presentation by Samuel Verboomen\" with its link to ai-exhibit.samverbo.com, shown here and on 00-holding (CC BY 4.0 asks for attribution anyway).",
+      "Book and channel titles stay as their publishers write them. The bylines come from credits.ts: a fork may present under its own name (set credits.fork), and is asked to keep the line \"Original presentation by Samuel Verboomen\" with its link to ai-exhibit.samverbo.com and its LinkedIn mark, shown here and on 00-holding (CC BY 4.0 asks for attribution anyway).",
   },
 ];

@@ -48,3 +48,29 @@
   color: var(--color-accent);
   text-decoration-color: currentColor;
 }
+
+/* The LinkedIn "in" mark after a name: about a capital's height, in the link color. */
+.mark {
+  display: inline-block;
+  margin-left: 0.3em;
+  vertical-align: -0.08em;
+  line-height: 0;
+  color: var(--color-accent-2);
+  border-radius: 0.12em;
+}
+.markIcon {
+  width: 0.78em;
+  height: 0.78em;
+  display: block;
+}
+a.mark {
+  cursor: pointer;
+}
+a.mark:hover,
+a.mark:focus-visible {
+  color: var(--color-accent);
+}
+a.mark:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}

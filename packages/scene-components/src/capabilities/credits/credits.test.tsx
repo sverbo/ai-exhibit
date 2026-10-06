@@ -40,10 +40,14 @@ function propsOf(scenes: SceneDefinition[], id: string): Record<string, unknown>
 const render = (C: SceneComponent, props: Record<string, unknown>, c: SceneContext) => renderToStaticMarkup(createElement(C, { props, ctx: c }));
 const fork: TalkCredits = { ...credits, fork: { name: "Ada Example", url: "https://example.org/talk" } };
 const ORIGINAL_LINK = 'href="https://ai-exhibit.samverbo.com"';
+const LINKEDIN = "https://www.linkedin.com/in/verboomensamuel";
+const linkedinLabel = (locale: Locale) => tr({ en: "{name} on LinkedIn" }, locale).replace("{name}", "Samuel Verboomen");
+const count = (html: string, s: string) => html.split(s).length - 1;
 
 describe("credits", () => {
   it("the original talk has no fork, and both slides read credits.ts", () => {
     expect(credits.fork).toBeNull();
+    expect(credits.original.linkedin).toBe(LINKEDIN);
     expect(propsOf(chapter01, "00-holding").credits).toBe(credits);
     expect(propsOf(chapter05, "05-credits").credits).toBe(credits);
   });
@@ -73,8 +77,26 @@ describe("credits", () => {
           expect(at("Samuel Verboomen")).toBeGreaterThan(at("Ada Example"));
           expect(forked).toContain("ai-exhibit.samverbo.com");
           // A real link on the live screens, plain text in the preview.
-          if (role === "preview") expect(forked).not.toContain("<a ");
-          else expect(forked).toContain(ORIGINAL_LINK);
+          if (role === "preview") {
+            expect(own).not.toContain("<a ");
+            expect(forked).not.toContain("<a ");
+            expect(own).not.toContain(LINKEDIN);
+          } else {
+            expect(forked).toContain(ORIGINAL_LINK);
+            // The author's LinkedIn mark, once, in the original and in a fork (on the original line).
+            for (const html of [own, forked]) {
+              expect(count(html, `href="${LINKEDIN}"`)).toBe(1);
+              expect(html).toContain(`aria-label="${linkedinLabel(locale)}"`);
+              expect(html).toMatch(new RegExp(`<a [^>]*href="${LINKEDIN}"[^>]*target="_blank"[^>]*rel="noopener noreferrer"`));
+            }
+            expect(forked.indexOf(LINKEDIN)).toBeGreaterThan(at("Samuel Verboomen"));
+            expect(forked.indexOf(LINKEDIN)).toBeLessThan(forked.indexOf(ORIGINAL_LINK));
+            // A fork's own LinkedIn gets its own mark, after the fork's name.
+            const withOwn = { ...fork, fork: { ...fork.fork!, linkedin: "https://www.linkedin.com/in/ada-example" } };
+            const both = render(C as SceneComponent, { ...props, credits: withOwn }, ctx(role, locale));
+            expect(both.indexOf("linkedin.com/in/ada-example")).toBeGreaterThan(both.indexOf("Ada Example"));
+            expect(both.indexOf("linkedin.com/in/ada-example")).toBeLessThan(both.indexOf(LINKEDIN));
+          }
         }
       }
     });

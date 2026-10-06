@@ -10,6 +10,8 @@ import { chapter03 } from "./scenes/03-builders.ts";
 import { chapter04 } from "./scenes/04-to-risks.ts";
 import { chapter05 } from "./scenes/05-closing.ts";
 
+export { credits } from "./credits.ts";
+
 export const canonical: PresentationDefinition = {
   id: "canonical",
   title: talkTitle,

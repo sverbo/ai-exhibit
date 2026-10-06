@@ -7,6 +7,7 @@ import {
   rememberTalkLocale,
   resolveTalk,
 } from "../../talk/presentation.ts";
+import { LinkedInIcon } from "@ai-exhibit/scene-components";
 import { cloudHealthText, lanOrigin, useCloudHealth, useRuntime } from "../../talk/runtime.ts";
 import chrome from "../../ui/chrome.module.css";
 import { LocalePicker } from "../../ui/LocalePicker.tsx";
@@ -184,7 +185,20 @@ export default function LauncherView() {
               <a href={x.url} target="_blank" rel="noopener noreferrer">
                 {x.url.replace("https://", "")}
               </a>{" "}
-              <b>{x.title}</b>. {x.description} <span className={styles.languages}>{x.languages.join(", ")}</span>
+              <b>{x.title}</b>
+              {x.linkedin && (
+                <a
+                  className={styles.linkedin}
+                  href={x.linkedin.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${x.linkedin.name} on LinkedIn`}
+                  title={`${x.linkedin.name} on LinkedIn`}
+                >
+                  <LinkedInIcon className={styles.linkedinIcon} />
+                </a>
+              )}
+              . {x.description} <span className={styles.languages}>{x.languages.join(", ")}</span>
             </li>
           ))}
         </ul>

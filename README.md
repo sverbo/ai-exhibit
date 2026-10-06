@@ -30,8 +30,9 @@ There are three ways to take part:
    set `fork` in
    [`presentations/canonical/src/credits.ts`](presentations/canonical/src/credits.ts),
    and please keep the line "Original presentation by Samuel Verboomen" with
-   its link to <https://ai-exhibit.samverbo.com>, which the first slide and the
-   credits slide then show under your byline.
+   its link to <https://ai-exhibit.samverbo.com> and its LinkedIn link
+   (<https://www.linkedin.com/in/verboomensamuel>), which the first slide and
+   the credits slide then show under your byline.
    The slide "My own demo" plays a screen recording of an agent at work
    (`content/assets/media/personal-demo.mp4`). Feel free to replace it with a
    recording of your own work, an agent doing something you really use it for:

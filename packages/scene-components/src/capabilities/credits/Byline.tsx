@@ -8,6 +8,8 @@ import styles from "./Byline.module.css";
 export interface CreditPerson {
   name: string;
   url?: string;
+  /** LinkedIn profile: a small "in" mark after the name links to it. */
+  linkedin?: string;
 }
 
 /**
@@ -15,13 +17,14 @@ export interface CreditPerson {
  * attribution config (presentations/canonical/src/credits.ts).
  */
 export interface TalkCredits {
-  original: CreditPerson & { url: string };
+  original: CreditPerson & { url: string; linkedin?: string };
   /** A fork's own presenter or author; null in the original talk. */
   fork: CreditPerson | null;
 }
 
 const COPY = {
   original: { en: "Original presentation by {name}" },
+  linkedin: { en: "{name} on LinkedIn" },
 } satisfies Record<string, L10n>;
 
 /**
@@ -53,9 +56,46 @@ export function CreditLink({ url, role, className, children }: { url: string; ro
 }
 
 /**
+ * A simple "in" mark (rounded square, letters cut out so the slide shows
+ * through), drawn here so nothing is fetched at presentation time.
+ */
+const IN_MARK =
+  "M4 0H20A4 4 0 0 1 24 4V20A4 4 0 0 1 20 24H4A4 4 0 0 1 0 20V4A4 4 0 0 1 4 0Z" +
+  "M4.6 6.6A1.9 1.9 0 1 0 8.4 6.6A1.9 1.9 0 1 0 4.6 6.6Z" +
+  "M4.8 9.6H8.2V19.6H4.8Z" +
+  "M10.4 9.6H13.6V11.1C14.2 10.1 15.4 9.4 17 9.4C19.3 9.4 20.1 10.9 20.1 13.4V19.6H16.7V14.3" +
+  "C16.7 13.1 16.4 12.3 15.3 12.3C14.2 12.3 13.8 13.1 13.8 14.3V19.6H10.4Z";
+
+/** The bare "in" mark, decorative (the link around it carries the label); also used on the home page. */
+export function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d={IN_MARK} fillRule="evenodd" fill="currentColor" />
+    </svg>
+  );
+}
+
+/**
+ * A person's LinkedIn mark, sized to the text around it: a link on the live
+ * screens (new tab, like CreditLink), a plain decoration in the preview.
+ */
+export function LinkedInMark({ person, locale, role }: { person: CreditPerson; locale: Locale; role: SceneRole }) {
+  if (!person.linkedin) return null;
+  const svg = <LinkedInIcon className={styles.markIcon} />;
+  if (role === "preview") return <span className={styles.mark}>{svg}</span>;
+  const label = tr(COPY.linkedin, locale).replace("{name}", person.name);
+  return (
+    <a className={styles.mark} href={person.linkedin} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
+      {svg}
+    </a>
+  );
+}
+
+/**
  * The talk's byline: the presenter's own line (the fork's, or the original
  * author's), then, in a fork, "Original presentation by Samuel Verboomen"
- * with the link to the original talk. `line` holds "{name}".
+ * with the link to the original talk. A name with a LinkedIn profile gets its
+ * "in" mark. `line` holds "{name}".
  */
 export function Byline({
   credits,
@@ -83,10 +123,14 @@ export function Byline({
         ) : (
           ownText
         )}
+        <LinkedInMark person={own} locale={locale} role={role} />
       </p>
       {credits.fork && (
         <p className={styles.original}>
-          <span>{withName(tr(COPY.original, locale), original.name, locale)}</span>
+          <span>
+            {withName(tr(COPY.original, locale), original.name, locale)}
+            <LinkedInMark person={original} locale={locale} role={role} />
+          </span>
           <CreditLink url={original.url} role={role} className={styles.url}>
             {displayUrl(original.url)}
           </CreditLink>
