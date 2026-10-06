@@ -51,8 +51,8 @@ export const chapter02: SceneDefinition[] = [
 - Spoiler: the school that lets the machine learn has clearly won. Rich Sutton called it **"The Bitter Lesson"** (2019): general methods that use more computing beat built-in human knowledge. Often the winner is simple, with lots of data, lots of computing, lots of money
 - Click 9, 2017: the **Transformer** (Google), the **T in GPT**. Just remember: a mathematical trick to process all the words **in parallel** instead of one after another, so training spreads over thousands of chips at once. It made possible models that could never have been trained before, at an enormous electricity cost
 - Click 10, 2019: **GPT-2**, barely noticed by the public (still often incoherent), though OpenAI first called it too dangerous to release in full
-- Click 11, 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing for its last training run (about $2.1 million according to Epoch AI), not counting the trials and the research. It worked: developers and researchers were stunned
-- The public boom came two years later: **ChatGPT**, 30 November 2022, built on **GPT-3.5**, a GPT-3 trained further to chat. That difference is the base model and assistant story at the end of this chapter`,
+- Between the two, said aloud (not on the timeline), 2020: **GPT-3**, the big bet: 100 times bigger, a few million dollars of computing for its last training run (about $2.1 million according to Epoch AI), not counting the trials and the research. It worked: developers and researchers were stunned
+- Click 11, 30 November 2022: **ChatGPT**, the public discovers it. Built on **GPT-3.5**, a GPT-3 trained further to chat. About **100 million** users in two months, the fastest-growing consumer app on record at the time (UBS estimate, Reuters). That difference between a raw model and an assistant is the story at the end of this chapter`,
     },
     transitionIn: { en: "Before opening the box, where it comes from." },
     transitionOut: { en: "These eras left us a few words. How do they fit together?" },
@@ -80,6 +80,7 @@ export const chapter02: SceneDefinition[] = [
       "tk-enigma-keyspace",
       "tk-sutton-2019-bitter-lesson",
       "tk-chatgpt-2022-gpt35",
+      "tk-reuters-2023-chatgpt-100m",
       "tk-epoch-notable-models",
       "tk-aidigest-2023-progress",
     ],
@@ -514,19 +515,19 @@ export const chapter02: SceneDefinition[] = [
   {
     id: "02-two-superpowers",
     code: "scale",
-    steps: 3,
+    steps: 4,
     chapter: "02",
     number: "2.13",
-    title: { en: "Two superpowers, one bet" },
+    title: { en: "Two superpowers, two bets" },
     objective: {
-      en: "Explain why next-word prediction changed everything: it generates, it needs no human labels, and it rewards sheer scale.",
+      en: "Explain why next-word prediction changed everything: it generates, it needs no human labels, and two bets: sheer scale makes it fluent, and predicting text well brings some logic and knowledge.",
     },
     takeaway: {
-      en: "Two superpowers (it writes, and every text is free training data) plus one bet: scale it up. The bet paid off.",
+      en: "Two superpowers (it writes, and every text is free training data) and two bets: scale makes it fluent, and predicting text well brings some logic and knowledge. Both largely paid off.",
     },
     visual: {
       layout: "cards",
-      heading: { en: "Two superpowers, one bet" },
+      heading: { en: "Two superpowers, two bets" },
       cards: [
         {
           title: { en: "It writes" },
@@ -542,11 +543,18 @@ export const chapter02: SceneDefinition[] = [
           sourceIds: ["tk-wiki-recaptcha"],
         },
         {
-          title: { en: "The bet: scale" },
+          title: { en: "Bet 1: scale" },
           body: {
-            en: "Keep the same simple task; make the model and the data vastly bigger. GPT-2 rambles, GPT-3 stuns.",
+            en: "Same simple task, a much bigger model and more data: the sentences become coherent. GPT‑2 rambles, GPT‑3 stuns.",
           },
           sourceIds: ["tk-kaplan-2020-scaling-laws", "llm-gpt2-paper", "llm-gpt3-paper"],
+        },
+        {
+          title: { en: "Bet 2: more than sentences" },
+          body: {
+            en: "To predict text well, it has to pick up some logic (code helps) and store knowledge.",
+          },
+          sourceIds: ["llm-gpt3-paper", "llm-aryabumi-2024"],
         },
       ],
     },
@@ -556,14 +564,17 @@ export const chapter02: SceneDefinition[] = [
 - **Superpower 2, almost unlimited data**: remember, data meant a text and its label (football), an image and its category (cat). Someone had to label it
 - Question to the room: who has clicked on traffic lights in a CAPTCHA? Those clicks labelled images (Google says, to improve Maps)
 - Here nobody labels anything: the raw data is the start of a sentence, the label is the word that follows. Take a huge, filtered part of the web, books, code: the data **and** its labels, for free
-- **The bet: scale.** Put in a lot of money, electricity and data. 2020 "scaling laws": errors fall predictably with size, data and computing; the exact design matters little
+- Two bets, not one. **Bet 1, scale.** Put in a lot of money, electricity and data. 2020 "scaling laws": errors fall predictably with size, data and computing; the exact design matters little
 - Why scale is needed: if the model is not quite good, one odd word is enough, the next words build on it, and it spirals into nonsense (we will see it with temperature 5 on the base model)
-- GPT-2 (1.5 billion numbers) sometimes talks nonsense; GPT-3 (175 billion, 100 times bigger) suddenly writes convincingly: same recipe, bigger`,
+- GPT-2 (1.5 billion numbers) sometimes talks nonsense; GPT-3 (175 billion, 100 times bigger) suddenly writes convincingly: same recipe, bigger
+- **Bet 2, more than coherent sentences.** To predict the next word of a maths exercise, a recipe or a program, coherent sentences are not enough: the model has to pick up some **logic** and store **knowledge**. Nobody writes either in; they come from predicting text
+- Code helps the logic: strict, structured text, about 17% of Llama 3's training text; adding code to pretraining improved reasoning, up to 8% relative (Aryabumi et al., 2024; more on the next slide)
+- Already in 2020, GPT-3, trained only to predict text, answered general-knowledge questions and did small sums (3-digit additions) from a few examples (its paper). Both bets largely paid off; how far the logic goes is still debated`,
     },
     transitionIn: { en: "Why this one change matters so much." },
     transitionOut: { en: "So how does it learn from all that text?" },
     evidenceLevel: "none",
-    sourceIds: ["tk-wiki-recaptcha", "tk-kaplan-2020-scaling-laws", "llm-gpt2-paper", "llm-gpt3-paper"],
+    sourceIds: ["tk-wiki-recaptcha", "tk-kaplan-2020-scaling-laws", "llm-gpt2-paper", "llm-gpt3-paper", "llm-aryabumi-2024", "llm-llama3-paper"],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "none" },

@@ -78,7 +78,7 @@ describe("story data", () => {
       ["alphago-2016", "promise"],
       ["transformer-2017", "promise"],
       ["gpt2-2019", "promise"],
-      ["gpt3-2020", "promise"],
+      ["chatgpt-2022", "promise"],
     ]);
     // One winter, drawn as a period, keeping the sources of the setbacks it replaces.
     const winter = AI_MILESTONES.find((m) => m.id === "ai-winters")!;

@@ -218,15 +218,15 @@ export const AI_MILESTONES: Milestone[] = [
     sourceIds: ["st-radford-2019-gpt2", "st-wiki-gpt-2"],
   },
   {
-    id: "gpt3-2020",
+    id: "chatgpt-2022",
     track: "promise",
-    when: { en: "2020" },
-    short: { en: "GPT-3" },
-    title: { en: "GPT-3" },
+    when: { en: "2022" },
+    short: { en: "ChatGPT" },
+    title: { en: "ChatGPT" },
     text: {
-      en: "The same recipe, more than 100 times bigger. Show it a few examples and it takes on a new task.",
+      en: "A chat assistant built on GPT-3.5 opens to everyone: about 100 million users in two months.",
     },
-    sourceIds: ["st-brown-2020-gpt3", "st-radford-2019-gpt2"],
+    sourceIds: ["tk-chatgpt-2022-gpt35", "tk-reuters-2023-chatgpt-100m"],
   },
 ];
 

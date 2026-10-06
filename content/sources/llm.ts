@@ -58,9 +58,12 @@ export const llmSources: SourceRecord[] = [
     date: "2020-05-28",
     retrieved: "2026-10-02",
     kind: "paper",
-    claim: "GPT-3 has 175 billion parameters (174,600 million in Table D.1).",
+    claim:
+      "GPT-3 has 175 billion parameters (174,600 million in Table D.1). Trained only to predict text, it performs, from a few examples and without further training, tasks such as question-answering and 3-digit arithmetic.",
     evidence: "none",
     verification: "verified",
+    notes:
+      "Abstract (checked 2026-10-06): strong performance on 'translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic'; tasks are specified 'purely via text interaction with the model', 'without any gradient updates or fine-tuning'.",
   },
   {
     id: "llm-patterson-2021",

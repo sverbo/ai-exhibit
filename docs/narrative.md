@@ -126,12 +126,14 @@ of learning. The fix, years later, was to block the label.
 answers. A language model makes the same kind of choice, about text: given the
 start of a sentence, which word comes next, among tens of thousands.
 
-**2.11 Two superpowers, one bet.** First, it writes: add the chosen word, predict
+**2.11 Two superpowers, two bets.** First, it writes: add the chosen word, predict
 again. Second, almost unlimited data: image classifiers need people to label
 pictures (you labelled some yourselves, clicking traffic lights in CAPTCHAs); here
-the label is the next word, already in the text. And the bet: keep this one simple
+the label is the next word, already in the text. The first bet: keep this one simple
 task and make everything vastly bigger. Scaling laws said the errors would fall
-predictably. GPT-2 rambled; GPT-3, a hundred times bigger, stunned.
+predictably. GPT-2 rambled; GPT-3, a hundred times bigger, stunned. The second
+bet: predicting text well takes some logic (code helps) and stored knowledge, so
+they come along for free.
 
 **2.12 How training works.** At first the model is random: the right word gets one
 chance in fifty thousand. Guess, compare, nudge every number a tiny bit, move one
