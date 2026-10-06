@@ -7,17 +7,12 @@ import { join } from "node:path";
 
 /** HF_TOKEN from the process environment, else from `<dir>/.env`. */
 export function readToken(dir: string, env: NodeJS.ProcessEnv = process.env): string | null {
-  return readSetting("HF_TOKEN", dir, env);
-}
-
-/** A setting from the environment, or else from the repo-root `.env`. */
-export function readSetting(name: string, dir: string, env: NodeJS.ProcessEnv = process.env): string | null {
-  const fromEnv = env[name]?.trim();
+  const fromEnv = env.HF_TOKEN?.trim();
   if (fromEnv) return fromEnv;
   try {
     const text = readFileSync(join(dir, ".env"), "utf8");
     for (const line of text.split(/\r?\n/)) {
-      const m = new RegExp(`^\\s*(?:export\\s+)?${name}\\s*=\\s*(.*)\\s*$`).exec(line);
+      const m = /^\s*(?:export\s+)?HF_TOKEN\s*=\s*(.*)\s*$/.exec(line);
       if (m) {
         const value = m[1]!.trim().replace(/^(['"])(.*)\1$/, "$2");
         return value || null;

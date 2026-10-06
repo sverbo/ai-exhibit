@@ -28,68 +28,6 @@ export const CHAT_MODELS = ["meta-llama/Llama-3.1-8B-Instruct:nscale", "meta-lla
 const STATUS_PROBE_URL = "https://router.huggingface.co/v1/models";
 /** The token's own account: tells whether the key is valid, its plan and whether it may call inference. */
 const WHOAMI_URL = "https://huggingface.co/api/whoami-v2";
-/**
- * The account's usage between two dates (seconds), with the token's
- * "Read billing usage" permission. It reports what was spent and the month's
- * included credit, not the prepaid balance: Hugging Face shows that one only on
- * its billing page, to a signed-in browser.
- */
-const USAGE_URL = "https://huggingface.co/api/settings/billing/usage-v2";
-
-/** Prepaid credit bought on the account (HF_CREDIT_USD), counted from HF_CREDIT_SINCE. */
-export interface CreditSetting {
-  usd: number;
-  /** When the credit was bought (ms); usage before that month is not counted. */
-  since: number;
-}
-
-/**
- * What is left of the Hugging Face credit, in US dollars: the bought credit,
- * minus what each month spent beyond its included credit, plus what is left of
- * this month's included credit. An estimate: it assumes nothing else was bought
- * or spent from the prepaid balance.
- */
-export function creditLeftUsd(setting: CreditSetting, months: { usedNanoUsd: number; includedNanoUsd: number }[]): number {
-  let left = setting.usd;
-  for (const m of months) left -= Math.max(0, m.usedNanoUsd - m.includedNanoUsd) / 1e9;
-  const current = months[months.length - 1];
-  if (current) left += Math.max(0, current.includedNanoUsd - current.usedNanoUsd) / 1e9;
-  return Math.round(left * 100) / 100;
-}
-
-/**
- * HF_CREDIT_USD (the credit bought, in US dollars) and HF_CREDIT_SINCE (when,
- * an ISO date). Without a date, the last twelve months are counted: an older
- * overspend would only make the estimate lower, never higher.
- */
-export function parseCreditSetting(usd: string | null, since: string | null, now: number): CreditSetting | null {
-  const amount = Number(usd?.replace(",", "."));
-  if (!usd || !Number.isFinite(amount) || amount <= 0) return null;
-  const parsed = since ? Date.parse(since) : NaN;
-  const d = new Date(now);
-  const yearAgo = Date.UTC(d.getUTCFullYear() - 1, d.getUTCMonth() + 1, 1);
-  return { usd: amount, since: Number.isFinite(parsed) ? parsed : yearAgo };
-}
-
-/** Calendar months (UTC) from `since` to `now`, at most twelve, as [start, end] in seconds. */
-export function billingMonths(since: number, now: number): [number, number][] {
-  const out: [number, number][] = [];
-  const d = new Date(since);
-  let y = d.getUTCFullYear();
-  let m = d.getUTCMonth();
-  for (;;) {
-    const start = Date.UTC(y, m, 1);
-    if (start > now) break;
-    const end = Math.min(Date.UTC(y, m + 1, 1), now);
-    out.push([Math.floor(start / 1000), Math.floor(end / 1000)]);
-    m += 1;
-    if (m === 12) {
-      m = 0;
-      y += 1;
-    }
-  }
-  return out.slice(-12);
-}
 
 /** What the server knows about its Hugging Face key, without revealing the key or the account name. */
 export interface KeyStatus {
@@ -101,10 +39,6 @@ export interface KeyStatus {
   inference: boolean | null;
   /** A model call was refused for payment (HTTP 402) in the last 15 minutes: credits look used up. */
   creditsExhausted: boolean;
-  /** The key may read the account's billing usage ("Read billing usage" permission). */
-  billing?: boolean | null;
-  /** Estimated credit left in US dollars (see creditLeftUsd); only with the billing permission and HF_CREDIT_USD set. */
-  creditLeftUsd?: number;
 }
 /**
  * Next-token probabilities for raw text. No Hugging Face routed provider
@@ -614,8 +548,6 @@ export interface CloudApiOptions {
   /** Budgets of audience requests (AUDIENCE_HEADER); false refuses them. Default AUDIENCE_LIMITS. */
   audience?: AudienceLimits | false;
   fetch?: typeof fetch;
-  /** Prepaid credit bought on the account (HF_CREDIT_USD, HF_CREDIT_SINCE); null when not set. */
-  credit?: () => CreditSetting | null;
   /** Fetch for public Hub files (tokenizers); the local runtime adds a disk cache. Defaults to `fetch`. */
   hubFetch?: typeof fetch;
   now?: () => number;
@@ -720,8 +652,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const minutes = new RollingCounter(60_000);
   const hours = new RollingCounter(3_600_000);
   let reachable: { value: boolean; at: number } | null = null;
-  let keyInfo: { value: Omit<KeyStatus, "creditsExhausted" | "creditLeftUsd">; at: number } | null = null;
-  let creditInfo: { value: number | null; at: number } | null = null;
+  let keyInfo: { value: Omit<KeyStatus, "creditsExhausted">; at: number } | null = null;
   let paymentRefusedAt: number | null = null;
 
   const requiredCode = () => options.accessCode?.()?.trim() || null;
@@ -828,35 +759,6 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     }
   };
 
-  /** Estimated credit left, cached 10 minutes; null when it cannot be worked out. */
-  const readCredit = async (key: string): Promise<number | null> => {
-    const setting = options.credit?.();
-    if (!setting) return null;
-    if (creditInfo && now() - creditInfo.at < 10 * 60_000) return creditInfo.value;
-    const ac = new AbortController();
-    const timer = setTimeout(() => ac.abort(), 8000);
-    try {
-      const months = [];
-      for (const [start, end] of billingMonths(setting.since, now())) {
-        const res = await (options.hubFetch ?? doFetch)(`${USAGE_URL}?startDate=${start}&endDate=${end}`, {
-          headers: { authorization: `Bearer ${key}` },
-          signal: ac.signal,
-        });
-        if (!res.ok) throw new Error(String(res.status));
-        const j = (await res.json()) as { usage?: { inferenceProviders?: { usedNanoUsd?: number; includedNanoUsd?: number } } };
-        const ip = j.usage?.inferenceProviders;
-        if (typeof ip?.usedNanoUsd !== "number" || typeof ip.includedNanoUsd !== "number") throw new Error("shape");
-        months.push({ usedNanoUsd: ip.usedNanoUsd, includedNanoUsd: ip.includedNanoUsd });
-      }
-      creditInfo = { value: creditLeftUsd(setting, months), at: now() };
-    } catch {
-      creditInfo = { value: null, at: now() };
-    } finally {
-      clearTimeout(timer);
-    }
-    return creditInfo.value;
-  };
-
   /** whoami-v2 with the key, cached 5 minutes; only the plan and permissions are kept. */
   const checkKey = async (): Promise<KeyStatus> => {
     const exhausted = paymentRefusedAt !== null && now() - paymentRefusedAt < 15 * 60_000;
@@ -868,7 +770,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     try {
       const res = await (options.hubFetch ?? doFetch)(WHOAMI_URL, { headers: { authorization: `Bearer ${key}` }, signal: ac.signal });
       if (res.status === 401 || res.status === 403) {
-        keyInfo = { value: { valid: false, plan: null, inference: false, billing: false }, at: now() };
+        keyInfo = { value: { valid: false, plan: null, inference: false }, at: now() };
       } else if (res.ok) {
         const j = (await res.json().catch(() => null)) as {
           isPro?: boolean;
@@ -877,9 +779,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
         const token = j?.auth?.accessToken;
         const perms = [...(token?.fineGrained?.global ?? []), ...(token?.fineGrained?.scoped ?? []).flatMap((x) => x.permissions ?? [])];
         const inference = token?.role === "write" || token?.role === "read" ? true : perms.some((x) => x.startsWith("inference."));
-        // A classic "read" or "write" token covers the account's billing too.
-        const billing = token?.role === "write" || token?.role === "read" ? true : perms.includes("user.billing.read");
-        keyInfo = { value: { valid: true, plan: j?.isPro ? "pro" : "free", inference, billing }, at: now() };
+        keyInfo = { value: { valid: true, plan: j?.isPro ? "pro" : "free", inference }, at: now() };
       } else {
         return { valid: null, plan: null, inference: null, creditsExhausted: exhausted };
       }
@@ -912,14 +812,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
       reachable: configured ? await probe() : null,
       codeRequired: Boolean(code),
     };
-    if (configured) {
-      out.key = await checkKey();
-      const key = options.token();
-      if (key && out.key.billing) {
-        const left = await readCredit(key);
-        if (left !== null) out.key.creditLeftUsd = left;
-      }
-    }
+    if (configured) out.key = await checkKey();
     if (code && sent !== null) {
       // Checking a code counts against the budget, so it cannot be guessed quickly.
       if (!allow(client.ip)) throw minuteRefusal(client.ip);

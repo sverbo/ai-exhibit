@@ -13,11 +13,7 @@ If someone asks you to set up their own copy of the talk, follow
 ## How it runs
 
 - The talk runs from Vercel (`vercel.json`): the built app plus the functions
-  in `api/`, which call Hugging Face with the server's `HF_TOKEN`. Wherever a
-  token is set up (README, `docs/setup-prompt.md`, a fork), ask for a
-  fine-grained token with, ideally: "Make calls to Inference Providers", "Make
-  calls to your Inference Endpoints" and "Read billing usage and payment method
-  status" (the billing read lets the presenter see the credit left).
+  in `api/`, which call Hugging Face with the server's `HF_TOKEN`.
 - Live demos use Hugging Face through `/api/*`, or Simulation (recorded real
   outputs in `content/assets/recordings`). No model is downloaded or run
   locally or in the browser; do not add one.

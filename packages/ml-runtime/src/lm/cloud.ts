@@ -15,16 +15,7 @@ export interface CloudStatus {
   /** Only when a code was sent and one is required. */
   codeAccepted?: boolean;
   /** The server's Hugging Face key: valid, plan, inference permission, credits refused lately. Absent from older servers. */
-  key?: {
-    valid: boolean | null;
-    plan: "free" | "pro" | null;
-    inference: boolean | null;
-    creditsExhausted: boolean;
-    /** The key may read the account's billing usage. Absent from older servers. */
-    billing?: boolean | null;
-    /** Estimated Hugging Face credit left, in US dollars; only with the billing permission and HF_CREDIT_USD set. */
-    creditLeftUsd?: number;
-  };
+  key?: { valid: boolean | null; plan: "free" | "pro" | null; inference: boolean | null; creditsExhausted: boolean };
 }
 
 /** Header the server reads the access code from (packages/cloud-api ACCESS_CODE_HEADER). */

@@ -13,10 +13,9 @@ import {
   isCloudPath,
   jsonResponse,
   LOCAL_LIMITS,
-  parseCreditSetting,
 } from "@ai-exhibit/cloud-api";
 import { loadCloudTokenizer } from "@ai-exhibit/cloud-api";
-import { diskCachedFetch, readSetting, readToken, sendWebResponse, toWebRequest } from "@ai-exhibit/cloud-api/node";
+import { diskCachedFetch, readToken, sendWebResponse, toWebRequest } from "@ai-exhibit/cloud-api/node";
 import { join } from "node:path";
 import { type Handler, isLoopback, type RuntimeContext } from "./http.ts";
 
@@ -59,9 +58,6 @@ export function createCloudLlmModule(
   // No access code here: only this machine is served.
   const api = createCloudApi({
     token: deps?.token ?? (() => cachedToken),
-    credit: deps?.token
-      ? undefined
-      : () => parseCreditSetting(readSetting("HF_CREDIT_USD", ctx.repoRoot), readSetting("HF_CREDIT_SINCE", ctx.repoRoot), Date.now()),
     limits: LOCAL_LIMITS,
     rateLimit: "global",
     fetch: deps?.fetch,
