@@ -647,7 +647,7 @@ export const chapter02: SceneDefinition[] = [
   {
     id: "02-meaning-dimensions",
     code: "dims",
-    steps: 5,
+    steps: 7,
     chapter: "02",
     number: "2.16",
     title: { en: "Why so many numbers" },
@@ -660,11 +660,14 @@ export const chapter02: SceneDefinition[] = [
     visual: { layout: "component", component: "MeaningDimensions", props: {} },
     interaction: "presenter",
     speakerNotes: {
-      en: `- To compute with words, a model needs numbers; here a word's number is simply its place
+      en: `- Click order: the line, salmon, the plane, blue pulled, 3D, a fourth meaning (the blues), many numbers, next
+- To compute with words, a model needs numbers; here a word's number is simply its place
 - One number is one line: colours on one side, fruits on the other; orange, a colour and a fruit, sits in the middle, and the line copes
 - Salmon is a colour and a fish: it should be near the colours and near the sea, and the line has no room for the sea
 - A second number gives a second direction: salmon settles between the colours and the sea
 - Blue: a colour, the sea, the sky, and sadness ("feeling blue"); halfway between all of them is close to none of them
+- A third number, a third direction: the plane tilts into 3D, sadness sits along the new "feelings" axis, and blue finds its place near all of them
+- Then a fourth meaning, the blues, the music: there is no direction left for it, and every new meaning needs one more
 - So models give each word hundreds or thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B
 - **Nobody names these directions**: training sets them, and words used in the same sentences end up close
 - Honest caveats: the positions here are invented, and strictly a model numbers tokens, not words; the next slide is a real map`,
@@ -679,7 +682,7 @@ export const chapter02: SceneDefinition[] = [
     durationSec: 120,
     optional: false,
     localizationNotes:
-      "Pick words that carry several meanings in the target language. English and French share salmon (colour and fish). French adds \"pêche\" (peach and fishing), between the fruits and the sea; English has no common equivalent and skips it. Blue pulls toward sadness in English (\"feeling blue\") and toward a bruise in French (\"un bleu\", shown as \"hématome\").",
+      "Pick words that carry several meanings in the target language. English and French share salmon (colour and fish). French adds \"pêche\" (peach and fishing), between the fruits and the sea; English has no common equivalent and skips it. Blue pulls toward sadness in English (\"feeling blue\") and toward a bruise in French (\"un bleu\", shown as \"hématome\"); the third axis is named after that meaning (\"feelings\", \"le corps\"). The fourth meaning, with no direction left, is the blues (the music) in English and \"les Bleus\" (the French national football team) in French.",
   },
   {
     id: "02-embedding-training",

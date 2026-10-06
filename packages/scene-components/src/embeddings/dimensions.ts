@@ -6,18 +6,22 @@
  *
  * Positions are invented and very simplified: x runs from the colours (-1) to
  * the fruits (+1) on the line; y (0 to 1) is the second dimension, "the sea",
- * which appears at step 2.
+ * which appears at step 2; z (0 to 1) is the third, which appears at step 4
+ * ("feelings" in English, where "sad" sits; "le corps" in French, where
+ * "hématome" sits).
  */
 import type { L10n, Locale } from "@ai-exhibit/presentation-core";
 
 /** Reveal steps after the initial state (scene `steps`). */
-export const DIMENSION_STEPS = 5;
+export const DIMENSION_STEPS = 7;
 
 export type Mood = "calm" | "focus" | "hesitant" | "clash";
 
 export interface PlanePos {
   x: number;
   y: number;
+  /** The third dimension (steps 4 and 5); 0 when absent. */
+  z?: number;
   mood?: Mood;
 }
 
@@ -30,16 +34,24 @@ export interface DimWord {
   at: Record<number, PlanePos>;
   /** Only shown in these locales; every locale when absent. */
   locales?: Locale[];
+  /** One of the meanings that pull on "blue": stays at full strength in 3D, where the rest goes quiet. */
+  bluePull?: boolean;
 }
 
 export const WORDS: DimWord[] = [
-  { id: "red", text: { en: "red" }, from: 0, at: { 0: { x: -0.95, y: 0 } } },
-  { id: "green", text: { en: "green" }, from: 0, at: { 0: { x: -0.72, y: 0 } } },
+  { id: "red", text: { en: "red" }, from: 0, at: { 0: { x: -0.95, y: 0 } }, bluePull: true },
+  { id: "green", text: { en: "green" }, from: 0, at: { 0: { x: -0.72, y: 0 } }, bluePull: true },
   {
     id: "blue",
     text: { en: "blue" },
     from: 0,
-    at: { 0: { x: -0.49, y: 0 }, 3: { x: -0.12, y: 0.4, mood: "hesitant" } },
+    at: {
+      0: { x: -0.49, y: 0 },
+      3: { x: -0.12, y: 0.4, mood: "hesitant" },
+      // In 3D: towards the colours (x < 0), the sea and the sky (y), and its third meaning (z).
+      4: { x: -0.15, y: 0.5, z: 0.55, mood: "focus" },
+      5: { x: -0.15, y: 0.5, z: 0.55, mood: "hesitant" },
+    },
   },
   // Same word in French: kept inline so the catalog has no entry identical to English.
   { id: "orange", text: { en: "orange", fr: "orange" }, from: 0, at: { 0: { x: 0, y: 0, mood: "focus" }, 1: { x: 0, y: 0 } } },
@@ -53,7 +65,7 @@ export const WORDS: DimWord[] = [
     at: { 1: { x: -0.26, y: 0.5, mood: "hesitant" }, 2: { x: -0.5, y: 0.5, mood: "focus" }, 3: { x: -0.5, y: 0.5 } },
   },
   { id: "fish", text: { en: "fish" }, from: 2, at: { 2: { x: -0.14, y: 0.9 } } },
-  { id: "sea", text: { en: "sea" }, from: 2, at: { 2: { x: 0.12, y: 1 } } },
+  { id: "sea", text: { en: "sea" }, from: 2, at: { 2: { x: 0.12, y: 1 } }, bluePull: true },
   { id: "boat", text: { en: "boat" }, from: 2, at: { 2: { x: 0.36, y: 0.84 } } },
   // French "pêche": the fruit (peach) and fishing. English has no common word
   // that is both a fruit and a sea word, so the English edition skips it.
@@ -64,17 +76,37 @@ export const WORDS: DimWord[] = [
     at: { 2: { x: 0.6, y: 0.5, mood: "focus" }, 3: { x: 0.6, y: 0.5 } },
     locales: ["fr"],
   },
-  { id: "sky", text: { en: "sky" }, from: 3, at: { 3: { x: 0.5, y: 0.98, mood: "clash" } } },
+  { id: "sky", text: { en: "sky" }, from: 3, at: { 3: { x: 0.5, y: 0.98, mood: "clash" }, 4: { x: 0.5, y: 0.98 } }, bluePull: true },
   // "Feeling blue" in English; "un bleu" (a bruise) in French. Not a
   // translation of "sad", so the French stays inline, for this place only.
-  { id: "blueSense", text: { en: "sad", fr: "hématome" }, from: 3, at: { 3: { x: 0.6, y: 0.07, mood: "clash" } } },
+  // In 3D it moves out along the third axis.
+  {
+    id: "blueSense",
+    text: { en: "sad", fr: "hématome" },
+    from: 3,
+    at: { 3: { x: 0.6, y: 0.07, mood: "clash" }, 4: { x: 0.25, y: 0, z: 1 } },
+    bluePull: true,
+  },
+  // A fourth meaning, with no direction left in 3D: the blues (the music) in
+  // English; "les Bleus" (the French national football team) in French. Not
+  // a translation either, so the French stays inline.
+  {
+    id: "blueFourth",
+    text: { en: "the blues", fr: "les Bleus" },
+    from: 5,
+    at: { 5: { x: 1.35, y: 0.6, mood: "clash" } },
+    bluePull: true,
+  },
 ];
+
+/** The third axis: what sits along it, by locale. Not a translation, so the French stays inline. */
+export const DEPTH_AXIS: L10n = { en: "feelings", fr: "le corps" };
 
 /** Where an arrow ends, in plane coordinates. */
 export interface DimArrow {
   id: string;
   from: string;
-  to: { x: number; y: number };
+  to: { x: number; y: number; z?: number };
 }
 
 /** The pulls on a word that does not fit, per step. */
@@ -89,6 +121,7 @@ export const ARROWS: Record<number, DimArrow[]> = {
     { id: "blue-sky", from: "blue", to: { x: 0.5, y: 0.98 } },
     { id: "blue-sense", from: "blue", to: { x: 0.6, y: 0.07 } },
   ],
+  5: [{ id: "blue-fourth", from: "blue", to: { x: 1.35, y: 0.6 } }],
 };
 
 /** Step 1 only: where the sea would go, if the line had room for it. */
@@ -99,8 +132,11 @@ export interface WordView {
   text: L10n;
   x: number;
   y: number;
+  z: number;
   visible: boolean;
   mood: Mood;
+  /** Drawn quieter: in 3D, the words that are not part of blue's story. */
+  quiet: boolean;
   /** The numbers written under the word: its coordinates, or "?" when it has no place. */
   value: number[] | "?" | null;
 }
@@ -111,7 +147,9 @@ export interface DimensionsView {
   numbers: number;
   /** The vertical axis ("the sea") is drawn. */
   plane: boolean;
-  /** The map (line or plane) is shown; from step 4 the row of numbers replaces it. */
+  /** The plane is tilted into a 3D view with a third axis (steps 4 and 5). */
+  space: boolean;
+  /** The map (line, plane or space) is shown; from step 6 the row of numbers replaces it. */
   map: boolean;
   ghost: boolean;
   words: WordView[];
@@ -141,12 +179,14 @@ function valueAt(word: DimWord, pos: PlanePos, step: number): WordView["value"] 
   if (pos.mood === "hesitant") return "?";
   if (step === 0) return [pos.x];
   if (step === 2 && pos.mood === "focus") return [pos.x, pos.y];
+  if (step === 4 && pos.mood === "focus") return [pos.x, pos.y, pos.z ?? 0];
   return null;
 }
 
 /** Everything the scene shows at a step. Pure: the same step gives the same picture. */
 export function dimensionsView(rawStep: number, locale: Locale): DimensionsView {
   const step = clampStep(rawStep);
+  const space = step === 4 || step === 5;
   const words = WORDS.filter((w) => !w.locales || w.locales.includes(locale)).map((w) => {
     const pos = positionAt(w, step);
     const visible = step >= w.from;
@@ -155,21 +195,24 @@ export function dimensionsView(rawStep: number, locale: Locale): DimensionsView 
       text: w.text,
       x: pos.x,
       y: pos.y,
+      z: pos.z ?? 0,
       visible,
       mood: pos.mood ?? "calm",
-      value: visible && step < 4 ? valueAt(w, pos, step) : null,
+      quiet: space && w.id !== "blue" && !w.bluePull,
+      value: visible && step <= 5 ? valueAt(w, pos, step) : null,
     };
   });
   return {
     step,
-    numbers: step <= 1 ? 1 : step <= 3 ? 2 : STRIP_LENGTH,
+    numbers: step <= 1 ? 1 : step <= 3 ? 2 : step <= 5 ? 3 : STRIP_LENGTH,
     plane: step >= 2,
-    map: step <= 3,
+    space,
+    map: step <= 5,
     ghost: step === 1,
     words,
     arrows: ARROWS[step] ?? [],
-    strip: step >= 4,
-    bridge: step >= 5,
+    strip: step >= 6,
+    bridge: step >= 7,
   };
 }
 

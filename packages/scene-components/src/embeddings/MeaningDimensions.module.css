@@ -42,7 +42,7 @@
   font-size: var(--text-lg);
 }
 
-/* The map: a line, then a plane. ----------------------------------------- */
+/* The map: a line, then a plane, then a space. --------------------------- */
 .map {
   position: absolute;
   inset: 0;
@@ -63,6 +63,13 @@
   stroke: var(--color-text);
   stroke-width: 5;
   stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+/* The flat axes; in 3D they shrink back into the far wall, with the words. */
+.wall {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 900ms var(--ease);
 }
 .axisHead {
   fill: var(--color-text);
@@ -78,24 +85,95 @@
 }
 .axisLabel {
   position: absolute;
+  left: 0;
+  top: 0;
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-style: italic;
   color: var(--color-accent-2);
   white-space: nowrap;
-  transition: opacity 500ms var(--ease) 300ms;
+  transition: opacity 500ms var(--ease) 300ms, transform 900ms var(--ease);
 }
 .axisLabel[data-visible="false"] {
   opacity: 0;
-  transition-delay: 0ms;
+  transition-delay: 0ms, 0ms;
 }
 .group {
   position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform 900ms var(--ease), opacity 500ms var(--ease);
+}
+.group[data-quiet="true"] {
+  opacity: 0.45;
+}
+.groupText {
+  position: absolute;
+  left: 0;
+  top: 0;
   transform: translateX(-50%);
   font-size: var(--text-sm);
   font-style: italic;
   color: var(--color-text-muted);
   white-space: nowrap;
+}
+
+/* The third dimension: a floor coming toward the room, its axis, and blue's
+   foot on the floor so its depth reads. Drawn in place, it only fades. */
+.depth {
+  transition: opacity 600ms var(--ease) 400ms;
+}
+.depth[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.floor {
+  fill: color-mix(in srgb, var(--color-accent-2) 8%, transparent);
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.depthAxis {
+  transform-box: fill-box;
+  transform-origin: 100% 0%;
+  transition: transform 800ms var(--ease) 400ms;
+}
+.depth[data-visible="false"] .depthAxis {
+  transform: scale(0);
+  transition-delay: 0ms;
+}
+.edge {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: 2;
+}
+.dropGroup {
+  transition: opacity 400ms var(--ease);
+}
+.dropGroup[data-visible="false"] {
+  opacity: 0;
+}
+.drop {
+  stroke: var(--color-text-muted);
+  stroke-width: 3;
+  stroke-dasharray: 6 8;
+}
+.foot {
+  fill: var(--color-text-muted);
+}
+.depthLabel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-accent-2);
+  white-space: nowrap;
+  transition: opacity 500ms var(--ease) 700ms;
+}
+.depthLabel[data-visible="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
 }
 
 /* The pulls on a word that does not fit. */
@@ -126,6 +204,19 @@
 .word[data-visible="false"] {
   opacity: 0;
 }
+/* In 3D, the words outside blue's story step back. */
+.word[data-visible="true"][data-quiet="true"] {
+  opacity: 0.35;
+}
+.word[data-quiet="true"] .label {
+  font-size: 34px;
+}
+/* Three numbers: written beside the dot, clear of its drop line and of the line below. */
+.word[data-numbers="3"] .value {
+  left: 24px;
+  top: -18px;
+  transform: none;
+}
 .wobble {
   position: absolute;
   left: 0;
@@ -155,7 +246,8 @@
   color: var(--color-text);
   background: transparent;
   border: 3px solid transparent;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    font-size 900ms var(--ease);
 }
 .value {
   position: absolute;

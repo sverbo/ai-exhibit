@@ -136,7 +136,7 @@ souris (lands near joie, perhaps read as a form of "sourire"), orage violent (ne
 
 ## `MeaningDimensions`
 
-Props: none. Set `steps: 5`. A scripted illustration that comes before the
+Props: none. Set `steps: 7`. A scripted illustration that comes before the
 map: why a word needs many numbers. Positions and values are invented and
 labelled as such on screen; everything is a pure function of the step
 (`dimensions.ts`), so previous and next work both ways, every screen draws the
@@ -149,8 +149,10 @@ transitions between step states, off with reduced motion and in previews.
 | 1 | "salmon" floats above the line, wobbling, with a "?" and two dashed arrows: toward the colours and toward a dashed "the sea?" that has no place |
 | 2 | A vertical axis, "the sea", grows from the line; fish, sea and boat appear at the top; salmon settles between the colours and the sea, with its two numbers. French only: "pêche" (peach and fishing) between the fruits and the sea. Badge: "2 numbers per word" |
 | 3 | "blue" lifts off the line, wobbling, pulled by four arrows (colours, sea, sky, and "sad" in English or "hématome" in French, for "un bleu"); sky and sad/hématome land on other words (dashed, colliding labels) |
-| 4 | The map fades; "blue" becomes a row of 384 invented numbers (the first six written, then 384 thin bars), and three tiles: 384 (our word map), 4,096 (Llama 3.1 8B), 16,384 (Llama 3.1 405B), with sources. Badge: "384 numbers per word" |
-| 5 | The caption becomes the bridge: "Next: the real map, learned from text." |
+| 4 | A third number: the plane shrinks back into a far wall and a floor comes toward the room, with a third axis ("feelings" in English, "le corps" in French); sad/hématome moves out along it, and "blue" settles near the colours, the sea and the sky, and that direction, with its three numbers and a dashed drop to the floor. Words outside blue's story go quieter. Badge: "3 numbers per word" |
+| 5 | A fourth meaning appears outside the box, dashed: "the blues" (the music) in English, "les Bleus" (the French national football team) in French; one arrow pulls "blue", which wobbles again with a "?": no direction is left for it |
+| 6 | The map fades; "blue" becomes a row of 384 invented numbers (the first six written, then 384 thin bars), and three tiles: 384 (our word map), 4,096 (Llama 3.1 8B), 16,384 (Llama 3.1 405B), with sources. Badge: "384 numbers per word" |
+| 7 | The caption becomes the bridge: "Next: the real map, learned from text." |
 
 Words are copy (`{ en }`, translated in the catalog); a word can be limited to
 some locales (`locales` in `WORDS`). Positions are shared between locales.

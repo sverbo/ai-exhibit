@@ -9,8 +9,12 @@
  *   colours and the sea (French: "pêche" between the fruits and the sea);
  * 3 "blue" is pulled four ways (colour, sea, sky, sadness or a bruise): two
  *   numbers are not enough, labels collide;
- * 4 the word becomes a row of 384 numbers, with real model sizes;
- * 5 a bridge line toward the real map.
+ * 4 a third number: the plane tilts into a 3D view with a third axis
+ *   ("feelings", or "le corps" in French) and blue settles;
+ * 5 a fourth meaning (the blues, or "les Bleus" in French) pulls on blue
+ *   from outside the box: no direction left for it;
+ * 6 the word becomes a row of 384 numbers, with real model sizes;
+ * 7 a bridge line toward the real map.
  *
  * Every screen draws from the step alone (dimensions.ts); no state, no model,
  * no network. Motion is CSS transitions between step states, off with reduced
@@ -23,7 +27,7 @@ import { formatNumber } from "../llm/shared.ts";
 import { NeutralSources } from "../llm/NeutralSources.tsx";
 import common from "../llm/common.module.css";
 import {
-  ARROWS, dimensionsView, GHOST, LLAMA_405B_DIMS, LLAMA_8B_DIMS, positionAt, STRIP, STRIP_HEAD, STRIP_LENGTH, WORDS,
+  ARROWS, DEPTH_AXIS, dimensionsView, GHOST, LLAMA_405B_DIMS, LLAMA_8B_DIMS, positionAt, STRIP, STRIP_HEAD, STRIP_LENGTH, WORDS,
 } from "./dimensions.ts";
 import styles from "./MeaningDimensions.module.css";
 
@@ -32,6 +36,8 @@ const HEADLINES: L10n[] = [
   { en: "Salmon: a colour, and a fish" },
   { en: "A second number, a second direction" },
   { en: "Blue: a colour, the sea, the sky, sadness" },
+  { en: "A third number, a third direction" },
+  { en: "Blue: and the blues, the music" },
   { en: "So each word gets hundreds of numbers" },
   { en: "So each word gets hundreds of numbers" },
 ];
@@ -41,6 +47,8 @@ const CAPTIONS: L10n[] = [
   { en: "Near the colours, and near the sea? On the line, the sea has no place." },
   { en: "With two numbers, salmon can sit between the colours and the sea." },
   { en: "Near all of them at once? Two numbers are not enough: halfway between everything is close to nothing." },
+  { en: "With a third direction, blue finds its place: near the colours, the sea and the sky, and its other meaning too." },
+  { en: "And yet another meaning… Every new meaning needs another direction." },
   { en: "Nobody names these numbers: they are learned from text. Words used in the same sentences end up close." },
   { en: "Next: the real map, learned from text." },
 ];
@@ -61,8 +69,36 @@ const COPY = {
 const AREA_W = 1728;
 const AREA_H = 600;
 const LINE_Y = 470;
-const px = (x: number) => AREA_W / 2 + x * 740;
-const py = (y: number) => LINE_Y - y * 400;
+const UNIT_X = 740;
+const UNIT_Y = 400;
+const px = (x: number) => AREA_W / 2 + x * UNIT_X;
+const py = (y: number) => LINE_Y - y * UNIT_Y;
+
+// The 3D view (steps 4 and 5): a simple oblique drawing. The plane shrinks
+// back into a wall; the third axis comes toward the viewer, down and left.
+const SPACE = { cx: 870, base: 405, ux: 560, uy: 330, zx: -170, zy: 125 };
+/** The far end of the axes, in plane units (the arrows stop a little past the words). */
+const AXIS_END = 1.12;
+const DEPTH_END = 1.15;
+
+interface Pt {
+  x: number;
+  y: number;
+}
+
+/** Where a point of the map is drawn, in the flat view or the 3D one. */
+function project(p: { x: number; y: number; z?: number }, space: boolean): Pt {
+  if (!space) return { x: px(p.x), y: py(p.y) };
+  const z = p.z ?? 0;
+  return { x: SPACE.cx + p.x * SPACE.ux + z * SPACE.zx, y: SPACE.base - p.y * SPACE.uy + z * SPACE.zy };
+}
+
+/** The flat axes, carried onto the back wall of the 3D view: one affine map, so CSS can ease it. */
+const WALL = (() => {
+  const a = SPACE.ux / UNIT_X;
+  const d = SPACE.uy / UNIT_Y;
+  return `matrix(${a}, 0, 0, ${d}, ${SPACE.cx - (AREA_W / 2) * a}, ${SPACE.base - LINE_Y * d})`;
+})();
 
 function signed(n: number, locale: Locale): string {
   const s = formatNumber(Math.abs(n), locale, 2);
@@ -78,11 +114,9 @@ function formatValue(value: number[] | "?", locale: Locale): string {
 }
 
 /** An arrow from a word toward what pulls it, shortened at both ends. */
-function arrowLine(from: { x: number; y: number }, to: { x: number; y: number }) {
-  const x1 = px(from.x);
-  const y1 = py(from.y);
-  const x2 = px(to.x);
-  const y2 = py(to.y);
+function arrowLine(from: Pt, to: Pt) {
+  const { x: x1, y: y1 } = from;
+  const { x: x2, y: y2 } = to;
   const len = Math.hypot(x2 - x1, y2 - y1) || 1;
   const ux = (x2 - x1) / len;
   const uy = (y2 - y1) / len;
@@ -94,9 +128,26 @@ function MapArea({ locale, step }: { locale: Locale; step: number }) {
   const arrows = Object.entries(ARROWS).flatMap(([s, list]) =>
     list.map((a) => {
       const word = WORDS.find((w) => w.id === a.from)!;
-      return { ...a, step: Number(s), line: arrowLine(positionAt(word, Number(s)), a.to) };
+      const inSpace = dimensionsView(Number(s), locale).space;
+      return { ...a, step: Number(s), line: arrowLine(project(positionAt(word, Number(s)), inSpace), project(a.to, inSpace)) };
     }),
   );
+  const sp = view.space;
+  // The 3D frame is always drawn at its 3D place; it only fades in and out.
+  const corner = (x: number, z: number) => project({ x, y: 0, z }, true);
+  const floor = [corner(-AXIS_END, 0), corner(AXIS_END, 0), corner(AXIS_END, DEPTH_END), corner(-AXIS_END, DEPTH_END)];
+  const depthTip = corner(-AXIS_END, DEPTH_END);
+  // The far wall's right edge, so the box (and what falls outside it) reads.
+  const wallEdge = [project({ x: AXIS_END, y: 0.8 }, true), project({ x: AXIS_END, y: 0 }, true)];
+  const blue = WORDS.find((w) => w.id === "blue")!;
+  const bluePos = positionAt(blue, 4);
+  const blueTop = project(bluePos, true);
+  const blueFoot = project({ ...bluePos, y: 0 }, true);
+  const groupAt = (x: number) => {
+    const p = project({ x, y: 0 }, sp);
+    return `translate(${p.x}px, ${p.y + 72}px)`;
+  };
+  const seaLabel = project({ x: -AXIS_END, y: 1.08 }, sp);
   return (
     <div className={styles.map} data-visible={view.map}>
       <svg className={styles.lines} viewBox={`0 0 ${AREA_W} ${AREA_H}`} width={AREA_W} height={AREA_H} aria-hidden="true">
@@ -108,9 +159,23 @@ function MapArea({ locale, step }: { locale: Locale; step: number }) {
             <path d="M0 0 L10 5 L0 10 z" className={styles.axisHead} />
           </marker>
         </defs>
-        <line className={styles.axis} x1={px(-1.12)} x2={px(1.12)} y1={LINE_Y} y2={LINE_Y} />
-        <g className={styles.vAxis} data-visible={view.plane}>
-          <line className={styles.axis} x1={px(-1.12)} x2={px(-1.12)} y1={LINE_Y} y2={py(1.08)} markerEnd="url(#dims-axis)" />
+        <g className={styles.depth} data-visible={sp}>
+          <polygon className={styles.floor} points={floor.map((p) => `${p.x},${p.y}`).join(" ")} />
+          <polyline className={styles.edge} points={wallEdge.map((p) => `${p.x},${p.y}`).join(" ")} />
+          {/* Blue's foot on the floor, while it has a place (step 4 only). */}
+          <g className={styles.dropGroup} data-visible={view.step === 4}>
+            <line className={styles.drop} x1={blueTop.x} y1={blueTop.y} x2={blueFoot.x} y2={blueFoot.y} />
+            <circle className={styles.foot} cx={blueFoot.x} cy={blueFoot.y} r={7} />
+          </g>
+          <g className={styles.depthAxis}>
+            <line className={styles.axis} x1={floor[0]!.x} y1={floor[0]!.y} x2={depthTip.x} y2={depthTip.y} markerEnd="url(#dims-axis)" />
+          </g>
+        </g>
+        <g className={styles.wall} style={{ transform: sp ? WALL : "none" }}>
+          <line className={styles.axis} x1={px(-AXIS_END)} x2={px(AXIS_END)} y1={LINE_Y} y2={LINE_Y} />
+          <g className={styles.vAxis} data-visible={view.plane}>
+            <line className={styles.axis} x1={px(-AXIS_END)} x2={px(-AXIS_END)} y1={LINE_Y} y2={py(1.08)} markerEnd="url(#dims-axis)" />
+          </g>
         </g>
         {arrows.map((a) => (
           <line
@@ -126,28 +191,35 @@ function MapArea({ locale, step }: { locale: Locale; step: number }) {
         ))}
       </svg>
 
-      <span className={styles.group} style={{ left: px(-0.72), top: LINE_Y + 72 }}>
-        {tr(COPY.colours, locale)}
+      <span className={styles.group} data-quiet={sp} style={{ transform: groupAt(-0.72) }}>
+        <span className={styles.groupText}>{tr(COPY.colours, locale)}</span>
       </span>
-      <span className={styles.group} style={{ left: px(0.72), top: LINE_Y + 72 }}>
-        {tr(COPY.fruits, locale)}
+      <span className={styles.group} data-quiet={sp} style={{ transform: groupAt(0.72) }}>
+        <span className={styles.groupText}>{tr(COPY.fruits, locale)}</span>
       </span>
-      <span className={styles.axisLabel} data-visible={view.plane} style={{ left: px(-1.12) + 26, top: py(1.08) - 6 }}>
+      <span className={styles.axisLabel} data-visible={view.plane} style={{ transform: `translate(${seaLabel.x + 26}px, ${seaLabel.y - 6}px)` }}>
         {tr(COPY.seaAxis, locale)}
+      </span>
+      <span className={styles.depthLabel} data-visible={sp} style={{ transform: `translate(${depthTip.x - 30}px, ${depthTip.y + 8}px)` }}>
+        {tr(DEPTH_AXIS, locale)}
       </span>
 
       <span className={styles.ghost} data-visible={view.ghost} style={{ transform: `translate(${px(GHOST.at.x)}px, ${py(GHOST.at.y)}px)` }}>
         <span className={styles.ghostLabel}>{tr(GHOST.text, locale)}</span>
       </span>
 
-      {view.words.map((w) => (
+      {view.words.map((w) => {
+        const at = project(w, sp);
+        return (
         <span
           key={w.id}
           className={styles.word}
           data-visible={w.visible}
           data-mood={w.mood}
+          data-quiet={w.quiet}
+          data-numbers={Array.isArray(w.value) ? w.value.length : 0}
           data-word={w.id}
-          style={{ transform: `translate(${px(w.x)}px, ${py(w.y)}px)` }}
+          style={{ transform: `translate(${at.x}px, ${at.y}px)` }}
         >
           <span className={styles.wobble}>
             <span className={styles.dot} />
@@ -155,7 +227,8 @@ function MapArea({ locale, step }: { locale: Locale; step: number }) {
           </span>
           {w.value !== null ? <span className={styles.value}>{formatValue(w.value, locale)}</span> : null}
         </span>
-      ))}
+        );
+      })}
     </div>
   );
 }

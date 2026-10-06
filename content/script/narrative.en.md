@@ -264,7 +264,9 @@ The best thing is to play: give me a word or a sentence, I type it in, and you c
 
 A number on its own has no meaning. To compute with words, a model needs numbers that do. Let's first try with a single number per word: its place on a line. Colours on one side, fruits on the other. "Orange", which is both a colour and a fruit, goes in the middle, and the line copes. But "salmon" is a colour and a fish: it should be near the colours and near the sea, and on the line, there is no room for the sea.
 
-Let's add a second number, so a second direction. Now "salmon" can settle between the colours and the sea. But take "blue": it is a colour, it is the sea, it is the sky, and it is also sadness, as in "feeling blue". Halfway between all of them, it is close to none of them. A word has so many different meanings that one number is not enough, and two are not enough either.
+Let's add a second number, so a second direction. Now "salmon" can settle between the colours and the sea. But take "blue": it is a colour, it is the sea, it is the sky, and it is also sadness, as in "feeling blue". Halfway between all of them, it is close to none of them. Two numbers are not enough.
+
+So let's add a third number, a third direction. The plane tilts, and we are now in 3D: along the new direction, the feelings, sits "sad", and "blue" finally finds its place, near the colours, near the sea and the sky, and toward sadness at the same time. But "blue" is also the blues, the music. Where does that go? There is no direction left for it. Every new meaning needs one more direction: a word has so many different meanings that one number is not enough, nor two, nor three.
 
 So models give each word hundreds, even thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B. And nobody names these directions: training sets them, and words used in the same sentences end up close to each other. To be honest, the positions on this slide are invented, and strictly speaking a model numbers tokens, not words. The real map is the next slide.
 

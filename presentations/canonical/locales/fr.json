@@ -896,8 +896,8 @@
     "text": "Les mots ont trop de sens pour un ou deux nombres : les modèles donnent à chaque mot des centaines de nombres, appris dans les textes."
   },
   "02-meaning-dimensions/speakerNotes": {
-    "source": "- To compute with words, a model needs numbers; here a word's number is simply its place\n- One number is one line: colours on one side, fruits on the other; orange, a colour and a fruit, sits in the middle, and the line copes\n- Salmon is a colour and a fish: it should be near the colours and near the sea, and the line has no room for the sea\n- A second number gives a second direction: salmon settles between the colours and the sea\n- Blue: a colour, the sea, the sky, and sadness (\"feeling blue\"); halfway between all of them is close to none of them\n- So models give each word hundreds or thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B\n- **Nobody names these directions**: training sets them, and words used in the same sentences end up close\n- Honest caveats: the positions here are invented, and strictly a model numbers tokens, not words; the next slide is a real map",
-    "text": "- Pour calculer avec des mots, un modèle a besoin de nombres ; ici, le nombre d'un mot, c'est simplement sa place\n- Un nombre, c'est une ligne : les couleurs d'un côté, les fruits de l'autre ; orange, couleur et fruit, se met au milieu, et la ligne s'en sort\n- Saumon est une couleur et un poisson : il devrait être près des couleurs et près de la mer, et la ligne n'a pas de place pour la mer\n- Un deuxième nombre donne une deuxième direction : saumon se pose entre les couleurs et la mer, pêche (le fruit, et la pêche en mer) entre les fruits et la mer\n- Bleu : une couleur, la mer, le ciel, et aussi le bleu qu'on se fait en se cognant ; à mi-chemin de tout, il n'est près de rien\n- Alors les modèles donnent à chaque mot des centaines ou des milliers de nombres : 384 dans la carte qui suit, 4 096 dans Llama 3.1 8B, 16 384 dans Llama 3.1 405B\n- **Personne ne nomme ces directions** : l'entraînement les fixe, et les mots employés dans les mêmes phrases finissent proches\n- Par honnêteté : les positions ici sont inventées, et un modèle numérote en fait des tokens, pas des mots ; la diapositive suivante montre une vraie carte"
+    "source": "- Click order: the line, salmon, the plane, blue pulled, 3D, a fourth meaning (the blues), many numbers, next\n- To compute with words, a model needs numbers; here a word's number is simply its place\n- One number is one line: colours on one side, fruits on the other; orange, a colour and a fruit, sits in the middle, and the line copes\n- Salmon is a colour and a fish: it should be near the colours and near the sea, and the line has no room for the sea\n- A second number gives a second direction: salmon settles between the colours and the sea\n- Blue: a colour, the sea, the sky, and sadness (\"feeling blue\"); halfway between all of them is close to none of them\n- A third number, a third direction: the plane tilts into 3D, sadness sits along the new \"feelings\" axis, and blue finds its place near all of them\n- Then a fourth meaning, the blues, the music: there is no direction left for it, and every new meaning needs one more\n- So models give each word hundreds or thousands of numbers: 384 in the map we are about to see, 4,096 in Llama 3.1 8B, 16,384 in Llama 3.1 405B\n- **Nobody names these directions**: training sets them, and words used in the same sentences end up close\n- Honest caveats: the positions here are invented, and strictly a model numbers tokens, not words; the next slide is a real map",
+    "text": "- Ordre des clics : la ligne, saumon, le plan, bleu tiraillé, la 3D, un quatrième sens (les Bleus), beaucoup de nombres, la suite\n- Pour calculer avec des mots, un modèle a besoin de nombres ; ici, le nombre d'un mot, c'est simplement sa place\n- Un nombre, c'est une ligne : les couleurs d'un côté, les fruits de l'autre ; orange, couleur et fruit, se met au milieu, et la ligne s'en sort\n- Saumon est une couleur et un poisson : il devrait être près des couleurs et près de la mer, et la ligne n'a pas de place pour la mer\n- Un deuxième nombre donne une deuxième direction : saumon se pose entre les couleurs et la mer, pêche (le fruit, et la pêche en mer) entre les fruits et la mer\n- Bleu : une couleur, la mer, le ciel, et aussi le bleu qu'on se fait en se cognant ; à mi-chemin de tout, il n'est près de rien\n- Un troisième nombre, une troisième direction : le plan bascule en 3D, l'hématome se place sur le nouvel axe « le corps », et bleu trouve sa place près de tout ça\n- Puis un quatrième sens, les Bleus, l'équipe de France de foot : il ne reste aucune direction pour lui, et chaque nouveau sens en demande une de plus\n- Alors les modèles donnent à chaque mot des centaines ou des milliers de nombres : 384 dans la carte qui suit, 4 096 dans Llama 3.1 8B, 16 384 dans Llama 3.1 405B\n- **Personne ne nomme ces directions** : l'entraînement les fixe, et les mots employés dans les mêmes phrases finissent proches\n- Par honnêteté : les positions ici sont inventées, et un modèle numérote en fait des tokens, pas des mots ; la diapositive suivante montre une vraie carte"
   },
   "02-meaning-dimensions/transitionIn": {
     "source": "A token's number says nothing. Meaning needs more numbers.",
@@ -2899,6 +2899,14 @@
     "source": "Blue: a colour, the sea, the sky, sadness",
     "text": "Bleu : une couleur, la mer, le ciel, un hématome"
   },
+  "copy:A third number, a third direction": {
+    "source": "A third number, a third direction",
+    "text": "Un troisième nombre, une troisième direction"
+  },
+  "copy:Blue: and the blues, the music": {
+    "source": "Blue: and the blues, the music",
+    "text": "Bleu : et les Bleus, l'équipe de France"
+  },
   "copy:So each word gets hundreds of numbers": {
     "source": "So each word gets hundreds of numbers",
     "text": "Chaque mot reçoit des centaines de nombres"
@@ -2918,6 +2926,14 @@
   "copy:Near all of them at once? Two numbers are not enough: halfway between everything is close to nothing.": {
     "source": "Near all of them at once? Two numbers are not enough: halfway between everything is close to nothing.",
     "text": "Près de tout à la fois ? Deux nombres ne suffisent pas : à mi-chemin de tout, on n'est près de rien."
+  },
+  "copy:With a third direction, blue finds its place: near the colours, the sea and the sky, and its other meaning too.": {
+    "source": "With a third direction, blue finds its place: near the colours, the sea and the sky, and its other meaning too.",
+    "text": "Avec une troisième direction, bleu trouve sa place : près des couleurs, de la mer et du ciel, et de son autre sens aussi."
+  },
+  "copy:And yet another meaning… Every new meaning needs another direction.": {
+    "source": "And yet another meaning… Every new meaning needs another direction.",
+    "text": "Et encore un autre sens… Chaque nouveau sens demande une direction de plus."
   },
   "copy:Nobody names these numbers: they are learned from text. Words used in the same sentences end up close.": {
     "source": "Nobody names these numbers: they are learned from text. Words used in the same sentences end up close.",
