@@ -166,8 +166,11 @@ function Legend({ locale, pairs }: { locale: Locale; pairs: boolean }) {
   );
 }
 
+/** The live map opens as the 3D cloud; the presenter can switch to the 2D map. Previews stay a still 2D map. */
+const DEFAULT_VIEW = "3d" as const;
+
 function ViewToggle({ ctx, state, patch: set }: { ctx: Ctx; state: ExplorerState; patch: (next: Partial<ExplorerState>) => void }) {
-  const view = state.view ?? "2d";
+  const view = state.view ?? DEFAULT_VIEW;
   return (
     <div className={styles.controls} onKeyDown={stopKeys}>
       <button type="button" className={styles.button} aria-pressed={view === "2d"} onClick={() => set({ view: "2d" })}>
@@ -203,7 +206,7 @@ function CloudMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const pairs = step >= 2;
   const focus = state.focus ?? null;
   const preview = role === "preview";
-  const view = preview ? "2d" : (state.view ?? "2d");
+  const view = preview ? "2d" : (state.view ?? DEFAULT_VIEW);
   const { patch: set, interactive } = useExplorer(ctx);
   const selected = preview ? null : (state.selected ?? null);
   const marks = selectionMarks(space, selected);
@@ -346,7 +349,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   // Stable while the query is unchanged, so the 3D cloud's frame loop keeps running.
   const highlight = useMemo(() => (query?.neighbours ?? []).map((n) => n.index), [query]);
   const cloudQuery = useMemo(() => (query?.position3d ? { text: query.text, position: query.position3d } : null), [query]);
-  const view = preview ? "2d" : (state.view ?? "2d");
+  const view = preview ? "2d" : (state.view ?? DEFAULT_VIEW);
 
   let notice: string | null = null;
   if (fallback) notice = tr(EXPLORER.fallbackActive, locale);

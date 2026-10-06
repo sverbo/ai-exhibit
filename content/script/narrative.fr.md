@@ -282,7 +282,7 @@ Comme on est en machine learning, personne ne place les mots à la main. Avant l
 
 **À retenir :** La proximité de sens devient une distance qu'on peut mesurer, dans des centaines de dimensions que personne n'a choisies.
 
-Explorons la carte avec vos mots. Donnez-moi un métier, un lieu, une émotion : je le tape, et il est calculé en direct par le même modèle. On lit ses plus proches voisins, et quand un voisin vous surprend, c'est souvent un mot qu'on emploie dans les mêmes phrases. La carte peut aussi passer en 3D : plus d'axes pour jouer, juste pour montrer l'idée.
+Explorons la carte avec vos mots. Donnez-moi un métier, un lieu, une émotion : je le tape, et il est calculé en direct par le même modèle. On lit ses plus proches voisins, et quand un voisin vous surprend, c'est souvent un mot qu'on emploie dans les mêmes phrases. La carte s'ouvre en 3D : plus d'axes pour jouer, juste pour montrer l'idée. On peut aussi l'aplatir en 2D, plus facile à lire.
 
 Ce modèle donne à chaque mot 384 nombres, c'est-à-dire 384 façons d'être voisin d'un autre mot. Personne ne saurait régler ça à la main, et c'est comme ça qu'on encode le sens et les liens entre les mots. Les plus grands modèles en utilisent bien plus : 4 096 nombres par token pour Llama 3.1 8B, 16 384 pour Llama 3.1 405B. Nous, on ne sait pas se représenter plus de trois dimensions. Les cartes en 2D et en 3D sont donc une projection, qui essaie de garder les proches voisins de chaque mot. Les distances entre des groupes éloignés et les axes ne veulent rien dire, et certains vrais voisins peuvent apparaître loin. La liste est exacte ; la carte est une approximation.
 

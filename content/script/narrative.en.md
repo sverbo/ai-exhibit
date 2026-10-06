@@ -282,7 +282,7 @@ Since we are in machine learning, nobody places the words by hand. Before traini
 
 **Takeaway:** Closeness of meaning becomes a distance we can measure, in hundreds of dimensions nobody chose.
 
-Let's explore the map with your words. Give me a job, a place, an emotion: I type it in, and it is computed live by the same model. We read its nearest neighbours, and when a neighbour surprises you, it is often a word used in the same sentences. The map can also switch to 3D: more axes to play with, just to show the idea.
+Let's explore the map with your words. Give me a job, a place, an emotion: I type it in, and it is computed live by the same model. We read its nearest neighbours, and when a neighbour surprises you, it is often a word used in the same sentences. The map opens in 3D: more axes to play with, just to show the idea. It can also be laid flat in 2D, which is easier to read.
 
 This model gives each word 384 numbers, which means 384 ways to be a neighbour of another word. Nobody could set that by hand, and that is how meaning and the links between words are encoded. The largest models use far more: 4,096 numbers per token for Llama 3.1 8B, 16,384 for Llama 3.1 405B. We cannot picture more than three dimensions. So the 2D and 3D maps are a projection, which tries to keep each word's close neighbours. The distances between far-apart groups, and the axes, mean nothing, and some true neighbours may show up far away. The list is exact; the map is an approximation.
 

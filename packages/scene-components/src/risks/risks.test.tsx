@@ -8,7 +8,7 @@ import { chapter04 } from "../../../../presentations/canonical/src/scenes/04-to-
 import type { SceneComponent, SceneContext, SceneRole } from "../contract.ts";
 import { INCIDENT_BEATS, INCIDENT_SHORT_BEATS, INCIDENT_STEPS, incidentBeats, incidentSteps, type IncidentVariant } from "./incident.ts";
 import { IncidentStory, incidentBeatAt } from "./IncidentStory.tsx";
-import { PictureCards, pictureCardsLayout, pictureCardsSteps, visiblePictureCards, type PictureCardsProps } from "./PictureCards.tsx";
+import { cardSteps, PictureCards, pictureCardsLayout, pictureCardsSteps, visiblePictureCards, type PictureCardsProps } from "./PictureCards.tsx";
 import { chapter05 } from "../../../../presentations/canonical/src/scenes/05-closing.ts";
 import { isPictureId, PICTURE_IDS, Picture } from "./pictures.tsx";
 import { OpinionGap, opinionGapSteps, orderedBars, type OpinionGapProps } from "./OpinionGap.tsx";
@@ -156,7 +156,13 @@ describe("PictureCards", () => {
         for (const locale of locales)
           for (let step = 0; step <= (scene.steps ?? 0); step++) {
             const html = render(PictureCards, scene.visual.props, ctx(role, step, locale, scene.steps));
-            const expected = role === "preview" ? scene.visual.props.cards.length : visiblePictureCards(scene.visual.props.cards.length, scene.steps ?? 0, step, false);
+            const cards = scene.visual.props.cards;
+            const expected =
+              role === "preview"
+                ? cards.length
+                : cards.some((c) => c.tip)
+                  ? cardSteps(cards).filter((p) => step >= p.card).length
+                  : visiblePictureCards(cards.length, scene.steps ?? 0, step, false);
             expect(html.match(/data-shown=""/g)?.length ?? 0, `${scene.id} ${role} ${step}`).toBe(expected);
           }
   });
@@ -166,14 +172,18 @@ describe("PictureCards tips", () => {
   const scene = chapter04.find((s) => s.id === "04-misuse")!;
   const props = (scene.visual as unknown as { props: PictureCardsProps }).props;
 
-  it("misuse sticks the update tip on the cyber card after both cards", () => {
+  it("misuse sticks the update tip on the cyber card, before the biology card", () => {
     expect(props.cards[0]!.tip?.en).toBe("Always accept updates!");
     expect(scene.steps).toBe(pictureCardsSteps(props));
     const at = (step: number) => render(PictureCards, props, ctx("display", step, "en", scene.steps));
-    expect(at(2)).not.toContain('data-tip=""');
-    expect(at(2).match(/data-shown=""/g)?.length).toBe(2);
+    const shown = (step: number) => at(step).match(/data-shown=""/g)?.length ?? 0;
+    expect(shown(1)).toBe(1);
+    expect(at(1)).not.toContain('data-tip=""');
+    expect(shown(2)).toBe(1);
+    expect(at(2)).toContain('data-tip=""');
+    expect(at(2)).toContain('data-picture="update"');
+    expect(shown(3)).toBe(2);
     expect(at(3)).toContain('data-tip=""');
-    expect(at(3)).toContain('data-picture="update"');
     expect(render(PictureCards, props, ctx("preview", 0, "en", scene.steps))).toContain('data-tip=""');
   });
 });

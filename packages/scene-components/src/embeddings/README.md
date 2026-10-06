@@ -126,7 +126,7 @@ souris (lands near joie, perhaps read as a form of "sourire"), orage violent (ne
 ### State (published by the controller, < 1 KB)
 
 ```ts
-{ view?: "2d" | "3d"; focus?: number | null; busy?: boolean; replay?: number;
+{ view?: "2d" | "3d" (default "3d"); focus?: number | null; busy?: boolean; replay?: number;
   camera?: { u, v, k } | null; camera3d?: { angle, tilt, zoom } | null; selected?: number | null;
   query?: { text, source: "model" | "vocabulary" | "unknown", matched?,
             neighbours: { index, similarity }[], position, position3d, ms? } | null }

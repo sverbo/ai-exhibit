@@ -739,7 +739,7 @@ export const chapter02: SceneDefinition[] = [
     speakerNotes: {
       en: `- Ask the room for a word (a job, a place, an emotion) and type it; it is computed live, by the same model through Hugging Face
 - Read the nearest neighbours; a surprising neighbour is often a word used in the same sentences
-- The map can switch to **3D**: more axes to play with, just to show the idea
+- The map opens as a **3D** cloud: more axes to play with, just to show the idea. The **2D map** button lays it flat, easier to read
 - This model gives each word **384 numbers**: 384 ways to be neighbours with another word. Nobody could set that by hand; that is how meaning and the links between words are encoded
 - The largest models use far more: **4,096** numbers per token for Llama 3.1 8B, **16,384** for Llama 3.1 405B
 - We cannot picture more than three dimensions: the 2D and 3D maps are a **projection** (UMAP) that tries to keep each word's close neighbours. Distances between far-apart groups and the axes mean nothing, and some true neighbours may show up far away

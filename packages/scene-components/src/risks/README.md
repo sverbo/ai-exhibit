@@ -37,7 +37,7 @@ Props:
     evidence?: EvidenceLevel; // badge under the line
     sourceIds?: string[];     // must also be on the scene; not printed on stage
     flags?: CountryCode[];    // small bundled flags under the picture
-    tip?: L10n;               // a sticker with the update pictogram, after the cards
+    tip?: L10n;               // a sticker with the update pictogram, the step after its card
   }[];
   center?: PictureId;    // with two cards: a shared picture between them
   orgs?: { label: L10n; names: string[] };          // a row of names, after the cards
@@ -53,7 +53,7 @@ four).
 | --- | --- |
 | `cards.length` | Step 0: the heading (and `center`). Each step adds the next card. |
 | `0` | Everything at once (used for single-card scenes). |
-| `pictureCardsSteps(props)` | With a `tip`, `orgs` or `takeaway`: one card per step, then the tips, then the organisations, then the takeaway. |
+| `pictureCardsSteps(props)` | With a `tip`, `orgs` or `takeaway`: one card per step (a card's tip on the step right after it), then the organisations, then the takeaway. |
 
 Used by `01-already-here` (4), `04-to-risks` (3), `04-misuse` (2: cyberattacks,
 biological and chemical weapons), `04-systemic` (4: jobs, power, skills, our
