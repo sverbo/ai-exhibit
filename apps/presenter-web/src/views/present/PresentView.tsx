@@ -110,10 +110,11 @@ export default function PresentView({ variant = "present" }: { variant?: "presen
             keys={talk.controller}
             corner={
               <>
-                {/* Language and model source from the projector too, presenter open or not: everything can be run from here. */}
+                {/* Theme, language and model source from the projector too, presenter open or not: everything can be run from here. */}
                 {talk.linked && !talk.ownsStage ? <span className={styles.linked}>{t("linkedToPresenter")}</span> : null}
                 {talk.controller ? (
                   <>
+                    <ThemeToggle />
                     <LocalePicker compact value={talk.locale} onChange={talk.actions.setLocale} />
                     <ModelSourceToggle shell={talk.shell} onChange={talk.actions.setModelSource} />
                   </>
