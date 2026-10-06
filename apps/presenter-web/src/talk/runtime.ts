@@ -99,7 +99,7 @@ export function useCloudHealth(intervalMs = 60_000, retryMs = 3_000): CloudStatu
 }
 
 /** Below this estimated credit (US dollars), "ready" comes with a warning and the amount left. */
-export const LOW_CREDIT_USD = 10;
+export const LOW_CREDIT_USD = 15;
 
 /** One line for the presenter: can the live demos use Hugging Face here? */
 export function cloudHealthText(s: CloudStatus | null | "unreachable"): { state: "ok" | "warn" | "bad" | "none"; text: string } {

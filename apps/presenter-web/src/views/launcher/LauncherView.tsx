@@ -160,11 +160,13 @@ export default function LauncherView() {
           <CopyPrompt />
         </p>
         <p>
-          <b>Make your own version</b> (another audience, length or angle): paste this prompt into Claude Code (button above): it checks your tools, forks{" "}
+          <b>Contribute, or make your own version:</b> paste this prompt into Claude Code (button above). It first asks what you
+          want to do. A correction, feedback or a new language belongs in the original talk: it opens a pull request on{" "}
           <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
             {REPO_URL.replace("https://", "")}
-          </a>
-          , installs it and guides you to host it. Live models need a Hugging Face token in <code>.env</code>, the only
+          </a>{" "}
+          for you. Another audience, length or angle is your own version: it forks the talk, installs it and guides you to host
+          it. Live models need a Hugging Face token in <code>.env</code>, the only
           required setting; without one, every demo runs on recorded simulation. Run it locally with <code>pnpm dev</code>, or host it
           (easy on Vercel). Big changes such as a new language use many tokens: a generous Claude plan helps. If you host a
           version, send me the link and a short description (for example: kid friendly, 60 minutes) and I will add it to the

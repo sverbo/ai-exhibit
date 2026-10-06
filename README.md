@@ -18,7 +18,10 @@ There are three ways to take part:
    Contact the author on Signal (`sverbo.39`) or open a pull request on
    [sverbo/ai-exhibit](https://github.com/sverbo/ai-exhibit) (see
    [CONTRIBUTING.md](CONTRIBUTING.md)). The change then reaches everyone, so
-   there is no need to fork for this.
+   there is no need for a version of your own. The setup prompt below handles
+   this too: it asks first whether your change belongs in the original talk,
+   and if so opens the pull request for you (with `gh`, or guiding you through
+   github.com).
 2. **Changing the talk itself** (another audience, length or angle): fork it
    and make your own version. The easiest way is to paste
    [`docs/setup-prompt.md`](docs/setup-prompt.md) into
@@ -98,7 +101,7 @@ model, chat model, next-token probabilities, embeddings).
 | Environment variable | Required | What it does |
 | --- | --- | --- |
 | `HF_TOKEN` | no | Hugging Face token for the live demos. It stays on the server: never sent to the browser, never logged. Without it, the demos play Simulation |
-| `HF_CREDIT_USD` | no | The prepaid credit bought on the Hugging Face account, in US dollars (e.g. `10`). With the token's "Read billing usage" permission, the home page and the presenter show "ready, but careful" with an estimate of what is left once it falls under $10. Hugging Face does not let a token read the prepaid balance itself: the estimate is this amount minus what each month spent beyond its included credit. The warning, with the amount, shows on the home page, which anyone with the URL can open |
+| `HF_CREDIT_USD` | no | The prepaid credit bought on the Hugging Face account, in US dollars (e.g. `10`). With the token's "Read billing usage" permission, the home page and the presenter show "ready, but careful" with an estimate of what is left once it falls under $15 (`LOW_CREDIT_USD`). Hugging Face does not let a token read the prepaid balance itself: the estimate is this amount minus what each month spent beyond its included credit. The warning, with the amount, shows on the home page, which anyone with the URL can open |
 | `HF_CREDIT_SINCE` | no | When that credit was bought (ISO date, e.g. `2026-10-01`); without it, the last twelve months are counted |
 | `AI_EXHIBIT_ACCESS_CODE` | no | When set, every model call must carry this code: the presenter view asks for it once and the browser remembers it. When unset, anyone with the URL can call the endpoints |
 
