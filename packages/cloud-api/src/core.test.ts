@@ -145,7 +145,11 @@ describe("cloud API", () => {
     expect(JSON.parse(String(f.mock.calls[0]![1]!.body)).max_tokens).toBe(PUBLIC_LIMITS.maxTokens);
     for (let i = 1; i < PUBLIC_LIMITS.perMinute; i++) await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.1");
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.1")).status).toBe(200);
-    expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.1")).status).toBe(429);
+    t = 45_000;
+    const refused = await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.1");
+    expect(refused.status).toBe(429);
+    // Which budget ran out, and when the first call of the window leaves it.
+    expect(refused.json).toMatchObject({ error: "rate-limited", limit: "minute", max: PUBLIC_LIMITS.perMinute, retryAfter: 16 });
     // Another visitor keeps its own budget.
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.2")).status).toBe(200);
     t = 61_000;
@@ -200,7 +204,11 @@ describe("cloud API", () => {
       expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.9")).status).toBe(200);
     }
     t += 10_000;
-    expect((await call(api, req("POST", "/api/llm/chat", { messages: [{ role: "user", content: "a" }] }), "198.51.100.9")).status).toBe(429);
+    const res = await api.handle(req("POST", "/api/llm/chat", { messages: [{ role: "user", content: "a" }] }), { ip: "198.51.100.9" });
+    expect(res?.status).toBe(429);
+    // The first call (t = 0) leaves the hour at 3600 s: 2600 s from now.
+    expect(res?.headers.get("retry-after")).toBe("2601");
+    expect(await res?.json()).toMatchObject({ error: "rate-limited", limit: "hour", max: PUBLIC_LIMITS.perHour, retryAfter: 2601 });
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.10")).status).toBe(200);
     t = 3_600_000 + 20_000;
     expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.9")).status).toBe(200);

@@ -76,14 +76,37 @@ export type CloudErrorCode =
   | "timeout"
   | "offline";
 
+/** For a "rate-limited" refusal: which budget ran out, how big it is, and when it frees up. */
+export interface CloudRateLimit {
+  limit: "minute" | "hour";
+  /** Requests allowed in that window, when the server says. */
+  max?: number;
+  /** Milliseconds until the server accepts calls again, when it says. */
+  retryAfterMs?: number;
+}
+
 export class CloudLlmError extends Error {
   constructor(
     readonly code: CloudErrorCode,
     message: string,
+    readonly rate?: CloudRateLimit,
   ) {
     super(message);
     this.name = "CloudLlmError";
   }
+}
+
+/**
+ * The details of a "rate-limited" answer: the fields the server adds
+ * (packages/cloud-api RateLimitInfo), else the Retry-After header and the
+ * wording of an older server's message ("in a minute", "in an hour").
+ */
+function rateLimitOf(res: Response, body: Record<string, unknown> | null): CloudRateLimit {
+  const message = typeof body?.message === "string" ? body.message : "";
+  const limit = body?.limit === "hour" || body?.limit === "minute" ? body.limit : /\bin an hour\b/i.test(message) ? "hour" : "minute";
+  const max = typeof body?.max === "number" ? body.max : Number(/More than (\d+)/i.exec(message)?.[1]) || undefined;
+  const seconds = typeof body?.retryAfter === "number" ? body.retryAfter : Number(res.headers.get("retry-after"));
+  return { limit, ...(max ? { max } : {}), ...(seconds > 0 ? { retryAfterMs: seconds * 1000 } : {}) };
 }
 
 export interface CloudOptions {
@@ -111,7 +134,8 @@ function refusal(res: Response, body: Record<string, unknown> | null, opts: Clou
   const error = (typeof body?.error === "string" ? body.error : "upstream") as CloudErrorCode;
   // A stored code the server refuses is stale: forget it, so the presenter is asked again.
   if (error === "access-code" && opts.accessCode === undefined && code) setAccessCode(null);
-  return new CloudLlmError(error, typeof body?.message === "string" ? body.message : `HTTP ${res.status}`);
+  const message = typeof body?.message === "string" ? body.message : `HTTP ${res.status}`;
+  return new CloudLlmError(error, message, error === "rate-limited" ? rateLimitOf(res, body) : undefined);
 }
 
 async function request<T>(path: string, init: RequestInit, opts: CloudOptions): Promise<T> {

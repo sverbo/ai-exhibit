@@ -3771,13 +3771,45 @@
     "source": "Hugging Face unreachable",
     "text": "Hugging Face injoignable"
   },
-  "copy:the cloud model failed": {
-    "source": "the cloud model failed",
-    "text": "le modèle cloud a échoué"
+  "copy:too many requests this minute: Hugging Face is back in a few seconds": {
+    "source": "too many requests this minute: Hugging Face is back in a few seconds",
+    "text": "trop de demandes cette minute : Hugging Face revient dans quelques secondes"
+  },
+  "copy:hourly limit reached ({max} requests)": {
+    "source": "hourly limit reached ({max} requests)",
+    "text": "limite horaire atteinte ({max} demandes)"
+  },
+  "copy:hourly request limit reached": {
+    "source": "hourly request limit reached",
+    "text": "limite horaire de demandes atteinte"
+  },
+  "copy:Hugging Face is back in about {minutes} min": {
+    "source": "Hugging Face is back in about {minutes} min",
+    "text": "Hugging Face revient dans {minutes} min environ"
+  },
+  "copy:Hugging Face did not answer in time": {
+    "source": "Hugging Face did not answer in time",
+    "text": "Hugging Face n'a pas répondu à temps"
+  },
+  "copy:the server could not be reached (network)": {
+    "source": "the server could not be reached (network)",
+    "text": "serveur injoignable (réseau)"
+  },
+  "copy:Hugging Face returned an error": {
+    "source": "Hugging Face returned an error",
+    "text": "Hugging Face a renvoyé une erreur"
   },
   "copy:fallback mode (F)": {
     "source": "fallback mode (F)",
     "text": "mode de secours (F)"
+  },
+  "copy:Retry Hugging Face": {
+    "source": "Retry Hugging Face",
+    "text": "Réessayer Hugging Face"
+  },
+  "copy:Too many requests at once: Hugging Face answers again in a few seconds.": {
+    "source": "Too many requests at once: Hugging Face answers again in a few seconds.",
+    "text": "Trop de demandes d'un coup : Hugging Face répond à nouveau dans quelques secondes."
   },
   "copy:Bars: probabilities from {model}, reading the raw text (no chat format). The base model does not give its own.": {
     "source": "Bars: probabilities from {model}, reading the raw text (no chat format). The base model does not give its own.",
@@ -3962,6 +3994,14 @@
   "copy:the connection ended before this answer did": {
     "source": "the connection ended before this answer did",
     "text": "la connexion s'est coupée avant la fin de cette réponse"
+  },
+  "copy:too many requests this minute, ask again in a few seconds": {
+    "source": "too many requests this minute, ask again in a few seconds",
+    "text": "trop de demandes cette minute, redemandez dans quelques secondes"
+  },
+  "copy:the hourly request limit is reached, Hugging Face is back later": {
+    "source": "the hourly request limit is reached, Hugging Face is back later",
+    "text": "la limite horaire de demandes est atteinte, Hugging Face revient plus tard"
   },
   "copy:No answer:": {
     "source": "No answer:",

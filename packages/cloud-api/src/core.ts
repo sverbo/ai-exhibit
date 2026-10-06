@@ -289,10 +289,23 @@ export const ERROR_STATUS: Record<CloudErrorCode, number> = {
   timeout: 504,
 };
 
+/**
+ * What a "rate-limited" refusal adds to its JSON body, so a client can say
+ * which budget ran out and when it frees up: `limit` ("minute" or "hour"),
+ * `max` (requests allowed in that window) and `retryAfter` (seconds, also
+ * sent as a Retry-After header). Older clients read `error` and `message` only.
+ */
+export interface RateLimitInfo {
+  limit: "minute" | "hour";
+  max: number;
+  retryAfter: number;
+}
+
 export class CloudError extends Error {
   constructor(
     readonly code: CloudErrorCode,
     message: string,
+    readonly rate?: RateLimitInfo,
   ) {
     super(message);
     this.name = "CloudError";
@@ -563,7 +576,9 @@ export function jsonResponse(status: number, body: unknown): Response {
 
 export function errorResponse(err: unknown): Response {
   const e = err instanceof CloudError ? err : new CloudError("upstream", "Unexpected error");
-  return jsonResponse(ERROR_STATUS[e.code], { error: e.code, message: e.message });
+  const res = jsonResponse(ERROR_STATUS[e.code], { error: e.code, message: e.message, ...e.rate });
+  if (e.rate) res.headers.set("retry-after", String(e.rate.retryAfter));
+  return res;
 }
 
 /** The audience device id of a request; null for the presenter's requests. */
@@ -600,6 +615,21 @@ export class RollingCounter {
     const l = this.list(key, t);
     for (let i = 0; i < cost; i++) l.push(t);
   }
+
+  /** Milliseconds until `cost` more fit under `max` (0 when they already do). */
+  waitMs(key: string, t: number, max: number, cost = 1): number {
+    const l = this.list(key, t);
+    const excess = l.length + cost - max;
+    if (excess <= 0) return 0;
+    // An entry leaves the window once it is strictly older than windowMs.
+    const freeing = l[Math.min(excess, l.length) - 1];
+    return freeing === undefined ? this.windowMs : Math.max(0, freeing + this.windowMs + 1 - t);
+  }
+}
+
+/** A "rate-limited" refusal that says which window ran out and when it frees up. */
+function rateLimited(message: string, limit: "minute" | "hour", max: number, waitMs: number): CloudError {
+  return new CloudError("rate-limited", message, { limit, max, retryAfter: Math.max(1, Math.ceil(waitMs / 1000)) });
 }
 
 async function readJson(request: Request, limits: Limits): Promise<unknown> {
@@ -640,14 +670,30 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   };
 
   /** The presenter's per-minute budget (per client, or one for the whole server); `free`: calls no model. */
-  const allow = (ip: string, free = false) => {
+  const minuteKey = (ip: string, free: boolean) => {
     const base = perClient ? ip || "unknown" : "*";
-    const key = free ? `free:${base}` : base;
+    return free ? `free:${base}` : base;
+  };
+  const allow = (ip: string, free = false) => {
+    const key = minuteKey(ip, free);
     const t = now();
     if (minutes.used(key, t) >= (free ? limits.freePerMinute : limits.perMinute)) return false;
     minutes.take(key, t);
     return true;
   };
+  /** The refusal once `allow` said no. */
+  const minuteRefusal = (ip: string, free = false) => {
+    const max = free ? limits.freePerMinute : limits.perMinute;
+    return rateLimited(`More than ${max} requests in a minute`, "minute", max, minutes.waitMs(minuteKey(ip, free), now(), max));
+  };
+  /** The refusal once `allowHour` said no. */
+  const hourRefusal = (ip: string, cost: number) =>
+    rateLimited(
+      `More than ${limits.perHour} model requests in an hour from this address`,
+      "hour",
+      limits.perHour,
+      hours.waitMs(ip || "unknown", now(), limits.perHour, cost),
+    );
 
   // Audience caps. Their keys never collide with the presenter's ("*", "local" or an address).
   const aud = options.audience === false ? null : (options.audience ?? AUDIENCE_LIMITS);
@@ -660,7 +706,9 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     const t = now();
     const key = `aud:${bucket}:${device}`;
     const max = bucket === "model" ? aud!.limits.perMinute : aud!.freePerMinute;
-    if (minutes.used(key, t) >= max) throw new CloudError("rate-limited", "Too many requests from this device in a minute: try again in a few seconds");
+    if (minutes.used(key, t) >= max) {
+      throw rateLimited("Too many requests from this device in a minute: try again in a few seconds", "minute", max, minutes.waitMs(key, t, max));
+    }
     minutes.take(key, t);
   };
 
@@ -767,7 +815,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     if (configured) out.key = await checkKey();
     if (code && sent !== null) {
       // Checking a code counts against the budget, so it cannot be guessed quickly.
-      if (!allow(client.ip)) throw new CloudError("rate-limited", `More than ${limits.perMinute} requests in a minute`);
+      if (!allow(client.ip)) throw minuteRefusal(client.ip);
       out.codeAccepted = sameSecret(sent, code);
     }
     return out;
@@ -1028,18 +1076,14 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
         if (!route || request.method !== "POST") throw new CloudError("not-found", "Unknown endpoint");
         const code = requiredCode();
         if (code && !sameSecret(request.headers.get(ACCESS_CODE_HEADER) ?? "", code)) {
-          if (!allow(client.ip)) throw new CloudError("rate-limited", `More than ${limits.perMinute} requests in a minute`);
+          if (!allow(client.ip)) throw minuteRefusal(client.ip);
           throw new CloudError("access-code", "An access code is required");
         }
         const body = await readJson(request, limits);
         if (!tokenless.has(pathname) && !options.token()) throw new CloudError("not-configured", "HF_TOKEN is not set");
         const free = tokenless.has(pathname);
-        if (!allow(client.ip, free)) {
-          throw new CloudError("rate-limited", `More than ${free ? limits.freePerMinute : limits.perMinute} requests in a minute`);
-        }
-        if (!tokenless.has(pathname) && !allowHour(client.ip, cost[pathname] ?? 1)) {
-          throw new CloudError("rate-limited", `More than ${limits.perHour} model requests in an hour from this address`);
-        }
+        if (!allow(client.ip, free)) throw minuteRefusal(client.ip, free);
+        if (!tokenless.has(pathname) && !allowHour(client.ip, cost[pathname] ?? 1)) throw hourRefusal(client.ip, cost[pathname] ?? 1);
         const out = await route(body, limits);
         return out instanceof Response ? out : jsonResponse(200, out);
       } catch (err) {

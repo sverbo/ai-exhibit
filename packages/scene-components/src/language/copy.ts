@@ -126,8 +126,18 @@ export const COPY = {
   whyCloudNotConfigured: {  en: "no Hugging Face token on the server" },
   whyCloudCode: {  en: "access code required" },
   whyCloudOffline: {  en: "Hugging Face unreachable" },
-  whyCloudError: {  en: "the cloud model failed" },
+  whyCloudRateMinute: {  en: "too many requests this minute: Hugging Face is back in a few seconds" },
+  whyCloudRateHour: {  en: "hourly limit reached ({max} requests)" },
+  whyCloudRateHourNoMax: {  en: "hourly request limit reached" },
+  whyBackInMinutes: {  en: "Hugging Face is back in about {minutes} min" },
+  whyCloudTimeout: {  en: "Hugging Face did not answer in time" },
+  whyCloudNetwork: {  en: "the server could not be reached (network)" },
+  whyCloudError: {  en: "Hugging Face returned an error" },
   whyFallbackKey: {  en: "fallback mode (F)" },
+  retryCloud: {  en: "Retry Hugging Face" },
+  rateLimited: {
+    en: "Too many requests at once: Hugging Face answers again in a few seconds.",
+  },
   barsFromCloud: {
     en: "Bars: probabilities from {model}, reading the raw text (no chat format). The base model does not give its own.",
   },
@@ -211,6 +221,8 @@ export const COPY = {
   liveThinking: { en: "Thinking" },
   liveCut: { en: "cut at the length limit" },
   liveStreamCut: { en: "the connection ended before this answer did" },
+  liveRateMinute: { en: "too many requests this minute, ask again in a few seconds" },
+  liveRateHour: { en: "the hourly request limit is reached, Hugging Face is back later" },
   liveNoAnswer: { en: "No answer:" },
   liveEmpty: { en: "(empty answer)" },
 } satisfies Record<string, L10n>;

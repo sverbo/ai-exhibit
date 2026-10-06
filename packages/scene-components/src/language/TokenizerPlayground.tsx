@@ -1,6 +1,6 @@
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { pick, tr, type L10n } from "@ai-exhibit/presentation-core";
-import { CloudLlmError, cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
+import { cloudTokenize, type CloudTokenizerId, findRecordedTokenization, type RecordedToken } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
@@ -8,15 +8,13 @@ import { COPY } from "./copy.ts";
 import { DEFAULT_TOKENIZER_EXAMPLES } from "./data.ts";
 import { charCount, formatInt } from "./format.ts";
 import { useTokenizationRecording } from "./runtime.ts";
-import { useSourceDecision } from "./source.ts";
+import { isPause, pauseLeftMs, useSourceDecision } from "./source.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
 import styles from "./TokenizerPlayground.module.css";
 import { Button, cx, Frame, Notice, Pending, RecordedTag, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
 /** Tokenize once typing pauses this long: one request per pause, not one per letter. */
 const TYPING_PAUSE_MS = 350;
-/** After a "too many requests" answer, try again this much later. */
-const RATE_LIMIT_RETRY_MS = 2000;
 
 type Action =
   | { type: "text"; text: string }
@@ -62,7 +60,7 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
     return { text, tokenizerId: defaultTokenizer, tokens: rec?.tokens ?? [], idsShown: null, source: "recorded", notice: null };
   };
   const [state, setState] = useSceneState<TokenizerState>(ctx, initial, { throttleMs: 60 });
-  const { decision, cloudFailed } = useSourceDecision(ctx);
+  const { decision, cloudFailed, retryCloud } = useSourceDecision(ctx);
   const live = decision.active === "hf";
 
   // Controller: (re)tokenize whenever the text or tokenizer changes, once typing pauses.
@@ -88,11 +86,9 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
         },
         (err: unknown) => {
           if (id !== request.current || ac.signal.aborted) return;
-          if (err instanceof CloudLlmError && err.code === "rate-limited") {
-            setTimeout(() => setRetry((n) => n + 1), RATE_LIMIT_RETRY_MS);
-            return;
-          }
-          cloudFailed();
+          const failure = cloudFailed(err);
+          // Too many requests this minute: not a failure of the model, try again once the pause is over.
+          if (isPause(failure)) setTimeout(() => setRetry((n) => n + 1), pauseLeftMs(failure));
         },
       );
     }, TYPING_PAUSE_MS);
@@ -148,7 +144,7 @@ export function TokenizerPlayground({ props, ctx }: SceneComponentProps<Tokenize
         </Button>
       ) : null}
       {role === "controller" && live && state.source !== "live" ? <Pending>{tr(COPY.loadingTokenizer, locale)}</Pending> : null}
-      {role === "controller" ? <SourceBadge decision={decision} model={tokenizerLabel(state.tokenizerId)} locale={locale} /> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={tokenizerLabel(state.tokenizerId)} locale={locale} onRetry={retryCloud} /> : null}
     </>
   ) : null;
 

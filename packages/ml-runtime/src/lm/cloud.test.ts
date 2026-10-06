@@ -102,6 +102,27 @@ describe("cloudLadder", () => {
     await expect(cloudLadder("Hi", () => {}, { fetch: f as unknown as typeof fetch })).rejects.toMatchObject({ code: "rate-limited" });
   });
 
+  it("says which budget a rate-limited answer ran out of, and when it frees up", async () => {
+    const minute = vi.fn(async () => json(429, { error: "rate-limited", message: "More than 20 requests in a minute", limit: "minute", max: 20, retryAfter: 7 }));
+    const a = (await cloudComplete({ prompt: "Once" }, { fetch: minute as unknown as typeof fetch }).catch((e) => e)) as CloudLlmError;
+    expect(a.rate).toEqual({ limit: "minute", max: 20, retryAfterMs: 7000 });
+    // An older server: only the message, and maybe a Retry-After header.
+    const old = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ error: "rate-limited", message: "More than 100 model requests in an hour from this address" }), {
+          status: 429,
+          headers: { "content-type": "application/json", "retry-after": "60" },
+        }),
+    );
+    const b = (await cloudComplete({ prompt: "Once" }, { fetch: old as unknown as typeof fetch }).catch((e) => e)) as CloudLlmError;
+    expect(b.rate).toEqual({ limit: "hour", max: 100, retryAfterMs: 60_000 });
+    const bare = vi.fn(async () => json(429, { error: "rate-limited", message: "Too many requests from this device in a minute" }));
+    const c = (await cloudComplete({ prompt: "Once" }, { fetch: bare as unknown as typeof fetch }).catch((e) => e)) as CloudLlmError;
+    expect(c.rate).toEqual({ limit: "minute" });
+    const other = vi.fn(async () => json(502, { error: "upstream", message: "Hugging Face answered 500" }));
+    expect(((await cloudComplete({ prompt: "Once" }, { fetch: other as unknown as typeof fetch }).catch((e) => e)) as CloudLlmError).rate).toBeUndefined();
+  });
+
   it("marks audience calls, and only those", async () => {
     const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) => json(200, { text: "hi" }));
     await cloudComplete({ prompt: "Once" }, { fetch: f as unknown as typeof fetch, audience: "phone-1234abcd" });

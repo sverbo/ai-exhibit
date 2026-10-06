@@ -6,8 +6,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useState } from "react";
 import { plainText, tr, type L10n, type Locale } from "@ai-exhibit/presentation-core";
-import type { FallbackWhy, SourceDecision } from "./source.ts";
-import { ControlBar } from "../primitives/Controls.tsx";
+import { canRetry, type FallbackWhy, type SourceDecision } from "./source.ts";
+import { ControlBar, ControlButton } from "../primitives/Controls.tsx";
 import { Rich } from "../primitives/Rich.tsx";
 import { COPY } from "./copy.ts";
 import { formatPercent, visibleToken } from "./format.ts";
@@ -164,18 +164,53 @@ const WHY_LABEL: Record<FallbackWhy, keyof typeof COPY> = {
   "cloud-not-configured": "whyCloudNotConfigured",
   "cloud-offline": "whyCloudOffline",
   "cloud-code": "whyCloudCode",
+  "cloud-rate-minute": "whyCloudRateMinute",
+  "cloud-rate-hour": "whyCloudRateHour",
+  "cloud-timeout": "whyCloudTimeout",
+  "cloud-network": "whyCloudNetwork",
   "cloud-error": "whyCloudError",
   "fallback-key": "whyFallbackKey",
 };
 
-/** Controller-only badge: the model source in use, the model, and why it differs from the presenter's choice. */
-export function SourceBadge({ decision, model, locale }: { decision: SourceDecision; model?: string; locale: Locale }) {
-  const fell = decision.active !== decision.requested;
+/** The badge's reason in plain words, with the cap and the wait when the server gave them. */
+export function sourceWhyText(decision: SourceDecision, locale: Locale, now = Date.now()): string | null {
+  if (!decision.why) return null;
+  if (decision.why !== "cloud-rate-hour") return tr(COPY[WHY_LABEL[decision.why]], locale);
+  const failure = decision.failure;
+  const reached = failure?.max
+    ? tr(COPY.whyCloudRateHour, locale).replace("{max}", String(failure.max))
+    : tr(COPY.whyCloudRateHourNoMax, locale);
+  if (failure?.until === undefined) return reached;
+  const minutes = Math.max(1, Math.ceil((failure.until - now) / 60_000));
+  return `${reached}, ${tr(COPY.whyBackInMinutes, locale).replace("{minutes}", String(minutes))}`;
+}
+
+/**
+ * Controller-only badge: the model source in use, the model, and why it
+ * differs from the presenter's choice (or why Hugging Face pauses). After a
+ * failure, `onRetry` adds a "Retry Hugging Face" button (see `canRetry`).
+ */
+export function SourceBadge({
+  decision,
+  model,
+  locale,
+  onRetry,
+}: {
+  decision: SourceDecision;
+  model?: string;
+  locale: Locale;
+  onRetry?: () => void;
+}) {
+  const marked = decision.active !== decision.requested || Boolean(decision.failure);
+  const why = sourceWhyText(decision, locale);
   return (
-    <span className={cx(styles.sourceBadge, styles[`source_${decision.active}`], fell && styles.sourceFell)} role="status">
-      <b>{tr(COPY[SOURCE_LABEL[decision.active]], locale)}</b>
-      {model ? <span>{model}</span> : null}
-      {decision.why ? <span className={styles.sourceWhy}>{tr(COPY[WHY_LABEL[decision.why]], locale)}</span> : null}
-    </span>
+    <>
+      <span className={cx(styles.sourceBadge, styles[`source_${decision.active}`], marked && styles.sourceFell)} role="status">
+        <b>{tr(COPY[SOURCE_LABEL[decision.active]], locale)}</b>
+        {model ? <span>{model}</span> : null}
+        {why ? <span className={styles.sourceWhy}>{why}</span> : null}
+      </span>
+      {onRetry && canRetry(decision) ? <ControlButton onClick={onRetry}>{tr(COPY.retryCloud, locale)}</ControlButton> : null}
+    </>
   );
 }

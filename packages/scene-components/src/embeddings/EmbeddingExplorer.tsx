@@ -6,7 +6,7 @@ import type { SceneComponentProps } from "../contract.ts";
 import { MAX_FIELD_CHARS } from "../primitives/Controls.tsx";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
-import { decideSource, requestedSource, resetCloudStatus, useCloudStatus } from "../language/source.ts";
+import { requestedSource, useSourceDecision } from "../language/source.ts";
 import { SourceBadge } from "../language/ui.tsx";
 import { Cloud3D } from "./Cloud3D.tsx";
 import { EXPLORER, formatSimilarity, MAP_CONTROLS, TRAINING, tr } from "./copy.ts";
@@ -290,15 +290,14 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
   const preview = role === "preview";
   const fallback = ctx.mode === "fallback";
   const [draft, setDraft] = useState("");
-  const [cloudFailed, setCloudFailed] = useState(false);
   const requestRef = useRef(0);
 
   // Model source chosen by the presenter: Hugging Face (/api/embed) or
   // prepared words only; hf falls back to prepared words and the controller's
-  // badge says why. No model runs in the browser.
+  // badge says why, with a button to try Hugging Face again. No model runs in
+  // the browser.
   const requested = requestedSource(ctx);
-  const cloud = useCloudStatus(controller && !fallback && requested === "hf");
-  const decision = decideSource({ requested, sceneFallback: fallback, cloud, cloudFailed });
+  const { decision, cloudFailed, retryCloud } = useSourceDecision(ctx);
   const useModel = decision.active === "hf";
 
   // Runs on the stage owner: the search typed in any window arrives here.
@@ -319,11 +318,12 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
       if (id !== requestRef.current || !raw) return;
       const result = fromLocated(text, locateQuery(space, raw), "model", { ms: Math.round(ms) });
       patch({ query: result, busy: false });
-    } catch {
+    } catch (err) {
       if (id !== requestRef.current) return;
-      // Next queries use the prepared words; the next scene asks the server again.
-      setCloudFailed(true);
-      resetCloudStatus();
+      // This query uses the prepared words. Too many requests this minute is a
+      // pause (the next query asks Hugging Face again); any other failure keeps
+      // the prepared words until the badge's retry.
+      cloudFailed(err);
       patch({ query: searchVocabulary(space, text), busy: false });
     }
   };
@@ -405,7 +405,7 @@ function SearchMode({ space, ctx }: { space: EmbeddingSpace; ctx: Ctx }) {
         </div>
         <aside className={styles.panel}>
           <h2 className={styles.heading}>{tr(EXPLORER.searchHeading, locale)}</h2>
-          {controller && !fallback ? <SourceBadge decision={decision} model="MiniLM-L12 multilingual" locale={locale} /> : null}
+          {controller && !fallback ? <SourceBadge decision={decision} model="MiniLM-L12 multilingual" locale={locale} onRetry={retryCloud} /> : null}
           {interactive ? (
             <form className={styles.form} onSubmit={submit} onKeyDown={stopKeys}>
               <input

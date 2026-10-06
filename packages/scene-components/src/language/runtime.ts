@@ -9,7 +9,7 @@ import type { COPY } from "./copy.ts";
 
 export type NoticeKey = keyof Pick<
   typeof COPY,
-  "failed" | "fallback" | "notRecorded" | "replayGreedy" | "sampleOnRecorded" | "noRefusal" | "simulationPresetsOnly"
+  "failed" | "fallback" | "notRecorded" | "replayGreedy" | "sampleOnRecorded" | "noRefusal" | "simulationPresetsOnly" | "rateLimited"
 >;
 
 /* ---------------------------------------------------------------------------- */

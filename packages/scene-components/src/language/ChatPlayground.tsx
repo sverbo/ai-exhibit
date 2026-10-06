@@ -22,7 +22,7 @@ import { COPY } from "./copy.ts";
 import { assistantMessages, CHAT_PRESETS, GUARDRAIL_PROMPT } from "./data.ts";
 import { stripEmphasis } from "./format.ts";
 import { type NoticeKey, useCloudRecording, useLlamaTemplate } from "./runtime.ts";
-import { useSourceDecision } from "./source.ts";
+import { isPause, pauseLeftMs, useSourceDecision } from "./source.ts";
 import { DEFAULT_TEMPERATURE, formatTemperature, isL10n, TEMPERATURES } from "./shared.ts";
 import { useOnStepChange, useSceneState } from "./state.ts";
 import { Button, cx, Frame, Notice, Pending, Segmented, SourceBadge, TextField } from "./ui.tsx";
@@ -72,7 +72,7 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
   stateRef.current = state;
   const cloudRec = useCloudRecording();
   const llamaTemplate = useLlamaTemplate();
-  const { decision, cloudFailed } = useSourceDecision(ctx);
+  const { decision, cloudFailed, retryCloud } = useSourceDecision(ctx);
   const simulation = decision.active === "simulation";
   const abort = useRef<AbortController | null>(null);
 
@@ -140,11 +140,20 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
       if (await reveal(r.text, ac)) {
         updateLast({ answer: r.text, state: "done", stopReason: r.finishReason === "stop" ? "eos" : "max-tokens" });
       }
-    } catch {
+    } catch (err) {
       if (ac.signal.aborted) return;
-      // Cloud failed: drop that turn, say so in the badge, show the recording if there is one.
+      // Drop that turn; the badge says why.
       setState((s) => ({ ...s, turns: s.turns.slice(0, -1) }));
-      cloudFailed();
+      const failure = cloudFailed(err);
+      if (isPause(failure)) {
+        // Too many requests this minute: Hugging Face stays on, ask again in a few seconds.
+        setState((s) => ({ ...s, notice: "rateLimited" }));
+        setTimeout(() => {
+          if (abort.current === ac) setState((s) => ({ ...s, notice: s.notice === "rateLimited" ? null : s.notice }));
+        }, pauseLeftMs(failure));
+        return;
+      }
+      // Any other failure: Simulation from now on; show the recording if there is one.
       await replayRecorded(q, kind, ac);
     }
   };
@@ -200,7 +209,7 @@ export function ChatPlayground({ props, ctx }: SceneComponentProps<ChatPlaygroun
         />
       </span>
       {simulation ? <span className={styles.simNote}>{tr(COPY.simulationPresetsOnly, locale)}</span> : null}
-      {role === "controller" ? <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} /> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={CLOUD_LABEL} locale={locale} onRetry={retryCloud} /> : null}
     </>
   ) : null;
 

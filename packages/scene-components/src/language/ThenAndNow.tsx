@@ -103,7 +103,14 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
       show();
     } catch (err) {
       if (ac.signal.aborted) return;
-      run = failLive(run, err instanceof CloudLlmError ? err.message : String(err));
+      // The server's budget (three requests a question): say it in the audience's words.
+      const rate = err instanceof CloudLlmError && err.code === "rate-limited" ? err.rate?.limit ?? "minute" : null;
+      const message = rate
+        ? tr(rate === "hour" ? COPY.liveRateHour : COPY.liveRateMinute, locale)
+        : err instanceof CloudLlmError
+          ? err.message
+          : String(err);
+      run = failLive(run, message);
       show();
     }
   };

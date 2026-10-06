@@ -111,7 +111,17 @@ back or by jump) clears its state: every visit starts it over.
   Simulation); it defaults to Hugging Face when the server has a token.
   `scene-components/src/language/source.ts` decides per scene and falls back
   to Simulation on its own (no token, unreachable, access code missing, failed
-  call), with the reason in a badge on the controller.
+  call), with the reason in a badge on the controller: timeout, network,
+  Hugging Face error, or the hourly limit reached. After a failed call the
+  badge offers "Retry Hugging Face", which clears the failure and asks the
+  status again (no reload). Too many requests this minute is not a fallback:
+  the scene keeps Hugging Face, the projector shows a short notice, and calls
+  resume once the minute frees up.
+- A refused call (429, `error: "rate-limited"`) also carries `limit`
+  (`"minute"` or `"hour"`), `max` and `retryAfter` (seconds, also sent as a
+  `Retry-After` header). On Vercel (`PUBLIC_LIMITS`) each address may make 20
+  model requests per rolling minute and 100 per hour, counted in memory per
+  function instance; tokenizing does not count against them.
 - Simulation replays `content/assets/recordings/` (`cloud.json`,
   `tokenizations.json`, rebuilt by `pnpm recordings:build`). The embedding map
   (`content/assets/embeddings/canonical.json`) is precomputed and frozen;

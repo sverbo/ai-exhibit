@@ -120,7 +120,9 @@ souris (lands near joie, perhaps read as a form of "sourire"), orage violent (ne
   word and that word's precomputed neighbours are shown, with "Closest prepared
   word".
 - Live mode when Hugging Face does not answer: the controller says so calmly
-  and searches the vocabulary.
+  and searches the vocabulary. The badge says why and, after a failed call,
+  offers "Retry Hugging Face"; too many requests this minute only sends that
+  one query to the vocabulary, the next one asks Hugging Face again.
 - `canonical.json` missing: a one-line notice, no crash.
 
 ### State (published by the controller, < 1 KB)

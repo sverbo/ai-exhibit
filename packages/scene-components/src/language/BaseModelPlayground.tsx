@@ -15,38 +15,24 @@
  */
 import { useEffect, useRef } from "react";
 import { tr, type L10n } from "@ai-exhibit/presentation-core";
-import { cloudComplete, cloudNextToken, findCloudNext, findCloudRecording, MAX_INPUT_CHARS } from "@ai-exhibit/ml-runtime/lm";
+import { MAX_INPUT_CHARS } from "@ai-exhibit/ml-runtime/lm";
 import type { SceneComponentProps } from "../contract.ts";
 import { canInteract, useSceneActions } from "../primitives/interaction.ts";
 import { Rich } from "../primitives/Rich.tsx";
+import { BARS_LABEL, BASE_LABEL, type BaseModelEngine, type BaseModelState, createBaseModelEngine } from "./baseModel.ts";
 import styles from "./BaseModelPlayground.module.css";
 import { COPY } from "./copy.ts";
 import { DEFAULT_BASE_PROMPT } from "./data.ts";
-import { type NoticeKey, useCloudRecording } from "./runtime.ts";
+import { useCloudRecording } from "./runtime.ts";
 import { useSourceDecision } from "./source.ts";
-import { type Cand, DEFAULT_TEMPERATURE, formatTemperature, isL10n, promptIn, TEMPERATURES } from "./shared.ts";
+import { DEFAULT_TEMPERATURE, formatTemperature, isL10n, promptIn, TEMPERATURES } from "./shared.ts";
 import { useSceneState } from "./state.ts";
 import { Button, cx, Fan, Frame, Notice, Pending, RecordedTag, Segmented, SourceBadge, TextField } from "./ui.tsx";
 
+export type { BaseModelState } from "./baseModel.ts";
+
 export interface BaseModelPlaygroundProps {
   prompt?: L10n;
-}
-
-export interface BaseModelState {
-  prompt: string;
-  /** Appended pieces; `cloud`: written by the base model in one go. */
-  appended: { id: number; text: string; cloud?: boolean }[];
-  /** Which model wrote the continuation on screen (shown to the audience). */
-  textModel?: string;
-  /** Model whose probabilities the bars show, and whether they are recorded. */
-  bars?: { model: string; recorded: boolean } | null;
-  candidates: Cand[];
-  picked: number | null;
-  busy: boolean;
-  source: "live" | "recorded";
-  notice: NoticeKey | null;
-  /** For the next generation; absent means DEFAULT_TEMPERATURE. */
-  temperature?: number;
 }
 
 /** The only control: how many tokens to add. */
@@ -57,22 +43,6 @@ type Action =
   | { type: "stop" }
   | { type: "prompt"; text: string }
   | { type: "temperature"; value: number };
-const PICK_MS = 550;
-const MAX_APPENDED = 200;
-const BASE_LABEL = "Llama 3.1 8B";
-const BARS_LABEL = "Llama 3.3 70B Instruct";
-
-/** Draws among the shown candidates with a temperature (the bars stay the raw probabilities). */
-function draw(cands: Cand[], temperature: number): Cand | undefined {
-  if (temperature <= 0) return cands[0];
-  const w = cands.map((c) => Math.pow(Math.max(c.p, 1e-12), 1 / Math.max(0.05, temperature)));
-  let r = Math.random() * w.reduce((a, b) => a + b, 0);
-  for (let i = 0; i < cands.length; i++) {
-    r -= w[i]!;
-    if (r <= 0) return cands[i];
-  }
-  return cands.at(-1);
-}
 
 export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseModelPlaygroundProps, BaseModelState>) {
   const { locale, role } = ctx;
@@ -90,149 +60,46 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
   const stateRef = useRef(state);
   stateRef.current = state;
   const cloudRec = useCloudRecording();
-  const { decision, cloudFailed } = useSourceDecision(ctx);
+  const { decision, cloudFailed, retryCloud } = useSourceDecision(ctx);
   const simulation = decision.active === "simulation";
-  const decisionRef = useRef(decision);
-  decisionRef.current = decision;
-  const generation = useRef(0);
-  const abort = useRef<AbortController | null>(null);
-
-  /** The whole text so far: what the next prediction continues. */
-  const fullText = (s: BaseModelState) => s.prompt + s.appended.map((t) => t.text).join("");
-  /** Recorded bars exist for the prepared prompt, step by step, as long as only recorded tokens were added. */
-  const recordedStep = (s: BaseModelState) => {
-    if (s.appended.some((t) => t.cloud)) return undefined;
-    const run = findCloudNext(cloudRec, s.prompt);
-    const step = run?.steps[s.appended.length];
-    const onPath = run && s.appended.every((t, i) => t.text === run.steps[i]?.token);
-    return onPath ? step : undefined;
-  };
-
-  /** Candidates for the next token after the text (the latest state, unless given). */
-  const refresh = async (s: BaseModelState = stateRef.current) => {
-    const gen = generation.current;
-    if (decisionRef.current.active === "simulation") {
-      const step = recordedStep(s);
-      setState((x) => ({
-        ...x,
-        candidates: step ? step.candidates.map((c, i) => ({ id: i, text: c.text, p: c.p })) : [],
-        bars: step ? { model: BARS_LABEL, recorded: true } : null,
-        source: "recorded",
-      }));
-      return;
-    }
-    try {
-      const r = await cloudNextToken({ prompt: fullText(s), temperature: 0 });
-      if (gen !== generation.current) return;
-      setState((x) => ({
-        ...x,
-        candidates: r.candidates.map((c, i) => ({ id: i, text: c.text, p: c.p })),
-        bars: { model: BARS_LABEL, recorded: false },
-        source: "live",
-      }));
-    } catch {
-      if (gen !== generation.current) return;
-      cloudFailed();
-    }
-  };
+  // What the engine reads at call time: the latest render's values.
+  const live = useRef({ decision, cloudFailed, cloudRec, reducedMotion: ctx.reducedMotion, setState });
+  live.current = { decision, cloudFailed, cloudRec, reducedMotion: ctx.reducedMotion, setState };
+  const engineRef = useRef<BaseModelEngine | null>(null);
+  engineRef.current ??= createBaseModelEngine({
+    get: () => stateRef.current,
+    set: (update) => live.current.setState(update),
+    source: () => live.current.decision.active,
+    cloudFailed: (err) => live.current.cloudFailed(err),
+    recording: () => live.current.cloudRec,
+    reducedMotion: () => live.current.reducedMotion,
+  });
+  const engine = engineRef.current;
 
   useEffect(() => {
     if (role !== "controller") return;
-    generation.current++;
+    engine.restart();
     if (simulation && !cloudRec) return;
-    void refresh();
+    void engine.refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, state.prompt, decision.active, cloudRec]);
-  useEffect(() => () => abort.current?.abort(), []);
-
-  const oneToken = async () => {
-    const s = stateRef.current;
-    if (s.busy || s.appended.length >= MAX_APPENDED || !s.candidates.length) return;
-    const gen = generation.current;
-    setState((x) => ({ ...x, busy: true }));
-    try {
-      // Simulation replays the recorded run: always the most likely token.
-      const pick = simulation ? s.candidates[0] : draw(s.candidates, s.temperature ?? DEFAULT_TEMPERATURE);
-      if (!pick) return;
-      setState((x) => ({ ...x, picked: pick.id }));
-      await new Promise((r) => setTimeout(r, ctx.reducedMotion ? 0 : PICK_MS));
-      if (gen !== generation.current) return;
-      const appended = [...stateRef.current.appended, { id: -1, text: pick.text }];
-      setState((x) => ({ ...x, appended, picked: null, textModel: BARS_LABEL }));
-      await refresh({ ...stateRef.current, appended });
-    } finally {
-      if (gen === generation.current) setState((x) => ({ ...x, busy: false }));
-    }
-  };
-
-  const severalTokens = async (many: number) => {
-    const s = stateRef.current;
-    if (s.busy) return;
-    const gen = generation.current;
-    abort.current?.abort();
-    const ac = new AbortController();
-    abort.current = ac;
-    setState((x) => ({ ...x, busy: true, candidates: [], picked: null }));
-    /** What is on screen once the pieces are shown (the next bars continue it). */
-    let appended = s.appended;
-    /** Shows text word by word (answers arrive whole). */
-    const reveal = async (text: string) => {
-      for (const piece of text.split(/(?<=\s)/)) {
-        if (ac.signal.aborted || gen !== generation.current) return false;
-        appended = [...appended, { id: -1, text: piece, cloud: true }];
-        const shown = appended;
-        setState((x) => ({ ...x, appended: shown }));
-        if (!ctx.reducedMotion) await new Promise((r) => setTimeout(r, 70));
-      }
-      return true;
-    };
-    try {
-      if (decisionRef.current.active === "hf") {
-        try {
-          const r = await cloudComplete(
-            { prompt: fullText(s), maxTokens: many, temperature: s.temperature ?? DEFAULT_TEMPERATURE },
-            { signal: ac.signal },
-          );
-          if (gen !== generation.current) return;
-          setState((x) => ({ ...x, textModel: BASE_LABEL, source: "live" }));
-          await reveal(r.text);
-          await refresh({ ...stateRef.current, appended });
-          return;
-        } catch {
-          if (ac.signal.aborted) return;
-          cloudFailed();
-        }
-      }
-      const recorded = !s.appended.length ? findCloudRecording(cloudRec, "base", s.prompt) : undefined;
-      if (recorded) {
-        setState((x) => ({ ...x, textModel: BASE_LABEL, source: "recorded", notice: null }));
-        await reveal(recorded.text);
-      } else {
-        setState((x) => ({ ...x, notice: "simulationPresetsOnly" }));
-      }
-      await refresh({ ...stateRef.current, appended });
-    } catch {
-      /* cancelled or failed: keep what was written */
-    } finally {
-      if (gen === generation.current) setState((x) => ({ ...x, busy: false }));
-    }
-  };
+  useEffect(() => () => engine.dispose(), [engine]);
 
   // Every window's buttons come here; only the stage owner runs them.
   const act = useSceneActions<Action, BaseModelState>(ctx, (action) => {
-    if (action.type === "stop") abort.current?.abort();
+    if (action.type === "stop") engine.stop();
     else if (action.type === "temperature") setState((x) => ({ ...x, temperature: action.value }));
     else if (action.type === "prompt") {
       const prompt = action.text.trim().slice(0, MAX_INPUT_CHARS);
       if (!prompt) return;
       // A new text starts over: no generated tokens, fresh bars (the effect on `prompt` asks for them).
-      generation.current++;
-      abort.current?.abort();
+      engine.restart();
+      engine.stop();
       setState((x) => ({ ...x, prompt, appended: [], candidates: [], picked: null, busy: false, textModel: undefined, notice: null }));
       // The same text again: the effect will not fire, so ask for the bars here.
-      if (prompt === stateRef.current.prompt) void refresh({ ...stateRef.current, appended: [] });
-    } else if (action.n <= 1) void oneToken();
-    else void severalTokens(action.n);
+      if (prompt === stateRef.current.prompt) void engine.refresh({ ...stateRef.current, appended: [] });
+    } else if (action.n <= 1) void engine.oneToken();
+    else void engine.severalTokens(action.n);
   });
 
   const view = role === "preview" || (role === "display" && ctx.state === undefined) ? initial() : state;
@@ -265,7 +132,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
           onChange={(value) => act({ type: "temperature", value })}
         />
       </span>
-      {role === "controller" ? <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} /> : null}
+      {role === "controller" ? <SourceBadge decision={decision} model={`${BASE_LABEL} (base)`} locale={locale} onRetry={retryCloud} /> : null}
     </>
   ) : null;
 
