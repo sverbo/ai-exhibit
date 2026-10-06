@@ -193,9 +193,9 @@ export const LOCAL_LIMITS: Limits = {
   tokenizeChars: MAX_INPUT_CHARS,
   timeoutMs: 25_000,
   ladderTimeoutMs: 50_000,
-  perMinute: 30,
+  perMinute: 50,
   freePerMinute: 240,
-  perHour: 100,
+  perHour: 500,
   bodyBytes: 32_000,
 };
 
@@ -212,9 +212,9 @@ export const PUBLIC_LIMITS: Limits = {
   timeoutMs: 25_000,
   // Inside the 30 s a Vercel function may run (vercel.json maxDuration).
   ladderTimeoutMs: 27_000,
-  perMinute: 20,
+  perMinute: 50,
   freePerMinute: 240,
-  perHour: 100,
+  perHour: 500,
   bodyBytes: 16_000,
 };
 

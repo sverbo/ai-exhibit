@@ -86,7 +86,7 @@ once the server's `retryAfter` has passed (the base model's bars, the
 tokenizer) or the presenter clicks again (the chat, several tokens). See
 `source.ts`. With Hugging Face, the base model costs one request to open or
 apply a text, one per "+1" and two per "+10" or "+30" (`baseModel.ts`); the
-server allows 20 a minute and 100 an hour per address on Vercel
+server allows 50 a minute and 500 an hour per address on Vercel
 (`PUBLIC_LIMITS`). The token stays on the
 server (`HF_TOKEN`: the runtime's environment or repo-root `.env`, or the
 Vercel project's environment).

@@ -194,16 +194,16 @@ describe("cloud API", () => {
     expect((await call(api, req("POST", "/api/llm/chat", long))).status).toBe(400);
   });
 
-  it("allows 100 model requests an hour per address, all endpoints together", async () => {
+  it("allows the hourly budget of model requests per address, all endpoints together", async () => {
     const f = vi.fn(async (_u: string | URL | Request, _i?: RequestInit) => okJson({ choices: [{ text: "x" }] }));
     let t = 0;
     const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS, rateLimit: "per-client", now: () => t });
     // Spread the calls so the per-minute budget never trips: only the hourly one does.
     for (let i = 0; i < PUBLIC_LIMITS.perHour; i++) {
-      t = i * 10_000;
+      t = i * 2_000;
       expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.9")).status).toBe(200);
     }
-    t += 10_000;
+    t += 2_000;
     const res = await api.handle(req("POST", "/api/llm/chat", { messages: [{ role: "user", content: "a" }] }), { ip: "198.51.100.9" });
     expect(res?.status).toBe(429);
     // The first call (t = 0) leaves the hour at 3600 s: 2600 s from now.
@@ -495,7 +495,7 @@ describe("/api/llm/ladder", () => {
     const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch, limits: PUBLIC_LIMITS, rateLimit: "per-client", now: () => t });
     const used = PUBLIC_LIMITS.perHour - LADDER.length + 1;
     for (let i = 0; i < used; i++) {
-      t = i * 10_000;
+      t = i * 2_000;
       expect((await call(api, req("POST", "/api/llm/complete", { prompt: "a" }), "198.51.100.20")).status).toBe(200);
     }
     // Fewer requests left than rungs: refused as a whole, before calling out.
