@@ -436,8 +436,8 @@
     "text": "Du texte que vous ne voyez pas"
   },
   "01-no-memory/visual.props.cards.2.line": {
-    "source": "The company's instructions, and the description of its tools.",
-    "text": "Les instructions de l'entreprise, et la description de ses outils."
+    "source": "The company's instructions, its tools, your preferences, and useful data fetched for you.",
+    "text": "Les instructions de l'entreprise, ses outils, vos préférences, et des données utiles cherchées pour vous."
   },
   "01-no-memory/visual.props.footnote": {
     "source": "* Depending on the provider, your plan and your settings, your conversations may be used later to train its next models.",

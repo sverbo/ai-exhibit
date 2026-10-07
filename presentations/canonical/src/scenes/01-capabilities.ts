@@ -580,7 +580,7 @@ export const chapter01: SceneDefinition[] = [
           {
             picture: "hidden",
             title: { en: "Text you never see" },
-            line: { en: "The company's instructions, and the description of its tools." },
+            line: { en: "The company's instructions, its tools, your preferences, and useful data fetched for you." },
             sourceIds: ["fnd-claude-tool-use-system-prompt", "fnd-claude-app-system-prompts", "fnd-claude-personalization-help", "fnd-claude-memory-help"],
           },
         ],
