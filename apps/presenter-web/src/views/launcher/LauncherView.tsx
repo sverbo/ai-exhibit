@@ -107,13 +107,13 @@ export default function LauncherView() {
 
         <section className={`${styles.entry} ${styles.remote}`} aria-labelledby="glossary-title">
           <h2 id="glossary-title" className={styles.entryTitle}>
-            Glossary and resources
+            Glossary and demos
           </h2>
           {glossaryUrl ? (
             <div className={styles.qr}>
-              <QrCode value={glossaryUrl} size={120} label="Glossary and resources" />
+              <QrCode value={glossaryUrl} size={120} label="Glossary and demos" />
               <span className={styles.entryHint}>
-                Every term of the talk in plain words, for the room. They scan this code, also on the agenda slide.{" "}
+                Every term in plain words, and demos to try on their phone. They scan this code, also on the agenda slide.{" "}
                 <a href="/glossary">Open it</a>
               </span>
             </div>
