@@ -80,9 +80,10 @@ fallback.
 | `ConnectedAssistant` | 1.4 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `PermissionsBoard` | 1.5 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `VideoScene` | 1.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `ToolCallDemo` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `AgentRunExplainer` | 1.8 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `AgentLoop` | 1.9 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `ContextStack` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `ToolCallDemo` | 1.8 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `AgentRunExplainer` | 1.9 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `AgentLoop` | 1.10 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `AITimeline` | 2.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `AIEnvelopes` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
 | `TextClassifierLab` | 2.3 to 2.9 | [textlab](../../packages/scene-components/src/textlab/README.md) |

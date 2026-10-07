@@ -535,7 +535,7 @@ export const chapter01: SceneDefinition[] = [
       en: "From the switches to a real run.",
     },
     transitionOut: {
-      en: "Let's slow one request down and look at every step.",
+      en: "Before we slow one request down: what does the model actually receive?",
     },
     // The presenter's own screen recording: shown, not cited.
     evidenceLevel: "none",
@@ -547,11 +547,59 @@ export const chapter01: SceneDefinition[] = [
     optional: false,
   },
   {
+    id: "01-no-memory",
+    code: "nomem",
+    steps: 5,
+    chapter: "01",
+    number: "1.7",
+    title: { en: "No memory" },
+    objective: {
+      en: "Show that a model does not learn while you chat: at every message, the app sends it the whole conversation again, within the context window, plus text you never see (a system prompt, the tool descriptions).",
+    },
+    takeaway: {
+      en: "A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.",
+    },
+    visual: { layout: "component", component: "ContextStack", props: {} },
+    interaction: "presenter",
+    speakerNotes: {
+      en: `- **No memory**: the model does not learn from your chat. Its numbers (the **weights**) were set during training, and they do not change while you talk to it
+- Click 1: what really happens: at **every message**, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch
+- Click 2: that works only while it fits in the **context window** (slide 1.3). When it overflowed, the start fell out: that is why chatbots seemed to "forget"
+- Click 3: the workarounds, all outside the model: **summarize** the older part (it is called compaction), and **fetch** information when needed: a search, or the "**memory**" features, which save notes about you and put them back into later conversations
+- Click 4: with your message, the model also receives text you **never see**: a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use
+- Click 5: so a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call into the same stack. Next slide, up close
+- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live
+- The conversation on screen is illustrative; the mechanics come from the providers' documentation`,
+    },
+    transitionIn: {
+      en: "From what it does to what it really receives.",
+    },
+    transitionOut: {
+      en: "One of those hidden pieces, up close: the tool call.",
+    },
+    evidenceLevel: "none",
+    sourceIds: [
+      "fnd-claude-messages-stateless",
+      "fnd-claude-context-windows",
+      "fnd-claude-tool-use-system-prompt",
+      "fnd-claude-app-system-prompts",
+      "fnd-claude-memory-help",
+      "fnd-anthropic-2025-consumer-terms",
+    ],
+    runtimeClass: "A",
+    artifacts: [],
+    fallback: { kind: "deterministic" },
+    durationSec: 120,
+    optional: false,
+    localizationNotes:
+      "The conversation is illustrative. Its last message is the question of the next slide (ToolCallDemo, search scenario) and comes from the same text, so both stay identical. \"Context window\" and \"system prompt\" stay in English with their gloss in French.",
+  },
+  {
     id: "01-tool-call",
     code: "tool",
     steps: 5,
     chapter: "01",
-    number: "1.7",
+    number: "1.8",
     title: { en: "Chat or agent: calling a tool" },
     objective: {
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
@@ -572,7 +620,7 @@ export const chapter01: SceneDefinition[] = [
 - Why models are good at this: they read a lot of **code** in training, about **17%** of Llama 3's training text, so they write logical, structured text well
 - It also took **precision** (in structured text, one wrong character breaks everything) and **large context windows**, because the tool descriptions must be there **at every call**
 - In practice: at the start, the app loads the tools the agent may use at the top of its context (up to about 1,500 pages for large models); when the conversation is compacted, the app gives them again. Apps with many tools load only some and let the model search for the rest
-- The model keeps nothing between calls: at each turn, the app sends everything again (instructions, tools, conversation)
+- As on the previous slide: the model keeps nothing between calls; at each turn, the app sends everything again (instructions, tools, conversation)
 - Structured does not mean error-free: the model can write a malformed call or wrong arguments. "Structured outputs" guarantee the **form**, not the **content**; the software checks the call and sends errors back, the model fixes and retries`,
     },
     transitionIn: {
@@ -595,7 +643,7 @@ export const chapter01: SceneDefinition[] = [
     code: "steps",
     steps: 15,
     chapter: "01",
-    number: "1.8",
+    number: "1.9",
     title: { en: "One request, every step" },
     objective: {
       en: "Make every step of one complex request visible: tool calls, sub-agents in parallel, merged results, a human approval before paying.",
@@ -633,7 +681,7 @@ export const chapter01: SceneDefinition[] = [
     code: "loop",
     steps: 5,
     chapter: "01",
-    number: "1.9",
+    number: "1.10",
     title: { en: "The agent loop" },
     objective: {
       en: "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",

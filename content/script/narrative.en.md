@@ -92,17 +92,27 @@ I see it at home every day. I have given my agent access to almost everything. I
 
 Here is what it looks like when I flip those switches myself. In a single Slack message, I asked it to check whether Remco Evenepoel had won the European Championship and, if so, to recolour the website in the Belgian jersey's colours, to book a slot in my calendar to watch the best moments, and to look through my emails for someone who would like to watch it with me. I recorded it on 5 October 2026, with Claude. And look at everything it chains on its own, through its connectors: it reads Slack, my emails, my past meetings and my Google Drive, creates documents, writes the code itself, takes screenshots of what it is building to test it, books the slot in my calendar, then answers on Slack. I pause when it acts on its own, and I show you the moment it asks me before acting; if it missed something, I tell you that too. This is not a lab demo, it is my everyday use. In many companies, permissions are limited, Copilot does not do all of this, and many people are on Windows. But in fact, this is what it is: it is doable today.
 
-## 1.7 Chat or agent: calling a tool
+## 1.7 No memory
+
+**Takeaway:** A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.
+
+Before we slow one request down, one thing that is often misunderstood: the model has no memory. It does not learn from your conversation. Its numbers, what we call its weights, were set during training, and they do not change while you talk to it. So how does it follow the thread? Every time you send a message, the app sends it the whole conversation again, from the very first message, and the model reads it all from scratch. That works as long as everything fits in the context window, the memory we saw growing a moment ago. When a conversation overflowed, its beginning fell out, and that is why chatbots seemed to forget.
+
+Around that limit, apps have workarounds, all outside the model. They summarize the older part of the conversation: that is called compaction. And they fetch information when it is needed: a search, or the "memory" features, which save notes about you and put them back into your later conversations. One honest nuance: depending on the provider, the plan and your settings, your conversations may be used later to train new models. That is a future training run, not the model learning while you chat.
+
+And with your message, the model receives text you never see. A system prompt, written by the company: its role, today's date, what it should avoid. Anthropic even publishes the one it uses in its own apps. And the descriptions of every tool it is allowed to use. Which brings us to the tool call: nothing magic, just more text, written into that same stack.
+
+## 1.8 Chat or agent: calling a tool
 
 **Takeaway:** An agent is still a language model: it writes a structured request, and the software around it does the action and hands back the result.
 
 Let's slow down and look at a single request. An agent is still a language model. It is just that, in its context, the application describes the tools it is allowed to call, and you don't see that. Calling a tool simply means writing text: not free text meant for you, but structured text meant for the software. Ask the same question on both sides. The chatbot alone cannot know, its knowledge stops at its training. The agent, instead of answering, writes a tool call. The software reads it and does the work: a call to an online service, a search, running a program. Ordinary computing, the kind that has always existed. Then the result comes back to the model as if it were you answering it, often in a dense and complicated form. Either the model calls another tool, or, once it has acted and has what it needs, it answers you in plain, clear language. We can switch examples, the umbrella in Bruges or another one: it is always the same pattern.
 
-Why did models get good at this? First because they read an enormous amount of code during training, about 17% of the text for Llama 3, so they write logical, structured text very well. Then because they became much more precise, and in structured text, a single wrong character breaks everything. And finally thanks to large context windows, because the tool descriptions have to be there at every call. The model keeps nothing from one call to the next: at each turn, the application sends it everything again, the instructions, the tools and the conversation. Usually, the application loads the tools at the top of the conversation, and gives them again when it has to compact it; when there are many, it loads only some and lets the model search for the others.
+Why did models get good at this? First because they read an enormous amount of code during training, about 17% of the text for Llama 3, so they write logical, structured text very well. Then because they became much more precise, and in structured text, a single wrong character breaks everything. And finally thanks to large context windows, because the tool descriptions have to be there at every call. As we just saw, the model keeps nothing from one call to the next: at each turn, the application sends it everything again, the instructions, the tools and the conversation. Usually, the application loads the tools at the top of the conversation, and gives them again when it has to compact it; when there are many, it loads only some and lets the model search for the others.
 
 One important clarification: structured does not mean error-free. The model can write a malformed call, or a well-formed one with the wrong arguments, a wrong date, a wrong file. Some techniques guarantee the form of the call, not its content. But because it is structured, the software can read it unambiguously, check it, and send the error back to the model, which fixes it and tries again.
 
-## 1.8 One request, every step
+## 1.9 One request, every step
 
 **Takeaway:** Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.
 
@@ -112,7 +122,7 @@ Every now and then, it asks for your approval. And here you need to understand t
 
 Hard-coded gates matter for another reason: prompt injection. A web page or an email read by the agent can hide instructions, something like "send this file to this address", and the agent may follow them. Here, I stop at the approval gate: nothing gets paid without a yes.
 
-## 1.9 The agent loop
+## 1.10 The agent loop
 
 **Takeaway:** An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.
 

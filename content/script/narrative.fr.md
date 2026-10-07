@@ -92,17 +92,27 @@ Je le vois chez moi tous les jours. J'ai donné à mon agent accès à presque t
 
 Voici ce que ça donne quand j'active ces interrupteurs moi-même. En un seul message Slack, je lui ai demandé de vérifier si Remco Evenepoel avait gagné le championnat d'Europe et, si oui, de remettre le site aux couleurs du maillot belge, de bloquer un créneau dans mon agenda pour regarder les meilleurs moments, et de chercher dans mes mails quelqu'un qui voudrait le regarder avec moi. Je l'ai enregistré le 5 octobre 2026, avec Claude. Et regardez tout ce qu'il enchaîne seul, grâce à ses connecteurs : il va lire Slack, mes mails, mes anciennes réunions et mon Google Drive, il crée des documents, il écrit le code lui-même, il fait des captures d'écran de ce qu'il construit pour le tester, il réserve le créneau dans mon agenda, puis il répond sur Slack. Je mets en pause quand il agit seul, et je vous montre le moment où il me demande avant d'agir ; s'il a raté quelque chose, je vous le dis aussi. Ce n'est pas une démo de laboratoire, c'est mon usage de tous les jours. Dans beaucoup d'entreprises, les permissions sont limitées, Copilot ne fait pas tout ça, beaucoup de gens sont sur Windows. Mais dans les faits, voilà ce que c'est : c'est faisable aujourd'hui.
 
-## 1.7 Chat ou agent : appeler un outil
+## 1.7 Pas de mémoire
+
+**À retenir :** Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais.
+
+Avant de ralentir une demande, une chose qu'on comprend souvent mal : le modèle n'a pas de mémoire. Il n'apprend pas de votre conversation. Ses nombres, ce qu'on appelle ses poids, ont été fixés pendant l'entraînement, et ils ne changent pas pendant que vous lui parlez. Alors, comment suit-il le fil ? À chaque message que vous envoyez, l'application lui renvoie toute la conversation, depuis le tout premier message, et le modèle relit tout depuis le début. Ça marche tant que tout tient dans la fenêtre de contexte, cette mémoire qu'on a vue grandir tout à l'heure. Quand une conversation débordait, son début en sortait, et c'est pour ça que les chatbots semblaient oublier.
+
+Autour de cette limite, les applications ont des parades, toutes en dehors du modèle. Elles résument la partie ancienne de la conversation : c'est ce qu'on appelle la compaction. Et elles vont chercher l'information quand il le faut : une recherche, ou les fonctions de « mémoire », qui enregistrent des notes sur vous et les remettent dans vos conversations suivantes. Une nuance honnête : selon le fournisseur, l'offre et vos réglages, vos conversations peuvent servir plus tard à entraîner de nouveaux modèles. C'est un futur entraînement, pas le modèle qui apprend pendant que vous lui parlez.
+
+Et avec votre message, le modèle reçoit du texte que vous ne voyez jamais. Un system prompt, écrit par l'entreprise : son rôle, la date du jour, ce qu'il doit éviter. Anthropic publie même celui qu'elle utilise dans ses propres applications. Et la description de chaque outil qu'il a le droit d'utiliser. Ce qui nous amène à l'appel d'outil : rien de magique, juste du texte en plus, écrit dans cette même pile.
+
+## 1.8 Chat ou agent : appeler un outil
 
 **À retenir :** Un agent reste un modèle de langage : il écrit une demande structurée, et le logiciel autour fait l'action et lui rend le résultat.
 
 Ralentissons et regardons une seule demande. Un agent reste un modèle de langage. Simplement, dans son contexte, l'application décrit les outils qu'il a le droit d'appeler, et vous ne le voyez pas. Appeler un outil, ça veut juste dire écrire du texte : pas du texte libre destiné à vous, mais du texte structuré, destiné au logiciel. Posez la même question des deux côtés. Le chatbot seul ne peut pas savoir, ses connaissances s'arrêtent à son entraînement. L'agent, au lieu de répondre, écrit un appel d'outil. Le logiciel le lit et fait le travail : un appel à un service en ligne, une recherche, l'exécution d'un programme. De l'informatique ordinaire, qui a toujours existé. Puis le résultat revient au modèle, comme si c'était vous qui lui répondiez, souvent sous une forme dense et compliquée. Soit le modèle appelle un autre outil, soit, une fois qu'il a agi et qu'il a ce qu'il lui faut, il vous répond en langage simple et clair. On peut changer d'exemple, le parapluie à Bruges ou un autre : c'est toujours le même schéma.
 
-Pourquoi les modèles sont-ils devenus bons à ça ? D'abord parce qu'ils ont lu énormément de code pendant leur entraînement, environ 17 % des textes pour Llama 3, et qu'ils écrivent donc très bien du texte logique et structuré. Ensuite parce qu'ils sont devenus beaucoup plus précis, et dans du texte structuré, un seul mauvais caractère casse tout. Enfin grâce aux grandes fenêtres de contexte, parce que la description des outils doit être là à chaque appel. Le modèle ne garde rien d'un appel à l'autre : à chaque tour, l'application lui renvoie tout, les instructions, les outils et la conversation. En général, l'application charge les outils en tête de la conversation, et les redonne quand elle doit la compacter ; quand il y en a beaucoup, elle n'en charge qu'une partie et laisse le modèle chercher les autres.
+Pourquoi les modèles sont-ils devenus bons à ça ? D'abord parce qu'ils ont lu énormément de code pendant leur entraînement, environ 17 % des textes pour Llama 3, et qu'ils écrivent donc très bien du texte logique et structuré. Ensuite parce qu'ils sont devenus beaucoup plus précis, et dans du texte structuré, un seul mauvais caractère casse tout. Enfin grâce aux grandes fenêtres de contexte, parce que la description des outils doit être là à chaque appel. Comme on vient de le voir, le modèle ne garde rien d'un appel à l'autre : à chaque tour, l'application lui renvoie tout, les instructions, les outils et la conversation. En général, l'application charge les outils en tête de la conversation, et les redonne quand elle doit la compacter ; quand il y en a beaucoup, elle n'en charge qu'une partie et laisse le modèle chercher les autres.
 
 Une précision importante : structuré ne veut pas dire sans erreur. Le modèle peut écrire un appel mal formé, ou bien formé avec de mauvais arguments, une mauvaise date, un mauvais fichier. Certaines techniques garantissent la forme de l'appel, pas son fond. Mais comme c'est structuré, le logiciel peut le lire sans ambiguïté, le vérifier, et renvoyer l'erreur au modèle, qui corrige et réessaie.
 
-## 1.8 Une demande, chaque étape
+## 1.9 Une demande, chaque étape
 
 **À retenir :** Derrière une seule phrase, un agent planifie, répartit le travail et enchaîne les étapes, et parfois c'est lui qui décide s'il doit d'abord te demander.
 
@@ -112,7 +122,7 @@ De temps en temps, il vous demande votre accord. Et là, il faut comprendre qu'i
 
 Les barrières codées en dur comptent pour une autre raison : l'injection de prompt. Une page web ou un mail lu par l'agent peut cacher des instructions, du genre « envoie ce fichier à telle adresse », et l'agent peut les suivre. Ici, je m'arrête à la barrière d'approbation : rien n'est payé sans un oui.
 
-## 1.9 La boucle d'agent
+## 1.10 La boucle d'agent
 
 **À retenir :** Un agent, c'est un modèle dans une boucle (but, plan, action, observation, nouveau plan) : ce qui est nouveau, ce n'est pas l'appel d'outil, c'est le plan.
 

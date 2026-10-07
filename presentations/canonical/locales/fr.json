@@ -396,8 +396,32 @@
     "text": "Des interrupteurs à un vrai essai."
   },
   "01-personal-demo/transitionOut": {
-    "source": "Let's slow one request down and look at every step.",
-    "text": "Ralentissons une demande et regardons chaque étape."
+    "source": "Before we slow one request down: what does the model actually receive?",
+    "text": "Avant de ralentir une demande : que reçoit vraiment le modèle ?"
+  },
+  "01-no-memory/title": {
+    "source": "No memory",
+    "text": "Pas de mémoire"
+  },
+  "01-no-memory/objective": {
+    "source": "Show that a model does not learn while you chat: at every message, the app sends it the whole conversation again, within the context window, plus text you never see (a system prompt, the tool descriptions).",
+    "text": "Montrer qu'un modèle n'apprend pas pendant qu'on lui parle : à chaque message, l'application lui renvoie toute la conversation, dans la fenêtre de contexte, avec du texte qu'on ne voit jamais (un system prompt, la description des outils)."
+  },
+  "01-no-memory/takeaway": {
+    "source": "A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.",
+    "text": "Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais."
+  },
+  "01-no-memory/speakerNotes": {
+    "source": "- **No memory**: the model does not learn from your chat. Its numbers (the **weights**) were set during training, and they do not change while you talk to it\n- Click 1: what really happens: at **every message**, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch\n- Click 2: that works only while it fits in the **context window** (slide 1.3). When it overflowed, the start fell out: that is why chatbots seemed to \"forget\"\n- Click 3: the workarounds, all outside the model: **summarize** the older part (it is called compaction), and **fetch** information when needed: a search, or the \"**memory**\" features, which save notes about you and put them back into later conversations\n- Click 4: with your message, the model also receives text you **never see**: a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use\n- Click 5: so a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call into the same stack. Next slide, up close\n- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live\n- The conversation on screen is illustrative; the mechanics come from the providers' documentation",
+    "text": "- **Pas de mémoire** : le modèle n'apprend pas de ta conversation. Ses nombres (les **poids**) ont été fixés pendant l'entraînement, et ils ne changent pas pendant que tu lui parles\n- Clic 1 : ce qui se passe vraiment : à **chaque message**, l'application renvoie **toute la conversation**, depuis le tout premier message, et le modèle relit tout depuis le début\n- Clic 2 : ça ne marche que tant que tout tient dans la **fenêtre de contexte** (diapo 1.3). Quand elle débordait, le début en sortait : c'est pour ça que les chatbots semblaient « oublier »\n- Clic 3 : les parades, toutes en dehors du modèle : **résumer** la partie ancienne (on appelle ça la compaction), et **aller chercher** l'information quand il faut : une recherche, ou les fonctions de « **mémoire** », qui enregistrent des notes sur toi et les remettent dans les conversations suivantes\n- Clic 4 : avec ton message, le modèle reçoit aussi du texte que tu **ne vois jamais** : un **system prompt** de l'entreprise (son rôle, la date du jour, ce qu'il doit éviter ; Anthropic publie celui de ses propres applications) et la **description de chaque outil** qu'il peut utiliser\n- Clic 5 : un appel d'outil n'a donc rien de magique : le modèle lit la description des outils dans ce texte, et écrit son appel dans la même pile. Diapo suivante, en détail\n- Si on te le demande : selon le fournisseur, l'offre et tes réglages, tes conversations peuvent servir **plus tard** à entraîner de **nouveaux** modèles (chez Anthropic : un réglage sur les offres grand public depuis 2025 ; pas sur les offres entreprise ni sur l'API). C'est un futur entraînement, pas le modèle qui apprend en direct\n- La conversation à l'écran est illustrative ; le mécanisme vient de la documentation des fournisseurs"
+  },
+  "01-no-memory/transitionIn": {
+    "source": "From what it does to what it really receives.",
+    "text": "De ce qu'il fait à ce qu'il reçoit vraiment."
+  },
+  "01-no-memory/transitionOut": {
+    "source": "One of those hidden pieces, up close: the tool call.",
+    "text": "Une de ces pièces cachées, de près : l'appel d'outil."
   },
   "01-tool-call/title": {
     "source": "Chat or agent: calling a tool",
@@ -412,8 +436,8 @@
     "text": "Un agent reste un modèle de langage : il écrit une demande structurée, et le logiciel autour fait l'action et lui rend le résultat."
   },
   "01-tool-call/speakerNotes": {
-    "source": "- An agent is still a **language model**. In its context, hidden from you, the application describes the tools it may call\n- Calling a tool just means **writing text**: not free text for you, but **structured text** (JSON) meant for the software\n- Same question on both sides (illustrative): the chatbot alone cannot know, its knowledge stops at training; the agent writes a tool call instead of answering\n- The software reads it and does the work: calls an API, runs a search, runs code. Ordinary computing, as it always existed\n- The result comes back to the model as if **you** were answering the chatbot (a message with its own \"tool\" role), often dense and complicated\n- Then the model either calls another tool, or, once it has acted and has what it needs, answers you in plain, clear language\n- Switch examples (the umbrella in Bruges, and others): the same pattern every time\n- Why models are good at this: they read a lot of **code** in training, about **17%** of Llama 3's training text, so they write logical, structured text well\n- It also took **precision** (in structured text, one wrong character breaks everything) and **large context windows**, because the tool descriptions must be there **at every call**\n- In practice: at the start, the app loads the tools the agent may use at the top of its context (up to about 1,500 pages for large models); when the conversation is compacted, the app gives them again. Apps with many tools load only some and let the model search for the rest\n- The model keeps nothing between calls: at each turn, the app sends everything again (instructions, tools, conversation)\n- Structured does not mean error-free: the model can write a malformed call or wrong arguments. \"Structured outputs\" guarantee the **form**, not the **content**; the software checks the call and sends errors back, the model fixes and retries",
-    "text": "- Un agent reste un **modèle de langage**. Dans son contexte, caché pour toi, l'application décrit les outils qu'il peut appeler\n- Appeler un outil, c'est juste **écrire du texte** : pas du texte libre pour toi, mais du **texte structuré** (JSON) destiné au logiciel\n- Même question des deux côtés (exemple illustratif) : le chatbot seul ne peut pas savoir, ses connaissances s'arrêtent à l'entraînement ; l'agent, au lieu de répondre, écrit un appel d'outil\n- Le logiciel le lit et fait le travail : appel à une API, recherche, exécution de code. De l'informatique ordinaire, qui a toujours existé\n- Le résultat revient au modèle comme si c'était **toi** qui répondais au chatbot (un message avec son propre rôle « tool »), souvent dense et compliqué\n- Ensuite, soit le modèle appelle un autre outil, soit, une fois qu'il a agi et qu'il a ce qu'il lui faut, il te répond en langage simple et clair\n- Changer d'exemple (le parapluie à Bruges, et les autres) : toujours le même schéma\n- Pourquoi les modèles sont bons à ça : ils ont lu énormément de **code** à l'entraînement, environ **17 %** des textes d'entraînement de Llama 3, donc ils écrivent bien du texte logique et structuré\n- Il a aussi fallu de la **précision** (dans du texte structuré, un seul mauvais caractère casse tout) et de **grandes fenêtres de contexte**, parce que la description des outils doit être là **à chaque appel**\n- En pratique : au départ, l'application charge les outils auxquels l'agent a droit en tête de son contexte (jusqu'à environ 1 500 pages pour les grands modèles) ; quand la conversation est compactée, l'application les redonne. Les applications avec beaucoup d'outils n'en chargent qu'une partie et laissent le modèle chercher les autres\n- Le modèle ne garde rien entre deux appels : à chaque tour, l'application renvoie tout (instructions, outils, conversation)\n- Structuré ne veut pas dire sans erreur : le modèle peut écrire un appel mal formé ou de mauvais arguments. Les « structured outputs » garantissent la **forme**, pas le **fond** ; le logiciel vérifie l'appel et renvoie les erreurs, le modèle corrige et réessaie"
+    "source": "- An agent is still a **language model**. In its context, hidden from you, the application describes the tools it may call\n- Calling a tool just means **writing text**: not free text for you, but **structured text** (JSON) meant for the software\n- Same question on both sides (illustrative): the chatbot alone cannot know, its knowledge stops at training; the agent writes a tool call instead of answering\n- The software reads it and does the work: calls an API, runs a search, runs code. Ordinary computing, as it always existed\n- The result comes back to the model as if **you** were answering the chatbot (a message with its own \"tool\" role), often dense and complicated\n- Then the model either calls another tool, or, once it has acted and has what it needs, answers you in plain, clear language\n- Switch examples (the umbrella in Bruges, and others): the same pattern every time\n- Why models are good at this: they read a lot of **code** in training, about **17%** of Llama 3's training text, so they write logical, structured text well\n- It also took **precision** (in structured text, one wrong character breaks everything) and **large context windows**, because the tool descriptions must be there **at every call**\n- In practice: at the start, the app loads the tools the agent may use at the top of its context (up to about 1,500 pages for large models); when the conversation is compacted, the app gives them again. Apps with many tools load only some and let the model search for the rest\n- As on the previous slide: the model keeps nothing between calls; at each turn, the app sends everything again (instructions, tools, conversation)\n- Structured does not mean error-free: the model can write a malformed call or wrong arguments. \"Structured outputs\" guarantee the **form**, not the **content**; the software checks the call and sends errors back, the model fixes and retries",
+    "text": "- Un agent reste un **modèle de langage**. Dans son contexte, caché pour toi, l'application décrit les outils qu'il peut appeler\n- Appeler un outil, c'est juste **écrire du texte** : pas du texte libre pour toi, mais du **texte structuré** (JSON) destiné au logiciel\n- Même question des deux côtés (exemple illustratif) : le chatbot seul ne peut pas savoir, ses connaissances s'arrêtent à l'entraînement ; l'agent, au lieu de répondre, écrit un appel d'outil\n- Le logiciel le lit et fait le travail : appel à une API, recherche, exécution de code. De l'informatique ordinaire, qui a toujours existé\n- Le résultat revient au modèle comme si c'était **toi** qui répondais au chatbot (un message avec son propre rôle « tool »), souvent dense et compliqué\n- Ensuite, soit le modèle appelle un autre outil, soit, une fois qu'il a agi et qu'il a ce qu'il lui faut, il te répond en langage simple et clair\n- Changer d'exemple (le parapluie à Bruges, et les autres) : toujours le même schéma\n- Pourquoi les modèles sont bons à ça : ils ont lu énormément de **code** à l'entraînement, environ **17 %** des textes d'entraînement de Llama 3, donc ils écrivent bien du texte logique et structuré\n- Il a aussi fallu de la **précision** (dans du texte structuré, un seul mauvais caractère casse tout) et de **grandes fenêtres de contexte**, parce que la description des outils doit être là **à chaque appel**\n- En pratique : au départ, l'application charge les outils auxquels l'agent a droit en tête de son contexte (jusqu'à environ 1 500 pages pour les grands modèles) ; quand la conversation est compactée, l'application les redonne. Les applications avec beaucoup d'outils n'en chargent qu'une partie et laissent le modèle chercher les autres\n- Comme à la diapo précédente : le modèle ne garde rien entre deux appels ; à chaque tour, l'application renvoie tout (instructions, outils, conversation)\n- Structuré ne veut pas dire sans erreur : le modèle peut écrire un appel mal formé ou de mauvais arguments. Les « structured outputs » garantissent la **forme**, pas le **fond** ; le logiciel vérifie l'appel et renvoie les erreurs, le modèle corrige et réessaie"
   },
   "01-tool-call/transitionIn": {
     "source": "Before a complex request, one single tool call.",
@@ -1815,6 +1839,138 @@
     "source": "Thank you.",
     "text": "Merci."
   },
+  "copy:The model has no memory": {
+    "source": "The model has no memory",
+    "text": "Le modèle n'a pas de mémoire"
+  },
+  "copy:Illustrative conversation": {
+    "source": "Illustrative conversation",
+    "text": "Conversation illustrative"
+  },
+  "copy:Context window: what the model receives": {
+    "source": "Context window: what the model receives",
+    "text": "Context window (*fenêtre de contexte*) : ce que le modèle reçoit"
+  },
+  "copy:The model": {
+    "source": "The model",
+    "text": "Le modèle"
+  },
+  "copy:Its numbers do not change while you chat": {
+    "source": "Its numbers do not change while you chat",
+    "text": "Ses nombres ne changent pas pendant que vous lui parlez"
+  },
+  "copy:Sent to the model": {
+    "source": "Sent to the model",
+    "text": "Envoyé au modèle"
+  },
+  "copy:All of it, at every message": {
+    "source": "All of it, at every message",
+    "text": "Tout, à chaque message"
+  },
+  "copy:hidden from you": {
+    "source": "hidden from you",
+    "text": "caché pour vous"
+  },
+  "copy:new": {
+    "source": "new",
+    "text": "nouveau"
+  },
+  "copy:falls out": {
+    "source": "falls out",
+    "text": "sort"
+  },
+  "copy:full": {
+    "source": "full",
+    "text": "pleine"
+  },
+  "copy:tool call": {
+    "source": "tool call",
+    "text": "tool call (*appel d'outil*)"
+  },
+  "copy:You": {
+    "source": "You",
+    "text": "Vous"
+  },
+  "copy:Model": {
+    "source": "Model",
+    "text": "Modèle"
+  },
+  "copy:System prompt": {
+    "source": "System prompt",
+    "text": "System prompt (*instruction système*)"
+  },
+  "copy:Tools": {
+    "source": "Tools",
+    "text": "Outils"
+  },
+  "copy:Memory": {
+    "source": "Memory",
+    "text": "Mémoire"
+  },
+  "copy:Summary": {
+    "source": "Summary",
+    "text": "Résumé"
+  },
+  "copy:I'm off to Barcelona next week!": {
+    "source": "I'm off to Barcelona next week!",
+    "text": "Je pars à Barcelone la semaine prochaine !"
+  },
+  "copy:Lovely! What would you like to do there?": {
+    "source": "Lovely! What would you like to do there?",
+    "text": "Super ! Qu'aimeriez-vous y faire ?"
+  },
+  "copy:See a football match.": {
+    "source": "See a football match.",
+    "text": "Voir un match de foot."
+  },
+  "copy:Then try the Camp Nou: book early.": {
+    "source": "Then try the Camp Nou: book early.",
+    "text": "Alors, le Camp Nou : réservez tôt."
+  },
+  "copy:... and many more messages ...": {
+    "source": "... and many more messages ...",
+    "text": "... et bien d'autres messages ..."
+  },
+  "copy:Earlier: a trip to Barcelona, wants to see a match.": {
+    "source": "Earlier: a trip to Barcelona, wants to see a match.",
+    "text": "Plus tôt : voyage à Barcelone, veut voir un match."
+  },
+  "copy:Saved note from another chat: a Barça fan.": {
+    "source": "Saved note from another chat: a Barça fan.",
+    "text": "Note d'une autre conversation : fan du Barça."
+  },
+  "copy:From the company: its role, today's date, what to avoid.": {
+    "source": "From the company: its role, today's date, what to avoid.",
+    "text": "De l'entreprise : son rôle, la date du jour, ce qu'il doit éviter."
+  },
+  "copy:Every tool it may use, and how to call it: web_search, calendar, email...": {
+    "source": "Every tool it may use, and how to call it: web_search, calendar, email...",
+    "text": "Chaque outil qu'il peut utiliser, et comment l'appeler : web_search, agenda, e-mail..."
+  },
+  "copy:It does not learn from your chat: its numbers do not change.": {
+    "source": "It does not learn from your chat: its numbers do not change.",
+    "text": "Il n'apprend pas de votre conversation : ses nombres ne changent pas."
+  },
+  "copy:At every message, the app sends the whole conversation again, from the start.": {
+    "source": "At every message, the app sends the whole conversation again, from the start.",
+    "text": "À chaque message, l'application renvoie toute la conversation, depuis le début."
+  },
+  "copy:When the window is full, the beginning falls out.": {
+    "source": "When the window is full, the beginning falls out.",
+    "text": "Quand la fenêtre est pleine, le début en sort."
+  },
+  "copy:The workarounds: summarize the old part, add saved notes when needed.": {
+    "source": "The workarounds: summarize the old part, add saved notes when needed.",
+    "text": "Les parades : résumer la partie ancienne, ajouter des notes enregistrées au besoin."
+  },
+  "copy:And with your message, text you never see.": {
+    "source": "And with your message, text you never see.",
+    "text": "Et avec votre message, du texte que vous ne voyez jamais."
+  },
+  "copy:A tool call is just more text, written into this same stack.": {
+    "source": "A tool call is just more text, written into this same stack.",
+    "text": "Un tool call (*appel d'outil*), c'est juste du texte en plus, écrit dans cette même pile."
+  },
   "copy:A loop, not an answer": {
     "source": "A loop, not an answer",
     "text": "Une boucle, pas une réponse"
@@ -2175,14 +2331,6 @@
     "source": "what actually travels, in JSON",
     "text": "ce qui circule vraiment, en JSON"
   },
-  "copy:You": {
-    "source": "You",
-    "text": "Vous"
-  },
-  "copy:The model": {
-    "source": "The model",
-    "text": "Le modèle"
-  },
   "copy:The software": {
     "source": "The software",
     "text": "Le logiciel"
@@ -2267,10 +2415,6 @@
     "source": "it can ask the software to act",
     "text": "il peut demander au logiciel d'agir"
   },
-  "copy:Model": {
-    "source": "Model",
-    "text": "Modèle"
-  },
   "copy:This is not an answer for you: it is a request for the software.": {
     "source": "This is not an answer for you: it is a request for the software.",
     "text": "Ce n'est pas une réponse pour vous : c'est une demande pour le logiciel."
@@ -2346,10 +2490,6 @@
   "copy:news.example: Real Madrid lose 2-1": {
     "source": "news.example: Real Madrid lose 2-1",
     "text": "news.example : le Real battu 2 à 1"
-  },
-  "copy:Tools": {
-    "source": "Tools",
-    "text": "Outils"
   },
   "copy:The software describes the tool to the model: a name, what it does, what it expects.": {
     "source": "The software describes the tool to the model: a name, what it does, what it expects.",
@@ -2643,10 +2783,6 @@
     "source": "Grok 3 ≈ 22,000 US homes for a year",
     "text": "Grok 3 ≈ 22 000 foyers américains pendant un an"
   },
-  "copy:Memory": {
-    "source": "Memory",
-    "text": "Mémoire"
-  },
   "copy:text read at once, in pages": {
     "source": "text read at once, in pages",
     "text": "texte lu d'un coup, en pages"
@@ -2786,10 +2922,6 @@
   "copy:Fast": {
     "source": "Fast",
     "text": "Rapide"
-  },
-  "copy:tool call": {
-    "source": "tool call",
-    "text": "tool call (*appel d'outil*)"
   },
   "copy:tool calls": {
     "source": "tool calls",

@@ -205,4 +205,90 @@ export const foundationsSources: SourceRecord[] = [
     notes:
       "Same help page lists limits: it cannot read or reply to existing messages, cannot message group chats, and messages it creates are not end-to-end encrypted. A sibling page (answer/15574928) covers calls and messages on WhatsApp.",
   },
+  // Slide 1.7, "No memory": what a model really receives at every message.
+  {
+    id: "fnd-claude-messages-stateless",
+    title: "Using the Messages API (Claude API documentation)",
+    url: "https://platform.claude.com/docs/en/build-with-claude/working-with-messages",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "The model keeps nothing between requests: the API is stateless, so the application sends the full conversation history with every new message.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Section 'Multiple conversational turns': 'The Messages API is stateless, which means that you always send the full conversational history to the API.' The page also shows that earlier turns can be written by the application ('synthetic assistant messages'). That the model's weights do not change while you chat is our plain-words explanation of this statelessness; the page does not use those words.",
+  },
+  {
+    id: "fnd-claude-context-windows",
+    title: "Context windows (Claude API documentation)",
+    url: "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "The context window is the model's working memory, separate from its training data. At each turn, the input holds all previous conversation history plus the new message, and the system prompt and tool definitions count too. Chat interfaces can drop the oldest part first; compaction summarizes earlier parts so a conversation can continue past the limit.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Quotes: the context window 'is different from the large corpus of data the language model was trained on, and instead represents a \"working memory\" for the model'; 'Input phase: Contains all previous conversation history plus the current user message'; 'Everything in the request counts toward the context window: the system prompt, every message in messages (including tool results, images, and documents), and your tool definitions'; footnote: 'Chat interfaces such as claude.ai can also manage the context window on a rolling \"first in, first out\" basis'; 'Compaction automatically summarizes earlier parts of the conversation on the server, so the conversation can continue past the context window limit.'",
+  },
+  {
+    id: "fnd-claude-tool-use-system-prompt",
+    title: "Define tools: tool use system prompt (Claude API documentation)",
+    url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "When an application gives a model tools, the descriptions of those tools are written into a system prompt that the model receives with the request.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Section 'Tool use system prompt': 'When you call the Claude API with the tools parameter, the API constructs a special system prompt from the tool definitions, tool configuration, and any user-specified system prompt.' The template shown includes '{{ TOOL DEFINITIONS IN JSON SCHEMA }}' and '{{ USER SYSTEM PROMPT }}'. The tool use overview (fnd-claude-tool-use-docs) adds that tool names, descriptions and schemas are billed as input tokens.",
+  },
+  {
+    id: "fnd-claude-app-system-prompts",
+    title: "System prompts (Claude release notes)",
+    url: "https://platform.claude.com/docs/en/release-notes/system-prompts",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "Chat apps give the model a system prompt the user does not see, with up-to-date information such as the current date and instructions on how to behave and what to avoid; Anthropic publishes the one used in its own apps.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Overview: 'Claude's web interface (claude.ai) and mobile apps use a system prompt to provide up-to-date information, such as the current date, to Claude at the start of every conversation. The system prompt also encourages certain behaviors' and 'These system prompt updates do not apply to the Claude API.' The Claude Opus 5.5 prompt dated September 22, 2026 (page claude-opus-5-5) holds a date placeholder ('{{currentDateTime}}') and instructions such as 'Claude never curses unless the person asks or curses a lot themselves'. It also lists the memory settings ('Search and reference past chats, generate memory from chat history').",
+  },
+  {
+    id: "fnd-claude-memory-help",
+    title: "Use Claude's chat search and memory to build on previous context (Claude Help Center)",
+    url: "https://support.claude.com/en/articles/11817273-how-does-claude-s-memory-work",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "\"Memory\" in chat apps is a feature around the model: the app saves notes from your chats and carries them into new conversations, and it can search past chats when needed, as a tool call.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Quotes: 'Claude can also remember context from your chats and carry it into new conversations'; 'Claude saves memory as a set of individual topics as you chat, rather than summarizing conversations after they end. Mention that a deadline moved, and your next conversation already knows.'; past-chat searches 'use Retrieval-Augmented Generation (RAG) and will appear as tool calls during your conversations'; 'With the addition of memory, Claude transforms from a stateless chat interface into a knowledgeable collaborator'. Memory can be paused, reset or turned off per chat.",
+  },
+  {
+    id: "fnd-anthropic-2025-consumer-terms",
+    title: "Updates to Consumer Terms and Privacy Policy",
+    url: "https://www.anthropic.com/news/updates-to-our-consumer-terms",
+    publisher: "Anthropic",
+    date: "2025-08-28",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "Depending on the provider, the plan and your settings, your conversations may be used later to train new models; this is a separate, later training run, not the model learning while you chat.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Quotes: 'We will train new models using data from Free, Pro, and Max accounts when this setting is on'; users choose in their privacy settings; 'These updates do not apply to services under our Commercial Terms', including Team and Enterprise plans and the API; 'If you delete a conversation with Claude it will not be used for future model training.' One provider's policy, as of the retrieval date: other providers have their own settings.",
+  },
 ];
