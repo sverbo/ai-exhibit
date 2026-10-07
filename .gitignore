@@ -25,3 +25,6 @@ archive/
 # Claude Code: personal settings and agent worktrees
 .claude/settings.local.json
 .claude/worktrees/
+
+# Personal working notes (French drafts, reviews): local only
+docs/script/
