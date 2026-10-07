@@ -129,9 +129,9 @@ export default function LauncherView() {
       </main>
 
       <p className={styles.howto}>
-        <b>Good to know:</b> arrows or a clicker advance either window, and N shows your notes on the Projector (the room
-        sees them too). The two stay linked when opened in the same browser profile, even on two screens, but not in a
-        private window.
+        <b>Good to know:</b> the Projector works on its own. Open the Presenter as well and the two are linked and in sync:
+        either window advances the talk, with the arrows or a clicker. Use the same browser profile (not a private window),
+        even on two screens.
       </p>
 
       <p className={styles.ready} role="status">
