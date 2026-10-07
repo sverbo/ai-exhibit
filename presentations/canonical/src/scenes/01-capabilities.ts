@@ -549,7 +549,7 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-no-memory",
     code: "nomem",
-    steps: 4,
+    steps: 3,
     chapter: "01",
     number: "1.7",
     title: { en: "No memory" },
@@ -567,39 +567,36 @@ export const chapter01: SceneDefinition[] = [
         cards: [
           {
             picture: "frozen",
-            title: { en: "It does not learn from you" },
+            title: { en: "It does not learn from you live*" },
             line: { en: "Its weights do not change while you chat." },
-            sourceIds: ["fnd-claude-messages-stateless"],
+            sourceIds: ["fnd-claude-messages-stateless", "fnd-anthropic-2025-consumer-terms"],
           },
           {
             picture: "resend",
             title: { en: "Everything, every time" },
-            line: { en: "At every message, the app sends it the whole conversation again." },
+            line: { en: "At every message, the app sends it the whole conversation again, summarized if too long." },
             sourceIds: ["fnd-claude-messages-stateless", "fnd-claude-context-windows"],
-          },
-          {
-            picture: "summary",
-            title: { en: "When it gets too long" },
-            line: { en: "The app summarizes the start, or adds notes it saved about you." },
-            sourceIds: ["fnd-claude-context-windows", "fnd-claude-memory-help"],
           },
           {
             picture: "hidden",
             title: { en: "Text you never see" },
             line: { en: "The company's instructions, and the description of its tools." },
-            sourceIds: ["fnd-claude-tool-use-system-prompt", "fnd-claude-app-system-prompts"],
+            sourceIds: ["fnd-claude-tool-use-system-prompt", "fnd-claude-app-system-prompts", "fnd-claude-personalization-help", "fnd-claude-memory-help"],
           },
         ],
+        footnote: {
+          en: "* Depending on the provider, your plan and your settings, your conversations may be used later to train its next models.",
+        },
       },
     },
     interaction: "presenter",
     speakerNotes: {
-      en: `- Click 1, **it does not learn from you**: its numbers (the **weights**) were set during training, and they do not change while you talk to it
-- Click 2, **everything, every time**: at every message, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch. That works while it fits in the **context window** (slide 1.3); when it overflowed, the start fell out: that is why chatbots seemed to "forget"
-- Click 3, **when it gets too long**: workarounds outside the model: **summarize** the older part (it is called compaction), and the "**memory**" features, which save notes about you and put them back into later conversations
-- Click 4, **text you never see**: with your message, the model also receives a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use
+      en: `- Click 1, **it does not learn from you live**: its numbers (the **weights**) were set during training, and they do not change while you talk to it
+- Click 2, **everything, every time**: at every message, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch. That works while it fits in the **context window** (slide 1.3); when it overflowed, the start fell out: that is why chatbots seemed to "forget". Today, when it gets too long, the app **summarizes** the older part (it is called compaction)
+- Click 3, **text you never see**: with your message, the model also receives a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use
+- Also in that hidden text, depending on the app: **your own instructions**, written once in the settings or in a project; the "**memory**" notes it saved about you; and information **fetched** along the way (a web search, a document, a past chat)
 - So a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call as more text. Next slide, up close
-- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live`,
+- The **asterisk** at the bottom: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live`,
     },
     transitionIn: {
       en: "From what it does to what it really receives.",
@@ -614,6 +611,7 @@ export const chapter01: SceneDefinition[] = [
       "fnd-claude-tool-use-system-prompt",
       "fnd-claude-app-system-prompts",
       "fnd-claude-memory-help",
+      "fnd-claude-personalization-help",
       "fnd-anthropic-2025-consumer-terms",
     ],
     runtimeClass: "A",

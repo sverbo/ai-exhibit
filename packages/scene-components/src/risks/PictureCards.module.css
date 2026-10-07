@@ -202,6 +202,19 @@
   text-wrap: balance;
 }
 
+/* A small note at the bottom, such as the "*" of a card. */
+.footnote {
+  position: absolute;
+  left: 150px;
+  right: 150px;
+  bottom: 56px;
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  transition: opacity var(--dur) var(--ease);
+}
+
 /* Footer: organisations, then the closing line. */
 .root[data-footer] {
   gap: var(--space-4);

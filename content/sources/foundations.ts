@@ -277,6 +277,20 @@ export const foundationsSources: SourceRecord[] = [
       "Quotes: 'Claude can also remember context from your chats and carry it into new conversations'; 'Claude saves memory as a set of individual topics as you chat, rather than summarizing conversations after they end. Mention that a deadline moved, and your next conversation already knows.'; past-chat searches 'use Retrieval-Augmented Generation (RAG) and will appear as tool calls during your conversations'; 'With the addition of memory, Claude transforms from a stateless chat interface into a knowledgeable collaborator'. Memory can be paused, reset or turned off per chat.",
   },
   {
+    id: "fnd-claude-personalization-help",
+    title: "Understanding Claude's personalization features (Claude Help Center)",
+    url: "https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features",
+    publisher: "Anthropic",
+    retrieved: "2026-10-07",
+    kind: "documentation",
+    claim:
+      "Chat apps let you write your own instructions once, in the settings or in a project, and the app takes them into account in your conversations.",
+    evidence: "observed",
+    verification: "verified",
+    notes:
+      "Quote: 'instructions are account-wide settings that help Claude understand your general instructions that Claude should consider in responses'. The page also describes project instructions (project-specific context) and skills.",
+  },
+  {
     id: "fnd-anthropic-2025-consumer-terms",
     title: "Updates to Consumer Terms and Privacy Policy",
     url: "https://www.anthropic.com/news/updates-to-our-consumer-terms",

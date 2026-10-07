@@ -45,6 +45,8 @@ export interface PictureCardsProps {
   orgs?: PictureCardsOrgs;
   /** Revealed on the final step. */
   takeaway?: PictureCardsTakeaway;
+  /** A small note at the bottom of the stage (for example the "*" of a card's title), shown with the first card. */
+  footnote?: L10n;
 }
 
 function hasTips(props: PictureCardsProps): boolean {
@@ -176,6 +178,11 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
           cards.map(card)
         )}
       </div>
+      {props.footnote ? (
+        <p className={`${styles.footnote} ${visible > 0 ? styles.shown : styles.hidden}`} data-footnote={visible > 0 ? "" : undefined}>
+          <Rich text={tr(props.footnote, locale)} />
+        </p>
+      ) : null}
       {props.orgs || props.takeaway ? (
         <footer className={styles.footer}>
           {props.orgs ? (

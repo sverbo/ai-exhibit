@@ -50,7 +50,6 @@ export const PICTURE_IDS = [
   // Chapter 01: no memory
   "frozen",
   "resend",
-  "summary",
   "hidden",
   // Chapter 05: governance
   "law",
@@ -516,18 +515,6 @@ const DRAW: Record<PictureId, () => ReactNode> = {
       <path d="M150 98 L166 112 L150 126" className={styles.strokeAi} />
       <Robot x={200} s={0.95} />
       <Ground />
-    </>
-  ),
-  summary: () => (
-    <>
-      <Page x={14} y={24} w={96} h={176} lines={7} />
-      <path d="M118 112 H150" className={styles.dashAlt} />
-      <path d="M142 98 L158 112 L142 126" className={styles.strokeAlt} />
-      <g transform="rotate(-4 196 112)">
-        <rect x="164" y="86" width="64" height="52" rx="5" className={styles.note} />
-        <line x1="176" y1="104" x2="216" y2="104" className={styles.strokeNote} />
-        <line x1="176" y1="120" x2="204" y2="120" className={styles.strokeNote} />
-      </g>
     </>
   ),
   hidden: () => (
