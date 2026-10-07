@@ -32,7 +32,7 @@ Two things this talk is not. It is not a tutorial on AI tools: they change every
 
 Still, to give you a sense of scale: one short question to a chatbot uses about 0.3 Wh (that is Epoch AI's estimate; Google published 0.24 Wh for a median Gemini prompt). An hour of video streaming is about 77 Wh, according to the International Energy Agency. In other words, about 250 questions equal one hour of streaming. But let's be honest: a long question, a model that "thinks", or an agent costs far more. With 100,000 tokens of input, you get close to 40 Wh, and an agent working for two hours can equal several hours of streaming. At world scale, data centres used about 1.5% of the world's electricity in 2024, and the IEA expects that to more than double by 2030.
 
-Ideally, we would cut both. But if it is for your work, I don't think you should feel too guilty about boosting your productivity, or you will fall behind. Again, that is my opinion. Today's focus is this sentence, from a 2023 statement signed by, among others, Geoffrey Hinton, Yoshua Bengio and leaders of AI labs: "Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war." It is the end of the sentence that gives the scale.
+Ideally, we would cut both. But if it is for your work, I don't think you should feel too guilty about boosting your productivity, or you will fall behind. Again, that is my opinion. Today's focus is what AI can already do, how it works, and its risks in all their variety: misuse, effects on society, and losing control. Not to alarm you, but so that we understand together what is at stake.
 
 # Chapter 1: What AI can do today
 
