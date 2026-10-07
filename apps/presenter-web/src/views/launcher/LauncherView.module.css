@@ -147,16 +147,11 @@ a.primary:hover {
 
 /* How the windows work together: three short lines under the entries. */
 .howto {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  max-width: 900px;
+  margin: 16px 0 0;
   color: var(--color-text-muted);
   font-size: var(--ui-text-sm);
   line-height: 1.45;
-}
-.howto p {
-  margin: 0;
 }
 .howto b {
   color: var(--color-text);

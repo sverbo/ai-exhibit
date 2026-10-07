@@ -128,19 +128,11 @@ export default function LauncherView() {
         </section>
       </main>
 
-      <section className={styles.howto} aria-label="How it works">
-        <p>
-          <b>The Projector works alone:</b> arrows or a clicker advance it, scenes are interactive, and N shows your notes
-          (the room sees them too).
-        </p>
-        <p>
-          <b>Open the Presenter as well</b> for notes, timer and controls, at any time: the two stay linked, and either
-          window takes the arrow keys.
-        </p>
-        <p>
-          <b>Same browser profile:</b> separate windows are fine, even on two screens, but not a private window.
-        </p>
-      </section>
+      <p className={styles.howto}>
+        <b>Good to know:</b> arrows or a clicker advance either window, and N shows your notes on the Projector (the room
+        sees them too). The two stay linked when opened in the same browser profile, even on two screens, but not in a
+        private window.
+      </p>
 
       <p className={styles.ready} role="status">
         <Dot state={cloud.state} />
