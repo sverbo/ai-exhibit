@@ -552,7 +552,7 @@ export const chapter01: SceneDefinition[] = [
     steps: 3,
     chapter: "01",
     number: "1.7",
-    title: { en: "No memory" },
+    title: { en: "How does it follow the conversation?" },
     objective: {
       en: "Show that a model does not learn while you chat: at every message, the app sends it the whole conversation again, within the context window, plus text you never see (a system prompt, the tool descriptions).",
     },
@@ -563,7 +563,8 @@ export const chapter01: SceneDefinition[] = [
       layout: "component",
       component: "PictureCards",
       props: {
-        heading: { en: "The model has no memory" },
+        kicker: { en: "From chatbot to agent" },
+        heading: { en: "How does it follow the conversation?" },
         cards: [
           {
             picture: "frozen",
@@ -628,7 +629,7 @@ export const chapter01: SceneDefinition[] = [
     steps: 5,
     chapter: "01",
     number: "1.8",
-    title: { en: "Chat or agent: calling a tool" },
+    title: { en: "Calling a tool" },
     objective: {
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
     },

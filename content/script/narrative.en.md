@@ -92,7 +92,7 @@ I see it at home every day. I have given my agent access to almost everything. I
 
 Here is what it looks like when I flip those switches myself. In a single Slack message, I asked it to check whether Remco Evenepoel had won the European Championship and, if so, to recolour the website in the Belgian jersey's colours, to book a slot in my calendar to watch the best moments, and to look through my emails for someone who would like to watch it with me. I recorded it on 5 October 2026, with Claude. And look at everything it chains on its own, through its connectors: it reads Slack, my emails, my past meetings and my Google Drive, creates documents, writes the code itself, takes screenshots of what it is building to test it, books the slot in my calendar, then answers on Slack. I pause when it acts on its own, and I show you the moment it asks me before acting; if it missed something, I tell you that too. This is not a lab demo, it is my everyday use. In many companies, permissions are limited, Copilot does not do all of this, and many people are on Windows. But in fact, this is what it is: it is doable today.
 
-## 1.7 No memory
+## 1.7 How does it follow the conversation?
 
 **Takeaway:** A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.
 
@@ -102,7 +102,7 @@ Today, when a conversation gets too long, the app summarizes its older part: tha
 
 And with your message, the model receives text you never see. A system prompt, written by the company: its role, today's date, what it should avoid. Anthropic even publishes the one it uses in its own apps. And the descriptions of every tool it is allowed to use. Depending on the app, there is more: your own instructions, written once in the settings; the "memory" notes it saved about you; and information fetched along the way, a web search, a document, a past chat. Which brings us to the tool call: nothing magic, just more text, added to everything it reads.
 
-## 1.8 Chat or agent: calling a tool
+## 1.8 Calling a tool
 
 **Takeaway:** An agent is still a language model: it writes a structured request, and the software around it does the action and hands back the result.
 

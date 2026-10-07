@@ -400,8 +400,8 @@
     "text": "Avant de ralentir une demande : que reçoit vraiment le modèle ?"
   },
   "01-no-memory/title": {
-    "source": "No memory",
-    "text": "Pas de mémoire"
+    "source": "How does it follow the conversation?",
+    "text": "Comment suit-il la conversation ?"
   },
   "01-no-memory/objective": {
     "source": "Show that a model does not learn while you chat: at every message, the app sends it the whole conversation again, within the context window, plus text you never see (a system prompt, the tool descriptions).",
@@ -411,9 +411,13 @@
     "source": "A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.",
     "text": "Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais."
   },
+  "01-no-memory/visual.props.kicker": {
+    "source": "From chatbot to agent",
+    "text": "Du chatbot à l'agent"
+  },
   "01-no-memory/visual.props.heading": {
-    "source": "The model has no memory",
-    "text": "Le modèle n'a pas de mémoire"
+    "source": "How does it follow the conversation?",
+    "text": "Comment suit-il la conversation ?"
   },
   "01-no-memory/visual.props.cards.0.title": {
     "source": "It does not learn from you live*",
@@ -456,8 +460,8 @@
     "text": "Une de ces pièces cachées, de près : l'appel d'outil."
   },
   "01-tool-call/title": {
-    "source": "Chat or agent: calling a tool",
-    "text": "Chat ou agent : appeler un outil"
+    "source": "Calling a tool",
+    "text": "Appeler un outil"
   },
   "01-tool-call/objective": {
     "source": "Show, with real JSON, that a model only writes text and the software around it runs the tools.",

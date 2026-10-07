@@ -92,7 +92,7 @@ Je le vois chez moi tous les jours. J'ai donné à mon agent accès à presque t
 
 Voici ce que ça donne quand j'active ces interrupteurs moi-même. En un seul message Slack, je lui ai demandé de vérifier si Remco Evenepoel avait gagné le championnat d'Europe et, si oui, de remettre le site aux couleurs du maillot belge, de bloquer un créneau dans mon agenda pour regarder les meilleurs moments, et de chercher dans mes mails quelqu'un qui voudrait le regarder avec moi. Je l'ai enregistré le 5 octobre 2026, avec Claude. Et regardez tout ce qu'il enchaîne seul, grâce à ses connecteurs : il va lire Slack, mes mails, mes anciennes réunions et mon Google Drive, il crée des documents, il écrit le code lui-même, il fait des captures d'écran de ce qu'il construit pour le tester, il réserve le créneau dans mon agenda, puis il répond sur Slack. Je mets en pause quand il agit seul, et je vous montre le moment où il me demande avant d'agir ; s'il a raté quelque chose, je vous le dis aussi. Ce n'est pas une démo de laboratoire, c'est mon usage de tous les jours. Dans beaucoup d'entreprises, les permissions sont limitées, Copilot ne fait pas tout ça, beaucoup de gens sont sur Windows. Mais dans les faits, voilà ce que c'est : c'est faisable aujourd'hui.
 
-## 1.7 Pas de mémoire
+## 1.7 Comment suit-il la conversation ?
 
 **À retenir :** Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais.
 
@@ -102,7 +102,7 @@ Aujourd'hui, quand une conversation devient trop longue, l'application en résum
 
 Et avec votre message, le modèle reçoit du texte que vous ne voyez jamais. Un system prompt, écrit par l'entreprise : son rôle, la date du jour, ce qu'il doit éviter. Anthropic publie même celui qu'elle utilise dans ses propres applications. Et la description de chaque outil qu'il a le droit d'utiliser. Selon l'application, il y a plus : vos propres instructions, écrites une fois dans les réglages ; les notes « mémoire » qu'elle a enregistrées sur vous ; et des informations cherchées en route, une recherche web, un document, une ancienne conversation. Ce qui nous amène à l'appel d'outil : rien de magique, juste du texte en plus, ajouté à tout ce qu'il lit.
 
-## 1.8 Chat ou agent : appeler un outil
+## 1.8 Appeler un outil
 
 **À retenir :** Un agent reste un modèle de langage : il écrit une demande structurée, et le logiciel autour fait l'action et lui rend le résultat.
 

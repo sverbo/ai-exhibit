@@ -55,14 +55,14 @@ switch turns advice into action.
 **1.6 My own demo.** (Presenter's recording.) An ordinary request, an ordinary
 person, and the moment it acts on its own, and the moment it asks before acting.
 
-**1.7 No memory.** Before slowing one request down: what does the model
+**1.7 How does it follow the conversation?** Before slowing one request down: what does the model
 actually receive? It learns nothing while you chat. At every message, the app
 sends the whole conversation again, as long as it fits in the context window;
 apps summarize the old part or fetch saved notes when it does not. With it comes
 text you never see: the company's system prompt and the description of every
 tool. The tool call is one more piece of that same text.
 
-**1.8 Chat or agent: calling a tool.** How does that actually work? Ask "who won
+**1.8 Calling a tool.** How does that actually work? Ask "who won
 last night's match?" A chatbot alone cannot know. Give the same model a search
 tool and watch: it does not answer, it writes a small JSON request. The model
 only writes text; the software reads it, runs the search, and hands back the

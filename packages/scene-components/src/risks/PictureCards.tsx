@@ -37,6 +37,8 @@ export interface PictureCardsTakeaway {
 }
 
 export interface PictureCardsProps {
+  /** A small label above the heading: where this slide sits in the story. */
+  kicker?: L10n;
   heading?: L10n;
   cards: PictureCard[];
   /** With exactly two cards: a picture between them, shown from step 0 (the shared tool). */
@@ -162,6 +164,11 @@ export function PictureCards({ props, ctx }: SceneComponentProps<PictureCardsPro
       data-visible={visible}
       data-footer={props.orgs || props.takeaway ? "" : undefined}
     >
+      {props.kicker ? (
+        <p className={styles.kicker}>
+          <Rich text={tr(props.kicker, locale)} />
+        </p>
+      ) : null}
       {props.heading ? <h2 className={styles.heading}>
           <Rich text={tr(props.heading, locale)} />
         </h2> : null}
