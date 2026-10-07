@@ -47,6 +47,11 @@ export const PICTURE_IDS = [
   "unwatched",
   // Chapter 02: a single real case
   "photo-app",
+  // Chapter 01: no memory
+  "frozen",
+  "resend",
+  "summary",
+  "hidden",
   // Chapter 05: governance
   "law",
   "test-lab",
@@ -489,6 +494,52 @@ const DRAW: Record<PictureId, () => ReactNode> = {
           <path d={`M${x! + 20} ${y! - 38} H${x! + 58}`} className={styles.dashAi} />
         </g>
       ))}
+      <Ground />
+    </>
+  ),
+  frozen: () => (
+    <>
+      <Robot x={104} s={1.5} />
+      <path d="M170 78 V58 Q170 36 192 36 Q214 36 214 58 V78" className={styles.strokeInk} />
+      <rect x="158" y="74" width="68" height="56" rx="10" className={styles.ink} />
+      <circle cx="192" cy="98" r="7" className={styles.cut} />
+      <rect x="189" y="100" width="6" height="16" rx="3" className={styles.cut} />
+      <Ground />
+    </>
+  ),
+  resend: () => (
+    <>
+      <Page x={34} y={70} w={92} h={120} lines={4} />
+      <Page x={24} y={58} w={92} h={120} lines={4} />
+      <Page x={14} y={46} w={92} h={120} lines={4} />
+      <path d="M118 112 H158" className={styles.dashAi} />
+      <path d="M150 98 L166 112 L150 126" className={styles.strokeAi} />
+      <Robot x={200} s={0.95} />
+      <Ground />
+    </>
+  ),
+  summary: () => (
+    <>
+      <Page x={14} y={24} w={96} h={176} lines={7} />
+      <path d="M118 112 H150" className={styles.dashAlt} />
+      <path d="M142 98 L158 112 L142 126" className={styles.strokeAlt} />
+      <g transform="rotate(-4 196 112)">
+        <rect x="164" y="86" width="64" height="52" rx="5" className={styles.note} />
+        <line x1="176" y1="104" x2="216" y2="104" className={styles.strokeNote} />
+        <line x1="176" y1="120" x2="204" y2="120" className={styles.strokeNote} />
+      </g>
+    </>
+  ),
+  hidden: () => (
+    <>
+      <Robot x={48} s={0.95} />
+      <Page x={96} y={30} w={128} h={150} lines={5} />
+      <g transform="translate(184 172)">
+        <circle r="34" className={styles.cut} />
+        <path d="M-24 0 Q0 -22 24 0 Q0 22 -24 0 Z" className={styles.strokeInk} style={{ strokeWidth: 6 }} />
+        <circle r="7" className={styles.ink} />
+        <line x1="-22" y1="-20" x2="22" y2="20" className={styles.strokeWarn} />
+      </g>
       <Ground />
     </>
   ),

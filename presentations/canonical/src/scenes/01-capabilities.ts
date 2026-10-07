@@ -549,7 +549,7 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-no-memory",
     code: "nomem",
-    steps: 5,
+    steps: 4,
     chapter: "01",
     number: "1.7",
     title: { en: "No memory" },
@@ -559,17 +559,47 @@ export const chapter01: SceneDefinition[] = [
     takeaway: {
       en: "A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.",
     },
-    visual: { layout: "component", component: "ContextStack", props: {} },
+    visual: {
+      layout: "component",
+      component: "PictureCards",
+      props: {
+        heading: { en: "The model has no memory" },
+        cards: [
+          {
+            picture: "frozen",
+            title: { en: "It does not learn from you" },
+            line: { en: "Its weights do not change while you chat." },
+            sourceIds: ["fnd-claude-messages-stateless"],
+          },
+          {
+            picture: "resend",
+            title: { en: "Everything, every time" },
+            line: { en: "At every message, the app sends it the whole conversation again." },
+            sourceIds: ["fnd-claude-messages-stateless", "fnd-claude-context-windows"],
+          },
+          {
+            picture: "summary",
+            title: { en: "When it gets too long" },
+            line: { en: "The app summarizes the start, or adds notes it saved about you." },
+            sourceIds: ["fnd-claude-context-windows", "fnd-claude-memory-help"],
+          },
+          {
+            picture: "hidden",
+            title: { en: "Text you never see" },
+            line: { en: "The company's instructions, and the description of its tools." },
+            sourceIds: ["fnd-claude-tool-use-system-prompt", "fnd-claude-app-system-prompts"],
+          },
+        ],
+      },
+    },
     interaction: "presenter",
     speakerNotes: {
-      en: `- **No memory**: the model does not learn from your chat. Its numbers (the **weights**) were set during training, and they do not change while you talk to it
-- Click 1: what really happens: at **every message**, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch
-- Click 2: that works only while it fits in the **context window** (slide 1.3). When it overflowed, the start fell out: that is why chatbots seemed to "forget"
-- Click 3: the workarounds, all outside the model: **summarize** the older part (it is called compaction), and **fetch** information when needed: a search, or the "**memory**" features, which save notes about you and put them back into later conversations
-- Click 4: with your message, the model also receives text you **never see**: a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use
-- Click 5: so a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call into the same stack. Next slide, up close
-- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live
-- The conversation on screen is illustrative; the mechanics come from the providers' documentation`,
+      en: `- Click 1, **it does not learn from you**: its numbers (the **weights**) were set during training, and they do not change while you talk to it
+- Click 2, **everything, every time**: at every message, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch. That works while it fits in the **context window** (slide 1.3); when it overflowed, the start fell out: that is why chatbots seemed to "forget"
+- Click 3, **when it gets too long**: workarounds outside the model: **summarize** the older part (it is called compaction), and the "**memory**" features, which save notes about you and put them back into later conversations
+- Click 4, **text you never see**: with your message, the model also receives a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use
+- So a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call as more text. Next slide, up close
+- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live`,
     },
     transitionIn: {
       en: "From what it does to what it really receives.",

@@ -18,7 +18,7 @@ describe("chapter 01 scenes", () => {
       "01-agent-loop",
     ]);
     const scene = chapter.find((s) => s.id === "01-no-memory")!;
-    expect(scene).toMatchObject({ number: "1.7", code: "nomem", steps: 5, optional: false });
-    expect(scene.visual).toMatchObject({ layout: "component", component: "ContextStack" });
+    expect(scene).toMatchObject({ number: "1.7", code: "nomem", steps: 4, optional: false });
+    expect(scene.visual).toMatchObject({ layout: "component", component: "PictureCards" });
   });
 });

@@ -100,7 +100,7 @@ Avant de ralentir une demande, une chose qu'on comprend souvent mal : le modèle
 
 Autour de cette limite, les applications ont des parades, toutes en dehors du modèle. Elles résument la partie ancienne de la conversation : c'est ce qu'on appelle la compaction. Et elles vont chercher l'information quand il le faut : une recherche, ou les fonctions de « mémoire », qui enregistrent des notes sur vous et les remettent dans vos conversations suivantes. Une nuance honnête : selon le fournisseur, l'offre et vos réglages, vos conversations peuvent servir plus tard à entraîner de nouveaux modèles. C'est un futur entraînement, pas le modèle qui apprend pendant que vous lui parlez.
 
-Et avec votre message, le modèle reçoit du texte que vous ne voyez jamais. Un system prompt, écrit par l'entreprise : son rôle, la date du jour, ce qu'il doit éviter. Anthropic publie même celui qu'elle utilise dans ses propres applications. Et la description de chaque outil qu'il a le droit d'utiliser. Ce qui nous amène à l'appel d'outil : rien de magique, juste du texte en plus, écrit dans cette même pile.
+Et avec votre message, le modèle reçoit du texte que vous ne voyez jamais. Un system prompt, écrit par l'entreprise : son rôle, la date du jour, ce qu'il doit éviter. Anthropic publie même celui qu'elle utilise dans ses propres applications. Et la description de chaque outil qu'il a le droit d'utiliser. Ce qui nous amène à l'appel d'outil : rien de magique, juste du texte en plus, ajouté à tout ce qu'il lit.
 
 ## 1.8 Chat ou agent : appeler un outil
 

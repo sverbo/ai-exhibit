@@ -100,7 +100,7 @@ Before we slow one request down, one thing that is often misunderstood: the mode
 
 Around that limit, apps have workarounds, all outside the model. They summarize the older part of the conversation: that is called compaction. And they fetch information when it is needed: a search, or the "memory" features, which save notes about you and put them back into your later conversations. One honest nuance: depending on the provider, the plan and your settings, your conversations may be used later to train new models. That is a future training run, not the model learning while you chat.
 
-And with your message, the model receives text you never see. A system prompt, written by the company: its role, today's date, what it should avoid. Anthropic even publishes the one it uses in its own apps. And the descriptions of every tool it is allowed to use. Which brings us to the tool call: nothing magic, just more text, written into that same stack.
+And with your message, the model receives text you never see. A system prompt, written by the company: its role, today's date, what it should avoid. Anthropic even publishes the one it uses in its own apps. And the descriptions of every tool it is allowed to use. Which brings us to the tool call: nothing magic, just more text, added to everything it reads.
 
 ## 1.8 Chat or agent: calling a tool
 

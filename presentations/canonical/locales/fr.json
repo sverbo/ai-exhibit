@@ -411,9 +411,45 @@
     "source": "A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.",
     "text": "Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais."
   },
+  "01-no-memory/visual.props.heading": {
+    "source": "The model has no memory",
+    "text": "Le modèle n'a pas de mémoire"
+  },
+  "01-no-memory/visual.props.cards.0.title": {
+    "source": "It does not learn from you",
+    "text": "Il n'apprend pas de vous"
+  },
+  "01-no-memory/visual.props.cards.0.line": {
+    "source": "Its weights do not change while you chat.",
+    "text": "Ses poids ne changent pas pendant que vous lui parlez."
+  },
+  "01-no-memory/visual.props.cards.1.title": {
+    "source": "Everything, every time",
+    "text": "Tout, à chaque fois"
+  },
+  "01-no-memory/visual.props.cards.1.line": {
+    "source": "At every message, the app sends it the whole conversation again.",
+    "text": "À chaque message, l'application lui renvoie toute la conversation."
+  },
+  "01-no-memory/visual.props.cards.2.title": {
+    "source": "When it gets too long",
+    "text": "Quand ça devient trop long"
+  },
+  "01-no-memory/visual.props.cards.2.line": {
+    "source": "The app summarizes the start, or adds notes it saved about you.",
+    "text": "L'application résume le début, ou ajoute des notes enregistrées sur vous."
+  },
+  "01-no-memory/visual.props.cards.3.title": {
+    "source": "Text you never see",
+    "text": "Du texte que vous ne voyez pas"
+  },
+  "01-no-memory/visual.props.cards.3.line": {
+    "source": "The company's instructions, and the description of its tools.",
+    "text": "Les instructions de l'entreprise, et la description de ses outils."
+  },
   "01-no-memory/speakerNotes": {
-    "source": "- **No memory**: the model does not learn from your chat. Its numbers (the **weights**) were set during training, and they do not change while you talk to it\n- Click 1: what really happens: at **every message**, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch\n- Click 2: that works only while it fits in the **context window** (slide 1.3). When it overflowed, the start fell out: that is why chatbots seemed to \"forget\"\n- Click 3: the workarounds, all outside the model: **summarize** the older part (it is called compaction), and **fetch** information when needed: a search, or the \"**memory**\" features, which save notes about you and put them back into later conversations\n- Click 4: with your message, the model also receives text you **never see**: a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use\n- Click 5: so a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call into the same stack. Next slide, up close\n- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live\n- The conversation on screen is illustrative; the mechanics come from the providers' documentation",
-    "text": "- **Pas de mémoire** : le modèle n'apprend pas de ta conversation. Ses nombres (les **poids**) ont été fixés pendant l'entraînement, et ils ne changent pas pendant que tu lui parles\n- Clic 1 : ce qui se passe vraiment : à **chaque message**, l'application renvoie **toute la conversation**, depuis le tout premier message, et le modèle relit tout depuis le début\n- Clic 2 : ça ne marche que tant que tout tient dans la **fenêtre de contexte** (diapo 1.3). Quand elle débordait, le début en sortait : c'est pour ça que les chatbots semblaient « oublier »\n- Clic 3 : les parades, toutes en dehors du modèle : **résumer** la partie ancienne (on appelle ça la compaction), et **aller chercher** l'information quand il faut : une recherche, ou les fonctions de « **mémoire** », qui enregistrent des notes sur toi et les remettent dans les conversations suivantes\n- Clic 4 : avec ton message, le modèle reçoit aussi du texte que tu **ne vois jamais** : un **system prompt** de l'entreprise (son rôle, la date du jour, ce qu'il doit éviter ; Anthropic publie celui de ses propres applications) et la **description de chaque outil** qu'il peut utiliser\n- Clic 5 : un appel d'outil n'a donc rien de magique : le modèle lit la description des outils dans ce texte, et écrit son appel dans la même pile. Diapo suivante, en détail\n- Si on te le demande : selon le fournisseur, l'offre et tes réglages, tes conversations peuvent servir **plus tard** à entraîner de **nouveaux** modèles (chez Anthropic : un réglage sur les offres grand public depuis 2025 ; pas sur les offres entreprise ni sur l'API). C'est un futur entraînement, pas le modèle qui apprend en direct\n- La conversation à l'écran est illustrative ; le mécanisme vient de la documentation des fournisseurs"
+    "source": "- Click 1, **it does not learn from you**: its numbers (the **weights**) were set during training, and they do not change while you talk to it\n- Click 2, **everything, every time**: at every message, the app sends the **whole conversation** again, from the very first message, and the model reads it all from scratch. That works while it fits in the **context window** (slide 1.3); when it overflowed, the start fell out: that is why chatbots seemed to \"forget\"\n- Click 3, **when it gets too long**: workarounds outside the model: **summarize** the older part (it is called compaction), and the \"**memory**\" features, which save notes about you and put them back into later conversations\n- Click 4, **text you never see**: with your message, the model also receives a **system prompt** from the company (its role, today's date, what to avoid; Anthropic publishes the one of its own apps) and the **descriptions of every tool** it may use\n- So a tool call is nothing magic: the model reads the tool descriptions in that text, and writes its call as more text. Next slide, up close\n- If asked: depending on the provider, the plan and your settings, your conversations may be used **later** to train **new** models (Anthropic: a setting on its consumer plans since 2025; not its business plans or the API). That is a future training run, not the model learning live",
+    "text": "- Clic 1, **il n'apprend pas de vous** : ses nombres (les **poids**) ont été fixés pendant l'entraînement, et ils ne changent pas pendant que vous lui parlez\n- Clic 2, **tout, à chaque fois** : à chaque message, l'application renvoie **toute la conversation**, depuis le tout premier message, et le modèle relit tout depuis le début. Ça marche tant que ça tient dans la **context window** (*fenêtre de contexte*, slide 1.3) ; quand elle débordait, le début sortait : c'est pour ça que les chatbots semblaient « oublier »\n- Clic 3, **quand ça devient trop long** : des parades en dehors du modèle : **résumer** la partie ancienne (on appelle ça la compaction), et les fonctions « **mémoire** », qui enregistrent des notes sur vous et les remettent dans les conversations suivantes\n- Clic 4, **du texte que vous ne voyez pas** : avec votre message, le modèle reçoit aussi un **prompt système** de l'entreprise (son rôle, la date du jour, ce qu'il doit éviter ; Anthropic publie celui de ses propres applications) et la **description de chaque outil** qu'il peut utiliser\n- Donc un tool call (*appel d'outil*) n'a rien de magique : le modèle lit la description des outils dans ce texte, et écrit son appel comme du texte en plus. Slide suivante, en gros plan\n- Si on demande : selon le fournisseur, l'abonnement et vos réglages, vos conversations peuvent servir **plus tard** à entraîner de **nouveaux** modèles (Anthropic : un réglage sur ses offres grand public depuis 2025 ; pas sur ses offres entreprise ni l'API). C'est un futur entraînement, pas le modèle qui apprend en direct"
   },
   "01-no-memory/transitionIn": {
     "source": "From what it does to what it really receives.",
@@ -1839,138 +1875,6 @@
     "source": "Thank you.",
     "text": "Merci."
   },
-  "copy:The model has no memory": {
-    "source": "The model has no memory",
-    "text": "Le modèle n'a pas de mémoire"
-  },
-  "copy:Illustrative conversation": {
-    "source": "Illustrative conversation",
-    "text": "Conversation illustrative"
-  },
-  "copy:Context window: what the model receives": {
-    "source": "Context window: what the model receives",
-    "text": "Context window (*fenêtre de contexte*) : ce que le modèle reçoit"
-  },
-  "copy:The model": {
-    "source": "The model",
-    "text": "Le modèle"
-  },
-  "copy:Its weights do not change while you chat": {
-    "source": "Its weights do not change while you chat",
-    "text": "Ses poids ne changent pas pendant que vous lui parlez"
-  },
-  "copy:Sent to the model": {
-    "source": "Sent to the model",
-    "text": "Envoyé au modèle"
-  },
-  "copy:All of it, at every message": {
-    "source": "All of it, at every message",
-    "text": "Tout, à chaque message"
-  },
-  "copy:hidden from you": {
-    "source": "hidden from you",
-    "text": "caché pour vous"
-  },
-  "copy:new": {
-    "source": "new",
-    "text": "nouveau"
-  },
-  "copy:falls out": {
-    "source": "falls out",
-    "text": "sort"
-  },
-  "copy:full": {
-    "source": "full",
-    "text": "pleine"
-  },
-  "copy:tool call": {
-    "source": "tool call",
-    "text": "tool call (*appel d'outil*)"
-  },
-  "copy:You": {
-    "source": "You",
-    "text": "Vous"
-  },
-  "copy:Model": {
-    "source": "Model",
-    "text": "Modèle"
-  },
-  "copy:System prompt": {
-    "source": "System prompt",
-    "text": "System prompt (*instruction système*)"
-  },
-  "copy:Tools": {
-    "source": "Tools",
-    "text": "Outils"
-  },
-  "copy:Memory": {
-    "source": "Memory",
-    "text": "Mémoire"
-  },
-  "copy:Summary": {
-    "source": "Summary",
-    "text": "Résumé"
-  },
-  "copy:I'm off to Barcelona next week!": {
-    "source": "I'm off to Barcelona next week!",
-    "text": "Je pars à Barcelone la semaine prochaine !"
-  },
-  "copy:Lovely! What would you like to do there?": {
-    "source": "Lovely! What would you like to do there?",
-    "text": "Super ! Qu'aimeriez-vous y faire ?"
-  },
-  "copy:See a football match.": {
-    "source": "See a football match.",
-    "text": "Voir un match de foot."
-  },
-  "copy:Then try the Camp Nou: book early.": {
-    "source": "Then try the Camp Nou: book early.",
-    "text": "Alors, le Camp Nou : réservez tôt."
-  },
-  "copy:... and many more messages ...": {
-    "source": "... and many more messages ...",
-    "text": "... et bien d'autres messages ..."
-  },
-  "copy:Earlier: a trip to Barcelona, wants to see a match.": {
-    "source": "Earlier: a trip to Barcelona, wants to see a match.",
-    "text": "Plus tôt : voyage à Barcelone, veut voir un match."
-  },
-  "copy:Saved note from another chat: a Barça fan.": {
-    "source": "Saved note from another chat: a Barça fan.",
-    "text": "Note d'une autre conversation : fan du Barça."
-  },
-  "copy:From the company: its role, today's date, what to avoid.": {
-    "source": "From the company: its role, today's date, what to avoid.",
-    "text": "De l'entreprise : son rôle, la date du jour, ce qu'il doit éviter."
-  },
-  "copy:Every tool it may use, and how to call it: web_search, calendar, email...": {
-    "source": "Every tool it may use, and how to call it: web_search, calendar, email...",
-    "text": "Chaque outil qu'il peut utiliser, et comment l'appeler : web_search, agenda, e-mail..."
-  },
-  "copy:It does not learn from your chat: its weights do not change.": {
-    "source": "It does not learn from your chat: its weights do not change.",
-    "text": "Il n'apprend pas de votre conversation : ses poids ne changent pas."
-  },
-  "copy:At every message, the app sends the whole conversation again, from the start.": {
-    "source": "At every message, the app sends the whole conversation again, from the start.",
-    "text": "À chaque message, l'application renvoie toute la conversation, depuis le début."
-  },
-  "copy:When the window is full, the beginning falls out.": {
-    "source": "When the window is full, the beginning falls out.",
-    "text": "Quand la fenêtre est pleine, le début en sort."
-  },
-  "copy:The workarounds: summarize the old part, add saved notes when needed.": {
-    "source": "The workarounds: summarize the old part, add saved notes when needed.",
-    "text": "Les parades : résumer la partie ancienne, ajouter des notes enregistrées au besoin."
-  },
-  "copy:And with your message, text you never see.": {
-    "source": "And with your message, text you never see.",
-    "text": "Et avec votre message, du texte que vous ne voyez jamais."
-  },
-  "copy:A tool call is just more text, written into this same stack.": {
-    "source": "A tool call is just more text, written into this same stack.",
-    "text": "Un tool call (*appel d'outil*), c'est juste du texte en plus, écrit dans cette même pile."
-  },
   "copy:A loop, not an answer": {
     "source": "A loop, not an answer",
     "text": "Une boucle, pas une réponse"
@@ -2331,6 +2235,14 @@
     "source": "what actually travels, in JSON",
     "text": "ce qui circule vraiment, en JSON"
   },
+  "copy:You": {
+    "source": "You",
+    "text": "Vous"
+  },
+  "copy:The model": {
+    "source": "The model",
+    "text": "Le modèle"
+  },
   "copy:The software": {
     "source": "The software",
     "text": "Le logiciel"
@@ -2415,6 +2327,10 @@
     "source": "it can ask the software to act",
     "text": "il peut demander au logiciel d'agir"
   },
+  "copy:Model": {
+    "source": "Model",
+    "text": "Modèle"
+  },
   "copy:This is not an answer for you: it is a request for the software.": {
     "source": "This is not an answer for you: it is a request for the software.",
     "text": "Ce n'est pas une réponse pour vous : c'est une demande pour le logiciel."
@@ -2490,6 +2406,10 @@
   "copy:news.example: Real Madrid lose 2-1": {
     "source": "news.example: Real Madrid lose 2-1",
     "text": "news.example : le Real battu 2 à 1"
+  },
+  "copy:Tools": {
+    "source": "Tools",
+    "text": "Outils"
   },
   "copy:The software describes the tool to the model: a name, what it does, what it expects.": {
     "source": "The software describes the tool to the model: a name, what it does, what it expects.",
@@ -2783,6 +2703,10 @@
     "source": "Grok 3 ≈ 22,000 US homes for a year",
     "text": "Grok 3 ≈ 22 000 foyers américains pendant un an"
   },
+  "copy:Memory": {
+    "source": "Memory",
+    "text": "Mémoire"
+  },
   "copy:text read at once, in pages": {
     "source": "text read at once, in pages",
     "text": "texte lu d'un coup, en pages"
@@ -2922,6 +2846,10 @@
   "copy:Fast": {
     "source": "Fast",
     "text": "Rapide"
+  },
+  "copy:tool call": {
+    "source": "tool call",
+    "text": "tool call (*appel d'outil*)"
   },
   "copy:tool calls": {
     "source": "tool calls",

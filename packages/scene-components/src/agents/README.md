@@ -27,31 +27,6 @@ the loop is complete (off in previews and with reduced motion). No shared state.
 A plain-words legend of each stage sits on the right in `intro`.
 `scene.steps`: intro 5 (4 is enough to stop at the closed loop), tools 1, high-stakes 2.
 
-## ContextStack
-
-Props: `{ heading?: L10n }`. Used by scene 01-no-memory, just before
-01-tool-call. No shared state, no controls.
-
-What the app really sends the model at each message: a stack of blocks inside a
-frame labelled as the context window, an arrow to "The model" ("its numbers do
-not change while you chat"). The conversation is illustrative and labelled so;
-its last message is the question of ToolCallDemo's `search` scenario, read from
-the same text (`context/stack.ts`). Hidden blocks are dashed and carry a
-"hidden from you" badge with an icon, the latest message a "new" badge, the
-dropped one a "falls out" badge and a strike-through: never color alone. New
-blocks fade in; previews and reduced motion show the end state at once.
-
-| Step | Shows |
-| --- | --- |
-| 0 | Your first message. "It does not learn from your chat" |
-| 1 | Message, answer, new message: the whole conversation is sent again |
-| 2 | The window is full: the first message falls out |
-| 3 | Workarounds: a summary of the old part and a saved note (memory) replace it |
-| 4 | Text you never see on top: the system prompt and the tool descriptions |
-| 5 | The model's reply is a tool call (`web_search` JSON), written into the same stack |
-
-`scene.steps`: 5.
-
 ## ToolCallDemo
 
 Props: `{ scenario?: "weather" | "search" | "calculator" | "code" }` (default

@@ -80,7 +80,6 @@ fallback.
 | `ConnectedAssistant` | 1.4 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `PermissionsBoard` | 1.5 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `VideoScene` | 1.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `ContextStack` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `ToolCallDemo` | 1.8 | [agents](../../packages/scene-components/src/agents/README.md) |
 | `AgentRunExplainer` | 1.9 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `AgentLoop` | 1.10 | [agents](../../packages/scene-components/src/agents/README.md) |
@@ -98,7 +97,7 @@ fallback.
 | `ChatPlayground` | 2.18 | [language](../../packages/scene-components/src/language/README.md) |
 | `IndustryStack` | 3.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `RaceDilemma` | 3.2 | [evidence](../../packages/scene-components/src/evidence/README.md) |
-| `PictureCards` | 1.2, 4.1, 4.3 to 4.5, 5.2, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
+| `PictureCards` | 1.2, 1.7, 4.1, 4.3 to 4.5, 5.2, 5.3 | [risks](../../packages/scene-components/src/risks/README.md) |
 | `IntelligenceScale` | 4.6 | [story](../../packages/scene-components/src/story/README.md) |
 | `GoalVsOutcome` | 4.7 | [learning](../../packages/scene-components/src/learning/README.md) |
 | `IncidentStory` | 4.8 | [risks](../../packages/scene-components/src/risks/README.md) |

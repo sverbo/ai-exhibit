@@ -8,7 +8,6 @@ export type IconName =
   | "plan"
   | "act"
   | "observe"
-  | "hidden"
   | "replan"
   | "result"
   | "search"
@@ -40,7 +39,6 @@ const PATHS: Record<IconName, string> = {
   plan: "M8 6h12 M8 12h12 M8 18h12 M3.5 6h.01 M3.5 12h.01 M3.5 18h.01",
   act: "M13 2L4 14h7l-1 8l9-12h-7z",
   observe: "M2 12s3.5-7 10-7s10 7 10 7s-3.5 7-10 7s-10-7-10-7z M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6",
-  hidden: "M3 3l18 18 M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2 M6.6 6.6C3.9 8.3 2 12 2 12s3.5 7 10 7c1.9 0 3.5-.5 4.9-1.3 M9.9 9.9a3 3 0 0 0 4.2 4.2",
   replan: "M3 12a9 9 0 0 1 15.5-6.2 M21 3v6h-6 M21 12a9 9 0 0 1-15.5 6.2 M3 21v-6h6",
   result: "M4 12l5 5L20 6",
   search: "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13 M15.5 15.5L21 21",
