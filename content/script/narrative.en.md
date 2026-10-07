@@ -10,9 +10,9 @@ This text tells the talk slide by slide, in order: its overall structure, its id
 
 The room fills up. On the screen, the title of the talk and a QR code that already opens the glossary. Once everyone has settled in, we start with a short video.
 
-## 0.2 This is not science fiction (optional)
+## 0.2 This concerns all of us (optional)
 
-**Takeaway:** Before any explanation, one minute to feel what is at stake.
+**Takeaway:** Before any explanation, one minute to feel that this concerns all of us.
 
 Before I explain anything, I show you a video that lasts barely a minute, just to set the mood. It is called "Welcome to AI In Context" and comes from the YouTube channel AI In Context, made by 80,000 Hours. Remember that name: the channel is in the resources at the end, and it has a few other really good videos.
 
@@ -32,7 +32,7 @@ Two things this talk is not. It is not a tutorial on AI tools: they change every
 
 Still, to give you a sense of scale: one short question to a chatbot uses about 0.3 Wh (that is Epoch AI's estimate; Google published 0.24 Wh for a median Gemini prompt). An hour of video streaming is about 77 Wh, according to the International Energy Agency. In other words, about 250 questions equal one hour of streaming. But let's be honest: a long question, a model that "thinks", or an agent costs far more. With 100,000 tokens of input, you get close to 40 Wh, and an agent working for two hours can equal several hours of streaming. At world scale, data centres used about 1.5% of the world's electricity in 2024, and the IEA expects that to more than double by 2030.
 
-Ideally, we would cut both. But if it is for your work, I don't think you should feel too guilty about boosting your productivity, or you will fall behind. Again, that is my opinion. Today's focus is what AI can already do, how it works, and its risks in all their variety: misuse, effects on society, and losing control. Not to alarm you, but so that we understand together what is at stake.
+Ideally, we would cut both. But if it is for your work, I don't think you should feel too guilty about boosting your productivity, or you will fall behind. Again, that is my opinion. Today's focus is understanding the risks, and why they deserve to be taken seriously. Not to alarm you, but so that we understand together what is at stake.
 
 # Chapter 1: What AI can do today
 

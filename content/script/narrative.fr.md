@@ -10,9 +10,9 @@ Ce texte raconte la présentation slide par slide, dans l'ordre : sa structure g
 
 La salle se remplit. À l'écran, le titre de la présentation et un QR code qui ouvre déjà le glossaire. Quand tout le monde est installé, on commence par une courte vidéo.
 
-## 0.2 Ce n'est pas de la science-fiction (optionnel)
+## 0.2 Ça nous concerne tous (optionnel)
 
-**À retenir :** Avant toute explication, une minute pour sentir l'enjeu.
+**À retenir :** Avant toute explication, une minute pour sentir que ça nous concerne tous.
 
 Avant d'expliquer quoi que ce soit, je vous montre une vidéo d'à peine une minute, juste pour se mettre dans l'ambiance. Elle s'appelle « Welcome to AI In Context » et vient de la chaîne YouTube AI In Context, réalisée par 80,000 Hours. Retenez ce nom : la chaîne est dans les ressources à la fin, et elle a quelques autres très belles vidéos.
 
@@ -32,7 +32,7 @@ Deux choses que cette présentation n'est pas. Ce n'est pas un tutoriel sur les 
 
 Pour situer quand même : une question courte à un chatbot consomme environ 0,3 Wh (c'est l'estimation d'Epoch AI ; Google a publié 0,24 Wh pour une requête Gemini médiane). Une heure de streaming vidéo, c'est environ 77 Wh selon l'Agence internationale de l'énergie. Autrement dit, environ 250 questions valent une heure de streaming. Mais soyons honnêtes : une longue question, un modèle qui « réfléchit » ou un agent coûtent bien plus. Avec 100 000 tokens en entrée, on approche les 40 Wh, et un agent qui travaille deux heures peut valoir plusieurs heures de streaming. À l'échelle mondiale, les data centres ont consommé environ 1,5 % de l'électricité mondiale en 2024, et l'AIE prévoit plus qu'un doublement d'ici 2030.
 
-Idéalement, il faudrait réduire les deux. Mais si c'est pour le travail, je pense qu'il ne faut pas trop culpabiliser de booster sa productivité, sinon on reste à la ramasse. Là encore, c'est mon avis. Le focus du jour, c'est ce que l'IA sait déjà faire, comment elle fonctionne, et ses risques dans toute leur variété : les usages malveillants, les effets sur la société, et la perte de contrôle. Pas pour vous alarmer, mais pour comprendre ensemble ce qui est en jeu.
+Idéalement, il faudrait réduire les deux. Mais si c'est pour le travail, je pense qu'il ne faut pas trop culpabiliser de booster sa productivité, sinon on reste à la ramasse. Là encore, c'est mon avis. Le focus du jour, c'est de comprendre les risques, et pourquoi il faut les prendre au sérieux. Pas pour vous alarmer, mais pour comprendre ensemble ce qui est en jeu.
 
 # Chapitre 1 : Ce que l'IA sait faire aujourd'hui
 

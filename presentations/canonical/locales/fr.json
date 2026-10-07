@@ -80,24 +80,24 @@
     "text": "Commençons par une courte vidéo."
   },
   "00-welcome-video/title": {
-    "source": "This is not science fiction",
-    "text": "Ce n'est pas de la science-fiction"
+    "source": "This concerns all of us",
+    "text": "Ça nous concerne tous"
   },
   "00-welcome-video/objective": {
     "source": "Open the talk with a one-minute video from AI In Context that sets the stakes before the presenter speaks.",
     "text": "Ouvrir la présentation sur une vidéo d'une minute d'AI In Context, qui pose les enjeux avant que le présentateur ne prenne la parole."
   },
   "00-welcome-video/takeaway": {
-    "source": "Before any explanation, one minute to feel what is at stake.",
-    "text": "Avant toute explication, une minute pour sentir l'enjeu."
+    "source": "Before any explanation, one minute to feel that this concerns all of us.",
+    "text": "Avant toute explication, une minute pour sentir que ça nous concerne tous."
   },
   "00-welcome-video/visual.props.kicker": {
     "source": "Before we start",
     "text": "Avant de commencer"
   },
   "00-welcome-video/visual.props.heading": {
-    "source": "This is not science fiction",
-    "text": "Ce n'est pas de la science-fiction"
+    "source": "This concerns all of us",
+    "text": "Ça nous concerne tous"
   },
   "00-welcome-video/visual.props.caption": {
     "source": "\"Welcome to AI In Context\", AI In Context on YouTube, 57 s",
@@ -180,12 +180,12 @@
     "text": "Le sujet d'aujourd'hui"
   },
   "00-not-this/visual.cards.2.body": {
-    "source": "What AI can already do, how it works, and its risks: misuse, effects on society, losing control.",
-    "text": "Ce que l'IA sait déjà faire, comment elle fonctionne, et ses risques : usages malveillants, effets sur la société, perte de contrôle."
+    "source": "Understanding the risks, and why they deserve to be taken seriously.",
+    "text": "Comprendre les risques, et pourquoi il faut les prendre au sérieux."
   },
   "00-not-this/speakerNotes": {
-    "source": "- **Optional**: framing only: nothing later depends on it. Hide it in Config if time is short\n- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how\n- **Not about the environment**: of course a serious problem, but another talk; for many, today's risks are of another order of magnitude (my view: say it as such)\n- To calibrate: one short chatbot question is about **0.3 Wh** (Epoch AI; Google: 0.24 Wh for a median Gemini prompt), one hour of video streaming about **77 Wh** (IEA): **about 250 questions, one hour of streaming**\n- Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming\n- At world scale: data centres used about **1.5%** of the world's electricity in 2024, and the IEA expects that to more than double by 2030\n- Ideally we would cut both; but if it is for your work, do not feel too guilty about boosting your productivity, or you will fall behind (my opinion)\n- **Today's focus**: what AI can already do, how it works, and its risks in all their variety: misuse, effects on society, losing control. Not to alarm, but to understand what is at stake\n- If asked how seriously experts take it: in 2023, Hinton, Bengio and AI lab leaders signed this sentence: \"Mitigating the risk of **extinction** from AI should be a global priority **alongside other societal-scale risks such as pandemics and nuclear war**\"",
-    "text": "- **Optionnelle** : du cadrage seulement : rien ne s'appuie dessus ensuite. À masquer dans Config si le temps manque\n- **Pas un tutoriel** sur les outils d'IA : ça change tous les mois. Savoir ce qui est possible, puis demander à son assistant comment faire\n- **Pas sur l'environnement** : c'est bien sûr un problème sérieux, mais c'est une autre présentation ; pour beaucoup, les risques d'aujourd'hui sont d'un autre ordre de grandeur (mon avis : le dire comme tel)\n- Pour situer : une question courte à un chatbot, c'est environ **0,3 Wh** (Epoch AI ; Google : 0,24 Wh pour une requête Gemini médiane), une heure de streaming vidéo environ **77 Wh** (AIE) : **environ 250 questions, une heure de streaming**\n- Nuance honnête : les longues questions, les modèles qui « réfléchissent » et les agents coûtent bien plus (environ 2,5 Wh pour 10 000 tokens en entrée, près de 40 Wh pour 100 000) : un agent qui travaille deux heures peut valoir plusieurs heures de streaming\n- À l'échelle mondiale : les data centres ont consommé environ **1,5 %** de l'électricité mondiale en 2024, et l'AIE prévoit plus qu'un doublement d'ici 2030\n- Idéalement, il faudrait réduire les deux ; mais si c'est pour le travail, pas besoin de trop culpabiliser de booster sa productivité, sinon on reste à la ramasse (mon avis)\n- **Le focus du jour** : ce que l'IA sait déjà faire, comment elle fonctionne, et ses risques dans toute leur variété : usages malveillants, effets sur la société, perte de contrôle. Pas pour alarmer, mais pour comprendre ce qui est en jeu\n- Si on demande à quel point les experts prennent ça au sérieux : en 2023, Hinton, Bengio et des dirigeants de labos d'IA ont signé cette phrase : « Réduire le risque d'**extinction** lié à l'IA devrait être une priorité mondiale, **au même titre que d'autres risques à l'échelle de la société, comme les pandémies et la guerre nucléaire** »"
+    "source": "- **Optional**: framing only: nothing later depends on it. Hide it in Config if time is short\n- **Not a tutorial** on AI tools: they change every month. Know what is possible, then ask your assistant how\n- **Not about the environment**: of course a serious problem, but another talk; for many, today's risks are of another order of magnitude (my view: say it as such)\n- To calibrate: one short chatbot question is about **0.3 Wh** (Epoch AI; Google: 0.24 Wh for a median Gemini prompt), one hour of video streaming about **77 Wh** (IEA): **about 250 questions, one hour of streaming**\n- Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming\n- At world scale: data centres used about **1.5%** of the world's electricity in 2024, and the IEA expects that to more than double by 2030\n- Ideally we would cut both; but if it is for your work, do not feel too guilty about boosting your productivity, or you will fall behind (my opinion)\n- **Today's focus**: understanding the risks, and why they deserve to be taken seriously. Not to alarm, but to understand what is at stake\n- If asked how seriously experts take it: in 2023, Hinton, Bengio and AI lab leaders signed this sentence: \"Mitigating the risk of **extinction** from AI should be a global priority **alongside other societal-scale risks such as pandemics and nuclear war**\"",
+    "text": "- **Optionnelle** : du cadrage seulement : rien ne s'appuie dessus ensuite. À masquer dans Config si le temps manque\n- **Pas un tutoriel** sur les outils d'IA : ça change tous les mois. Savoir ce qui est possible, puis demander à son assistant comment faire\n- **Pas sur l'environnement** : c'est bien sûr un problème sérieux, mais c'est une autre présentation ; pour beaucoup, les risques d'aujourd'hui sont d'un autre ordre de grandeur (mon avis : le dire comme tel)\n- Pour situer : une question courte à un chatbot, c'est environ **0,3 Wh** (Epoch AI ; Google : 0,24 Wh pour une requête Gemini médiane), une heure de streaming vidéo environ **77 Wh** (AIE) : **environ 250 questions, une heure de streaming**\n- Nuance honnête : les longues questions, les modèles qui « réfléchissent » et les agents coûtent bien plus (environ 2,5 Wh pour 10 000 tokens en entrée, près de 40 Wh pour 100 000) : un agent qui travaille deux heures peut valoir plusieurs heures de streaming\n- À l'échelle mondiale : les data centres ont consommé environ **1,5 %** de l'électricité mondiale en 2024, et l'AIE prévoit plus qu'un doublement d'ici 2030\n- Idéalement, il faudrait réduire les deux ; mais si c'est pour le travail, pas besoin de trop culpabiliser de booster sa productivité, sinon on reste à la ramasse (mon avis)\n- **Le focus du jour** : comprendre les risques, et pourquoi il faut les prendre au sérieux. Pas pour alarmer, mais pour comprendre ce qui est en jeu\n- Si on demande à quel point les experts prennent ça au sérieux : en 2023, Hinton, Bengio et des dirigeants de labos d'IA ont signé cette phrase : « Réduire le risque d'**extinction** lié à l'IA devrait être une priorité mondiale, **au même titre que d'autres risques à l'échelle de la société, comme les pandémies et la guerre nucléaire** »"
   },
   "00-not-this/transitionIn": {
     "source": "From the plan to what is not in it.",

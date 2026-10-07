@@ -56,12 +56,12 @@ export const chapter01: SceneDefinition[] = [
     code: "stake",
     chapter: "00",
     number: "0.2",
-    title: { en: "This is not science fiction" },
+    title: { en: "This concerns all of us" },
     objective: {
       en: "Open the talk with a one-minute video from AI In Context that sets the stakes before the presenter speaks.",
     },
     takeaway: {
-      en: "Before any explanation, one minute to feel what is at stake.",
+      en: "Before any explanation, one minute to feel that this concerns all of us.",
     },
     visual: {
       layout: "component",
@@ -70,7 +70,7 @@ export const chapter01: SceneDefinition[] = [
         videoId: "uX-Cq-rvlv8",
         durationSec: 57,
         kicker: { en: "Before we start" },
-        heading: { en: "This is not science fiction" },
+        heading: { en: "This concerns all of us" },
         caption: { en: "\"Welcome to AI In Context\", AI In Context on YouTube, 57 s" },
       },
     },
@@ -179,7 +179,7 @@ export const chapter01: SceneDefinition[] = [
         {
           title: { en: "Today's focus" },
           body: {
-            en: "What AI can already do, how it works, and its risks: misuse, effects on society, losing control.",
+            en: "Understanding the risks, and why they deserve to be taken seriously.",
           },
         },
       ],
@@ -193,7 +193,7 @@ export const chapter01: SceneDefinition[] = [
 - Honest caveat: long questions, reasoning models and agents cost far more (about 2.5 Wh for a 10,000-token input, nearly 40 Wh for 100,000): an agent working two hours can equal several hours of streaming
 - At world scale: data centres used about **1.5%** of the world's electricity in 2024, and the IEA expects that to more than double by 2030
 - Ideally we would cut both; but if it is for your work, do not feel too guilty about boosting your productivity, or you will fall behind (my opinion)
-- **Today's focus**: what AI can already do, how it works, and its risks in all their variety: misuse, effects on society, losing control. Not to alarm, but to understand what is at stake
+- **Today's focus**: understanding the risks, and why they deserve to be taken seriously. Not to alarm, but to understand what is at stake
 - If asked how seriously experts take it: in 2023, Hinton, Bengio and AI lab leaders signed this sentence: "Mitigating the risk of **extinction** from AI should be a global priority **alongside other societal-scale risks such as pandemics and nuclear war**"`,
     },
     transitionIn: { en: "From the plan to what is not in it." },
