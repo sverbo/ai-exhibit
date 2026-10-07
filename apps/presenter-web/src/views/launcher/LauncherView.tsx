@@ -111,10 +111,10 @@ export default function LauncherView() {
           </h2>
           {glossaryUrl ? (
             <div className={styles.qr}>
-              <QrCode value={glossaryUrl} size={156} label="Glossary and resources" />
+              <QrCode value={glossaryUrl} size={120} label="Glossary and resources" />
               <span className={styles.entryHint}>
-                A page for everyone in the room: every term of the talk explained in plain words, and links to go further. They
-                open it by scanning this code, also shown on the agenda slide. <a href="/glossary">Open it</a>
+                Every term of the talk in plain words, for the room. They scan this code, also on the agenda slide.{" "}
+                <a href="/glossary">Open it</a>
               </span>
             </div>
           ) : (

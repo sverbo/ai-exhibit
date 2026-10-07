@@ -68,8 +68,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-height: 210px;
-  padding: 24px 24px 22px;
+  min-height: 150px;
+  padding: 20px 24px 18px;
   border: 1px solid var(--color-line);
   border-radius: var(--ui-radius);
   background: var(--ui-panel);
@@ -122,6 +122,7 @@ a.primary:hover {
 }
 .entryHint a {
   color: var(--color-accent);
+  white-space: nowrap;
 }
 
 /* Readiness ------------------------------------------------------------------ */
