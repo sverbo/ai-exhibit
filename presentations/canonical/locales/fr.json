@@ -1855,9 +1855,9 @@
     "source": "The model",
     "text": "Le modèle"
   },
-  "copy:Its numbers do not change while you chat": {
-    "source": "Its numbers do not change while you chat",
-    "text": "Ses nombres ne changent pas pendant que vous lui parlez"
+  "copy:Its weights do not change while you chat": {
+    "source": "Its weights do not change while you chat",
+    "text": "Ses poids ne changent pas pendant que vous lui parlez"
   },
   "copy:Sent to the model": {
     "source": "Sent to the model",
@@ -1947,9 +1947,9 @@
     "source": "Every tool it may use, and how to call it: web_search, calendar, email...",
     "text": "Chaque outil qu'il peut utiliser, et comment l'appeler : web_search, agenda, e-mail..."
   },
-  "copy:It does not learn from your chat: its numbers do not change.": {
-    "source": "It does not learn from your chat: its numbers do not change.",
-    "text": "Il n'apprend pas de votre conversation : ses nombres ne changent pas."
+  "copy:It does not learn from your chat: its weights do not change.": {
+    "source": "It does not learn from your chat: its weights do not change.",
+    "text": "Il n'apprend pas de votre conversation : ses poids ne changent pas."
   },
   "copy:At every message, the app sends the whole conversation again, from the start.": {
     "source": "At every message, the app sends the whole conversation again, from the start.",

@@ -101,7 +101,7 @@ export const FULL_STEP = 2;
 
 /** The line under the heading, one per step. */
 export const STEP_SUB: L10n[] = [
-  { en: "It does not learn from your chat: its numbers do not change." },
+  { en: "It does not learn from your chat: its weights do not change." },
   { en: "At every message, the app sends the whole conversation again, from the start." },
   { en: "When the window is full, the beginning falls out." },
   { en: "The workarounds: summarize the old part, add saved notes when needed." },

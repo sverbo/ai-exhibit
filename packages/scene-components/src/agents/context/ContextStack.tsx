@@ -15,7 +15,7 @@ const TEXT = {
   illustrative: { en: "Illustrative conversation" },
   frame: { en: "Context window: what the model receives" },
   model: { en: "The model" },
-  frozen: { en: "Its numbers do not change while you chat" },
+  frozen: { en: "Its weights do not change while you chat" },
   sentFirst: { en: "Sent to the model" },
   sentAll: { en: "All of it, at every message" },
   hidden: { en: "hidden from you" },
