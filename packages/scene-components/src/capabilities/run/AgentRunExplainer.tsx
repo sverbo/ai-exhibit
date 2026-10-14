@@ -24,10 +24,13 @@ import {
   type Score,
   type ScoreNode,
 } from "./model.ts";
+import { MiniLoop } from "../../agents/loop/MiniLoop.tsx";
 import styles from "./AgentRunExplainer.module.css";
 
 export interface AgentRunExplainerProps {
   scenario: "weekend-trip";
+  /** One more click after the run: the agent loop in small, naming the pattern the run followed. */
+  loop?: boolean;
 }
 
 const TEXT = {
@@ -48,6 +51,8 @@ const TEXT = {
   legendAct: { en: "A circle: the assistant does one thing" },
   legendNow: { en: "The shaded band: where we are now" },
   stepOf: (a: number, b: number): L10n => ({ fr: `Étape ${a} sur ${b}`, en: `Step ${a} of ${b}` }),
+  loopTag: { en: "A loop, not an answer" },
+  loopCaption: { en: "Every step was the same loop: plan, act, look at the result, and plan again, until the goal is met." },
 };
 
 const SPEED_LABEL: Record<RunSpeed, L10n> = {
@@ -107,6 +112,8 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
 
   const step = scenario ? clampStep(ctx.revealStep, scenario) : 0;
   const last = scenario ? scenario.steps.length - 1 : 0;
+  // The click after the run: the score stays complete, the focus names the loop.
+  const showLoop = Boolean(props.loop) && scenario !== undefined && ctx.revealStep > last;
   const goto = (n: number) => {
     if (!scenario) return;
     ctx.sendCommand({ type: "goto", sceneId: ctx.scene.id, revealStep: clampStep(n, scenario) });
@@ -177,23 +184,38 @@ export function AgentRunExplainer({ props, ctx }: SceneComponentProps<AgentRunEx
 
       <ScoreView scenario={scenario} score={score} step={step} locale={locale} />
 
-      <section className={styles.focus} key={step} aria-live="polite">
-        <div className={styles.captionCol}>
-          <span className={cx(styles.tag, failed && styles.tagFail)}>
-            <CapIcon name={failed ? "cross" : stepIcon(scenario, current)} size={26} />
-            <Rich text={t(failed ? FAILED_TAG : TAG[current.kind])} />
-          </span>
-          <p className={styles.caption}><Rich text={t(current.caption)} /></p>
-        </div>
-        <div className={styles.detailCol}>
-          <Detail
-            scenario={scenario}
-            step={current}
-            locale={locale}
-            onApprove={canInteract(ctx) ? () => act("approve") : undefined}
-          />
-        </div>
-      </section>
+      {showLoop ? (
+        <section className={styles.focus} key="loop" aria-live="polite">
+          <div className={styles.captionCol}>
+            <span className={styles.tag}>
+              <CapIcon name="replan" size={26} />
+              <Rich text={t(TEXT.loopTag)} />
+            </span>
+            <p className={styles.caption}><Rich text={t(TEXT.loopCaption)} /></p>
+          </div>
+          <div className={styles.detailCol}>
+            <MiniLoop locale={locale} animate={animate} />
+          </div>
+        </section>
+      ) : (
+        <section className={styles.focus} key={step} aria-live="polite">
+          <div className={styles.captionCol}>
+            <span className={cx(styles.tag, failed && styles.tagFail)}>
+              <CapIcon name={failed ? "cross" : stepIcon(scenario, current)} size={26} />
+              <Rich text={t(failed ? FAILED_TAG : TAG[current.kind])} />
+            </span>
+            <p className={styles.caption}><Rich text={t(current.caption)} /></p>
+          </div>
+          <div className={styles.detailCol}>
+            <Detail
+              scenario={scenario}
+              step={current}
+              locale={locale}
+              onApprove={canInteract(ctx) ? () => act("approve") : undefined}
+            />
+          </div>
+        </section>
+      )}
 
       {canInteract(ctx) && (
         <ControlBar className={styles.controls}>

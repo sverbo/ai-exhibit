@@ -221,6 +221,7 @@ export const COPY = {
   liveThinking: { en: "Thinking" },
   liveCut: { en: "cut at the length limit" },
   liveStreamCut: { en: "the connection ended before this answer did" },
+  liveInterrupted: { en: "interrupted (the window that asked was reloaded): ask again" },
   liveRateMinute: { en: "too many requests this minute, ask again in a few seconds" },
   liveRateHour: { en: "the hourly request limit is reached, Hugging Face is back later" },
   liveNoAnswer: { en: "No answer:" },

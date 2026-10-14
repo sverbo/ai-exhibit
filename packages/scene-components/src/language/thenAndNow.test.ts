@@ -11,7 +11,9 @@ import {
   lastStage,
   type LiveLadderRecordingFile,
   liveQuestion,
+  keyTermRuns,
   liveStage,
+  rungStage,
   maxStage,
   pickQuestions,
   questionRuns,
@@ -85,13 +87,14 @@ describe("truncate", () => {
 });
 
 describe("ladder", () => {
-  it("opens the game with AI Digest's published answers, one generation per stage", () => {
+  it("opens the game with AI Digest's published answers: the three wrong ones together, then GPT-4", () => {
     const first = pickQuestions(undefined, "game")[0]!;
     expect(first.id).toBe("clock-riddle");
     expect(first.ladder?.sourceId).toBe("tk-aidigest-2023-progress");
     expect(first.ladder?.rungs.map((r) => r.generation)).toEqual(["GPT-2", "GPT-3", "GPT-3.5", "GPT-4"]);
     expect(first.ladder?.rungs.map((r) => r.correct)).toEqual([false, false, false, true]);
-    expect(lastStage(first)).toBe(5);
+    expect(first.ladder!.rungs.map((_, i) => rungStage(first, i))).toEqual([1, 1, 1, 2]);
+    expect(lastStage(first)).toBe(3);
     expect(lastStage(pickQuestions(["sally"], "game")[0]!)).toBe(2);
   });
 
@@ -108,9 +111,9 @@ describe("live step", () => {
   const ids = LADDER_MODELS.map((m) => m.id);
 
   it("comes right after today's answer, on ladder questions only", () => {
-    expect(lastStage(riddle)).toBe(5);
-    expect(liveStage(riddle)).toBe(6);
-    expect(maxStage(riddle)).toBe(6);
+    expect(lastStage(riddle)).toBe(3);
+    expect(liveStage(riddle)).toBe(4);
+    expect(maxStage(riddle)).toBe(4);
     expect(liveStage(plain)).toBeNull();
     expect(maxStage(plain)).toBe(lastStage(plain));
   });
@@ -201,5 +204,24 @@ describe("ladder labels", () => {
       expect(m.year).toBeGreaterThanOrEqual(2019);
     }
     expect(LADDER_MODELS.map((m) => m.paramsB)).toEqual([...LADDER_MODELS.map((m) => m.paramsB)].sort((a, b) => a - b));
+  });
+});
+
+describe("key terms", () => {
+  const keys = (text: string) => keyTermRuns(text).filter((r) => r.key).map((r) => r.text);
+
+  it("picks out the numbers and the clock, in English and French", () => {
+    expect(keys("When ten plus four is two, what is nine plus six?")).toEqual(["ten", "four", "two", "nine", "six"]);
+    expect(keys("if it is ten o'clock and you add four hours")).toEqual(["ten", "o'clock", "four", "hours"]);
+    expect(keys("3. Sur une horloge, dix heures plus quatre heures")).toEqual(["3", "horloge", "dix", "heures", "quatre", "heures"]);
+  });
+
+  it("leaves articles and words that only contain a number alone", () => {
+    expect(keys("one of them, une horloge, often a tenure")).toEqual(["horloge"]);
+  });
+
+  it("keeps every character", () => {
+    const text = "The answer is 15.";
+    expect(keyTermRuns(text).map((r) => r.text).join("")).toBe(text);
   });
 });

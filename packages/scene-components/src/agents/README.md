@@ -5,27 +5,15 @@ All are deterministic: `mode: "fallback"` renders exactly like `live`, so scenes
 can use `fallback: { kind: "deterministic" }`. State hooks and UI helpers come
 from `../learning/shared/`. Every component accepts an optional `heading: L10n`.
 
-## AgentLoop
+## The agent loop (`loop/`)
 
-Props: `{ variant: "intro" | "tools" | "high-stakes", goal?: L10n }`. Used by
-0.5 (`intro`), 5.3 (`tools`), 8.1 (`high-stakes`).
-
-One diagram, drawn by `loop/LoopRing.tsx` at the same place in every variant:
-the goal at the center, then Plan, Act, Observe, Re-plan on a ring. Stage
-labels never change between variants. A pulse travels around the ring once
-the loop is complete (off in previews and with reduced motion). No shared state.
-
-| Step | `intro` | `tools` | `high-stakes` |
-| --- | --- | --- | --- |
-| 0 | Goal | Full loop, cycling | Full loop, cycling |
-| 1 | + Plan | Tools fan out from Act: web search, browser, run code, files, calculator | Broad access fans out from Act: bank account, email, terminal, production servers, internet |
-| 2 | + Act | | "In the real world": payments sent, emails in your name, files deleted... and the loop speeds up |
-| 3 | + Observe | | |
-| 4 | + Re-plan, the loop closes and cycles | | |
-| 5 | Who does what: you (goal), the model (plan, re-plan), the software (act, observe) | | |
-
-A plain-words legend of each stage sits on the right in `intro`.
-`scene.steps`: intro 5 (4 is enough to stop at the closed loop), tools 1, high-stakes 2.
+Not a scene component of its own. `loop/LoopRing.tsx` draws the loop: the goal
+at the center, then Plan, Act, Observe on a ring, and back to Plan (planning
+again is just the next turn). `loop/MiniLoop.tsx` draws it in small with who
+does what: the model plans (accent, yellow), ordinary software acts and reads
+the result (accent-2, green), you give the goal; a pulse goes round (off in
+previews and with reduced motion). `AgentRunExplainer` shows it on its `loop`
+click (1.8).
 
 ## ToolCallDemo
 
@@ -89,20 +77,3 @@ highlighted, a structured call, the tool result, then the final answer.
 | 4 | The final answer |
 
 `scene.steps`: 4 for `weather`, `calculator` and `code`; 5 for `search`.
-
-## PermissionsBoard
-
-Props: `{ mode: "permissions" | "approval" }`. Used by 5.4 and 5.5.
-
-Switches: read files, write files, terminal, web browser, money. The list on
-the right shows what the same agent can do (13 capabilities in
-`permissions/capabilities.ts`, some only through combinations such as read +
-browser = "send your documents to an outside website"), risky ones flagged.
-The controller can flip any switch at any time.
-
-| Step | `permissions` | `approval` |
-| --- | --- | --- |
-| 0 | No access: it can only answer | Everything on, risky actions run "without asking" |
-| 1..5 | Grants read, write, terminal, browser, money, one per step | 1: a human approval gate: risky actions become "with your approval", and a pending request card (pay a bill, delete files, install a program) with Approve / Deny on the controller |
-
-`scene.steps`: permissions 5, approval 1.

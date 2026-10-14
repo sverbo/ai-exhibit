@@ -6,28 +6,18 @@ import { IconG, type IconName } from "../shared/icons.tsx";
 import styles from "./LoopRing.module.css";
 
 /**
- * The agent loop, drawn once and reused everywhere (0.5, 5.3, 8.1 and the trace
- * replays): a goal at the center, four stages on a ring. Labels never change
- * between uses, so the audience recognises the same diagram each time.
+ * The agent loop: a goal at the center, three stages on a ring, plan, act,
+ * observe, and back to plan (planning again is just the next turn).
  */
 
-export type LoopStage = "goal" | "plan" | "act" | "observe" | "replan";
-export const RING_STAGES: Exclude<LoopStage, "goal">[] = ["plan", "act", "observe", "replan"];
+export type LoopStage = "goal" | "plan" | "act" | "observe";
+export const RING_STAGES: Exclude<LoopStage, "goal">[] = ["plan", "act", "observe"];
 
 export const STAGE_LABEL: Record<LoopStage, L10n> = {
   goal: { en: "Goal" },
   plan: { en: "Plan" },
   act: { en: "Act" },
   observe: { en: "Observe" },
-  replan: { en: "Re-plan" },
-};
-
-export const STAGE_GLOSS: Record<LoopStage, L10n> = {
-  goal: { en: "what it was asked to do" },
-  plan: { en: "decide the next step" },
-  act: { en: "use a tool" },
-  observe: { en: "read the result" },
-  replan: { en: "adjust the plan" },
 };
 
 const ICON: Record<LoopStage, IconName> = {
@@ -35,11 +25,10 @@ const ICON: Record<LoopStage, IconName> = {
   plan: "plan",
   act: "act",
   observe: "observe",
-  replan: "replan",
 };
 
 /** Ring angle of each stage, in degrees, clockwise from the right. */
-const ANGLE: Record<Exclude<LoopStage, "goal">, number> = { plan: -90, act: 0, observe: 90, replan: 180 };
+const ANGLE: Record<Exclude<LoopStage, "goal">, number> = { plan: -90, act: 30, observe: 150 };
 
 export interface RingGeometry {
   cx: number;
@@ -89,22 +78,20 @@ function stageAt(angle: number | null): LoopStage | null {
 export function LoopRing({
   geometry: g,
   locale,
-  revealed = 5,
+  revealed = 4,
   pulseAngle = null,
   highlight = null,
-  glosses = false,
   dimOthers = false,
   goalText,
 }: {
   geometry: RingGeometry;
   locale: Locale;
-  /** How many stages are visible, in order goal, plan, act, observe, replan (0..5). */
+  /** How many stages are visible, in order goal, plan, act, observe (0..4). */
   revealed?: number;
   /** Angle of the travelling pulse (see usePulse); null = no pulse. */
   pulseAngle?: number | null;
   /** A stage to light up (trace replays). */
   highlight?: LoopStage | null;
-  glosses?: boolean;
   /** Fade stages that are not highlighted. */
   dimOthers?: boolean;
   goalText?: string;
@@ -113,7 +100,7 @@ export function LoopRing({
   const order: LoopStage[] = ["goal", ...RING_STAGES];
   const visible = (s: LoopStage) => order.indexOf(s) < revealed;
   const lit = highlight ?? stageAt(pulseAngle);
-  const ringClosed = revealed >= 5;
+  const ringClosed = revealed >= 4;
 
   // Arcs between consecutive ring stages (the last one closes the loop).
   const gap = (g.node + 14) / g.r; // radians kept clear around each node
@@ -128,8 +115,7 @@ export function LoopRing({
   const arcs: [Exclude<LoopStage, "goal">, Exclude<LoopStage, "goal">, boolean][] = [
     ["plan", "act", visible("act")],
     ["act", "observe", visible("observe")],
-    ["observe", "replan", visible("replan")],
-    ["replan", "plan", ringClosed],
+    ["observe", "plan", ringClosed],
   ];
 
   const [px, py] = stagePos(g, "plan");
@@ -185,15 +171,6 @@ export function LoopRing({
             <text x={x} y={y + r * 0.42} className={styles.label} style={{ fontSize: Math.round(r * 0.3) }}>
               <RichTspans text={t(STAGE_LABEL[s])} />
             </text>
-            {glosses && s !== "goal" && (
-              <text
-                x={x + (s === "act" ? r + 24 : s === "replan" ? -r - 24 : 0)}
-                y={y + (s === "plan" ? -r - 22 : s === "observe" ? r + 44 : 10)}
-                className={cx(styles.gloss, s === "act" && styles.glossStart, s === "replan" && styles.glossEnd)}
-              >
-                <RichTspans text={t(STAGE_GLOSS[s])} />
-              </text>
-            )}
             {s === "goal" && goalText && (
               <text x={x} y={y + r + 46} className={styles.goalText}>
                 <RichTspans text={goalText} />

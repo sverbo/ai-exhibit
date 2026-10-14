@@ -78,11 +78,9 @@ fallback.
 | `ThenAndNow` | 1.1 | [language](../../packages/scene-components/src/language/README.md) |
 | `FrontierProgress` | 1.3 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `ConnectedAssistant` | 1.4 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `PermissionsBoard` | 1.5 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `VideoScene` | 1.6 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `ToolCallDemo` | 1.8 | [agents](../../packages/scene-components/src/agents/README.md) |
-| `AgentRunExplainer` | 1.9 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
-| `AgentLoop` | 1.10 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `VideoScene` | 1.5 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
+| `ToolCallDemo` | 1.7 | [agents](../../packages/scene-components/src/agents/README.md) |
+| `AgentRunExplainer` | 1.8 | [capabilities](../../packages/scene-components/src/capabilities/README.md) |
 | `AITimeline` | 2.1 | [story](../../packages/scene-components/src/story/README.md) |
 | `AIEnvelopes` | 2.2 | [story](../../packages/scene-components/src/story/README.md) |
 | `TextClassifierLab` | 2.3 to 2.9 | [textlab](../../packages/scene-components/src/textlab/README.md) |
@@ -359,7 +357,7 @@ steps in the area README.
 **Test it in `/lab`.** Pick the component (or a scene using it), edit props as
 JSON, change the step and locale, toggle fallback, and watch controller, display
 and preview side by side with the shared state and the commands sent. URL
-parameters make a state shareable: `/lab?c=PermissionsBoard&props={"mode":"approval"}&step=1&fallback=1&locale=en`.
+parameters make a state shareable: `/lab?c=AgentRunExplainer&props={"scenario":"weekend-trip"}&step=1&fallback=1&locale=en`.
 Then `pnpm test`, `pnpm verify:content` and `pnpm rehearse`.
 
 If the component needs a new model, add an endpoint to `packages/cloud-api`

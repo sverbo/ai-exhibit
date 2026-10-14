@@ -41,6 +41,82 @@
   stroke-width: 4;
   stroke-dasharray: none;
 }
+/* Permission click: every wire is solid. */
+.wirePermission {
+  stroke: var(--color-text);
+  stroke-width: 3;
+  stroke-dasharray: none;
+}
+.wireRisky {
+  stroke: var(--color-danger);
+}
+/* Permission click: each connector wears an "on" switch. */
+.switch {
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--color-accent);
+  border: 3px solid var(--color-bg);
+}
+.switch .knob {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-on-accent);
+}
+.switchRisky {
+  background: var(--color-danger);
+}
+.animate .switch {
+  animation: pop 360ms var(--ease) both;
+}
+
+/* Callouts: one short text and one arrow, for the permission and the risk clicks. */
+.callout {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.arrowHead {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.calloutRisk,
+.arrowHeadRisk {
+  stroke: var(--color-danger);
+}
+.animate .calloutIn {
+  animation: fade 360ms var(--ease) 200ms both;
+}
+.calloutText {
+  position: absolute;
+  margin: 0;
+  width: 380px;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.calloutPermission {
+  right: 80px;
+  top: 232px;
+  text-align: right;
+}
+.calloutRiskText {
+  left: 80px;
+  top: 236px;
+  color: var(--color-danger);
+}
+.animate .calloutText {
+  animation: arrive 420ms var(--ease) 200ms both;
+}
+
 .animate .wireNew {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -107,9 +183,28 @@
   white-space: nowrap;
   font-size: 30px;
   font-weight: 500;
+  /* Masks the wire behind the label (the top nodes' labels sit on their own wire). */
+  padding: 0 10px 2px;
+  border-radius: 10px;
+  background: var(--color-bg);
 }
 .nodeCurrent .label {
   font-weight: 700;
+}
+.nodeRisky .disc {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.riskTag {
+  display: block;
+  margin-top: 2px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-danger);
+}
+.animate .riskTag {
+  animation: arrive 360ms var(--ease) both;
 }
 .animate .nodeCurrent .disc {
   animation: pop 460ms var(--ease) 280ms both;
@@ -158,6 +253,14 @@
 @keyframes draw {
   to {
     stroke-dashoffset: 0;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 @keyframes pop {

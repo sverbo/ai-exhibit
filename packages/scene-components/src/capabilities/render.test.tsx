@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { sources } from "../../../../content/sources/index.ts";
 import { SCENARIOS } from "../../../../content/assets/scenarios/index.ts";
 import type { SceneComponent, SceneContext, SceneRole } from "../contract.ts";
-import { CONNECTORS } from "./connected/connectors.ts";
+import { CONNECTORS, LAST_STEP as CONNECTED_LAST_STEP } from "./connected/connectors.ts";
 import { ConnectedAssistant } from "./connected/ConnectedAssistant.tsx";
 import { AgentRunExplainer } from "./run/AgentRunExplainer.tsx";
 import { VideoScene } from "./video/VideoScene.tsx";
@@ -29,8 +29,9 @@ function ctx(role: SceneRole, revealStep: number, locale: Locale): SceneContext 
 }
 
 const cases: [string, SceneComponent, Record<string, unknown>, number][] = [
-  ["ConnectedAssistant", ConnectedAssistant, {}, CONNECTORS.length],
+  ["ConnectedAssistant", ConnectedAssistant, {}, CONNECTED_LAST_STEP],
   ["AgentRunExplainer", AgentRunExplainer, { scenario: "weekend-trip" }, SCENARIOS["weekend-trip"]!.steps.length - 1],
+  ["AgentRunExplainer with the loop", AgentRunExplainer, { scenario: "weekend-trip", loop: true }, SCENARIOS["weekend-trip"]!.steps.length],
   ["VideoScene missing file", VideoScene, { src: "media/no-such-video.mp4", caption: { en: "c", fr: "c" } }, 1],
 ];
 
@@ -54,6 +55,14 @@ describe("capabilities components render in every role and step", () => {
       const html = renderToStaticMarkup(createElement(ConnectedAssistant as SceneComponent, { props: {}, ctx: ctx("display", step, "en") }));
       expect(html).not.toMatch(/fnd-/);
     }
+  });
+
+  it("ends on the loop, in small, only when asked", () => {
+    const after = SCENARIOS["weekend-trip"]!.steps.length;
+    const render = (props: Record<string, unknown>) =>
+      renderToStaticMarkup(createElement(AgentRunExplainer as SceneComponent, { props, ctx: ctx("display", after, "en") }));
+    expect(render({ scenario: "weekend-trip", loop: true })).toContain("A loop, not an answer");
+    expect(render({ scenario: "weekend-trip" })).not.toContain("A loop, not an answer");
   });
 
   it("labels the run as a reconstruction at every step", () => {

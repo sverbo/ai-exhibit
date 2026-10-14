@@ -46,35 +46,32 @@ projection. Far fewer errors; not none.
 
 **1.4 Connected to your life.** With that memory and reliability, models no longer
 just answer: they act. Today's assistants plug into your email, calendar, files,
-browser, shopping and payments, code, messages.
+browser, code, messages, shopping and payments. Each connection is a switch we
+turn on, and some let it act in our name: send, post, run programs, pay. Because
+it looks reliable, we keep switching on more.
 
-**1.5 Permissions.** The same model can be harmless or powerful depending on the
-switches we turn on: read files, write files, a terminal, a browser, money. Each
-switch turns advice into action.
-
-**1.6 My own demo.** (Presenter's recording.) An ordinary request, an ordinary
+**1.5 My own demo.** (Presenter's recording.) An ordinary request, an ordinary
 person, and the moment it acts on its own, and the moment it asks before acting.
 
-**1.7 How does it follow the conversation?** Before slowing one request down: what does the model
+**1.6 How does it follow the conversation?** Before slowing one request down: what does the model
 actually receive? It learns nothing while you chat. At every message, the app
 sends the whole conversation again, as long as it fits in the context window;
 apps summarize the old part or fetch saved notes when it does not. With it comes
 text you never see: the company's system prompt and the description of every
 tool. The tool call is one more piece of that same text.
 
-**1.8 Calling a tool.** How does that actually work? Ask "who won
+**1.7 Calling a tool.** How does that actually work? Ask "who won
 last night's match?" A chatbot alone cannot know. Give the same model a search
 tool and watch: it does not answer, it writes a small JSON request. The model
 only writes text; the software reads it, runs the search, and hands back the
 results; then the model answers and cites them. That is the whole trick.
 
-**1.9 One request, every step.** Now chain dozens of those. "Plan a weekend in
+**1.8 One request, every step.** Now chain dozens of those. "Plan a weekend in
 Bruges for four": the assistant splits the job, calls tools, launches helpers in
 parallel, hits a fully booked hotel, re-plans, and stops to ask before paying.
-
-**1.10 The agent loop.** Goal, plan, act, observe, re-plan. In the middle, a
-language model; around it, ordinary software, tools and memory. So what is that
-thing in the middle? Let us open the box.
+Last click, the pattern in small: a loop, not an answer. The model plans and
+re-plans; ordinary software acts and reads the result. So what is that model?
+Let us open the box.
 
 ## Chapter 2. History and how it works
 

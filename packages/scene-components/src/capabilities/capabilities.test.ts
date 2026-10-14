@@ -7,7 +7,7 @@ import {
   validateScenario,
   type AgentRunScenario,
 } from "../../../../content/assets/scenarios/index.ts";
-import { CONNECTORS, REQUESTED_SOURCES, connectorPosition, resolveSource, visibleConnectors } from "./connected/connectors.ts";
+import { CONNECTORS, LAST_STEP, REQUESTED_SOURCES, STEP_PERMISSION, STEP_RISK, connectorPosition, resolveSource, visibleConnectors } from "./connected/connectors.ts";
 import { autoplayMayLeave, buildScore, clampStep, stepDuration } from "./run/model.ts";
 import { captionsName, expectedPath, makeLookup, mediaName } from "./video/media.ts";
 import { expectedPosition, formatTime, isMuted, needsSeek, seekTo, setPlaying, initialVideoState } from "./video/sync.ts";
@@ -120,8 +120,10 @@ describe("run score layout", () => {
 });
 
 describe("connected assistant", () => {
-  it("lists the seven connector types of the storyboard, one per step", () => {
-    expect(CONNECTORS.map((c) => c.id)).toEqual(["email", "calendar", "files", "browser", "shopping", "code", "messages"]);
+  it("lists the seven connector types, one per step, then the permission and risk clicks", () => {
+    expect(CONNECTORS.map((c) => c.id)).toEqual(["email", "calendar", "files", "browser", "code", "messages", "shopping"]);
+    expect([STEP_PERMISSION, STEP_RISK, LAST_STEP]).toEqual([8, 9, 9]);
+    expect(CONNECTORS.filter((c) => c.risk).map((c) => c.id)).toEqual(["email", "browser", "code", "messages", "shopping"]);
     expect(visibleConnectors(0)).toBe(0);
     expect(visibleConnectors(3)).toBe(3);
     expect(visibleConnectors(20)).toBe(CONNECTORS.length);
@@ -129,7 +131,7 @@ describe("connected assistant", () => {
 
   it("has both locales, no dashes, and a verified source for every connector", () => {
     for (const c of CONNECTORS) {
-      for (const text of [c.label, c.example]) {
+      for (const text of [c.label, c.example, ...(c.risk ? [c.risk] : [])]) {
         expect(pick(text, "fr").trim() && text.en.trim(), c.id).toBeTruthy();
         expect(pick(text, "fr") + text.en).not.toMatch(DASH);
       }

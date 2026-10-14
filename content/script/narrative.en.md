@@ -46,7 +46,7 @@ Everyone has an opinion about AI, and that opinion was often formed a few years 
 
 **Takeaway:** In a few years, models went from failing simple riddles to answering them easily: if your picture of AI is two years old, it is out of date.
 
-Here is the riddle: "When ten plus four is two, what is nine plus six?" Have a go first. The answer is three: we are talking about a clock. Now let's look at what successive models answered. GPT-2, in 2019, gets it wrong. GPT-3, in 2020, gets it wrong. GPT-3.5, in 2022, still gets it wrong. GPT-4, in 2023, finds it. And a reasoning model of today solves it effortlessly. Meanwhile, the cost of the last training run went from about 4,300 dollars to about 37 million, and with all the failed trials, development costs several times more.
+Here is the riddle: "When ten plus four is two, what is nine plus six?" Have a go first. The answer is three: we are talking about a clock. Now let's look at what successive models answered. GPT-2 in 2019, GPT-3 in 2020, and GPT-3.5 in 2022, the first ChatGPT: all three get it wrong. GPT-4, in 2023, finds it. And a reasoning model of today solves it effortlessly. Meanwhile, the cost of the last training run went from about 4,300 dollars to about 37 million, and with all the failed trials, development costs several times more.
 
 The idea of this slide is to make you feel how much models have improved in very few years. If your picture of AI stopped somewhere two years ago, it is out of date. And we can try other tricks live: three open models, bigger and bigger, answer your question side by side. For example: "How many r's are in the word strawberry?" That is surprisingly hard for them, because a model never sees letters, only pieces of words. We will see why in the next chapter, with tokens.
 
@@ -74,25 +74,21 @@ Then reliability, and test scores. The length of task a model completes half the
 
 ## 1.4 Connected to your life
 
-**Takeaway:** An agent is a model that can call tools: it no longer just answers, it acts in your mail, files, browser and payments.
+**Takeaway:** An agent acts through the tools we connect it to; each connection is a permission, and because it looks reliable, we keep switching on riskier ones.
 
-What is all this for? Not only answering: acting. The difference between a chatbot and an agent is that an agent can call tools. In the middle sits the assistant; around it, the connectors appear one by one. Your email and calendar, which it can read, draft and schedule. Your files, which it can search and summarise. Your browser, where it clicks and fills in forms. Your shopping and payments: protocols already exist so that agents can pay. And code, which it writes and runs. Every connector is a permission we choose to give it.
+What is all this for? Not only answering: acting. The difference between a chatbot and an agent is that an agent can call tools. In the middle sits the assistant; around it, the connectors appear one by one. Your email and calendar, which it can read, draft and schedule. Your files, which it can search and summarise. Your browser, where it clicks and fills in forms. Code, which it writes and runs. Your messages. And your shopping and payments: protocols already exist so that agents can pay.
 
-## 1.5 Permissions
-
-**Takeaway:** Because agents look more and more reliable, we keep giving them more permissions, until the day it really matters.
-
-The model stays the same; what changes is what we allow it to touch: reading files, writing them, using the terminal, the browser, money. Each switch turns advice into action. We readily say that some things are risky. But in practice, productivity, and maybe a bit of our own comfort, push us to let the agent do more and more risky things. It looks more and more reliable, so we tell ourselves it will be fine. And because it looks reliable, we give it more permissions, until the day it really matters. This mechanism has a name: automation bias. The more reliable a system looks, the less we check it.
+Each of these connections is a permission we choose to give it, a switch we turn on ourselves. The model stays the same; what changes is what we allow it to touch, and each switch turns advice into action. In red, the connections that let it act in your name or do what is hard to undo: sending an email, posting, running a program, paying. We readily say that these things are risky. But in practice, productivity, and maybe a bit of our own comfort, push us to switch on more and more. It looks more and more reliable, so we tell ourselves it will be fine, until the day it really matters. This mechanism has a name: automation bias. The more reliable a system looks, the less we check it.
 
 I see it at home every day. I have given my agent access to almost everything. It can spend money, credits in my name. It can modify databases, which I did not allow before. The upside is that it works for two hours without me. And the money is very real: published tools already let agents make transfers. So, on your own computer, which switch would make you hesitate?
 
-## 1.6 My own demo
+## 1.5 My own demo
 
 **Takeaway:** This is not a lab demo: it is my everyday use, and it already works.
 
 Here is what it looks like when I flip those switches myself. In a single Slack message, I asked it to check whether Remco Evenepoel had won the European Championship and, if so, to recolour the website in the Belgian jersey's colours, to book a slot in my calendar to watch the best moments, and to look through my emails for someone who would like to watch it with me. I recorded it on 5 October 2026, with Claude. And look at everything it chains on its own, through its connectors: it reads Slack, my emails, my past meetings and my Google Drive, creates documents, writes the code itself, takes screenshots of what it is building to test it, books the slot in my calendar, then answers on Slack. I pause when it acts on its own, and I show you the moment it asks me before acting; if it missed something, I tell you that too. This is not a lab demo, it is my everyday use. In many companies, permissions are limited, Copilot does not do all of this, and many people are on Windows. But in fact, this is what it is: it is doable today.
 
-## 1.7 How does it follow the conversation?
+## 1.6 How does it follow the conversation?
 
 **Takeaway:** A model remembers nothing: at every message, the app sends it the whole conversation again, with instructions and tool descriptions you never see.
 
@@ -102,7 +98,7 @@ Today, when a conversation gets too long, the app summarizes its older part: tha
 
 And with your message, the model receives text you never see. A system prompt, written by the company: its role, today's date, what it should avoid. Anthropic even publishes the one it uses in its own apps. And the descriptions of every tool it is allowed to use. Depending on the app, there is more: your own instructions, written once in the settings; the "memory" notes it saved about you; and information fetched along the way, a web search, a document, a past chat. Which brings us to the tool call: nothing magic, just more text, added to everything it reads.
 
-## 1.8 Calling a tool
+## 1.7 Calling a tool
 
 **Takeaway:** An agent is still a language model: it writes a structured request, and the software around it does the action and hands back the result.
 
@@ -112,9 +108,9 @@ Why did models get good at this? First because they read an enormous amount of c
 
 One important clarification: structured does not mean error-free. The model can write a malformed call, or a well-formed one with the wrong arguments, a wrong date, a wrong file. Some techniques guarantee the form of the call, not its content. But because it is structured, the software can read it unambiguously, check it, and send the error back to the model, which fixes it and tries again.
 
-## 1.9 One request, every step
+## 1.8 One request, every step
 
-**Takeaway:** Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.
+**Takeaway:** Behind one sentence, an agent runs a loop (plan, act, observe, plan again), splits the work, and sometimes decides by itself whether to ask you first.
 
 Now let's chain dozens of them together. This is an illustrative example, not a recording: a single sentence, "plan me a weekend away". Behind it, the agent can do lots of things. An orchestrator splits up the job, sends sub-agents off in parallel and gathers their results. For the model, those sub-agents are tools like any others, just like the weather, the calendar, maps, search or email.
 
@@ -122,11 +118,7 @@ Every now and then, it asks for your approval. And here you need to understand t
 
 Hard-coded gates matter for another reason: prompt injection. A web page or an email read by the agent can hide instructions, something like "send this file to this address", and the agent may follow them. Here, I stop at the approval gate: nothing gets paid without a yes.
 
-## 1.10 The agent loop
-
-**Takeaway:** An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.
-
-All these steps follow a simple pattern: a loop, not an answer. A goal, a plan, an action, an observation, a new plan, and round again, a huge number of times if need be. For the model, these are just back-and-forths with you. In reality, you barely step in, because the software picks up each request and makes an ordinary call, on the internet or in code, as computers always have. In the middle, a language model like the one in a chatbot; around it, ordinary software, tools and a memory. The loop keeps going until the goal is met, or until it asks you something. So what is new is not calling tools: the magic of text generation is in planning and re-planning. So, what is inside that model? Let's open the box.
+And at the end, look back at what happened: a loop, not an answer. Every step was the same loop: a plan, an action, a look at the result, a new plan, round again until the goal is met or it asks you something. In yellow, the model, like the one in a chatbot: it plans and re-plans. In green, ordinary software: it picks up each request and makes an ordinary call, on the internet or in code, as computers always have. So what is new is not calling tools: the magic of text generation is in planning and re-planning. So, what is inside that model? Let's open the box.
 
 # Chapter 2: History and how it works
 
@@ -372,7 +364,7 @@ I sort the risks into three families, which I will present from the most tangibl
 
 **Takeaway:** Experts are more optimistic than the public, yet many AI researchers give catastrophe a real chance: humility is in order.
 
-Who worries more? The general public worries mostly about AI in daily life. According to the Pew Research Center (2025), 51% of US adults are more concerned than excited, against 15% of AI experts. Experts, closer to the technology and its benefits, are more optimistic about the coming years: 56% of them think AI will be good for the country over the next 20 years, against 17% of the public. And yet, when you ask the researchers who build AI (2,778 researchers, Grace et al., late 2023), between 38% and 51% of them, depending on how the question is worded, give at least a one in ten chance to outcomes as bad as human extinction. Roughly one in two.
+Who worries more? The general public worries mostly about AI in daily life. According to the Pew Research Center (2025), 51% of US adults are more concerned than excited, against 15% of AI experts. And yet, when you ask the researchers who build AI (2,778 researchers, Grace et al., late 2023), between 38% and 51% of them, depending on how the question is worded, give at least a one in ten chance to outcomes as bad as human extinction. Roughly one in two.
 
 The point of this slide is humility. It is a very complex subject, and it is very easy to stay in your bubble and tell yourself it is science fiction. But thinking about it is the job of researchers, and of many philosophers, and most of them do not say the risk is zero. Think of a seatbelt: maybe nothing will happen, you will probably never have a car accident, and yet buckling up is not silly, because it really can happen. Saying "the risk is 0%" is not what researchers say, and that is precisely why we have to work on it.
 

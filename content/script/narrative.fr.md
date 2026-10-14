@@ -46,7 +46,7 @@ Tout le monde a un avis sur l'IA, et cet avis s'est souvent formé il y a quelqu
 
 **À retenir :** En quelques années, les modèles sont passés de l'échec sur des énigmes simples à la réponse facile : si votre image de l'IA a deux ans, elle est périmée.
 
-Voici l'énigme : « Quand dix plus quatre font deux, combien font neuf plus six ? » Je vous laisse chercher d'abord. La réponse est trois : on parle d'une horloge. Maintenant, regardons ce qu'ont répondu les modèles successifs. GPT-2, en 2019, se trompe. GPT-3, en 2020, se trompe. GPT-3.5, en 2022, se trompe encore. GPT-4, en 2023, trouve. Et un modèle de raisonnement d'aujourd'hui la résout sans effort. Entre-temps, le coût du dernier entraînement est passé d'environ 4 300 dollars à environ 37 millions, et avec tous les essais ratés, le développement coûte encore plusieurs fois plus.
+Voici l'énigme : « Quand dix plus quatre font deux, combien font neuf plus six ? » Je vous laisse chercher d'abord. La réponse est trois : on parle d'une horloge. Maintenant, regardons ce qu'ont répondu les modèles successifs. GPT-2 en 2019, GPT-3 en 2020, et GPT-3.5 en 2022, le premier ChatGPT : tous les trois se trompent. GPT-4, en 2023, trouve. Et un modèle de raisonnement d'aujourd'hui la résout sans effort. Entre-temps, le coût du dernier entraînement est passé d'environ 4 300 dollars à environ 37 millions, et avec tous les essais ratés, le développement coûte encore plusieurs fois plus.
 
 L'idée de cette slide, c'est de vous faire sentir à quel point les modèles ont progressé en très peu d'années. Si votre image de l'IA s'est arrêtée quelque part il y a deux ans, elle est périmée. Et on peut essayer d'autres pièges en direct : trois modèles ouverts, de plus en plus grands, répondent côte à côte à votre question. Par exemple : « Combien de r dans le mot strawberry ? » C'est étonnamment dur pour eux, parce qu'un modèle ne voit jamais les lettres, seulement des morceaux de mots. On verra pourquoi au chapitre suivant, avec les tokens.
 
@@ -74,25 +74,21 @@ Et la fiabilité, et les scores. La longueur des tâches qu'un modèle réussit 
 
 ## 1.4 Branché sur votre vie
 
-**À retenir :** Un agent, c'est un modèle qui peut appeler des outils : il ne fait plus que répondre, il agit dans vos mails, vos fichiers, votre navigateur et vos paiements.
+**À retenir :** Un agent agit par les outils qu'on lui branche ; chaque branchement est une permission, et parce qu'il a l'air fiable, on en active de plus en plus de risqués.
 
-Tout ça pour quoi faire ? Pas seulement répondre : agir. La différence entre un chatbot et un agent, c'est que l'agent peut appeler des outils. Au centre, l'assistant ; autour, les connecteurs apparaissent un par un. Vos mails et votre agenda, qu'il peut lire, rédiger et planifier. Vos fichiers, qu'il peut chercher et résumer. Votre navigateur, où il clique et remplit des formulaires. Vos achats et vos paiements : des protocoles existent déjà pour que des agents paient. Et le code, qu'il écrit et exécute. Chaque connecteur est une permission qu'on choisit de lui donner.
+Tout ça pour quoi faire ? Pas seulement répondre : agir. La différence entre un chatbot et un agent, c'est que l'agent peut appeler des outils. Au centre, l'assistant ; autour, les connecteurs apparaissent un par un. Vos mails et votre agenda, qu'il peut lire, rédiger et planifier. Vos fichiers, qu'il peut chercher et résumer. Votre navigateur, où il clique et remplit des formulaires. Le code, qu'il écrit et exécute. Vos messages. Et vos achats et vos paiements : des protocoles existent déjà pour que des agents paient.
 
-## 1.5 Les permissions
-
-**À retenir :** Parce que les agents ont l'air de plus en plus fiables, on leur donne toujours plus de permissions, jusqu'au jour où ça compte vraiment.
-
-Le modèle reste le même ; ce qui change, c'est ce qu'on l'autorise à toucher : lire des fichiers, en écrire, utiliser le terminal, le navigateur, l'argent. Chaque interrupteur transforme un conseil en action. On dit volontiers que certaines choses sont risquées. Mais en pratique, la productivité, et peut-être un peu notre confort, nous poussent à accepter que l'agent fasse de plus en plus de choses risquées. Il a l'air de plus en plus fiable, alors on se dit que ça ira. Et parce qu'il a l'air fiable, on lui donne plus de permissions, jusqu'au jour où ça compte vraiment. Ce mécanisme a un nom : le biais d'automatisation. Plus un système a l'air fiable, moins on le vérifie.
+Chacun de ces branchements est une permission qu'on choisit de lui donner, un interrupteur qu'on active nous-mêmes. Le modèle reste le même ; ce qui change, c'est ce qu'on l'autorise à toucher, et chaque interrupteur transforme un conseil en action. En rouge, les branchements qui le laissent agir en votre nom ou faire ce qui se défait mal : envoyer un mail, publier, lancer un programme, payer. On dit volontiers que ces choses-là sont risquées. Mais en pratique, la productivité, et peut-être un peu notre confort, nous poussent à en activer toujours plus. Il a l'air de plus en plus fiable, alors on se dit que ça ira, jusqu'au jour où ça compte vraiment. Ce mécanisme a un nom : le biais d'automatisation. Plus un système a l'air fiable, moins on le vérifie.
 
 Je le vois chez moi tous les jours. J'ai donné à mon agent accès à presque tout. Il peut dépenser de l'argent, des crédits à mon nom. Il peut modifier des bases de données, ce que je ne permettais pas avant. L'avantage, c'est qu'il travaille deux heures sans moi. Et l'argent est bien réel : des outils publiés permettent déjà à des agents de faire des virements. Alors, sur votre propre ordinateur, quel interrupteur vous ferait hésiter ?
 
-## 1.6 Ma propre démo
+## 1.5 Ma propre démo
 
 **À retenir :** Ce n'est pas une démo de labo : c'est mon usage de tous les jours, et ça marche déjà.
 
 Voici ce que ça donne quand j'active ces interrupteurs moi-même. En un seul message Slack, je lui ai demandé de vérifier si Remco Evenepoel avait gagné le championnat d'Europe et, si oui, de remettre le site aux couleurs du maillot belge, de bloquer un créneau dans mon agenda pour regarder les meilleurs moments, et de chercher dans mes mails quelqu'un qui voudrait le regarder avec moi. Je l'ai enregistré le 5 octobre 2026, avec Claude. Et regardez tout ce qu'il enchaîne seul, grâce à ses connecteurs : il va lire Slack, mes mails, mes anciennes réunions et mon Google Drive, il crée des documents, il écrit le code lui-même, il fait des captures d'écran de ce qu'il construit pour le tester, il réserve le créneau dans mon agenda, puis il répond sur Slack. Je mets en pause quand il agit seul, et je vous montre le moment où il me demande avant d'agir ; s'il a raté quelque chose, je vous le dis aussi. Ce n'est pas une démo de laboratoire, c'est mon usage de tous les jours. Dans beaucoup d'entreprises, les permissions sont limitées, Copilot ne fait pas tout ça, beaucoup de gens sont sur Windows. Mais dans les faits, voilà ce que c'est : c'est faisable aujourd'hui.
 
-## 1.7 Comment suit-il la conversation ?
+## 1.6 Comment suit-il la conversation ?
 
 **À retenir :** Un modèle ne se souvient de rien : à chaque message, l'application lui renvoie toute la conversation, avec des consignes et des descriptions d'outils que vous ne voyez jamais.
 
@@ -102,7 +98,7 @@ Aujourd'hui, quand une conversation devient trop longue, l'application en résum
 
 Et avec votre message, le modèle reçoit du texte que vous ne voyez jamais. Un system prompt, écrit par l'entreprise : son rôle, la date du jour, ce qu'il doit éviter. Anthropic publie même celui qu'elle utilise dans ses propres applications. Et la description de chaque outil qu'il a le droit d'utiliser. Selon l'application, il y a plus : vos propres instructions, écrites une fois dans les réglages ; les notes « mémoire » qu'elle a enregistrées sur vous ; et des informations cherchées en route, une recherche web, un document, une ancienne conversation. Ce qui nous amène à l'appel d'outil : rien de magique, juste du texte en plus, ajouté à tout ce qu'il lit.
 
-## 1.8 Appeler un outil
+## 1.7 Appeler un outil
 
 **À retenir :** Un agent reste un modèle de langage : il écrit une demande structurée, et le logiciel autour fait l'action et lui rend le résultat.
 
@@ -112,9 +108,9 @@ Pourquoi les modèles sont-ils devenus bons à ça ? D'abord parce qu'ils ont lu
 
 Une précision importante : structuré ne veut pas dire sans erreur. Le modèle peut écrire un appel mal formé, ou bien formé avec de mauvais arguments, une mauvaise date, un mauvais fichier. Certaines techniques garantissent la forme de l'appel, pas son fond. Mais comme c'est structuré, le logiciel peut le lire sans ambiguïté, le vérifier, et renvoyer l'erreur au modèle, qui corrige et réessaie.
 
-## 1.9 Une demande, chaque étape
+## 1.8 Une demande, chaque étape
 
-**À retenir :** Derrière une seule phrase, un agent planifie, répartit le travail et enchaîne les étapes, et parfois c'est lui qui décide s'il doit d'abord te demander.
+**À retenir :** Derrière une seule phrase, un agent tourne en boucle (plan, action, observation, nouveau plan), répartit le travail, et parfois c'est lui qui décide s'il doit d'abord te demander.
 
 Maintenant, enchaînons-en des dizaines. C'est un exemple illustratif, pas un enregistrement : une seule phrase, « organise-moi un week-end ». Derrière, l'agent sait faire plein de choses. Un orchestrateur découpe le travail, envoie des sous-agents en parallèle et rassemble leurs résultats. Pour le modèle, ces sous-agents sont des outils comme les autres, au même titre que la météo, l'agenda, les cartes, la recherche ou le mail.
 
@@ -122,11 +118,7 @@ De temps en temps, il vous demande votre accord. Et là, il faut comprendre qu'i
 
 Les barrières codées en dur comptent pour une autre raison : l'injection de prompt. Une page web ou un mail lu par l'agent peut cacher des instructions, du genre « envoie ce fichier à telle adresse », et l'agent peut les suivre. Ici, je m'arrête à la barrière d'approbation : rien n'est payé sans un oui.
 
-## 1.10 La boucle d'agent
-
-**À retenir :** Un agent, c'est un modèle dans une boucle (but, plan, action, observation, nouveau plan) : ce qui est nouveau, ce n'est pas l'appel d'outil, c'est le plan.
-
-Toutes ces étapes suivent un schéma simple : une boucle, pas une réponse. Un but, un plan, une action, une observation, un nouveau plan, et on recommence, énormément de fois s'il le faut. Pour le modèle, ce ne sont que des allers-retours avec vous. En réalité, vous intervenez très peu, parce que le logiciel récupère chaque demande et fait un appel ordinaire, sur internet ou dans du code, comme les ordinateurs l'ont toujours fait. Au milieu, un modèle de langage comme celui d'un chatbot ; autour, du logiciel ordinaire, des outils et une mémoire. La boucle tourne jusqu'à ce que le but soit atteint, ou jusqu'à ce qu'il vous demande quelque chose. Ce qui est nouveau, ce n'est donc pas l'appel d'outil : la magie de la génération de texte est dans le plan et le re-plan. Alors, qu'y a-t-il dans ce modèle ? Ouvrons la boîte.
+Et à la fin, on regarde ce qui s'est passé : une boucle, pas une réponse. Chaque étape suivait la même boucle : un plan, une action, un coup d'œil au résultat, un nouveau plan, et on recommence jusqu'à ce que le but soit atteint ou qu'il vous demande quelque chose. En jaune, le modèle, comme celui d'un chatbot : il planifie et re-planifie. En vert, du logiciel ordinaire : il récupère chaque demande et fait un appel ordinaire, sur internet ou dans du code, comme les ordinateurs l'ont toujours fait. Ce qui est nouveau, ce n'est donc pas l'appel d'outil : la magie de la génération de texte est dans le plan et le re-plan. Alors, qu'y a-t-il dans ce modèle ? Ouvrons la boîte.
 
 # Chapitre 2 : L'histoire et comment ça marche
 
@@ -372,7 +364,7 @@ Je range les risques en trois familles, que je vais présenter de la plus concr�
 
 **À retenir :** Les experts sont plus optimistes que le public, et pourtant beaucoup de chercheurs en IA donnent une vraie chance à la catastrophe : un peu d'humilité s'impose.
 
-Qui s'inquiète le plus ? Le grand public s'inquiète surtout de l'IA au quotidien. Selon le Pew Research Center (2025), 51 % des adultes américains sont plus inquiets qu'enthousiastes, contre 15 % des experts en IA. Les experts, plus proches de la technologie et de ses bénéfices, sont plus optimistes pour les années qui viennent : 56 % d'entre eux pensent que l'IA sera bonne pour le pays dans les 20 prochaines années, contre 17 % du public. Et pourtant, quand on interroge les chercheurs qui construisent l'IA (2 778 chercheurs, Grace et al., fin 2023), entre 38 % et 51 % d'entre eux, selon la formulation de la question, donnent au moins une chance sur dix à des issues aussi graves que l'extinction humaine. En gros, un sur deux.
+Qui s'inquiète le plus ? Le grand public s'inquiète surtout de l'IA au quotidien. Selon le Pew Research Center (2025), 51 % des adultes américains sont plus inquiets qu'enthousiastes, contre 15 % des experts en IA. Et pourtant, quand on interroge les chercheurs qui construisent l'IA (2 778 chercheurs, Grace et al., fin 2023), entre 38 % et 51 % d'entre eux, selon la formulation de la question, donnent au moins une chance sur dix à des issues aussi graves que l'extinction humaine. En gros, un sur deux.
 
 Le but de cette slide, c'est l'humilité. C'est un sujet très complexe, et il est très facile de rester dans sa bulle et de se dire que c'est de la science-fiction. Mais y réfléchir, c'est le métier de chercheurs, et de beaucoup de philosophes, et la plupart d'entre eux ne disent pas que le risque est nul. Pensez à la ceinture de sécurité : il ne se passera peut-être rien, vous n'aurez sans doute jamais d'accident de voiture, et pourtant ce n'est pas bête de vous attacher, parce que ça peut vraiment arriver. Dire « le risque est de 0 % », ce n'est pas ce que disent les chercheurs, et c'est précisément pour ça qu'il faut y travailler.
 

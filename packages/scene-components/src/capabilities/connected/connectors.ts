@@ -3,10 +3,12 @@ import { l } from "../../learning/shared/ui.tsx";
 import type { CapIconName } from "../shared/icons.tsx";
 
 /**
- * Connector types shown around the assistant in ConnectedAssistant (storyboard
- * scene 1.3). Only connector types that public products offer today are listed,
- * each with a source that documents it. The everyday examples are illustrative
- * requests, not quotes.
+ * Connector types shown around the assistant in ConnectedAssistant (scene
+ * 01-connected). Only connector types that public products offer today are
+ * listed, each with a source that documents it. The everyday examples are
+ * illustrative requests, not quotes. After the connectors, one click shows each
+ * wire as a permission and one marks the risky ones: what the same connection
+ * also lets the agent do in your name (illustrative, not a ranking).
  */
 export interface Connector {
   id: string;
@@ -16,6 +18,8 @@ export interface Connector {
   example: L10n;
   /** Sources documenting that a public product offers this kind of connection. */
   sourceIds: string[];
+  /** Set when the connection lets the agent act in your name or do what is hard to undo: what it can do, in a few words. */
+  risk?: L10n;
 }
 
 export const CONNECTORS: Connector[] = [
@@ -28,6 +32,7 @@ export const CONNECTORS: Connector[] = [
       "Find the invoice from my plumber and add it to my accounts.",
     ),
     sourceIds: ["fnd-claude-google-workspace"],
+    risk: { en: "sends in your name" },
   },
   {
     id: "calendar",
@@ -58,16 +63,7 @@ export const CONNECTORS: Connector[] = [
       "Fill in the town hall form to renew my parking permit.",
     ),
     sourceIds: ["fnd-claude-for-chrome", "fnd-chatgpt-agent-system-card"],
-  },
-  {
-    id: "shopping",
-    icon: "cart",
-    label: { en: "Shopping and payments" },
-    example: l(
-      "Recommande les mêmes cartouches d'encre que la dernière fois, pour moins de 30 euros.",
-      "Reorder the same printer ink as last time, under 30 euros.",
-    ),
-    sourceIds: ["fnd-chatgpt-agent-system-card", "fnd-google-ap2"],
+    risk: { en: "clicks and posts for you" },
   },
   {
     id: "code",
@@ -78,6 +74,7 @@ export const CONNECTORS: Connector[] = [
       "Write a small program that sorts my holiday photos by date.",
     ),
     sourceIds: ["fnd-claude-code-docs"],
+    risk: { en: "runs any program" },
   },
   {
     id: "messages",
@@ -88,8 +85,25 @@ export const CONNECTORS: Connector[] = [
       "Text Ana that I am running ten minutes late.",
     ),
     sourceIds: ["fnd-gemini-messages-android"],
+    risk: { en: "texts in your name" },
+  },
+  {
+    id: "shopping",
+    icon: "cart",
+    label: { en: "Shopping and payments" },
+    example: l(
+      "Recommande les mêmes cartouches d'encre que la dernière fois, pour moins de 30 euros.",
+      "Reorder the same printer ink as last time, under 30 euros.",
+    ),
+    sourceIds: ["fnd-chatgpt-agent-system-card", "fnd-google-ap2"],
+    risk: { en: "spends your money" },
   },
 ];
+
+/** After the last connector: every wire becomes a permission switch, then the risky ones turn red. */
+export const STEP_PERMISSION = CONNECTORS.length + 1;
+export const STEP_RISK = CONNECTORS.length + 2;
+export const LAST_STEP = STEP_RISK;
 
 /**
  * Sources this component needs that are not yet in `content/sources/foundations.ts`.

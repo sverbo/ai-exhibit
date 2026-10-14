@@ -224,8 +224,8 @@
     "text": "En quelques années, les modèles sont passés de l'échec sur des énigmes simples à la réponse facile : si votre image de l'IA a deux ans, elle est périmée."
   },
   "01-then-and-now/speakerNotes": {
-    "source": "- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date\n- The riddle: \"When ten plus four is two, what is nine plus six?\" Let the **room answer first** (3, on a clock)\n- Clicks 1 to 4: GPT-2 (2019) wrong, GPT-3 (2020) wrong, GPT-3.5 (2022) still wrong, GPT-4 (2023) gets it\n- The costs on screen are the **last training run** only (Epoch AI's estimates, the same as the next slides): GPT-2 about $4,300, GPT-3 about $2.1 million, GPT-4 about $37 million. With every trial, experiment and failed run, a model's development takes about 1.2 to 4 times that compute (2.2 times typically), salaries not included. Rented on the cloud, the bills were higher still: GPT-2 about $43,000, GPT-3 about $4.6 million, and Altman said GPT-4 cost \"more than\" $100 million\n- Click 5: today's reasoning model, a recorded answer with its name and date\n- Click 6, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)\n- Try other tricks, for example with letters: \"How many r's are in the word strawberry?\" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**\n- Simulation (no Hugging Face): the field is locked on the strawberry question and shows the answers recorded on 4 October 2026: 1, then 2, then 3 (correct)\n- GPT-2 to GPT-4 cannot be called live (closed, or not served), hence open models on the live step",
-    "text": "- L'idée : montrer à quel point les modèles ont progressé en quelques années. Si votre image de l'IA s'est arrêtée quelque part, elle est périmée\n- L'énigme : « Quand dix plus quatre font deux, combien font neuf plus six ? » Laisser **la salle répondre d'abord** (3, sur une horloge)\n- Clics 1 à 4 : GPT-2 (2019) se trompe, GPT-3 (2020) se trompe, GPT-3.5 (2022) se trompe encore, GPT-4 (2023) trouve\n- Les coûts à l'écran sont ceux du **dernier entraînement** seulement (estimations d'Epoch AI, les mêmes que sur les slides suivantes) : GPT-2 environ 4 300 $, GPT-3 environ 2,1 millions $, GPT-4 environ 37 millions $. Avec tous les essais, expériences et entraînements ratés, le développement d'un modèle demande environ 1,2 à 4 fois ce calcul (2,2 fois en général), salaires non compris. En location cloud, les factures étaient encore plus élevées : GPT-2 environ 43 000 $, GPT-3 environ 4,6 millions $, et Altman a dit que GPT-4 avait coûté « plus de » 100 millions $\n- Clic 5 : un modèle de raisonnement d'aujourd'hui, réponse enregistrée avec son nom et sa date\n- Clic 6, en direct : taper n'importe quelle question ; trois modèles ouverts de plus en plus grands répondent côte à côte, chacun avec son année et sa taille : Qwen2.5 0.5B (2024, un modèle de base jamais entraîné à discuter), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 milliards de paramètres, réfléchit avant de répondre)\n- Essayer d'autres pièges, par exemple avec les lettres : « Combien de r dans le mot strawberry ? » (pré-rempli). Les modèles ne voient jamais les lettres, seulement des morceaux de mots : on verra pourquoi avec les **tokens**\n- Simulation (sans Hugging Face) : le champ est bloqué sur la question strawberry et montre les réponses enregistrées le 4 octobre 2026 : 1, puis 2, puis 3 (correct)\n- GPT-2 à GPT-4 ne peuvent pas être appelés en direct (fermés, ou non servis), d'où les modèles ouverts à l'étape en direct"
+    "source": "- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date\n- The riddle: \"When ten plus four is two, what is nine plus six?\" Let the **room answer first** (3, on a clock)\n- Click 1: GPT-2 (2019), GPT-3 (2020) and GPT-3.5 (2022, the first ChatGPT) all wrong, together\n- Click 2: GPT-4 (2023) gets it\n- The costs on screen are the **last training run** only (Epoch AI's estimates, the same as the next slides): GPT-2 about $4,300, GPT-3 about $2.1 million, GPT-4 about $37 million. With every trial, experiment and failed run, a model's development takes about 1.2 to 4 times that compute (2.2 times typically), salaries not included. Rented on the cloud, the bills were higher still: GPT-2 about $43,000, GPT-3 about $4.6 million, and Altman said GPT-4 cost \"more than\" $100 million\n- Click 3: today's reasoning model, a recorded answer with its name and date\n- Click 4, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)\n- Try other tricks, for example with letters: \"How many r's are in the word strawberry?\" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**\n- Simulation (no Hugging Face): the field is locked on the strawberry question and shows the answers recorded on 4 October 2026: 1, then 2, then 3 (correct)\n- GPT-2 to GPT-4 cannot be called live (closed, or not served), hence open models on the live step",
+    "text": "- L'idée : montrer à quel point les modèles ont progressé en quelques années. Si votre image de l'IA s'est arrêtée quelque part, elle est périmée\n- L'énigme : « Quand dix plus quatre font deux, combien font neuf plus six ? » Laisser **la salle répondre d'abord** (3, sur une horloge)\n- Clic 1 : GPT-2 (2019), GPT-3 (2020) et GPT-3.5 (2022, le premier ChatGPT) se trompent tous les trois, ensemble\n- Clic 2 : GPT-4 (2023) trouve\n- Les coûts à l'écran sont ceux du **dernier entraînement** seulement (estimations d'Epoch AI, les mêmes que sur les slides suivantes) : GPT-2 environ 4 300 $, GPT-3 environ 2,1 millions $, GPT-4 environ 37 millions $. Avec tous les essais, expériences et entraînements ratés, le développement d'un modèle demande environ 1,2 à 4 fois ce calcul (2,2 fois en général), salaires non compris. En location cloud, les factures étaient encore plus élevées : GPT-2 environ 43 000 $, GPT-3 environ 4,6 millions $, et Altman a dit que GPT-4 avait coûté « plus de » 100 millions $\n- Clic 3 : un modèle de raisonnement d'aujourd'hui, réponse enregistrée avec son nom et sa date\n- Clic 4, en direct : taper n'importe quelle question ; trois modèles ouverts de plus en plus grands répondent côte à côte, chacun avec son année et sa taille : Qwen2.5 0.5B (2024, un modèle de base jamais entraîné à discuter), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 milliards de paramètres, réfléchit avant de répondre)\n- Essayer d'autres pièges, par exemple avec les lettres : « Combien de r dans le mot strawberry ? » (pré-rempli). Les modèles ne voient jamais les lettres, seulement des morceaux de mots : on verra pourquoi avec les **tokens**\n- Simulation (sans Hugging Face) : le champ est bloqué sur la question strawberry et montre les réponses enregistrées le 4 octobre 2026 : 1, puis 2, puis 3 (correct)\n- GPT-2 à GPT-4 ne peuvent pas être appelés en direct (fermés, ou non servis), d'où les modèles ouverts à l'étape en direct"
   },
   "01-then-and-now/transitionIn": {
     "source": "From the question to a quick test.",
@@ -332,46 +332,22 @@
     "text": "Branché sur votre vie"
   },
   "01-connected/objective": {
-    "source": "Show that today's assistants can be connected to email, calendar, files, the browser, payments and code.",
-    "text": "Montrer que les assistants actuels peuvent être branchés sur les mails, l'agenda, les fichiers, le navigateur, les paiements et le code."
+    "source": "Show that today's assistants can be connected to email, calendar, files, the browser, code, messages and payments, that each connection is a permission we give, and that some of them let it act in our name.",
+    "text": "Montrer que les assistants actuels peuvent être branchés sur les mails, l'agenda, les fichiers, le navigateur, le code, les messages et les paiements, que chaque branchement est une permission qu'on donne, et que certains le laissent agir en notre nom."
   },
   "01-connected/takeaway": {
-    "source": "An agent is a model that can call tools: it no longer just answers, it acts in your mail, files, browser and payments.",
-    "text": "Un agent, c'est un modèle qui peut appeler des outils : il ne fait plus que répondre, il agit dans vos mails, vos fichiers, votre navigateur et vos paiements."
+    "source": "An agent acts through the tools we connect it to; each connection is a permission, and because it looks reliable, we keep switching on riskier ones.",
+    "text": "Un agent agit par les outils qu'on lui branche ; chaque branchement est une permission, et parce qu'il a l'air fiable, on en active de plus en plus de risqués."
   },
   "01-connected/speakerNotes": {
-    "source": "- The difference between a chatbot and an **agent**: an agent can **call tools**\n- The assistant sits in the middle; connectors appear one by one\n- **Email and calendar**: read, draft, schedule\n- **Files**: search and summarise your documents\n- **Browser**: it clicks and fills forms on websites\n- **Shopping and payments**: protocols now exist for agents to pay\n- **Code**: it writes and runs programs\n- Every connector is a permission we choose to give: next slide",
-    "text": "- La différence entre un chatbot (*agent conversationnel*) et un **agent** : l'agent peut **appeler des outils**\n- L'assistant est au centre ; les connecteurs apparaissent un par un\n- **Mail et agenda** : lire, rédiger, planifier\n- **Fichiers** : chercher et résumer vos documents\n- **Navigateur** : il clique et remplit des formulaires sur des sites\n- **Achats et paiements** : des protocoles existent déjà pour que des agents paient\n- **Code** : il écrit et exécute des programmes\n- Chaque connecteur est une permission qu'on choisit de donner : slide suivante"
+    "source": "- The difference between a chatbot and an **agent**: an agent can **call tools**\n- The assistant sits in the middle; connectors appear one by one\n  - **Email and calendar**: read, draft, schedule\n  - **Files**: search and summarise your documents\n  - **Browser**: it clicks and fills forms on websites\n  - **Code**: it writes and runs programs\n  - **Messages**: it texts for you\n  - **Shopping and payments**: protocols now exist for agents to pay\n- Click: **each connection is a permission** we choose to give, a switch we turn on. Same model; only what we let it touch changes. Each switch turns advice into action\n- Click: **in red, what acts in your name** or is hard to undo: sending, posting, running programs, paying\n- We say some things are risky; in practice, **productivity** and convenience push us to switch on more and more. Because it looks reliable, we give it more permissions, until the day it really matters\n- This has a name: **automation bias**. The more reliable a system looks, the less we check it\n- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me\n- Money is real: published tools already let agents make transfers\n- Question to the room: which switch would make you hesitate on your own computer?",
+    "text": "- La différence entre un chatbot (*agent conversationnel*) et un **agent** : l'agent peut **appeler des outils**\n- L'assistant est au centre ; les connecteurs apparaissent un par un\n  - **Mail et agenda** : lire, rédiger, planifier\n  - **Fichiers** : chercher et résumer vos documents\n  - **Navigateur** : il clique et remplit des formulaires sur des sites\n  - **Code** : il écrit et exécute des programmes\n  - **Messages** : il écrit des SMS pour vous\n  - **Achats et paiements** : des protocoles existent déjà pour que des agents paient\n- Clic : **chaque branchement est une permission** qu'on choisit de donner, un interrupteur qu'on active. Même modèle ; seul change ce qu'on le laisse toucher. Chaque interrupteur transforme un conseil en action\n- Clic : **en rouge, ce qui agit en votre nom** ou se défait mal : envoyer, publier, lancer des programmes, payer\n- On dit que certaines choses sont risquées ; en pratique, la **productivité** et le confort nous poussent à en activer toujours plus. Parce qu'il a l'air fiable, on lui donne plus de permissions, jusqu'au jour où ça compte vraiment\n- Ça a un nom : le **biais d'automatisation**. Plus un système a l'air fiable, moins on le vérifie\n- Mon cas : j'ai donné au mien accès à presque tout. Il peut **dépenser de l'argent** (des crédits à mon nom) et **modifier des bases de données**, ce que je ne permettais pas avant. L'avantage : il travaille **deux heures** sans moi\n- L'argent est réel : des outils publiés permettent déjà à des agents de faire des virements\n- Question à la salle : quel interrupteur vous ferait hésiter sur votre propre ordinateur ?"
   },
   "01-connected/transitionIn": {
     "source": "From answering to acting.",
     "text": "De répondre à agir."
   },
   "01-connected/transitionOut": {
-    "source": "Connected, yes. But allowed to do what?",
-    "text": "Branché, oui. Mais autorisé à faire quoi ?"
-  },
-  "01-permissions/title": {
-    "source": "Permissions",
-    "text": "Les permissions"
-  },
-  "01-permissions/objective": {
-    "source": "Show that what an assistant can do depends on what we allow it to touch, up to spending money.",
-    "text": "Montrer que ce qu'un assistant peut faire dépend de ce qu'on l'autorise à toucher, jusqu'à dépenser de l'argent."
-  },
-  "01-permissions/takeaway": {
-    "source": "Because agents look more and more reliable, we keep giving them more permissions, until the day it really matters.",
-    "text": "Parce que les agents ont l'air de plus en plus fiables, on leur donne toujours plus de permissions, jusqu'au jour où ça compte vraiment."
-  },
-  "01-permissions/speakerNotes": {
-    "source": "- Same model; only what we allow it to touch changes: read files, write files, terminal, browser, money. Each switch turns advice into action\n- We say some things are risky; in practice, **productivity** and convenience push us to accept more and more risky actions\n- The agent looks more and more reliable, so we feel it will be fine. Because it looks reliable, we give it more permissions, until the day it really matters\n- This has a name: **automation bias**. The more reliable a system looks, the less we check it\n- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me\n- Money is real: published tools already let agents make transfers\n- Question to the room: which switch would make you hesitate on your own computer?",
-    "text": "- Même modèle ; seul change ce qu'on l'autorise à toucher : lire des fichiers, écrire des fichiers, le terminal, le navigateur, l'argent. Chaque interrupteur transforme un conseil en action\n- On dit que certaines choses sont risquées ; en pratique, la **productivité** et le confort nous poussent à accepter de plus en plus d'actions risquées\n- L'agent a l'air de plus en plus fiable, alors on se dit que ça ira. Parce qu'il a l'air fiable, on lui donne plus de permissions, jusqu'au jour où ça compte vraiment\n- Ça a un nom : le **biais d'automatisation**. Plus un système a l'air fiable, moins on le vérifie\n- Mon cas : j'ai donné au mien accès à presque tout. Il peut **dépenser de l'argent** (des crédits à mon nom) et **modifier des bases de données**, ce que je ne permettais pas avant. L'avantage : il travaille **deux heures** sans moi\n- L'argent est réel : des outils publiés permettent déjà à des agents de faire des virements\n- Question à la salle : quel interrupteur vous ferait hésiter sur votre propre ordinateur ?"
-  },
-  "01-permissions/transitionIn": {
-    "source": "The connections exist; what matters is what we switch on.",
-    "text": "Les connexions existent ; ce qui compte, c'est ce qu'on active."
-  },
-  "01-permissions/transitionOut": {
     "source": "Here is what it looks like when I switch them on myself.",
     "text": "Voici ce que ça donne quand je les active moi-même."
   },
@@ -492,42 +468,18 @@
     "text": "Rendre visible chaque étape d'une demande complexe : tool calls, sous-agents en parallèle, résultats fusionnés, accord humain avant de payer."
   },
   "01-one-request/takeaway": {
-    "source": "Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.",
-    "text": "Derrière une seule phrase, un agent planifie, répartit le travail et enchaîne les étapes, et parfois c'est lui qui décide s'il doit d'abord te demander."
+    "source": "Behind one sentence, an agent runs a loop (plan, act, observe, plan again), splits the work, and sometimes decides by itself whether to ask you first.",
+    "text": "Derrière une seule phrase, un agent tourne en boucle (planifier, agir, observer, replanifier), répartit le travail, et parfois c'est lui qui décide s'il doit d'abord vous demander."
   },
   "01-one-request/speakerNotes": {
-    "source": "- Illustrative, not a recording: say so. One sentence: plan a weekend trip\n- It can do many things: an orchestrator splits the job, dispatches **sub-agents** in parallel and merges their results. For the model, sub-agents are just tools like the others\n- Tool calls: weather, calendar, maps, search, email\n- **Approval**, two cases: either the tool always requires it, **hard-coded** in the software (deterministic; payments usually are), or **the model decides** when to ask you\n- The second case is where it can be dangerous: it is **not deterministic**. We hope it knows that this kind of action needs your yes. Payments are usually hard-coded, but many things are less black and white: be careful\n- Another reason hard-coded gates matter: **prompt injection**. A web page or an email read by the agent can hide instructions (\"send this file to...\"), and the agent may follow them\n- Stop at the approval gate: nothing is paid without a yes",
-    "text": "- Exemple illustratif, pas un enregistrement : le dire. Une phrase : organiser un week-end\n- Il sait faire plein de choses : un orchestrateur découpe le travail, envoie des **sous-agents** en parallèle et fusionne leurs résultats. Pour le modèle, les sous-agents sont des outils comme les autres\n- Appels d'outils : météo, agenda, cartes, recherche, mail\n- **L'approbation**, deux cas : soit l'outil l'exige toujours, **codé en dur** dans le logiciel (déterministe ; les paiements le sont en général), soit **c'est le modèle qui décide** quand te demander\n- Le deuxième cas, c'est là que ça peut être dangereux : ce n'est **pas déterministe**. On espère qu'il sait que ce genre d'action demande ton accord. Les paiements sont en général codés en dur, mais beaucoup de choses sont moins noir ou blanc : faire attention\n- Autre raison pour laquelle les barrières codées en dur comptent : l'**injection de prompt**. Une page web ou un mail lu par l'agent peut cacher des instructions (« envoie ce fichier à... »), et l'agent peut les suivre\n- S'arrêter à la barrière d'approbation : rien n'est payé sans un oui"
+    "source": "- Illustrative, not a recording: say so. One sentence: plan a weekend trip\n- It can do many things: an orchestrator splits the job, dispatches **sub-agents** in parallel and merges their results. For the model, sub-agents are just tools like the others\n- Tool calls: weather, calendar, maps, search, email\n- **Approval**, two cases: either the tool always requires it, **hard-coded** in the software (deterministic; payments usually are), or **the model decides** when to ask you\n- The second case is where it can be dangerous: it is **not deterministic**. We hope it knows that this kind of action needs your yes. Payments are usually hard-coded, but many things are less black and white: be careful\n- Another reason hard-coded gates matter: **prompt injection**. A web page or an email read by the agent can hide instructions (\"send this file to...\"), and the agent may follow them\n- Stop at the approval gate: nothing is paid without a yes\n- Last click, **a loop, not an answer**: every step was the same loop, plan, act, observe, plan again, until the goal is met or it asks you\n- In yellow, the model: like a chatbot, it plans and re-plans. In green, ordinary software: it picks up each request and makes an ordinary call (internet, code), as computers always did\n- What is new is not calling tools: the magic of text generation is in **planning and re-planning**",
+    "text": "- Exemple illustratif, pas un enregistrement : le dire. Une phrase : organiser un week-end\n- Il sait faire plein de choses : un orchestrateur découpe le travail, envoie des **sous-agents** en parallèle et fusionne leurs résultats. Pour le modèle, les sous-agents sont des outils comme les autres\n- Appels d'outils : météo, agenda, cartes, recherche, mail\n- **L'approbation**, deux cas : soit l'outil l'exige toujours, **codé en dur** dans le logiciel (déterministe ; les paiements le sont en général), soit **c'est le modèle qui décide** quand te demander\n- Le deuxième cas, c'est là que ça peut être dangereux : ce n'est **pas déterministe**. On espère qu'il sait que ce genre d'action demande ton accord. Les paiements sont en général codés en dur, mais beaucoup de choses sont moins noir ou blanc : faire attention\n- Autre raison pour laquelle les barrières codées en dur comptent : l'**injection de prompt**. Une page web ou un mail lu par l'agent peut cacher des instructions (« envoie ce fichier à... »), et l'agent peut les suivre\n- S'arrêter à la barrière d'approbation : rien n'est payé sans un oui\n- Dernier clic, **une boucle, pas une réponse** : chaque étape suivait la même boucle, planifier, agir, observer, replanifier, jusqu'à atteindre l'objectif ou vous demander\n- En jaune, le modèle : comme un chatbot, il planifie et replanifie. En vert, du logiciel ordinaire : il récupère chaque demande et fait un appel ordinaire (internet, code), comme les ordinateurs l'ont toujours fait\n- Ce qui est nouveau, ce n'est pas d'appeler des outils : la magie de la génération de texte est dans le **plan et le re-plan**"
   },
   "01-one-request/transitionIn": {
     "source": "From a real run to a slowed-down one.",
     "text": "D'un vrai essai à un essai au ralenti."
   },
   "01-one-request/transitionOut": {
-    "source": "All these steps follow one simple pattern.",
-    "text": "Toutes ces étapes suivent un schéma simple."
-  },
-  "01-agent-loop/title": {
-    "source": "The agent loop",
-    "text": "La boucle d'agent"
-  },
-  "01-agent-loop/objective": {
-    "source": "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",
-    "text": "Nommer le schéma : un agent, c'est un modèle dans une boucle objectif, plan, action, observation, nouveau plan."
-  },
-  "01-agent-loop/takeaway": {
-    "source": "An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.",
-    "text": "Un agent, c'est un modèle dans une boucle (but, plan, action, observation, nouveau plan) : ce qui est nouveau, ce n'est pas l'appel d'outil, c'est le plan."
-  },
-  "01-agent-loop/speakerNotes": {
-    "source": "- **A loop, not an answer**: goal, plan, act, observe, plan again\n- It can go round many, many times. For the model these are just back-and-forths with you; in reality you barely step in, because the software picks up each request and makes an ordinary call (internet, code), as computers always did\n- In the middle, a language model like a chatbot; around it, ordinary software, tools and a memory\n- What is new is not calling tools: the magic of text generation is in **planning and re-planning**\n- It goes round until the goal is met, or until it asks you",
-    "text": "- **Une boucle, pas une réponse** : but, plan, action, observation, nouveau plan\n- Il peut boucler énormément de fois. Pour le modèle, ce ne sont que des allers-retours avec toi ; en réalité tu interviens très peu, parce que le logiciel récupère chaque demande et fait un appel ordinaire (internet, code), comme les ordinateurs l'ont toujours fait\n- Au milieu, un modèle de langage comme un chatbot ; autour, du logiciel ordinaire, des outils et une mémoire\n- Ce qui est nouveau, ce n'est pas l'appel d'outils : la magie de la génération de texte est dans le **plan et le re-plan**\n- Il tourne jusqu'à ce que le but soit atteint, ou jusqu'à ce qu'il te demande"
-  },
-  "01-agent-loop/transitionIn": {
-    "source": "From one example to the general pattern.",
-    "text": "D'un exemple au schéma général."
-  },
-  "01-agent-loop/transitionOut": {
     "source": "So what is inside? Let us open the box.",
     "text": "Alors, qu'y a-t-il dedans ? Ouvrons la boîte."
   },
@@ -1284,30 +1236,14 @@
     "text": "Experts de l'IA"
   },
   "04-opinions/visual.props.rows.1.question": {
-    "source": "AI will be good for the country over the next 20 years",
-    "text": "L'IA sera bonne pour le pays dans les 20 prochaines années"
-  },
-  "04-opinions/visual.props.rows.1.source": {
-    "source": "Pew Research Center, United States, 2025",
-    "text": "Pew Research Center, États-Unis, 2025"
-  },
-  "04-opinions/visual.props.rows.1.bars.0.who": {
-    "source": "US adults",
-    "text": "Adultes américains"
-  },
-  "04-opinions/visual.props.rows.1.bars.1.who": {
-    "source": "AI experts",
-    "text": "Experts de l'IA"
-  },
-  "04-opinions/visual.props.rows.2.question": {
     "source": "Give at least a 1 in 10 chance of outcomes as bad as human extinction",
     "text": "Donnent au moins 1 chance sur 10 à des issues aussi graves que l'extinction humaine"
   },
-  "04-opinions/visual.props.rows.2.source": {
+  "04-opinions/visual.props.rows.1.source": {
     "source": "Grace et al., 2,778 AI researchers, 2024",
     "text": "Grace et al., 2 778 chercheurs en IA, 2024"
   },
-  "04-opinions/visual.props.rows.2.bars.0.who": {
+  "04-opinions/visual.props.rows.1.bars.0.who": {
     "source": "AI researchers",
     "text": "Chercheurs en IA"
   },
@@ -1328,8 +1264,8 @@
     "text": "Restons humbles : des experts y travaillent au quotidien. « Impossible » n'est pas un argument."
   },
   "04-opinions/speakerNotes": {
-    "source": "- The public worries more about AI in daily life; AI experts, closer to the technology and its benefits, are more optimistic about the coming years\n- Pew (April 2025; 5,410 US adults and 1,013 US AI experts): \"more concerned than excited about the increased use of AI in daily life\", **51% vs 15%**; AI will be good for the country over the next 20 years, **17% vs 56%** (bad for it: 35% vs 15%)\n- Yet the researchers building AI (not quite the same experts): **between 38% and 51%** give at least a **1 in 10** chance to outcomes as bad as human extinction, depending on the wording (Grace et al., 2,778 researchers, fall 2023). Roughly one in two\n- The point of this slide: **humility**. It is a very complex subject, and it is easy to stay in our bubble and call it science fiction. Thinking about it is the daily job of researchers, and of many philosophers; most of them do not say the risk is zero\n- The seatbelt: maybe nothing will happen. You will probably never have a car accident either, yet buckling up is not silly, because it can really happen. \"The risk is 0%\" is not what researchers say, and that is why we must work on it\n- Question to the room: the people most excited about AI also give it a real chance of catastrophe. What do you make of that?\n- Last click, a look back: around 2013, Müller and Bostrom asked AI experts when they saw a 50% chance of a machine that can do most human jobs: median **2040**; Bostrom reports it in Superintelligence (2014). Some then \"considered science fiction\" these questions\n- A forecast is not evidence. For comparison only (a different question), Grace et al. now put 50% at 2047, 13 years earlier than in their survey one year before\n- Orwell's 1984 (published in **1949**) imagined mass surveillance: it sounded like fiction, and it partly came true. An analogy, not evidence\n- The spectrum is wide: Yudkowsky and Soares, \"If Anyone Builds It, Everyone Dies\" (2025), argue superhuman AI would kill us all; Yann LeCun (Meta) calls existential worries \"complete B.S.\" (October 2024)",
-    "text": "- Le public s'inquiète plus de l'IA au quotidien ; les experts en IA, plus proches de la technologie et de ses bénéfices, sont plus optimistes pour les années qui viennent\n- Pew (avril 2025 ; 5 410 adultes américains et 1 013 experts en IA américains) : « plus inquiets qu'enthousiastes face à l'usage croissant de l'IA au quotidien », **51 % contre 15 %** ; l'IA sera bonne pour le pays dans les 20 prochaines années, **17 % contre 56 %** (mauvaise : 35 % contre 15 %)\n- Et pourtant, les chercheurs qui construisent l'IA (pas tout à fait les mêmes experts) : **entre 38 % et 51 %** donnent au moins **une chance sur dix** à des issues aussi graves que l'extinction humaine, selon la formulation (Grace et al., 2 778 chercheurs, automne 2023). En gros, un sur deux\n- Le but de cette slide : **l'humilité**. C'est un sujet très complexe, et il est facile de rester dans sa bulle et de crier à la science-fiction. Y réfléchir, c'est le métier quotidien de chercheurs, et de beaucoup de philosophes ; la plupart ne disent pas que le risque est nul\n- La ceinture de sécurité : il ne se passera peut-être rien. Vous n'aurez sans doute jamais d'accident de voiture non plus, et pourtant ce n'est pas bête de s'attacher, parce que ça peut vraiment arriver. « Le risque est de 0 % », ce n'est pas ce que disent les chercheurs, et c'est pour ça qu'il faut y travailler\n- Question à la salle : les gens les plus enthousiastes face à l'IA lui donnent aussi une vraie chance de catastrophe. Qu'est-ce que vous en pensez ?\n- Dernier clic, un regard en arrière : vers 2013, Müller et Bostrom ont demandé à des experts en IA quand ils voyaient 50 % de chances d'une machine capable de faire la plupart des métiers humains : médiane **2040** ; Bostrom le rapporte dans Superintelligence (2014). Certains « considéraient alors comme de la science-fiction » ces questions\n- Une prévision n'est pas une preuve. Pour comparaison seulement (une autre question), Grace et al. placent maintenant les 50 % en 2047, 13 ans plus tôt que dans leur enquête de l'année précédente\n- Le 1984 d'Orwell (publié en **1949**) imaginait la surveillance de masse : ça sonnait comme de la fiction, et c'est en partie arrivé. Une analogie, pas une preuve\n- L'éventail est large : Yudkowsky et Soares, « If Anyone Builds It, Everyone Dies » (2025), affirment qu'une IA surhumaine nous tuerait tous ; Yann LeCun (Meta) qualifie les craintes existentielles de « complete B.S. » (*foutaises*, octobre 2024)"
+    "source": "- The public worries more about AI in daily life; AI experts, closer to the technology and its benefits, worry less\n- Pew (April 2025; 5,410 US adults and 1,013 US AI experts): \"more concerned than excited about the increased use of AI in daily life\", **51% vs 15%**\n- Yet the researchers building AI (not quite the same experts): **between 38% and 51%** give at least a **1 in 10** chance to outcomes as bad as human extinction, depending on the wording (Grace et al., 2,778 researchers, fall 2023). Roughly one in two\n- The point of this slide: **humility**. It is a very complex subject, and it is easy to stay in our bubble and call it science fiction. Thinking about it is the daily job of researchers, and of many philosophers; most of them do not say the risk is zero\n- The seatbelt: maybe nothing will happen. You will probably never have a car accident either, yet buckling up is not silly, because it can really happen. \"The risk is 0%\" is not what researchers say, and that is why we must work on it\n- Question to the room: the people most excited about AI also give it a real chance of catastrophe. What do you make of that?\n- Last click, a look back: around 2013, Müller and Bostrom asked AI experts when they saw a 50% chance of a machine that can do most human jobs: median **2040**; Bostrom reports it in Superintelligence (2014). Some then \"considered science fiction\" these questions\n- A forecast is not evidence. For comparison only (a different question), Grace et al. now put 50% at 2047, 13 years earlier than in their survey one year before\n- Orwell's 1984 (published in **1949**) imagined mass surveillance: it sounded like fiction, and it partly came true. An analogy, not evidence\n- The spectrum is wide: Yudkowsky and Soares, \"If Anyone Builds It, Everyone Dies\" (2025), argue superhuman AI would kill us all; Yann LeCun (Meta) calls existential worries \"complete B.S.\" (October 2024)",
+    "text": "- Le public s'inquiète plus de l'IA au quotidien ; les experts en IA, plus proches de la technologie et de ses bénéfices, s'inquiètent moins\n- Pew (avril 2025 ; 5 410 adultes américains et 1 013 experts en IA américains) : « plus inquiets qu'enthousiastes face à l'usage croissant de l'IA au quotidien », **51 % contre 15 %**\n- Et pourtant, les chercheurs qui construisent l'IA (pas tout à fait les mêmes experts) : **entre 38 % et 51 %** donnent au moins **une chance sur dix** à des issues aussi graves que l'extinction humaine, selon la formulation (Grace et al., 2 778 chercheurs, automne 2023). En gros, un sur deux\n- Le but de cette slide : **l'humilité**. C'est un sujet très complexe, et il est facile de rester dans sa bulle et de crier à la science-fiction. Y réfléchir, c'est le métier quotidien de chercheurs, et de beaucoup de philosophes ; la plupart ne disent pas que le risque est nul\n- La ceinture de sécurité : il ne se passera peut-être rien. Vous n'aurez sans doute jamais d'accident de voiture non plus, et pourtant ce n'est pas bête de s'attacher, parce que ça peut vraiment arriver. « Le risque est de 0 % », ce n'est pas ce que disent les chercheurs, et c'est pour ça qu'il faut y travailler\n- Question à la salle : les gens les plus enthousiastes face à l'IA lui donnent aussi une vraie chance de catastrophe. Qu'est-ce que vous en pensez ?\n- Dernier clic, un regard en arrière : vers 2013, Müller et Bostrom ont demandé à des experts en IA quand ils voyaient 50 % de chances d'une machine capable de faire la plupart des métiers humains : médiane **2040** ; Bostrom le rapporte dans Superintelligence (2014). Certains « considéraient alors comme de la science-fiction » ces questions\n- Une prévision n'est pas une preuve. Pour comparaison seulement (une autre question), Grace et al. placent maintenant les 50 % en 2047, 13 ans plus tôt que dans leur enquête de l'année précédente\n- Le 1984 d'Orwell (publié en **1949**) imaginait la surveillance de masse : ça sonnait comme de la fiction, et c'est en partie arrivé. Une analogie, pas une preuve\n- L'éventail est large : Yudkowsky et Soares, « If Anyone Builds It, Everyone Dies » (2025), affirment qu'une IA surhumaine nous tuerait tous ; Yann LeCun (Meta) qualifie les craintes existentielles de « complete B.S. » (*foutaises*, octobre 2024)"
   },
   "04-opinions/transitionIn": {
     "source": "Before the details: who is worried, and how much?",
@@ -1400,8 +1336,8 @@
     "text": "Le mal peut venir sans méchant : l'emploi, le pouvoir, nos compétences et notre voix basculent alors que chacun agit raisonnablement."
   },
   "04-systemic/visual.props.heading": {
-    "source": "No villain required",
-    "text": "Pas besoin de méchant"
+    "source": "Systemic effects: no villain required",
+    "text": "Effets systémiques : pas besoin de méchant"
   },
   "04-systemic/visual.props.cards.0.title": {
     "source": "Jobs",
@@ -1458,6 +1394,10 @@
   "04-agi/takeaway": {
     "source": "AGI has no single definition, but today's AI already brings the skill of the best experts in every field, copied without limit.",
     "text": "L'AGI n'a pas de définition unique, mais l'IA d'aujourd'hui apporte déjà le savoir-faire des meilleurs experts dans tous les domaines, copiable à l'infini."
+  },
+  "04-agi/visual.props.kicker": {
+    "source": "Loss of control",
+    "text": "Perte de contrôle"
   },
   "04-agi/visual.props.heading": {
     "source": "AGI (artificial general intelligence): are we there?",
@@ -1875,138 +1815,6 @@
     "source": "Thank you.",
     "text": "Merci."
   },
-  "copy:A loop, not an answer": {
-    "source": "A loop, not an answer",
-    "text": "Une boucle, pas une réponse"
-  },
-  "copy:Tools inside the loop": {
-    "source": "Tools inside the loop",
-    "text": "Des outils dans la boucle"
-  },
-  "copy:The same loop, with real levers": {
-    "source": "The same loop, with real levers",
-    "text": "La même boucle, avec de vrais leviers"
-  },
-  "copy:It is given a goal.": {
-    "source": "It is given a goal.",
-    "text": "On lui donne un objectif."
-  },
-  "copy:It decides on a first step.": {
-    "source": "It decides on a first step.",
-    "text": "Il décide d'une première étape."
-  },
-  "copy:It acts.": {
-    "source": "It acts.",
-    "text": "Il agit."
-  },
-  "copy:It looks at what happened.": {
-    "source": "It looks at what happened.",
-    "text": "Il regarde ce qui s'est passé."
-  },
-  "copy:It adjusts its plan, and the loop goes around again until the goal is met.": {
-    "source": "It adjusts its plan, and the loop goes around again until the goal is met.",
-    "text": "Il ajuste son plan, et la boucle repart jusqu'à ce que l'objectif soit atteint."
-  },
-  "copy:An agent: a model placed inside a loop, with tools and a memory of what has happened so far.": {
-    "source": "An agent: a model placed inside a loop, with tools and a memory of what has happened so far.",
-    "text": "Un agent : un modèle placé dans une boucle, avec des outils et la mémoire de ce qui s'est déjà passé."
-  },
-  "copy:The loop from the start.": {
-    "source": "The loop from the start.",
-    "text": "La boucle du début."
-  },
-  "copy:“Act” means picking a tool and using it.": {
-    "source": "“Act” means picking a tool and using it.",
-    "text": "« Agir », c'est choisir un outil et l'utiliser."
-  },
-  "copy:The same loop.": {
-    "source": "The same loop.",
-    "text": "La même boucle."
-  },
-  "copy:But this time, with broad access.": {
-    "source": "But this time, with broad access.",
-    "text": "Mais cette fois, avec des accès larges."
-  },
-  "copy:Every turn of the loop can change something in the world.": {
-    "source": "Every turn of the loop can change something in the world.",
-    "text": "Chaque tour de boucle peut changer quelque chose dans le monde."
-  },
-  "copy:you": {
-    "source": "you",
-    "text": "vous"
-  },
-  "copy:the model": {
-    "source": "the model",
-    "text": "le modèle"
-  },
-  "copy:the software": {
-    "source": "the software",
-    "text": "le logiciel"
-  },
-  "copy:Access": {
-    "source": "Access",
-    "text": "Accès"
-  },
-  "copy:In the real world": {
-    "source": "In the real world",
-    "text": "Dans le monde réel"
-  },
-  "copy:Web search": {
-    "source": "Web search",
-    "text": "Recherche web"
-  },
-  "copy:Browser": {
-    "source": "Browser",
-    "text": "Navigateur"
-  },
-  "copy:Run code": {
-    "source": "Run code",
-    "text": "Exécuter du code"
-  },
-  "copy:Files": {
-    "source": "Files",
-    "text": "Fichiers"
-  },
-  "copy:Calculator": {
-    "source": "Calculator",
-    "text": "Calculatrice"
-  },
-  "copy:Bank account": {
-    "source": "Bank account",
-    "text": "Compte bancaire"
-  },
-  "copy:Terminal": {
-    "source": "Terminal",
-    "text": "Terminal"
-  },
-  "copy:Production servers": {
-    "source": "Production servers",
-    "text": "Serveurs de production"
-  },
-  "copy:The internet": {
-    "source": "The internet",
-    "text": "Internet"
-  },
-  "copy:Payments sent": {
-    "source": "Payments sent",
-    "text": "Paiements envoyés"
-  },
-  "copy:Emails in your name": {
-    "source": "Emails in your name",
-    "text": "E-mails en votre nom"
-  },
-  "copy:Files deleted": {
-    "source": "Files deleted",
-    "text": "Fichiers effacés"
-  },
-  "copy:Services changed": {
-    "source": "Services changed",
-    "text": "Services modifiés"
-  },
-  "copy:Posts published": {
-    "source": "Posts published",
-    "text": "Messages publiés"
-  },
   "copy:Goal": {
     "source": "Goal",
     "text": "Objectif"
@@ -2023,193 +1831,17 @@
     "source": "Observe",
     "text": "Observer"
   },
-  "copy:Re-plan": {
-    "source": "Re-plan",
-    "text": "Replanifier"
+  "copy:The model plans, then plans again": {
+    "source": "The model plans, then plans again",
+    "text": "Le modèle planifie, puis replanifie"
   },
-  "copy:what it was asked to do": {
-    "source": "what it was asked to do",
-    "text": "ce qu'on lui a demandé"
+  "copy:Ordinary software acts and reads the result": {
+    "source": "Ordinary software acts and reads the result",
+    "text": "Du logiciel ordinaire agit et lit le résultat"
   },
-  "copy:decide the next step": {
-    "source": "decide the next step",
-    "text": "décider de la prochaine étape"
-  },
-  "copy:use a tool": {
-    "source": "use a tool",
-    "text": "utiliser un outil"
-  },
-  "copy:read the result": {
-    "source": "read the result",
-    "text": "lire le résultat"
-  },
-  "copy:adjust the plan": {
-    "source": "adjust the plan",
-    "text": "corriger le plan"
-  },
-  "copy:What we allow it to do": {
-    "source": "What we allow it to do",
-    "text": "Ce qu'on lui permet de faire"
-  },
-  "copy:Keeping a hand on the wheel": {
-    "source": "Keeping a hand on the wheel",
-    "text": "Garder la main"
-  },
-  "copy:The same agent. Only its access changes.": {
-    "source": "The same agent. Only its access changes.",
-    "text": "Le même agent. Seuls ses accès changent."
-  },
-  "copy:Everything is allowed, and everything happens without asking.": {
-    "source": "Everything is allowed, and everything happens without asking.",
-    "text": "Tout est permis, et tout se fait sans demander."
-  },
-  "copy:Risky actions go through a person first.": {
-    "source": "Risky actions go through a person first.",
-    "text": "Les actions risquées passent d'abord par une personne."
-  },
-  "copy:Access given to the agent": {
-    "source": "Access given to the agent",
-    "text": "Accès accordés à l'agent"
-  },
-  "copy:What it can do": {
-    "source": "What it can do",
-    "text": "Ce qu'il peut faire"
-  },
-  "copy:risky": {
-    "source": "risky",
-    "text": "risqué"
-  },
-  "copy:without asking": {
-    "source": "without asking",
-    "text": "sans demander"
-  },
-  "copy:with your approval": {
-    "source": "with your approval",
-    "text": "avec votre accord"
-  },
-  "copy:combination": {
-    "source": "combination",
-    "text": "combinaison"
-  },
-  "copy:The agent asks": {
-    "source": "The agent asks",
-    "text": "L'agent demande"
-  },
-  "copy:Deny": {
-    "source": "Deny",
-    "text": "Refuser"
-  },
-  "copy:Next request": {
-    "source": "Next request",
-    "text": "Demande suivante"
-  },
-  "copy:This access is off: the agent cannot even ask.": {
-    "source": "This access is off: the agent cannot even ask.",
-    "text": "Cet accès est coupé : l'agent ne peut même pas le demander."
-  },
-  "copy:Read files": {
-    "source": "Read files",
-    "text": "Lire des fichiers"
-  },
-  "copy:Write files": {
-    "source": "Write files",
-    "text": "Écrire des fichiers"
-  },
-  "copy:Web browser": {
-    "source": "Web browser",
-    "text": "Navigateur web"
-  },
-  "copy:Money": {
-    "source": "Money",
-    "text": "Argent"
-  },
-  "copy:Answer your questions": {
-    "source": "Answer your questions",
-    "text": "Répondre à vos questions"
-  },
-  "copy:Summarize your documents": {
-    "source": "Summarize your documents",
-    "text": "Résumer vos documents"
-  },
-  "copy:Find an invoice": {
-    "source": "Find an invoice",
-    "text": "Retrouver une facture"
-  },
-  "copy:Write and save a report": {
-    "source": "Write and save a report",
-    "text": "Rédiger et enregistrer un rapport"
-  },
-  "copy:Delete or overwrite files": {
-    "source": "Delete or overwrite files",
-    "text": "Effacer ou écraser des fichiers"
-  },
-  "copy:Install software": {
-    "source": "Install software",
-    "text": "Installer des logiciels"
-  },
-  "copy:Run any program": {
-    "source": "Run any program",
-    "text": "Lancer n'importe quel programme"
-  },
-  "copy:Look up current information": {
-    "source": "Look up current information",
-    "text": "Chercher des informations à jour"
-  },
-  "copy:Post or write in your name": {
-    "source": "Post or write in your name",
-    "text": "Publier ou écrire en votre nom"
-  },
-  "copy:Pay a bill": {
-    "source": "Pay a bill",
-    "text": "Payer une facture"
-  },
-  "copy:Send your documents to an outside website": {
-    "source": "Send your documents to an outside website",
-    "text": "Envoyer vos documents à un site extérieur"
-  },
-  "copy:Download a program, then run it": {
-    "source": "Download a program, then run it",
-    "text": "Télécharger un programme, puis l'exécuter"
-  },
-  "copy:Order online and pay": {
-    "source": "Order online and pay",
-    "text": "Commander en ligne et payer"
-  },
-  "copy:Pay the electricity bill: €84.20": {
-    "source": "Pay the electricity bill: €84.20",
-    "text": "Payer la facture d'électricité : 84,20 €"
-  },
-  "copy:Payment sent.": {
-    "source": "Payment sent.",
-    "text": "Paiement envoyé."
-  },
-  "copy:Nothing is paid. The agent leaves the bill to you.": {
-    "source": "Nothing is paid. The agent leaves the bill to you.",
-    "text": "Rien n'est payé. L'agent vous laisse la facture."
-  },
-  "copy:Delete 312 old files to free up space": {
-    "source": "Delete 312 old files to free up space",
-    "text": "Supprimer 312 vieux fichiers pour faire de la place"
-  },
-  "copy:Files deleted.": {
-    "source": "Files deleted.",
-    "text": "Fichiers supprimés."
-  },
-  "copy:Nothing is deleted. The agent offers a list to check.": {
-    "source": "Nothing is deleted. The agent offers a list to check.",
-    "text": "Rien n'est supprimé. L'agent propose une liste à vérifier."
-  },
-  "copy:Install a program found on a forum": {
-    "source": "Install a program found on a forum",
-    "text": "Installer un programme trouvé sur un forum"
-  },
-  "copy:Program installed.": {
-    "source": "Program installed.",
-    "text": "Programme installé."
-  },
-  "copy:Install blocked. The agent looks for another way.": {
-    "source": "Install blocked. The agent looks for another way.",
-    "text": "Installation bloquée. L'agent cherche une autre méthode."
+  "copy:You give the goal": {
+    "source": "You give the goal",
+    "text": "Vous donnez l'objectif"
   },
   "copy:A chatbot, or an agent with a tool?": {
     "source": "A chatbot, or an agent with a tool?",
@@ -2347,6 +1979,10 @@
     "source": "Example",
     "text": "Exemple"
   },
+  "copy:Calculator": {
+    "source": "Calculator",
+    "text": "Calculatrice"
+  },
   "copy:Code": {
     "source": "Code",
     "text": "Code"
@@ -2358,6 +1994,14 @@
   "copy:Tools it can use": {
     "source": "Tools it can use",
     "text": "Outils à sa disposition"
+  },
+  "copy:Web search": {
+    "source": "Web search",
+    "text": "Recherche web"
+  },
+  "copy:Run code": {
+    "source": "Run code",
+    "text": "Exécuter du code"
   },
   "copy:Illustrative exchange, written for this talk.": {
     "source": "Illustrative exchange, written for this talk.",
@@ -2503,6 +2147,34 @@
     "source": "Each connection opens one more door.",
     "text": "Chaque branchement lui ouvre une porte de plus."
   },
+  "copy:Each switch is a permission we give it": {
+    "source": "Each switch is a permission we give it",
+    "text": "Chaque interrupteur est une permission qu'on lui donne"
+  },
+  "copy:Every connection is a switch we turn on ourselves.": {
+    "source": "Every connection is a switch we turn on ourselves.",
+    "text": "Chaque branchement est un interrupteur qu'on active nous-mêmes."
+  },
+  "copy:Same model; only what we let it touch changes.": {
+    "source": "Same model; only what we let it touch changes.",
+    "text": "Même modèle ; seul change ce qu'on le laisse toucher."
+  },
+  "copy:In red: it acts in your name, hard to undo": {
+    "source": "In red: it acts in your name, hard to undo",
+    "text": "En rouge : il agit en votre nom, difficile à défaire"
+  },
+  "copy:It looks reliable, so we switch on more and more, until the day it really matters.": {
+    "source": "It looks reliable, so we switch on more and more, until the day it really matters.",
+    "text": "Il a l'air fiable, alors on en active toujours plus, jusqu'au jour où ça compte vraiment."
+  },
+  "copy:Automation bias: the more reliable a system looks, the less we check it.": {
+    "source": "Automation bias: the more reliable a system looks, the less we check it.",
+    "text": "Biais d'automatisation : plus un système a l'air fiable, moins on le vérifie."
+  },
+  "copy:sends in your name": {
+    "source": "sends in your name",
+    "text": "envoie en votre nom"
+  },
   "copy:Calendar": {
     "source": "Calendar",
     "text": "Agenda"
@@ -2511,13 +2183,33 @@
     "source": "Files and documents",
     "text": "Fichiers et documents"
   },
-  "copy:Shopping and payments": {
-    "source": "Shopping and payments",
-    "text": "Achats et paiements"
+  "copy:Web browser": {
+    "source": "Web browser",
+    "text": "Navigateur web"
+  },
+  "copy:clicks and posts for you": {
+    "source": "clicks and posts for you",
+    "text": "clique et publie pour vous"
+  },
+  "copy:runs any program": {
+    "source": "runs any program",
+    "text": "lance n'importe quel programme"
   },
   "copy:Phone and messages": {
     "source": "Phone and messages",
     "text": "Téléphone et messages"
+  },
+  "copy:texts in your name": {
+    "source": "texts in your name",
+    "text": "écrit en votre nom"
+  },
+  "copy:Shopping and payments": {
+    "source": "Shopping and payments",
+    "text": "Achats et paiements"
+  },
+  "copy:spends your money": {
+    "source": "spends your money",
+    "text": "dépense votre argent"
   },
   "copy:Original presentation by {name}": {
     "source": "Original presentation by {name}",
@@ -2834,6 +2526,14 @@
   "copy:The shaded band: where we are now": {
     "source": "The shaded band: where we are now",
     "text": "La bande claire : où nous en sommes"
+  },
+  "copy:A loop, not an answer": {
+    "source": "A loop, not an answer",
+    "text": "Une boucle, pas une réponse"
+  },
+  "copy:Every step was the same loop: plan, act, look at the result, and plan again, until the goal is met.": {
+    "source": "Every step was the same loop: plan, act, look at the result, and plan again, until the goal is met.",
+    "text": "Chaque étape suivait la même boucle : planifier, agir, regarder le résultat, et replanifier, jusqu'à atteindre l'objectif."
   },
   "copy:Slow": {
     "source": "Slow",
@@ -4058,6 +3758,10 @@
   "copy:the connection ended before this answer did": {
     "source": "the connection ended before this answer did",
     "text": "la connexion s'est coupée avant la fin de cette réponse"
+  },
+  "copy:interrupted (the window that asked was reloaded): ask again": {
+    "source": "interrupted (the window that asked was reloaded): ask again",
+    "text": "interrompu (la fenêtre qui a posé la question a été rechargée) : reposez-la"
   },
   "copy:too many requests this minute, ask again in a few seconds": {
     "source": "too many requests this minute, ask again in a few seconds",

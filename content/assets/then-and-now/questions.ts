@@ -51,6 +51,8 @@ export interface GenerationSlot {
 /** One generation's answer as published by a third party (never invented). */
 export interface PublishedRung {
   generation: string;
+  /** A few words after the generation, in parentheses ("first ChatGPT"). */
+  aka?: L10n;
   year: number;
   /** Exact model identifier as published. */
   model: string;
@@ -70,12 +72,14 @@ export interface PublishedRung {
   correct: boolean;
 }
 
-/** A question with a published answer per generation, shown one per click. */
+/** A question with a published answer per generation: the first `together` rungs on the first click, then one per click. */
 export interface Ladder {
   /** ID in the source registry (content/sources). */
   sourceId: string;
   /** The prompt exactly as the source asked it. */
   originalPrompt: string;
+  /** How many rungs the first click reveals at once (default 1). */
+  together?: number;
   rungs: PublishedRung[];
 }
 
@@ -138,6 +142,8 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
     ladder: {
       sourceId: "tk-aidigest-2023-progress",
       originalPrompt: "When ten plus four is two, what is nine plus six?",
+      // The three wrong answers land together; GPT-4 gets its own click.
+      together: 3,
       rungs: [
         {
           generation: "GPT-2",
@@ -159,6 +165,7 @@ export const thenAndNowQuestions: ThenAndNowQuestion[] = [
         },
         {
           generation: "GPT-3.5",
+          aka: { en: "first ChatGPT", fr: "premier ChatGPT" },
           year: 2022,
           model: "gpt-3.5-turbo-0613",
           cost: null,

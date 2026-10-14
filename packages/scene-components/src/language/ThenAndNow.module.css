@@ -17,6 +17,13 @@
   font-weight: 500;
   color: var(--color-text);
 }
+/* Numbers and the clock, in the question and the answers. */
+.keyTerm {
+  font-weight: 700;
+}
+.question .keyTerm {
+  font-weight: 650;
+}
 .punctuation {
   font-variation-settings: "opsz" 9;
   color: var(--color-text);
@@ -67,6 +74,14 @@
   font-family: var(--font-display);
   font-size: var(--text-md);
   color: var(--color-text);
+}
+/* "(first ChatGPT)" on its own line under the generation: smaller, so the generation stays the name. */
+.rungAka {
+  flex-basis: 100%;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 .colYear {
   font-family: var(--font-mono);

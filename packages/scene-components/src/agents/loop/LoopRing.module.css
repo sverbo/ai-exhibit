@@ -92,19 +92,6 @@
   filter: drop-shadow(0 0 10px var(--color-accent-2));
 }
 
-.gloss {
-  font-size: 26px;
-  fill: var(--color-text-muted);
-  text-anchor: middle;
-  font-style: italic;
-}
-.glossStart {
-  text-anchor: start;
-}
-.glossEnd {
-  text-anchor: end;
-}
-
 .goalText {
   font-size: 26px;
   fill: var(--color-text);

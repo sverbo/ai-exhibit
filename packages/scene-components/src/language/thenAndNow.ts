@@ -27,6 +27,36 @@ export function truncate(text: string, max: number): string {
 }
 
 
+/**
+ * What the clock riddle turns on, set in bold in the question and the answers:
+ * numbers (digits or words, English and French; not "one" or "un", which are
+ * mostly articles) and the clock itself.
+ */
+const KEY_TERM = new RegExp(
+  "(?<![\\p{L}\\d])(" +
+    [
+      "\\d+(?:[.,]\\d+)?",
+      "o['’]clock",
+      "clocks?",
+      "hours?",
+      "horloges?",
+      "heures?",
+      "zero|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen",
+      "zéro|deux|trois|quatre|cinq|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize",
+    ].join("|") +
+    ")(?![\\p{L}\\d])",
+  "giu",
+);
+
+/** A text split into plain runs and key terms (numbers, the clock), for bold. */
+export function keyTermRuns(text: string): { text: string; key: boolean }[] {
+  // split() with a capture group puts the matches at the odd indexes.
+  return text
+    .split(KEY_TERM)
+    .map((t, i) => ({ text: t, key: i % 2 === 1 }))
+    .filter((r) => r.text !== "");
+}
+
 /** Operators and punctuation: thin hairlines at display size, so they get a sturdier cut. */
 const MARK = /([+\-−×÷=<>?!.,:;$%'"“”‘’]+)/;
 const OPERATOR = /^[+\-−×÷=<>]+$/;
@@ -45,9 +75,19 @@ export function questionRuns(text: string): { text: string; kind: RunKind }[] {
     .filter((r) => r.text !== "");
 }
 
-/** Reveal stages of a game question: 0 question, one per published rung (or GPT-2), then today. */
+/** Rungs the first click reveals at once (the ladder's `together`, at least 1). */
+function together(q: ThenAndNowQuestion): number {
+  return Math.max(1, Math.min(q.ladder?.together ?? 1, q.ladder?.rungs.length ?? 1));
+}
+
+/** The stage at which published rung i appears: the first `together` rungs at stage 1, then one per stage. */
+export function rungStage(q: ThenAndNowQuestion, i: number): number {
+  return Math.max(1, i - together(q) + 2);
+}
+
+/** Reveal stages of a game question: 0 question, the published rungs (or GPT-2), then today. */
 export function lastStage(q: ThenAndNowQuestion): number {
-  return q.ladder ? q.ladder.rungs.length + 1 : 2;
+  return q.ladder ? rungStage(q, q.ladder.rungs.length - 1) + 1 : 2;
 }
 
 /**

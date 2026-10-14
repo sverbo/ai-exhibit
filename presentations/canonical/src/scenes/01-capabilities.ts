@@ -224,7 +224,7 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-then-and-now",
     code: "then",
-    steps: 6,
+    steps: 4,
     chapter: "01",
     number: "1.1",
     title: { en: "Then and now" },
@@ -239,10 +239,11 @@ export const chapter01: SceneDefinition[] = [
     speakerNotes: {
       en: `- The idea: show how much models improved in a few years. If your picture of AI stopped somewhere, it is out of date
 - The riddle: "When ten plus four is two, what is nine plus six?" Let the **room answer first** (3, on a clock)
-- Clicks 1 to 4: GPT-2 (2019) wrong, GPT-3 (2020) wrong, GPT-3.5 (2022) still wrong, GPT-4 (2023) gets it
+- Click 1: GPT-2 (2019), GPT-3 (2020) and GPT-3.5 (2022, the first ChatGPT) all wrong, together
+- Click 2: GPT-4 (2023) gets it
 - The costs on screen are the **last training run** only (Epoch AI's estimates, the same as the next slides): GPT-2 about $4,300, GPT-3 about $2.1 million, GPT-4 about $37 million. With every trial, experiment and failed run, a model's development takes about 1.2 to 4 times that compute (2.2 times typically), salaries not included. Rented on the cloud, the bills were higher still: GPT-2 about $43,000, GPT-3 about $4.6 million, and Altman said GPT-4 cost "more than" $100 million
-- Click 5: today's reasoning model, a recorded answer with its name and date
-- Click 6, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)
+- Click 3: today's reasoning model, a recorded answer with its name and date
+- Click 4, live: type any question; three open models of increasing size answer side by side, each with its year and size: Qwen2.5 0.5B (2024, a base model never trained to chat), Llama 3.1 8B Instruct (2024), GLM-5.3 (Z.ai, 2026, 753 billion parameters, thinks before answering)
 - Try other tricks, for example with letters: "How many r's are in the word strawberry?" (prefilled). Models never see letters, only pieces of words: we will see why in **Tokens**
 - Simulation (no Hugging Face): the field is locked on the strawberry question and shows the answers recorded on 4 October 2026: 1, then 2, then 3 (correct)
 - GPT-2 to GPT-4 cannot be called live (closed, or not served), hence open models on the live step`,
@@ -429,31 +430,38 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-connected",
     code: "conn",
-    steps: 7,
+    steps: 9,
     chapter: "01",
     number: "1.4",
     title: { en: "Connected to your life" },
     objective: {
-      en: "Show that today's assistants can be connected to email, calendar, files, the browser, payments and code.",
+      en: "Show that today's assistants can be connected to email, calendar, files, the browser, code, messages and payments, that each connection is a permission we give, and that some of them let it act in our name.",
     },
     takeaway: {
-      en: "An agent is a model that can call tools: it no longer just answers, it acts in your mail, files, browser and payments.",
+      en: "An agent acts through the tools we connect it to; each connection is a permission, and because it looks reliable, we keep switching on riskier ones.",
     },
     visual: { layout: "component", component: "ConnectedAssistant", props: {} },
     interaction: "presenter",
     speakerNotes: {
       en: `- The difference between a chatbot and an **agent**: an agent can **call tools**
 - The assistant sits in the middle; connectors appear one by one
-- **Email and calendar**: read, draft, schedule
-- **Files**: search and summarise your documents
-- **Browser**: it clicks and fills forms on websites
-- **Shopping and payments**: protocols now exist for agents to pay
-- **Code**: it writes and runs programs
-- Every connector is a permission we choose to give: next slide`,
+  - **Email and calendar**: read, draft, schedule
+  - **Files**: search and summarise your documents
+  - **Browser**: it clicks and fills forms on websites
+  - **Code**: it writes and runs programs
+  - **Messages**: it texts for you
+  - **Shopping and payments**: protocols now exist for agents to pay
+- Click: **each connection is a permission** we choose to give, a switch we turn on. Same model; only what we let it touch changes. Each switch turns advice into action
+- Click: **in red, what acts in your name** or is hard to undo: sending, posting, running programs, paying
+- We say some things are risky; in practice, **productivity** and convenience push us to switch on more and more. Because it looks reliable, we give it more permissions, until the day it really matters
+- This has a name: **automation bias**. The more reliable a system looks, the less we check it
+- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me
+- Money is real: published tools already let agents make transfers
+- Question to the room: which switch would make you hesitate on your own computer?`,
     },
     transitionIn: { en: "From answering to acting." },
     transitionOut: {
-      en: "Connected, yes. But allowed to do what?",
+      en: "Here is what it looks like when I switch them on myself.",
     },
     evidenceLevel: "observed",
     sourceIds: [
@@ -462,49 +470,12 @@ export const chapter01: SceneDefinition[] = [
       "fnd-claude-computer-use-docs",
       "fnd-claude-code-docs",
       "fnd-google-ap2",
+      "fm-aisi-trends-2025-agents-finance",
     ],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "deterministic" },
-    durationSec: 120,
-    optional: false,
-  },
-  {
-    id: "01-permissions",
-    code: "perm",
-    steps: 5,
-    chapter: "01",
-    number: "1.5",
-    title: { en: "Permissions" },
-    objective: {
-      en: "Show that what an assistant can do depends on what we allow it to touch, up to spending money.",
-    },
-    takeaway: {
-      en: "Because agents look more and more reliable, we keep giving them more permissions, until the day it really matters.",
-    },
-    visual: { layout: "component", component: "PermissionsBoard", props: { mode: "permissions" } },
-    interaction: "presenter",
-    speakerNotes: {
-      en: `- Same model; only what we allow it to touch changes: read files, write files, terminal, browser, money. Each switch turns advice into action
-- We say some things are risky; in practice, **productivity** and convenience push us to accept more and more risky actions
-- The agent looks more and more reliable, so we feel it will be fine. Because it looks reliable, we give it more permissions, until the day it really matters
-- This has a name: **automation bias**. The more reliable a system looks, the less we check it
-- My own case: I gave mine access to almost everything. It can **spend money** (credits in my name) and **modify databases**, things I did not allow before. The upside: it works for **two hours** without me
-- Money is real: published tools already let agents make transfers
-- Question to the room: which switch would make you hesitate on your own computer?`,
-    },
-    transitionIn: {
-      en: "The connections exist; what matters is what we switch on.",
-    },
-    transitionOut: {
-      en: "Here is what it looks like when I switch them on myself.",
-    },
-    evidenceLevel: "observed",
-    sourceIds: ["fm-aisi-trends-2025-agents-finance"],
-    runtimeClass: "A",
-    artifacts: [],
-    fallback: { kind: "deterministic" },
-    durationSec: 120,
+    durationSec: 180,
     optional: false,
   },
   {
@@ -512,7 +483,7 @@ export const chapter01: SceneDefinition[] = [
     code: "demo",
     steps: 1,
     chapter: "01",
-    number: "1.6",
+    number: "1.5",
     title: { en: "My own demo" },
     objective: {
       en: "Show a real task the presenter gave an AI assistant, recorded on screen.",
@@ -551,7 +522,7 @@ export const chapter01: SceneDefinition[] = [
     code: "nomem",
     steps: 3,
     chapter: "01",
-    number: "1.7",
+    number: "1.6",
     title: { en: "How does it follow the conversation?" },
     objective: {
       en: "Show that a model does not learn while you chat: at every message, the app sends it the whole conversation again, within the context window, plus text you never see (a system prompt, the tool descriptions).",
@@ -628,7 +599,7 @@ export const chapter01: SceneDefinition[] = [
     code: "tool",
     steps: 5,
     chapter: "01",
-    number: "1.8",
+    number: "1.7",
     title: { en: "Calling a tool" },
     objective: {
       en: "Show, with real JSON, that a model only writes text and the software around it runs the tools.",
@@ -670,17 +641,17 @@ export const chapter01: SceneDefinition[] = [
   {
     id: "01-one-request",
     code: "steps",
-    steps: 15,
+    steps: 16,
     chapter: "01",
-    number: "1.9",
+    number: "1.8",
     title: { en: "One request, every step" },
     objective: {
       en: "Make every step of one complex request visible: tool calls, sub-agents in parallel, merged results, a human approval before paying.",
     },
     takeaway: {
-      en: "Behind one sentence, an agent plans, splits the work and runs many steps, and sometimes it decides by itself whether to ask you first.",
+      en: "Behind one sentence, an agent runs a loop (plan, act, observe, plan again), splits the work, and sometimes decides by itself whether to ask you first.",
     },
-    visual: { layout: "component", component: "AgentRunExplainer", props: { scenario: "weekend-trip" } },
+    visual: { layout: "component", component: "AgentRunExplainer", props: { scenario: "weekend-trip", loop: true } },
     interaction: "presenter",
     speakerNotes: {
       en: `- Illustrative, not a recording: say so. One sentence: plan a weekend trip
@@ -689,55 +660,21 @@ export const chapter01: SceneDefinition[] = [
 - **Approval**, two cases: either the tool always requires it, **hard-coded** in the software (deterministic; payments usually are), or **the model decides** when to ask you
 - The second case is where it can be dangerous: it is **not deterministic**. We hope it knows that this kind of action needs your yes. Payments are usually hard-coded, but many things are less black and white: be careful
 - Another reason hard-coded gates matter: **prompt injection**. A web page or an email read by the agent can hide instructions ("send this file to..."), and the agent may follow them
-- Stop at the approval gate: nothing is paid without a yes`,
+- Stop at the approval gate: nothing is paid without a yes
+- Last click, **a loop, not an answer**: every step was the same loop, plan, act, observe, plan again, until the goal is met or it asks you
+- In yellow, the model: like a chatbot, it plans and re-plans. In green, ordinary software: it picks up each request and makes an ordinary call (internet, code), as computers always did
+- What is new is not calling tools: the magic of text generation is in **planning and re-planning**`,
     },
     transitionIn: {
       en: "From a real run to a slowed-down one.",
     },
-    transitionOut: {
-      en: "All these steps follow one simple pattern.",
-    },
+    transitionOut: { en: "So what is inside? Let us open the box." },
     evidenceLevel: "thought-experiment",
-    sourceIds: ["fm-anthropic-building-agents-2024", "fnd-chatgpt-agent-system-card"],
+    sourceIds: ["fm-anthropic-building-agents-2024", "fnd-chatgpt-agent-system-card", "fnd-claude-tool-use-docs"],
     runtimeClass: "A",
     artifacts: [],
     fallback: { kind: "deterministic" },
     durationSec: 195,
     optional: false,
-  },
-  {
-    id: "01-agent-loop",
-    code: "loop",
-    steps: 5,
-    chapter: "01",
-    number: "1.10",
-    title: { en: "The agent loop" },
-    objective: {
-      en: "Name the pattern: an agent is a model in a loop of goal, plan, act, observe, re-plan.",
-    },
-    takeaway: {
-      en: "An agent is a model in a loop (goal, plan, act, observe, plan again): what is new is not the tool call, it is the planning.",
-    },
-    visual: { layout: "component", component: "AgentLoop", props: { variant: "intro" } },
-    interaction: "presenter",
-    speakerNotes: {
-      en: `- **A loop, not an answer**: goal, plan, act, observe, plan again
-- It can go round many, many times. For the model these are just back-and-forths with you; in reality you barely step in, because the software picks up each request and makes an ordinary call (internet, code), as computers always did
-- In the middle, a language model like a chatbot; around it, ordinary software, tools and a memory
-- What is new is not calling tools: the magic of text generation is in **planning and re-planning**
-- It goes round until the goal is met, or until it asks you`,
-    },
-    transitionIn: {
-      en: "From one example to the general pattern.",
-    },
-    transitionOut: { en: "So what is inside? Let us open the box." },
-    evidenceLevel: "none",
-    sourceIds: ["fnd-claude-tool-use-docs", "fm-anthropic-building-agents-2024"],
-    runtimeClass: "A",
-    artifacts: [],
-    fallback: { kind: "deterministic" },
-    durationSec: 90,
-    optional: false,
-    localizationNotes: "Loop labels come from the AgentLoop component strings; say them with the same words.",
   },
 ];

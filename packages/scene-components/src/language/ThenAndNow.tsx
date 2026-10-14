@@ -35,7 +35,9 @@ import {
   type LiveLadder,
   lastStage,
   liveQuestion,
+  keyTermRuns,
   liveStage,
+  rungStage,
   maxStage,
   pickQuestions,
   questionRuns,
@@ -76,6 +78,14 @@ function Game({ props, ctx }: SceneComponentProps<ThenAndNowProps, ThenAndNowSta
   const canAskLive = decision.active === "hf";
 
   useEffect(() => () => liveAbort.current?.abort(), []);
+
+  // A run still marked as running that this window is not streaming was cut off by a reload
+  // (its stream died with the old page): close it, or the field would stay busy for good.
+  useEffect(() => {
+    if (role !== "controller" || !state.live?.running || liveAbort.current) return;
+    setState((s) => (s.live?.running ? { ...s, live: failLive(s.live, tr(COPY.liveInterrupted, locale)) } : s));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role, state.live?.running]);
 
   /** Every rung at once; each answer grows as its words arrive from the server. */
   const askLive = async (input: string) => {
@@ -379,10 +389,11 @@ function LadderView({ q, stage, locale }: { q: ThenAndNowQuestion; stage: number
     <div className={styles.ladderWrap}>
       <ol className={styles.ladder}>
         {ladder.rungs.map((r, i) => (
-          <li key={r.generation} className={cx(styles.rung, stage < i + 1 && styles.hidden)} aria-hidden={stage < i + 1}>
+          <li key={r.generation} className={cx(styles.rung, stage < rungStage(q, i) && styles.hidden)} aria-hidden={stage < rungStage(q, i)}>
             <span className={styles.rungWho}>
               <span className={styles.colTitle}>{r.generation}</span>
               <span className={styles.colYear}>{r.year}</span>
+              {r.aka ? <span className={styles.rungAka}>({tr(r.aka, locale)})</span> : null}
               <span className={styles.rungCost}>
                 {r.cost ? `${tr(COPY.estimatedCost, locale)} ${tr(r.cost, locale)}` : tr(COPY.costUnknown, locale)}
               </span>
@@ -405,7 +416,9 @@ function LadderView({ q, stage, locale }: { q: ThenAndNowQuestion; stage: number
               {tr(COPY.recordedAnswer, locale)}, {formatDate(q.today.date, locale)}
             </span>
           </span>
-          <q className={styles.rungAnswer}>{tr(q.today.answer, locale)}</q>
+          <q className={styles.rungAnswer}>
+            <KeyTerms text={tr(q.today.answer, locale)} />
+          </q>
           <Mark correct locale={locale} />
         </li>
       </ol>
@@ -423,17 +436,22 @@ export function AnswerInLocale({ answer, translated, locale }: { answer: string;
   if (!translated || locale === "en") {
     return (
       <q className={styles.rungAnswer} lang="en">
-        {answer}
+        <KeyTerms text={answer} />
       </q>
     );
   }
   return (
     <>
       <span className={styles.rungAnswer}>
-        <em>{typeset(translated, locale)}</em> <span className={styles.translationLabel}>({tr(COPY.translatedFromEnglish, locale)})</span>
+        <em>
+          <KeyTerms text={typeset(translated, locale)} />
+        </em> <span className={styles.translationLabel}>({tr(COPY.translatedFromEnglish, locale)})</span>
       </span>
       <span className={styles.translation}>
-        <span className={styles.translationLabel}>{tr(COPY.original, locale)}</span> <q lang="en">{answer}</q>
+        <span className={styles.translationLabel}>{tr(COPY.original, locale)}</span>{" "}
+        <q lang="en">
+          <KeyTerms text={answer} />
+        </q>
       </span>
     </>
   );
@@ -485,6 +503,23 @@ function QuestionText({ text }: { text: string }) {
           <span key={i} className={styles[run.kind]}>
             {run.text}
           </span>
+        ) : (
+          <KeyTerms key={i} text={run.text} />
+        ),
+      )}
+    </>
+  );
+}
+
+/** Numbers and the clock in bold: what the riddle turns on. */
+function KeyTerms({ text }: { text: string }) {
+  return (
+    <>
+      {keyTermRuns(text).map((run, i) =>
+        run.key ? (
+          <strong key={i} className={styles.keyTerm}>
+            {run.text}
+          </strong>
         ) : (
           run.text
         ),

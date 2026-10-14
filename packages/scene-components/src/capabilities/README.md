@@ -8,12 +8,15 @@ state hooks and buttons from `../learning/shared/`.
 
 ## ConnectedAssistant
 
-Props: `{}`. Used by 1.3.
+Props: `{}`. Used by 1.4.
 
 The assistant sits in the middle of the stage; connectors appear around it,
 one per step, each with a one-line everyday request in large type and the
 short label of the sources showing that a public product offers that kind of
-connection. Data: `connected/connectors.ts`.
+connection. Two more clicks turn the ring into permissions: a switch on every
+connector, then the risky connectors in red, each with what it lets the agent do in
+your name (`risk` in the data). Each of those clicks has one callout arrow.
+Data: `connected/connectors.ts`.
 
 | Step | Shows |
 | --- | --- |
@@ -22,11 +25,13 @@ connection. Data: `connected/connectors.ts`.
 | 2 | + Calendar |
 | 3 | + Files and documents |
 | 4 | + Web browser |
-| 5 | + Shopping and payments |
-| 6 | + Code |
-| 7 | + Phone and messages |
+| 5 | + Code |
+| 6 | + Phone and messages |
+| 7 | + Shopping and payments |
+| 8 | A switch on every connector, arrow: "Each switch is a permission we give it" |
+| 9 | Risky connectors in red (email, browser, code, messages, payments), arrow: "In red: it acts in your name, hard to undo"; band on automation bias |
 
-`scene.steps`: 7.
+`scene.steps`: 9.
 
 Sources per connector: `fnd-claude-google-workspace` (email, calendar, files),
 `fnd-claude-for-chrome` and `fnd-chatgpt-agent-system-card` (browser),
@@ -39,7 +44,7 @@ Presenter View and `/handout`.
 
 ## AgentRunExplainer
 
-Props: `{ scenario: "weekend-trip" }`. Used by 1.6.
+Props: `{ scenario: "weekend-trip"; loop?: boolean }`. Used by 1.8 (with `loop`).
 
 One complex request, every step visible. The top shows the request, the
 "illustrative reconstruction" disclosure (always on screen) and four counters
@@ -78,8 +83,9 @@ Shared state is only `{ playing, speed }`.
 | 13 | Tool: booking and payment (after approval) |
 | 14 | Tool: invitation sent |
 | 15 | Summary |
+| 16 | With `loop`: the score stays complete; the bottom names the pattern, "A loop, not an answer", with the loop in small (`agents/loop/MiniLoop.tsx`): plan, act, observe, and back to plan, a pulse going round; the model plans (yellow), ordinary software acts and reads the result (green) |
 
-`scene.steps`: 15 (scenario length minus one).
+`scene.steps`: 15 (scenario length minus one), 16 with `loop`.
 
 Data: `content/assets/scenarios/weekend-trip.ts`, typed and validated by
 `content/assets/scenarios/index.ts` (`validateScenario`: starts with a request,
