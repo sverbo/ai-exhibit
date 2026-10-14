@@ -222,6 +222,35 @@ describe("cloud API", () => {
     expect(f).not.toHaveBeenCalled();
   });
 
+  it("tries the base model again when its provider is at capacity, and only then", async () => {
+    const capacity = () =>
+      new Response(JSON.stringify({ error: { message: "meta-llama/Llama-3.1-8B is temporarily at capacity. Please try again shortly." } }), { status: 503 });
+    const busyOnce = vi.fn().mockResolvedValueOnce(capacity()).mockResolvedValue(okJson({ choices: [{ text: " sleep" }] }));
+    const api = createCloudApi({ token: () => FAKE, fetch: busyOnce as unknown as typeof fetch, limits: PUBLIC_LIMITS });
+    const ok = await call(api, req("POST", "/api/llm/complete", { prompt: "How to" }), "198.51.100.40");
+    expect(ok.status).toBe(200);
+    expect(ok.json!.text).toBe(" sleep");
+    expect(busyOnce).toHaveBeenCalledTimes(2);
+
+    const broken = vi.fn(async () => new Response("bad request", { status: 400 }));
+    const api2 = createCloudApi({ token: () => FAKE, fetch: broken as unknown as typeof fetch, limits: PUBLIC_LIMITS });
+    const bad = await call(api2, req("POST", "/api/llm/complete", { prompt: "How to" }), "198.51.100.41");
+    expect(bad.status).toBeGreaterThanOrEqual(400);
+    expect(broken).toHaveBeenCalledTimes(1);
+  });
+
+  it("gives up on a provider that stays at capacity within the time limit", async () => {
+    let t = 0;
+    const full = vi.fn(async () => {
+      t += 11_000; // featherless-ai takes about 11 s to say it is full
+      return new Response(JSON.stringify({ error: { message: "temporarily at capacity" } }), { status: 503 });
+    });
+    const api = createCloudApi({ token: () => FAKE, fetch: full as unknown as typeof fetch, limits: PUBLIC_LIMITS, now: () => t });
+    const res = await call(api, req("POST", "/api/llm/complete", { prompt: "How to" }), "198.51.100.42");
+    expect(res.status).toBe(502);
+    expect(full.mock.calls.length).toBeLessThanOrEqual(3);
+  });
+
   it("never echoes the token from an upstream error", async () => {
     const f = vi.fn(async () => new Response(`bad token ${FAKE}`, { status: 401 }));
     const api = createCloudApi({ token: () => FAKE, fetch: f as unknown as typeof fetch });

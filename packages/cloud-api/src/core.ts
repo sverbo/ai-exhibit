@@ -129,6 +129,10 @@ export const LADDER_BASE_TOKENS = 200;
 export const LADDER_REASONING_TOKENS = 3072;
 /** Pause before trying a busy provider again. */
 export const LADDER_RETRY_MS = 1500;
+/** The same pause for the single-model endpoints. */
+export const BUSY_RETRY_MS = LADDER_RETRY_MS;
+/** A new try is only worth starting with at least this much of the time limit left. */
+export const MIN_TRY_MS = 4000;
 
 /**
  * A failure worth one more try at the same provider: rate limits, overload,
@@ -712,11 +716,11 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     minutes.take(key, t);
   };
 
-  const post = async (url: string, body: unknown): Promise<unknown> => {
+  const post = async (url: string, body: unknown, timeoutMs = limits.timeoutMs): Promise<unknown> => {
     const key = options.token();
     if (!key) throw new CloudError("not-configured", "HF_TOKEN is not set");
     const ac = new AbortController();
-    const timer = setTimeout(() => ac.abort(), limits.timeoutMs);
+    const timer = setTimeout(() => ac.abort(), timeoutMs);
     try {
       const res = await doFetch(url, {
         method: "POST",
@@ -737,6 +741,25 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
       throw new CloudError("upstream", `Network error: ${String((err as Error)?.message ?? err).slice(0, 120)}`);
     } finally {
       clearTimeout(timer);
+    }
+  };
+
+  /**
+   * `post` for a provider that is sometimes full (featherless-ai, the only one
+   * serving the base model, answers "temporarily at capacity", often after
+   * about 11 s; seen 2026-10-14): a busy answer is tried again after a short
+   * pause, as long as a new try still fits in the same time limit.
+   */
+  const postPatiently = async (url: string, body: unknown): Promise<unknown> => {
+    const deadline = now() + limits.timeoutMs;
+    for (;;) {
+      try {
+        return await post(url, body, Math.max(1, deadline - now()));
+      } catch (err) {
+        const busy = err instanceof CloudError && err.code === "upstream" && isBusy(err.message);
+        if (!busy || deadline - now() < BUSY_RETRY_MS + MIN_TRY_MS) throw err;
+        await new Promise((r) => setTimeout(r, BUSY_RETRY_MS));
+      }
     }
   };
 
@@ -824,7 +847,7 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const complete = async (body: unknown, lim: Limits) => {
     const { prompt, maxTokens, temperature } = parseCompleteBody(body, lim);
     const t0 = now();
-    const json = (await post(BASE_URL, {
+    const json = (await postPatiently(BASE_URL, {
       model: BASE_MODEL,
       prompt,
       max_tokens: maxTokens,
