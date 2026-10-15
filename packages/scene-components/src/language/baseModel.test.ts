@@ -122,6 +122,23 @@ describe("BaseModelPlayground with Hugging Face", () => {
     expect(calls).toEqual(["/api/llm/next", "/api/llm/next"]);
   });
 
+  it("keeps the text live when only the bars fail, and +1 then asks the base model for one token", async () => {
+    const PAYG = { error: "upstream", message: 'Hugging Face answered 402: {"error":"Pay-as-you go is not enabled for provider together yet."}' };
+    const calls = server({ "/api/llm/next": [() => json(502, PAYG)], "/api/llm/complete": [() => json(200, { ...COMPLETE, text: " there" })] });
+    const s = setup();
+    await s.engine.refresh();
+    // The scene stays on Hugging Face: no Simulation, no error notice, just no bars.
+    expect(s.source()).toBe("hf");
+    expect(s.failure()).toBeNull();
+    expect(s.state()).toMatchObject({ candidates: [], bars: null, notice: null });
+    await s.engine.oneToken();
+    expect(s.state().appended.map((t) => t.text).join("")).toBe(" there");
+    // The bars' endpoint is not asked again: one failed call, then the base model only.
+    expect(calls).toEqual(["/api/llm/next", "/api/llm/complete"]);
+    const sent = (fetch as unknown as { mock: { calls: [string, RequestInit][] } }).mock.calls.find((c) => c[0] === "/api/llm/complete")!;
+    expect(JSON.parse(String(sent[1].body))).toMatchObject({ maxTokens: 1 });
+  });
+
   it("falls back to Simulation on any other failure, with the reason, until the retry", async () => {
     const calls = server({
       "/api/llm/next": [() => json(200, NEXT)],

@@ -18,7 +18,7 @@ import {
 import type { ModelSource } from "../contract.ts";
 import type { NoticeKey } from "./runtime.ts";
 import { type Cand, DEFAULT_TEMPERATURE } from "./shared.ts";
-import { type CloudFailure, isPause, pauseLeftMs } from "./source.ts";
+import { type CloudFailure, classifyFailure, isPause, pauseLeftMs } from "./source.ts";
 
 export interface BaseModelState {
   prompt: string;
@@ -85,6 +85,13 @@ export function createBaseModelEngine(deps: BaseModelDeps) {
   let generation = 0;
   let abort: AbortController | null = null;
   let pauseTimer: ReturnType<typeof setTimeout> | null = null;
+  /**
+   * The bars' endpoint failed for another reason than a pause (with a free
+   * Hugging Face key, Together refuses it): the text keeps coming live from the
+   * base model, the bars fall back to the recorded ones where they exist, and
+   * the endpoint is not asked again for this scene.
+   */
+  let barsDown = false;
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, deps.reducedMotion() ? 0 : ms));
 
   /** The whole text so far: what the next prediction continues. */
@@ -127,6 +134,10 @@ export function createBaseModelEngine(deps: BaseModelDeps) {
       }));
       return;
     }
+    if (barsDown) {
+      recordedBarsOrNone(s);
+      return;
+    }
     try {
       const r = await cloudNextToken({ prompt: fullText(s), temperature: 0 });
       if (gen !== generation) return;
@@ -139,18 +150,33 @@ export function createBaseModelEngine(deps: BaseModelDeps) {
       }));
     } catch (err) {
       if (gen !== generation) return;
-      const failure = deps.cloudFailed(err);
-      // Otherwise the scene is in Simulation now, and asks for recorded bars.
-      if (isPause(failure)) {
+      if (isPause(classifyFailure(err))) {
+        const failure = deps.cloudFailed(err);
         // The bars on screen were for the text before: hide them until the new ones come.
         set((x) => ({ ...x, candidates: [] }));
         pause(failure, gen, true);
+        return;
       }
+      // Only the bars failed: the scene stays on Hugging Face for the text.
+      barsDown = true;
+      recordedBarsOrNone(s);
     }
+  };
+
+  /** The recorded bars for this text when there are some, else none (then +1 asks the base model for one token). */
+  const recordedBarsOrNone = (s: BaseModelState) => {
+    const step = recordedStep(s);
+    set((x) => ({
+      ...x,
+      candidates: step ? step.candidates.map((c, i) => ({ id: i, text: c.text, p: c.p })) : [],
+      bars: step ? { model: BARS_LABEL, recorded: true } : null,
+    }));
   };
 
   const oneToken = async () => {
     const s = get();
+    // No bars (their endpoint is down, nothing recorded for this text): the base model writes one token.
+    if (!s.busy && !s.candidates.length && barsDown && deps.source() === "hf" && s.appended.length < MAX_APPENDED) return severalTokens(1);
     if (s.busy || s.appended.length >= MAX_APPENDED || !s.candidates.length) return;
     const gen = generation;
     set((x) => ({ ...x, busy: true }));
