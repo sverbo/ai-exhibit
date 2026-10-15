@@ -300,23 +300,23 @@ Alors, que sort-il de tout cet entraînement ? Ce qu'on vient de décrire, c'est
 
 C'est le moment de jouer avec la température. À 0, on prend toujours le mot le plus probable, donc on obtient presque toujours le même texte, puisque les calculs sont déterministes (sur les serveurs, un mot peut quand même changer de temps en temps). À 1, on tire au sort de manière pondérée : si « chat » est à 30 %, il sort environ une fois sur trois. Plus on monte, plus les chances s'aplatissent et plus des mots bizarres sortent. Essayons 5 : très vite, ça ne veut plus rien dire. C'est la démonstration de ce que je vous annonçais : si le modèle n'est pas assez bon, un mot bizarre entraîne le suivant, et ça part en cacahuète.
 
-## 2.20 Un assistant après fine-tuning
-
-**À retenir :** Le même modèle, entraîné en plus sur des conversations et nourri d'un texte caché : c'est ça qui fait un chatbot.
-
-Alors, comment devient-il un assistant ? Voici le même modèle, entraîné en plus sur des questions et des réponses : Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on vient d'utiliser. Posons-lui les mêmes questions : maintenant, il répond, de façon cohérente. Il a été entraîné à se comporter en assistant, d'abord avec des exemples de conversations, puis avec des récompenses pour les réponses que les gens préfèrent. Un fait frappant : les gens préféraient les réponses d'un assistant de 1,3 milliard de paramètres à celles de GPT-3 brut, 175 milliards, cent fois plus gros. Ce n'est donc pas qu'une question de taille.
-
-Il est aussi entraîné à refuser certaines demandes, et l'exemple de refus que vous voyez est un vrai refus enregistré, sur la question de la bombe. Mais les refus sont appris, et l'apprentissage peut échouer : les grands assistants ajoutent beaucoup plus d'entraînement de sécurité et de filtres. Et puis il y a ce que le modèle lit vraiment, et que vous ne voyez jamais : un prompt système caché, des balises de rôle, votre question, puis « assistant: », et il continue le texte. C'est toujours de la prédiction du mot suivant. Il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter.
-
-## 2.21 Comment on façonne un assistant
+## 2.20 Comment on façonne un assistant
 
 **À retenir :** Un assistant, c'est un modèle pré-entraîné façonné par trois couches (des exemples, des règles écrites, des classificateurs), et aucune ne suffit seule.
 
-Mais les exemples ne sont pas les seuls à le façonner. Partons du même modèle pré-entraîné : trois couches en font un produit. La première, ce sont des exemples : beaucoup de conversations, pour qu'il soit récompensé quand il se comporte en assistant, et récompensé pour des valeurs et des comportements humains. La deuxième, ce sont des règles écrites. Certaines entreprises, pas toutes, publient une constitution, comme Anthropic, ou une Model Spec, une spécification du modèle, comme OpenAI, et le modèle est entraîné à la suivre. On y trouve par exemple, dans les deux, l'interdiction d'aider à créer des armes chimiques, biologiques, radiologiques ou nucléaires. Elles lui demandent aussi de rester gentil et honnête, et de ne pas vous flatter juste pour vous plaire : c'est ce qu'on appelle la sycophancy, la complaisance.
+Alors, comment devient-il un assistant ? Partons du même modèle pré-entraîné : trois couches en font un produit. La première, ce sont des exemples : beaucoup de conversations, pour qu'il soit récompensé quand il se comporte en assistant, et récompensé pour des valeurs et des comportements humains. La deuxième, ce sont des règles écrites. Certaines entreprises, pas toutes, publient une constitution, comme Anthropic, ou une Model Spec, une spécification du modèle, comme OpenAI, et le modèle est entraîné à la suivre. On y trouve par exemple, dans les deux, l'interdiction d'aider à créer des armes chimiques, biologiques, radiologiques ou nucléaires. Elles lui demandent aussi de rester gentil et honnête, et de ne pas vous flatter juste pour vous plaire : c'est ce qu'on appelle la sycophancy, la complaisance.
 
 Et la complaisance est bien réelle. En avril 2025, OpenAI a retiré une mise à jour de GPT-4o parce qu'elle flattait trop les utilisateurs. Un modèle récompensé pour être apprécié apprend à dire ce qu'on veut entendre. C'est le premier exemple, encore inoffensif, d'une idée qui reviendra au chapitre des risques : l'IA fait ce qu'on a récompensé, pas forcément ce qu'on voulait.
 
-La troisième couche, ce sont des classificateurs : des modèles séparés, comme notre classificateur de sports, qui vérifient votre question avant même qu'elle atteigne le modèle, et la réponse avant qu'elle vous arrive. Ils peuvent bloquer l'une ou l'autre. À quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule. Et cela nous amène à la question suivante : qui construit ces modèles ?
+La troisième couche, ce sont des classificateurs : des modèles séparés, comme notre classificateur de sports, qui vérifient votre question avant même qu'elle atteigne le modèle, et la réponse avant qu'elle vous arrive. Ils peuvent bloquer l'une ou l'autre. À quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule. Essayons le résultat.
+
+## 2.21 Un assistant après fine-tuning
+
+**À retenir :** Le même modèle, entraîné en plus sur des conversations et nourri d'un texte caché : c'est ça qui fait un chatbot.
+
+Voici le résultat : le même modèle, entraîné en plus sur des questions et des réponses, Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on a utilisé deux slides plus tôt. Posons-lui les mêmes questions : maintenant, il répond, de façon cohérente. Il a été entraîné à se comporter en assistant, d'abord avec des exemples de conversations, puis avec des récompenses pour les réponses que les gens préfèrent. Un fait frappant : les gens préféraient les réponses d'un assistant de 1,3 milliard de paramètres à celles de GPT-3 brut, 175 milliards, cent fois plus gros. Ce n'est donc pas qu'une question de taille.
+
+Il est aussi entraîné à refuser certaines demandes, et l'exemple de refus que vous voyez est un vrai refus enregistré, sur la question de la bombe. Mais les refus sont appris, et l'apprentissage peut échouer : les grands assistants ajoutent beaucoup plus d'entraînement de sécurité et de filtres. Et puis il y a ce que le modèle lit vraiment, et que vous ne voyez jamais : un prompt système caché, des balises de rôle, votre question, puis « assistant: », et il continue le texte. C'est toujours de la prédiction du mot suivant. Il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter. Et cela nous amène à la question suivante : qui construit ces modèles ?
 
 # Chapitre 3 : Qui la construit
 

@@ -300,23 +300,23 @@ So what comes out of all this training? What we have just described is pretraini
 
 This is the moment to play with temperature. At 0, we always take the most likely word, so we almost always get the same text, since the computations are deterministic (on servers, a word can still change now and then). At 1, we draw at random, weighted: if "cat" is at 30%, it comes out about one time in three. The higher we go, the flatter the odds and the more odd words come out. Let's try 5: very quickly, it stops making sense. That is the demonstration of what I told you earlier: if the model is not good enough, one odd word drags in the next, and it goes off the rails.
 
-## 2.20 A fine-tuned assistant
-
-**Takeaway:** The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.
-
-So how does it become an assistant? Here is the same model, trained further on questions and answers: Llama 3.1 8B Instruct, the assistant version of the base model we just used. Let's ask it the same questions: now it answers, coherently. It was trained to behave as an assistant, first with example conversations, then with rewards for the answers people prefer. A striking fact: people preferred the answers of a 1.3 billion parameter assistant to those of raw GPT-3, 175 billion, a hundred times bigger. So it is not only a question of size.
-
-It is also trained to refuse some requests, and the refusal example you see is a real recorded refusal, on the bomb question. But refusals are learned, and learning can fail: the big assistants add far more safety training and filters. And then there is what the model really reads, which you never see: a hidden system prompt, role tags, your question, then "assistant:", and it continues the text. It is still next-word prediction. It writes the answer, then an end tag that tells the software to stop.
-
-## 2.21 How an assistant is shaped
+## 2.20 How an assistant is shaped
 
 **Takeaway:** An assistant is a pretrained model shaped by three layers (examples, written rules, classifiers), and none is enough alone.
 
-But examples are not the only thing that shapes it. Let's start from the same pretrained model: three layers turn it into a product. The first is examples: lots of conversations, so that it is rewarded for behaving as an assistant, and rewarded for human values and behaviours. The second is written rules. Some companies, not all, publish a constitution, like Anthropic, or a Model Spec, a specification of the model, like OpenAI, and the model is trained to follow it. Both include, for example, a ban on helping to create chemical, biological, radiological or nuclear weapons. They also ask it to stay kind and honest, and not to flatter you just to please you: that is what we call sycophancy.
+So how does it become an assistant? Let's start from the same pretrained model: three layers turn it into a product. The first is examples: lots of conversations, so that it is rewarded for behaving as an assistant, and rewarded for human values and behaviours. The second is written rules. Some companies, not all, publish a constitution, like Anthropic, or a Model Spec, a specification of the model, like OpenAI, and the model is trained to follow it. Both include, for example, a ban on helping to create chemical, biological, radiological or nuclear weapons. They also ask it to stay kind and honest, and not to flatter you just to please you: that is what we call sycophancy.
 
 And sycophancy is very real. In April 2025, OpenAI rolled back a GPT-4o update because it flattered users too much. A model rewarded for being liked learns to say what we want to hear. It is the first example, still harmless, of an idea that will come back in the chapter on risks: AI does what we rewarded, not necessarily what we wanted.
 
-The third layer is classifiers: separate models, like our sports classifier, which check your question before it even reaches the model, and the answer before it reaches you. They can block either one. Which layer would you trust most? None is enough on its own. And that brings us to the next question: who builds these models?
+The third layer is classifiers: separate models, like our sports classifier, which check your question before it even reaches the model, and the answer before it reaches you. They can block either one. Which layer would you trust most? None is enough on its own. Let's try the result.
+
+## 2.21 A fine-tuned assistant
+
+**Takeaway:** The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.
+
+Here is the result: the same model, trained further on questions and answers, Llama 3.1 8B Instruct, the assistant version of the base model we used two slides ago. Let's ask it the same questions: now it answers, coherently. It was trained to behave as an assistant, first with example conversations, then with rewards for the answers people prefer. A striking fact: people preferred the answers of a 1.3 billion parameter assistant to those of raw GPT-3, 175 billion, a hundred times bigger. So it is not only a question of size.
+
+It is also trained to refuse some requests, and the refusal example you see is a real recorded refusal, on the bomb question. But refusals are learned, and learning can fail: the big assistants add far more safety training and filters. And then there is what the model really reads, which you never see: a hidden system prompt, role tags, your question, then "assistant:", and it continues the text. It is still next-word prediction. It writes the answer, then an end tag that tells the software to stop. And that brings us to the next question: who builds these models?
 
 # Chapter 3: Who builds it
 

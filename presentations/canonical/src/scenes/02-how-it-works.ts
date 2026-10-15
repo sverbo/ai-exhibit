@@ -794,7 +794,7 @@ export const chapter02: SceneDefinition[] = [
       en: `- This is **pretraining**: exactly the next-word loop we saw, on a huge amount of text, nothing more
 - Ask it a question: it works, it writes fluent text, but something is off: it **continues the page** instead of answering. Try a multiple-choice quiz: it adds more questions
 - It has no notion of chat, of being an assistant, or of what it should not say. It is neither helpful nor harmful: it imitates plausible text
-- Better not type a harmful question live on the base model; the next slide shows a **recorded** refusal on the bomb question
+- Better not type a harmful question live on the base model; the assistant slide, two slides on, shows a **recorded** refusal on the bomb question
 - One token: show the bars, then draw one. Several tokens: let it write on
 - **Temperature**: at **0**, always the most likely word, so the same text every time: the computations are deterministic (on servers, a word can still change now and then)
 - At **1**, a weighted draw: if "cat" is at 30%, it comes out about one time in three
@@ -814,49 +814,11 @@ export const chapter02: SceneDefinition[] = [
     localizationNotes: "The prompt is shared with the chat scene; the recordings are made for exactly these strings.",
   },
   {
-    id: "02-fine-tuned",
-    code: "tuned",
-    steps: 1,
-    chapter: "02",
-    number: "2.20",
-    title: { en: "A fine-tuned assistant" },
-    objective: {
-      en: "Show that further training on questions and answers, plus guardrails, turns a base model into an assistant.",
-    },
-    takeaway: {
-      en: "The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.",
-    },
-    visual: { layout: "component", component: "ChatPlayground", props: { prompt: baseVsInstructPrompt } },
-    interaction: "network",
-    speakerNotes: {
-      en: `- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we just used)
-- Ask the **same questions** as to the base model: now it answers, coherently
-- Temperature works the same way (default 1)
-- It was **trained** to behave as an assistant: example conversations, then rewards for the answers people prefer
-- Striking fact: people preferred the answers of a **1.3 billion** parameter assistant to those of the raw **175 billion** GPT-3, 100 times bigger (InstructGPT, OpenAI, 2022): it is not only about size
-- Guardrails: it is trained to refuse some requests. The guardrail example is a recorded real refusal (the bomb question). Refusals are trained, and training can fail; large assistants add far more safety training and filters
-- Next step: what the model really reads, which you never see: a hidden **system prompt**, role tags, the question, then "assistant:" and it continues
-- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here "<|eot_id|>")`,
-    },
-    transitionIn: { en: "From the base model to its assistant version." },
-    transitionOut: { en: "But examples are not the only thing shaping it." },
-    evidenceLevel: "none",
-    sourceIds: [
-      "fnd-instructgpt",
-      "llm-llama31-models",
-    ],
-    runtimeClass: "C",
-    artifacts: ["recordings-next-token"],
-    fallback: { kind: "recording", asset: "recordings-next-token" },
-    durationSec: 180,
-    optional: false,
-  },
-  {
     id: "02-shaping-assistant",
     code: "shape",
     steps: 3,
     chapter: "02",
-    number: "2.21",
+    number: "2.20",
     title: { en: "How an assistant is shaped" },
     objective: {
       en: "Show the three layers that shape an assistant: example conversations, written rules, and classifiers around the model.",
@@ -901,8 +863,8 @@ export const chapter02: SceneDefinition[] = [
 - Layer 3, **classifiers**: separate models, like our sports classifier, check your question **before it even reaches the model**, and the answer before it reaches you; they can block either
 - Question to the room: which layer would you trust most? None alone is enough`,
     },
-    transitionIn: { en: "But examples are not the only thing shaping it." },
-    transitionOut: { en: "Who builds these models?" },
+    transitionIn: { en: "Three layers turn a base model into an assistant." },
+    transitionOut: { en: "Let us try the result: the assistant version of the same model." },
     evidenceLevel: "observed",
     sourceIds: [
       "fnd-instructgpt",
@@ -915,6 +877,44 @@ export const chapter02: SceneDefinition[] = [
     artifacts: [],
     fallback: { kind: "none" },
     durationSec: 120,
+    optional: false,
+  },
+  {
+    id: "02-fine-tuned",
+    code: "tuned",
+    steps: 1,
+    chapter: "02",
+    number: "2.21",
+    title: { en: "A fine-tuned assistant" },
+    objective: {
+      en: "Show that further training on questions and answers, plus guardrails, turns a base model into an assistant.",
+    },
+    takeaway: {
+      en: "The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.",
+    },
+    visual: { layout: "component", component: "ChatPlayground", props: { prompt: baseVsInstructPrompt } },
+    interaction: "network",
+    speakerNotes: {
+      en: `- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we used two slides ago)
+- Ask the **same questions** as to the base model: now it answers, coherently
+- Temperature works the same way (default 1)
+- It was **trained** to behave as an assistant: example conversations, then rewards for the answers people prefer
+- Striking fact: people preferred the answers of a **1.3 billion** parameter assistant to those of the raw **175 billion** GPT-3, 100 times bigger (InstructGPT, OpenAI, 2022): it is not only about size
+- Guardrails: it is trained to refuse some requests. The guardrail example is a recorded real refusal (the bomb question). Refusals are trained, and training can fail; large assistants add far more safety training and filters
+- Next step: what the model really reads, which you never see: a hidden **system prompt**, role tags, the question, then "assistant:" and it continues
+- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here "<|eot_id|>")`,
+    },
+    transitionIn: { en: "The result: the assistant version of the same model." },
+    transitionOut: { en: "Who builds these models?" },
+    evidenceLevel: "none",
+    sourceIds: [
+      "fnd-instructgpt",
+      "llm-llama31-models",
+    ],
+    runtimeClass: "C",
+    artifacts: ["recordings-next-token"],
+    fallback: { kind: "recording", asset: "recordings-next-token" },
+    durationSec: 180,
     optional: false,
   },
 ];

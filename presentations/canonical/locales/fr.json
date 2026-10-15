@@ -992,8 +992,8 @@
     "text": "Comment mieux dormir ?"
   },
   "02-base-model/speakerNotes": {
-    "source": "- This is **pretraining**: exactly the next-word loop we saw, on a huge amount of text, nothing more\n- Ask it a question: it works, it writes fluent text, but something is off: it **continues the page** instead of answering. Try a multiple-choice quiz: it adds more questions\n- It has no notion of chat, of being an assistant, or of what it should not say. It is neither helpful nor harmful: it imitates plausible text\n- Better not type a harmful question live on the base model; the next slide shows a **recorded** refusal on the bomb question\n- One token: show the bars, then draw one. Several tokens: let it write on\n- **Temperature**: at **0**, always the most likely word, so the same text every time: the computations are deterministic (on servers, a word can still change now and then)\n- At **1**, a weighted draw: if \"cat\" is at 30%, it comes out about one time in three\n- Higher, the odds flatten and odd words come out more and more. Try **5**: it soon means nothing. Proof that if the model is not good enough, one odd word leads to the next and it goes off the rails\n- Here: Llama 3.1 8B, Meta's base model; the bars come from a larger sibling, Llama 3.3 70B Instruct, reading the same raw text (the base model's provider gives no probabilities), and the screen says so\n- It runs on **Hugging Face**, the public library where AI models are shared: remember that name",
-    "text": "- C'est le pretraining (*pré-entraînement*) : exactement la boucle du mot suivant qu'on a vue, sur une énorme quantité de texte, rien de plus\n- Lui poser une question : ça marche, il écrit un texte fluide, mais quelque chose cloche : il **continue la page** au lieu de répondre. Essayer un QCM : il ajoute d'autres questions\n- Il n'a aucune notion de conversation, d'assistant, ni de ce qu'il ne devrait pas dire. Ni utile ni nuisible : il imite du texte plausible\n- Mieux vaut ne pas taper en direct une question dangereuse au modèle de base ; la slide suivante montre un refus **enregistré** sur la question de la bombe\n- Un token : montrer les barres, puis en tirer un. Plusieurs tokens : le laisser écrire\n- **Température** : à **0**, toujours le mot le plus probable, donc le même texte à chaque fois : les calculs sont déterministes (sur les serveurs, un mot peut quand même changer de temps en temps)\n- À **1**, un tirage pondéré : si « chat » est à 30 %, il sort environ une fois sur trois\n- Plus haut, les chances s'aplatissent et des mots bizarres sortent de plus en plus. Essayer **5** : très vite, ça ne veut plus rien dire. La preuve que si le modèle n'est pas assez bon, un mot bizarre entraîne le suivant et ça part en cacahuète\n- Ici : Llama 3.1 8B, le modèle de base de Meta ; les barres viennent d'un grand frère, Llama 3.3 70B Instruct, qui lit le même texte brut (le fournisseur du modèle de base ne donne pas les probabilités), et l'écran le dit\n- Il tourne sur **Hugging Face**, la bibliothèque publique où l'on partage des modèles d'IA : retenez ce nom"
+    "source": "- This is **pretraining**: exactly the next-word loop we saw, on a huge amount of text, nothing more\n- Ask it a question: it works, it writes fluent text, but something is off: it **continues the page** instead of answering. Try a multiple-choice quiz: it adds more questions\n- It has no notion of chat, of being an assistant, or of what it should not say. It is neither helpful nor harmful: it imitates plausible text\n- Better not type a harmful question live on the base model; the assistant slide, two slides on, shows a **recorded** refusal on the bomb question\n- One token: show the bars, then draw one. Several tokens: let it write on\n- **Temperature**: at **0**, always the most likely word, so the same text every time: the computations are deterministic (on servers, a word can still change now and then)\n- At **1**, a weighted draw: if \"cat\" is at 30%, it comes out about one time in three\n- Higher, the odds flatten and odd words come out more and more. Try **5**: it soon means nothing. Proof that if the model is not good enough, one odd word leads to the next and it goes off the rails\n- Here: Llama 3.1 8B, Meta's base model; the bars come from a larger sibling, Llama 3.3 70B Instruct, reading the same raw text (the base model's provider gives no probabilities), and the screen says so\n- It runs on **Hugging Face**, the public library where AI models are shared: remember that name",
+    "text": "- C'est le pretraining (*pré-entraînement*) : exactement la boucle du mot suivant qu'on a vue, sur une énorme quantité de texte, rien de plus\n- Lui poser une question : ça marche, il écrit un texte fluide, mais quelque chose cloche : il **continue la page** au lieu de répondre. Essayer un QCM : il ajoute d'autres questions\n- Il n'a aucune notion de conversation, d'assistant, ni de ce qu'il ne devrait pas dire. Ni utile ni nuisible : il imite du texte plausible\n- Mieux vaut ne pas taper en direct une question dangereuse au modèle de base ; la slide de l'assistant, deux slides plus loin, montre un refus **enregistré** sur la question de la bombe\n- Un token : montrer les barres, puis en tirer un. Plusieurs tokens : le laisser écrire\n- **Température** : à **0**, toujours le mot le plus probable, donc le même texte à chaque fois : les calculs sont déterministes (sur les serveurs, un mot peut quand même changer de temps en temps)\n- À **1**, un tirage pondéré : si « chat » est à 30 %, il sort environ une fois sur trois\n- Plus haut, les chances s'aplatissent et des mots bizarres sortent de plus en plus. Essayer **5** : très vite, ça ne veut plus rien dire. La preuve que si le modèle n'est pas assez bon, un mot bizarre entraîne le suivant et ça part en cacahuète\n- Ici : Llama 3.1 8B, le modèle de base de Meta ; les barres viennent d'un grand frère, Llama 3.3 70B Instruct, qui lit le même texte brut (le fournisseur du modèle de base ne donne pas les probabilités), et l'écran le dit\n- Il tourne sur **Hugging Face**, la bibliothèque publique où l'on partage des modèles d'IA : retenez ce nom"
   },
   "02-base-model/transitionIn": {
     "source": "We run the result of pretraining.",
@@ -1002,30 +1002,6 @@
   "02-base-model/transitionOut": {
     "source": "So how does it become an assistant?",
     "text": "Alors comment devient-il un assistant ?"
-  },
-  "02-fine-tuned/title": {
-    "source": "A fine-tuned assistant",
-    "text": "Un assistant après fine-tuning"
-  },
-  "02-fine-tuned/objective": {
-    "source": "Show that further training on questions and answers, plus guardrails, turns a base model into an assistant.",
-    "text": "Montrer qu'un entraînement supplémentaire sur des questions et des réponses, avec des guardrails, transforme un base model en assistant."
-  },
-  "02-fine-tuned/takeaway": {
-    "source": "The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.",
-    "text": "Le même modèle, entraîné en plus sur des conversations et nourri d'un texte caché : c'est ça qui fait un chatbot."
-  },
-  "02-fine-tuned/speakerNotes": {
-    "source": "- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we just used)\n- Ask the **same questions** as to the base model: now it answers, coherently\n- Temperature works the same way (default 1)\n- It was **trained** to behave as an assistant: example conversations, then rewards for the answers people prefer\n- Striking fact: people preferred the answers of a **1.3 billion** parameter assistant to those of the raw **175 billion** GPT-3, 100 times bigger (InstructGPT, OpenAI, 2022): it is not only about size\n- Guardrails: it is trained to refuse some requests. The guardrail example is a recorded real refusal (the bomb question). Refusals are trained, and training can fail; large assistants add far more safety training and filters\n- Next step: what the model really reads, which you never see: a hidden **system prompt**, role tags, the question, then \"assistant:\" and it continues\n- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here \"<|eot_id|>\")",
-    "text": "- Le même genre de modèle, entraîné en plus sur des questions et des réponses (ici Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on vient d'utiliser)\n- Poser les **mêmes questions** qu'au modèle de base : maintenant il répond, de façon cohérente\n- La température marche pareil (1 par défaut)\n- Il a été **entraîné** à se comporter en assistant : des exemples de conversations, puis des récompenses pour les réponses que les gens préfèrent\n- Un fait frappant : les gens préféraient les réponses d'un assistant de **1,3 milliard** de paramètres à celles de GPT-3 brut, **175 milliards**, 100 fois plus gros (InstructGPT, OpenAI, 2022) : ce n'est pas qu'une question de taille\n- Garde-fous : il est entraîné à refuser certaines demandes. L'exemple de garde-fou est un vrai refus enregistré (la question de la bombe). Les refus sont appris, et l'apprentissage peut échouer ; les grands assistants ajoutent beaucoup plus d'entraînement de sécurité et de filtres\n- Étape suivante : ce que le modèle lit vraiment, et que vous ne voyez jamais : un **prompt système** caché, des balises de rôle, la question, puis « assistant: », et il continue\n- Toujours la prédiction du mot suivant : il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter (ici « <|eot_id|> »)"
-  },
-  "02-fine-tuned/transitionIn": {
-    "source": "From the base model to its assistant version.",
-    "text": "Du base model à sa version assistant."
-  },
-  "02-fine-tuned/transitionOut": {
-    "source": "But examples are not the only thing shaping it.",
-    "text": "Mais les exemples ne sont pas les seuls à le façonner."
   },
   "02-shaping-assistant/title": {
     "source": "How an assistant is shaped",
@@ -1072,10 +1048,34 @@
     "text": "- Le même modèle pré-entraîné ; trois couches en font un produit\n- Couche 1, **des exemples** : beaucoup de conversations, pour qu'il soit récompensé quand il se comporte en assistant, et récompensé pour des valeurs et des comportements humains\n- Couche 2, **des règles écrites** : certaines entreprises, pas toutes, publient une **constitution** (Anthropic) ou une **Model Spec** (*spécification du modèle*, OpenAI) ; le modèle est entraîné à la suivre\n- Une règle présente dans les deux : pas d'aide pour créer des armes chimiques, biologiques, radiologiques ou nucléaires. Elles lui demandent aussi de rester gentil et honnête, et de ne pas vous flatter juste pour vous plaire (la **sycophancy**, *complaisance*)\n- La complaisance est bien réelle : en avril 2025, OpenAI a retiré une mise à jour de GPT-4o parce qu'elle flattait trop les utilisateurs. Un modèle récompensé pour être apprécié apprend à dire ce qu'on veut entendre : le premier exemple, inoffensif, de « il fait ce qu'on a récompensé, pas ce qu'on voulait » (chapitre 4)\n- Couche 3, **des classificateurs** : des modèles séparés, comme notre classificateur de sports, vérifient votre question **avant même qu'elle atteigne le modèle**, et la réponse avant qu'elle vous arrive ; ils peuvent bloquer l'une ou l'autre\n- Question à la salle : à quelle couche feriez-vous le plus confiance ? Aucune ne suffit seule"
   },
   "02-shaping-assistant/transitionIn": {
-    "source": "But examples are not the only thing shaping it.",
-    "text": "Mais les exemples ne sont pas les seuls à le façonner."
+    "source": "Three layers turn a base model into an assistant.",
+    "text": "Trois couches font d'un modèle de base un assistant."
   },
   "02-shaping-assistant/transitionOut": {
+    "source": "Let us try the result: the assistant version of the same model.",
+    "text": "Essayons le résultat : la version assistant du même modèle."
+  },
+  "02-fine-tuned/title": {
+    "source": "A fine-tuned assistant",
+    "text": "Un assistant après fine-tuning"
+  },
+  "02-fine-tuned/objective": {
+    "source": "Show that further training on questions and answers, plus guardrails, turns a base model into an assistant.",
+    "text": "Montrer qu'un entraînement supplémentaire sur des questions et des réponses, avec des guardrails, transforme un base model en assistant."
+  },
+  "02-fine-tuned/takeaway": {
+    "source": "The same model, trained further on conversations and fed a hidden text: that is what makes a chatbot.",
+    "text": "Le même modèle, entraîné en plus sur des conversations et nourri d'un texte caché : c'est ça qui fait un chatbot."
+  },
+  "02-fine-tuned/speakerNotes": {
+    "source": "- Same kind of model, trained further on questions and answers (here Llama 3.1 8B Instruct, the assistant version of the base model we used two slides ago)\n- Ask the **same questions** as to the base model: now it answers, coherently\n- Temperature works the same way (default 1)\n- It was **trained** to behave as an assistant: example conversations, then rewards for the answers people prefer\n- Striking fact: people preferred the answers of a **1.3 billion** parameter assistant to those of the raw **175 billion** GPT-3, 100 times bigger (InstructGPT, OpenAI, 2022): it is not only about size\n- Guardrails: it is trained to refuse some requests. The guardrail example is a recorded real refusal (the bomb question). Refusals are trained, and training can fail; large assistants add far more safety training and filters\n- Next step: what the model really reads, which you never see: a hidden **system prompt**, role tags, the question, then \"assistant:\" and it continues\n- Still next-word prediction: it writes the answer, then an end tag that tells the software to stop (here \"<|eot_id|>\")",
+    "text": "- Le même genre de modèle, entraîné en plus sur des questions et des réponses (ici Llama 3.1 8B Instruct, la version assistant du modèle de base qu'on a utilisé deux slides plus tôt)\n- Poser les **mêmes questions** qu'au modèle de base : maintenant il répond, de façon cohérente\n- La température marche pareil (1 par défaut)\n- Il a été **entraîné** à se comporter en assistant : des exemples de conversations, puis des récompenses pour les réponses que les gens préfèrent\n- Un fait frappant : les gens préféraient les réponses d'un assistant de **1,3 milliard** de paramètres à celles de GPT-3 brut, **175 milliards**, 100 fois plus gros (InstructGPT, OpenAI, 2022) : ce n'est pas qu'une question de taille\n- Garde-fous : il est entraîné à refuser certaines demandes. L'exemple de garde-fou est un vrai refus enregistré (la question de la bombe). Les refus sont appris, et l'apprentissage peut échouer ; les grands assistants ajoutent beaucoup plus d'entraînement de sécurité et de filtres\n- Étape suivante : ce que le modèle lit vraiment, et que vous ne voyez jamais : un **prompt système** caché, des balises de rôle, la question, puis « assistant: », et il continue\n- Toujours la prédiction du mot suivant : il écrit la réponse, puis une balise de fin qui dit au logiciel de s'arrêter (ici « <|eot_id|> »)"
+  },
+  "02-fine-tuned/transitionIn": {
+    "source": "The result: the assistant version of the same model.",
+    "text": "Le résultat : la version assistant du même modèle."
+  },
+  "02-fine-tuned/transitionOut": {
     "source": "Who builds these models?",
     "text": "Qui construit ces modèles ?"
   },
