@@ -21,6 +21,15 @@ import { EMBED_MODEL, EMBED_URL, roundVector, toSentenceVectors } from "./embed.
 import { CLOUD_TOKENIZERS, isCloudTokenizerId, loadCloudTokenizer, tokenizeWith } from "./tokenize.js";
 
 export const BASE_MODEL = "meta-llama/Llama-3.1-8B";
+/**
+ * The base model's stand-in: another base model (pretraining only) at the same
+ * provider. featherless-ai is the only provider serving base models, and it
+ * fills up per model ("temporarily at capacity"), so a sibling is usually free
+ * when the first is full (checked 2026-10-14).
+ */
+export const BASE_FALLBACK_MODEL = "meta-llama/Meta-Llama-3-8B";
+/** Start the stand-in when the base model has not answered within this time (it answers in 2 to 7 s when free). */
+export const BASE_HEDGE_MS = 8000;
 export const BASE_URL = "https://router.huggingface.co/featherless-ai/v1/completions";
 export const CHAT_URL = "https://router.huggingface.co/v1/chat/completions";
 /** Providers that return top_logprobs, in order of preference. */
@@ -129,8 +138,6 @@ export const LADDER_BASE_TOKENS = 200;
 export const LADDER_REASONING_TOKENS = 3072;
 /** Pause before trying a busy provider again. */
 export const LADDER_RETRY_MS = 1500;
-/** The same pause for the single-model endpoints. */
-export const BUSY_RETRY_MS = LADDER_RETRY_MS;
 /** A new try is only worth starting with at least this much of the time limit left. */
 export const MIN_TRY_MS = 4000;
 
@@ -716,11 +723,12 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
     minutes.take(key, t);
   };
 
-  const post = async (url: string, body: unknown, timeoutMs = limits.timeoutMs): Promise<unknown> => {
+  const post = async (url: string, body: unknown, timeoutMs = limits.timeoutMs, stop?: AbortSignal): Promise<unknown> => {
     const key = options.token();
     if (!key) throw new CloudError("not-configured", "HF_TOKEN is not set");
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), timeoutMs);
+    stop?.addEventListener("abort", () => ac.abort(), { once: true });
     try {
       const res = await doFetch(url, {
         method: "POST",
@@ -745,22 +753,49 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   };
 
   /**
-   * `post` for a provider that is sometimes full (featherless-ai, the only one
-   * serving the base model, answers "temporarily at capacity", often after
-   * about 11 s; seen 2026-10-14): a busy answer is tried again after a short
-   * pause, as long as a new try still fits in the same time limit.
+   * The base model, with a stand-in. featherless-ai, the only provider serving
+   * base models, sometimes answers "temporarily at capacity" for one model,
+   * often after about 11 s (seen 2026-10-14). The stand-in starts as soon as
+   * the base model fails, or when it has not answered after BASE_HEDGE_MS; the
+   * first answer wins and the other call is stopped. Both share the time limit.
    */
-  const postPatiently = async (url: string, body: unknown): Promise<unknown> => {
+  const postBase = (body: (model: string) => unknown): Promise<{ model: string; json: unknown }> => {
     const deadline = now() + limits.timeoutMs;
-    for (;;) {
-      try {
-        return await post(url, body, Math.max(1, deadline - now()));
-      } catch (err) {
-        const busy = err instanceof CloudError && err.code === "upstream" && isBusy(err.message);
-        if (!busy || deadline - now() < BUSY_RETRY_MS + MIN_TRY_MS) throw err;
-        await new Promise((r) => setTimeout(r, BUSY_RETRY_MS));
-      }
-    }
+    const stop = new AbortController();
+    const models = [BASE_MODEL, BASE_FALLBACK_MODEL];
+    return new Promise((resolve, reject) => {
+      let started = 0;
+      let running = 0;
+      let lastError: unknown = null;
+      let settled = false;
+      const launch = () => {
+        if (settled || started >= models.length) return;
+        const model = models[started++]!;
+        running++;
+        post(BASE_URL, body(model), Math.max(1, deadline - now()), stop.signal).then(
+          (json) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(hedge);
+            stop.abort();
+            resolve({ model, json });
+          },
+          (err) => {
+            running--;
+            lastError = err;
+            if (settled) return;
+            if (started < models.length && deadline - now() >= MIN_TRY_MS) launch();
+            else if (running === 0) {
+              settled = true;
+              clearTimeout(hedge);
+              reject(lastError);
+            }
+          },
+        );
+      };
+      const hedge = setTimeout(launch, BASE_HEDGE_MS);
+      launch();
+    });
   };
 
   const probe = async (): Promise<boolean | null> => {
@@ -847,18 +882,19 @@ export function createCloudApi(options: CloudApiOptions): CloudApi {
   const complete = async (body: unknown, lim: Limits) => {
     const { prompt, maxTokens, temperature } = parseCompleteBody(body, lim);
     const t0 = now();
-    const json = (await postPatiently(BASE_URL, {
-      model: BASE_MODEL,
+    const answer = await postBase((model) => ({
+      model,
       prompt,
       max_tokens: maxTokens,
       ...(temperature !== undefined ? { temperature } : {}),
-    })) as Record<string, unknown>;
+    }));
+    const json = answer.json as Record<string, unknown>;
     const choice = (json.choices as { text?: unknown; finish_reason?: unknown }[] | undefined)?.[0];
     if (typeof choice?.text !== "string") throw new CloudError("upstream", "Unexpected answer shape");
     return {
       text: choice.text,
       finishReason: typeof choice.finish_reason === "string" ? choice.finish_reason : null,
-      model: BASE_MODEL,
+      model: answer.model,
       provider: "featherless-ai",
       ms: now() - t0,
       usage: json.usage ?? null,

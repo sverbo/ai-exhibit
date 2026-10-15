@@ -140,7 +140,7 @@ export function BaseModelPlayground({ props, ctx }: SceneComponentProps<BaseMode
     <Frame controls={controls} label={tr(ctx.scene.title, locale)}>
       <header className={styles.head}>
         <p className={styles.modelLine}>
-          <Rich text={tr(COPY.baseTitle, locale)} /> <b>{BASE_LABEL}</b>
+          <Rich text={tr(COPY.baseTitle, locale)} /> <b>{view.textModel ?? BASE_LABEL}</b>
           {locale === "fr" ? "\u00a0: " : ": "}
           <Rich text={tr(COPY.baseSub, locale)} />
         </p>

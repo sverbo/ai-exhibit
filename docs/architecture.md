@@ -97,7 +97,7 @@ back or by jump) clears its state: every visit starts it over.
 | Endpoint | What |
 | --- | --- |
 | `GET /api/llm/status` | `{configured, reachable, codeRequired}` |
-| `POST /api/llm/complete` | Base model continuation (Llama 3.1 8B) |
+| `POST /api/llm/complete` | Base model continuation (Llama 3.1 8B; Llama 3 8B, also a base model, stands in when the first is full or slow at featherless-ai, the only provider of base models; the answer names the model) |
 | `POST /api/llm/next` | Top next-token probabilities of a raw text (Llama 3.3 70B Instruct) |
 | `POST /api/llm/chat` | Assistant answer with first-token probabilities (Llama 3.1 8B Instruct) |
 | `POST /api/llm/ladder` | One question, answers of three open models of increasing power (Qwen2.5 0.5B base, Llama 3.1 8B Instruct, GLM-5.3 reasoning) streamed side by side (NDJSON); costs three requests of the hourly budget |

@@ -40,6 +40,13 @@ export interface BaseModelState {
 export const PICK_MS = 550;
 export const MAX_APPENDED = 200;
 export const BASE_LABEL = "Llama 3.1 8B";
+/** The server's stand-in base model (BASE_FALLBACK_MODEL in packages/cloud-api), when the first one is full. */
+const FALLBACK_LABELS: Record<string, string> = { "meta-llama/Meta-Llama-3-8B": "Llama 3 8B" };
+
+/** The label of the base model that actually wrote a continuation. */
+export function baseLabel(modelId: string | undefined): string {
+  return (modelId && FALLBACK_LABELS[modelId]) || BASE_LABEL;
+}
 export const BARS_LABEL = "Llama 3.3 70B Instruct";
 
 /** Draws among the shown candidates with a temperature (the bars stay the raw probabilities). */
@@ -191,7 +198,7 @@ export function createBaseModelEngine(deps: BaseModelDeps) {
             { signal: ac.signal },
           );
           if (gen !== generation) return;
-          set((x) => ({ ...x, textModel: BASE_LABEL, source: "live", notice: liveNotice(x) }));
+          set((x) => ({ ...x, textModel: baseLabel(r.model), source: "live", notice: liveNotice(x) }));
           await reveal(r.text);
           await refresh({ ...get(), appended });
           return;
