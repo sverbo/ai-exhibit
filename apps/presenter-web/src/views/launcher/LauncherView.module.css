@@ -25,6 +25,25 @@
   color: var(--color-accent);
   font-weight: 600;
 }
+/* Under the welcome: a work in progress, made largely with AI, open to corrections. */
+.caveat {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm, 15px);
+  line-height: 1.45;
+}
+.caveat b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.caveat a {
+  color: var(--color-accent);
+}
 .mark {
   flex: none;
   display: block;

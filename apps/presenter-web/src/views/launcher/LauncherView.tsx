@@ -65,6 +65,15 @@ export default function LauncherView() {
           Don't hesitate to message me on Signal, <b>{SIGNAL}</b>. Let's spread the word: you don't need to be an expert to help
           the general public understand what is happening.
         </p>
+        <p className={styles.caveat}>
+          <b>A work in progress, and it always will be.</b> Some statements may be wrong, or put too firmly. Don't hesitate to
+          open a pull request on{" "}
+          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>{" "}
+          or to send me a message on Signal, <b>{SIGNAL}</b>: I am open to any feedback. Much of this content was made with
+          AI, and I do not hide it; the storyline and the ideas for the animations are my own.
+        </p>
         <div className={styles.theme}>
           <ThemeToggle hint={false} locale="en" />
         </div>
