@@ -72,7 +72,7 @@ export default function LauncherView() {
             GitHub
           </a>{" "}
           or to send me a message on Signal, <b>{SIGNAL}</b>: I am open to any feedback. Much of this content was made with
-          AI, and I do not hide it; the storyline and the ideas for the animations are my own.
+          AI, and I do not hide it. The storyline and the ideas for the animations are my own, and I spent hours testing it.
         </p>
         <div className={styles.theme}>
           <ThemeToggle hint={false} locale="en" />

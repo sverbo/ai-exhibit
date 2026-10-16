@@ -15,7 +15,7 @@
 }
 /* A friendly line under the title: feedback from presenters is welcome. */
 .welcome {
-  max-width: 62ch;
+  max-width: 67%;
   margin: 16px 0 0;
   color: var(--color-text-muted);
   font-size: var(--ui-text-md, 17px);
@@ -27,7 +27,7 @@
 }
 /* Under the welcome: a work in progress, made largely with AI, open to corrections. */
 .caveat {
-  max-width: 62ch;
+  max-width: 67%;
   margin: 12px 0 0;
   padding: 10px 14px;
   border-left: 3px solid var(--color-accent);
@@ -60,7 +60,8 @@
 }
 .title {
   margin: 0;
-  max-width: 18ch;
+  /* About two thirds of the page, like the welcome and the caveat under it. */
+  max-width: 67%;
   font-family: var(--font-display);
   font-size: clamp(38px, 6vw, 76px);
   font-weight: 360;
@@ -239,6 +240,11 @@ a.primary:hover {
 }
 
 @media (max-width: 860px) {
+  .title,
+  .welcome,
+  .caveat {
+    max-width: none;
+  }
   .launcher {
     padding: 24px 16px 48px;
   }
